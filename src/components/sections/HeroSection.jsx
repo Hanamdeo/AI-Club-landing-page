@@ -80,11 +80,11 @@ export function HeroSection() {
             {/* Ambient Radial Depth Frame */}
             <div className="relative w-full h-full flex items-center justify-center">
               {/* Subtle architectural framing markers */}
-              <div className="absolute top-0 right-0 text-[10px] font-mono text-secondary/40">
-                // MASCOT: PHOENIX_3D
+              <div className="absolute top-2 right-2 text-[10px] font-mono text-secondary/40 tracking-widest">
+                [ PHOENIX // 01 ]
               </div>
-              <div className="absolute bottom-4 left-4 text-[10px] font-mono text-secondary/30">
-                SHADING: ANATOMICAL_GLB
+              <div className="absolute bottom-4 left-4 text-[10px] font-mono text-secondary/30 tracking-wider">
+                + SKELETAL GLB ACTIVE +
               </div>
             </div>
           </div>

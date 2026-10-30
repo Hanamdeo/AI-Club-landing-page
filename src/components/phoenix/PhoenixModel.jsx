@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useRef, useEffect, useMemo } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF, useAnimations } from '@react-three/drei';
 import * as THREE from 'three';
@@ -8,54 +8,49 @@ import * as THREE from 'three';
 export function PhoenixModel({ flightVelocity = 1 }) {
   const groupRef = useRef();
   const { scene, animations } = useGLTF('/models/phoenix.glb');
-  const { actions, mixer } = useAnimations(animations, groupRef);
+  // Pass scene directly to useAnimations so mixer is bound to the exact bone hierarchy
+  const { actions } = useAnimations(animations, scene);
 
-  // Clone scene so we don't mutate the cached GLTF in memory
-  const clonedScene = useMemo(() => scene.clone(true), [scene]);
-
-  // Enhance materials for a futuristic, cinematic cyber-phoenix aesthetic
+  // Configure materials, shadows, and frustum culling
   useEffect(() => {
-    if (!clonedScene) return;
+    if (!scene) return;
 
-    clonedScene.traverse((child) => {
+    scene.traverse((child) => {
       if (child.isMesh) {
+        // SkinnedMesh vertices are deformed by GPU shaders; disable frustum culling to prevent sudden disappearance
+        child.frustumCulled = false;
         child.castShadow = true;
         child.receiveShadow = true;
 
         if (child.material) {
-          const originalMat = child.material;
-          const enhancedMat = new THREE.MeshStandardMaterial({
-            map: originalMat.map || null,
-            normalMap: originalMat.normalMap || null,
-            roughness: 0.35,
-            metalness: 0.75,
-            color: new THREE.Color('#0A1A2E'),
-            emissive: new THREE.Color('#0A3A75'),
-            emissiveIntensity: 1.4,
-          });
+          // Preserve the original rich diffuse and emissive textures from the GLB
+          child.material.side = THREE.DoubleSide;
+          child.material.transparent = true;
+          child.material.alphaTest = 0.12;
+          child.material.depthWrite = true;
 
-          // Add glowing electric blue edge accents
-          if (child.name.includes('01b') || child.name.includes('Feather')) {
-            enhancedMat.emissive = new THREE.Color('#147DFF');
-            enhancedMat.emissiveIntensity = 2.2;
-          }
-
-          child.material = enhancedMat;
+          // Luminous cyber-aesthetic: bright icy cyan diffuse tint with brilliant electric blue emissive glow
+          child.material.color = new THREE.Color('#B4E5FF');
+          child.material.emissive = new THREE.Color('#147DFF');
+          child.material.emissiveIntensity = 2.0;
+          child.material.roughness = 0.35;
+          child.material.metalness = 0.3;
+          child.material.needsUpdate = true;
         }
       }
     });
-  }, [clonedScene]);
+  }, [scene]);
 
   // Trigger flight animation 'Take 001'
   useEffect(() => {
     if (actions && actions['Take 001']) {
       const action = actions['Take 001'];
-      action.reset().fadeIn(0.6).play();
+      action.reset().fadeIn(0.5).play();
       action.timeScale = 1.0 * flightVelocity;
     }
     return () => {
       if (actions && actions['Take 001']) {
-        actions['Take 001'].fadeOut(0.4);
+        actions['Take 001'].fadeOut(0.3);
       }
     };
   }, [actions, flightVelocity]);
@@ -71,25 +66,32 @@ export function PhoenixModel({ flightVelocity = 1 }) {
   useFrame((state) => {
     const time = state.clock.getElapsedTime();
     if (groupRef.current) {
-      groupRef.current.position.y += Math.sin(time * 2.2) * 0.0015;
-      groupRef.current.rotation.z = Math.sin(time * 1.5) * 0.025;
+      groupRef.current.position.y = Math.sin(time * 2.2) * 0.05;
+      groupRef.current.rotation.z = Math.sin(time * 1.5) * 0.03;
     }
   });
 
   return (
     <group ref={groupRef} dispose={null}>
       {/* 
-        Raw Phoenix scale is ~800 units, so 0.0035 fits ~2.8-3.0 units in world space.
-        Rotated to face elegantly across the hero composition.
+        The model's bounding box center is at [-377, 170, 0] with wingspan ~964 units.
+        We offset by [+377, -170, 0] so the pivot point is at the exact center of mass / heart.
+        Scale 0.0029 normalizes the wingspan to ~2.8 units in Three.js world space.
+        Rotation Math.PI * 0.72 directs the phoenix forward-left towards the editorial headline.
       */}
-      <group scale={[0.0035, 0.0035, 0.0035]} rotation={[0, -Math.PI / 1.8, 0]} position={[0, -0.6, 0]}>
-        <primitive object={clonedScene} />
+      <group
+        scale={[0.0029, 0.0029, 0.0029]}
+        rotation={[0.05, Math.PI * 0.72, -0.05]}
+      >
+        <group position={[377, -170, 0]}>
+          <primitive object={scene} />
+        </group>
       </group>
 
       {/* Internal Crystalline Blue Heart Light */}
-      <pointLight color="#49D8FF" intensity={3.0} distance={5} decay={2} position={[0, 0, 0.2]} />
-      {/* Rear Restrained Flame Accent Light */}
-      <pointLight color="#FF7138" intensity={1.8} distance={4} decay={2} position={[0, -0.4, -0.8]} />
+      <pointLight color="#49D8FF" intensity={3.5} distance={6} decay={2} position={[0, 0.2, 0.3]} />
+      {/* Rear Flame Accent Light for dramatic silhouette */}
+      <pointLight color="#FF7138" intensity={2.2} distance={5} decay={2} position={[-0.4, -0.2, -0.6]} />
     </group>
   );
 }

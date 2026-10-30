@@ -27,8 +27,8 @@ function SceneController({ isMobile, isReducedMotion }) {
 
     // Mobile vs Desktop target coordinates
     const scaleFactor = isMobile ? 0.65 : 1.0;
-    const xHero = isMobile ? 0 : 2.1;
-    const yHero = isMobile ? 0.8 : -0.1;
+    const xHero = isMobile ? 0 : 1.8;
+    const yHero = isMobile ? 0.7 : -0.05;
 
     // Phase A: Set initial position in navbar emblem region
     gsap.set(group.position, {
@@ -333,26 +333,33 @@ export function PhoenixCanvas() {
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
         {/* Cinematic Multi-Point Lighting */}
-        <ambientLight intensity={0.4} color="#0B1929" />
+        <ambientLight intensity={0.6} color="#0B1929" />
         
         {/* Key Electric Blue Light from Front-Right */}
         <directionalLight
           position={[6, 5, 5]}
-          intensity={2.5}
+          intensity={3.2}
           color="#147DFF"
         />
 
         {/* Cobalt / Cyan Rim Light from Top-Left */}
         <directionalLight
           position={[-6, 4, -4]}
-          intensity={3.2}
+          intensity={3.5}
           color="#49D8FF"
+        />
+
+        {/* Crisp Front Fill to reveal feather detail */}
+        <directionalLight
+          position={[0, 2, 6]}
+          intensity={2.2}
+          color="#E0F2FE"
         />
 
         {/* Warm Flame Orange Accent Fill from Below */}
         <pointLight
           position={[0, -3, 2]}
-          intensity={1.6}
+          intensity={2.0}
           color="#FF7138"
           distance={10}
         />
