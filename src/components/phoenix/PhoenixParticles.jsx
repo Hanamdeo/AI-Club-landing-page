@@ -99,3 +99,4 @@ export function PhoenixParticles({ count = 80, isMobile = false }) {
     </points>
   );
 }
+

@@ -24,7 +24,7 @@ export function BlogSection() {
         {/* Section Header */}
         <div className="max-w-3xl mb-14 space-y-4">
           <Badge variant="blue" icon={BookOpen}>
-            07 // THOUGHT LEADERSHIP & DISPATCHES
+            06 // THOUGHT LEADERSHIP & DISPATCHES
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
             AI Insights & <span className="text-phoenix-cyan">Dispatches</span>.
@@ -112,3 +112,4 @@ export function BlogSection() {
     </section>
   );
 }
+

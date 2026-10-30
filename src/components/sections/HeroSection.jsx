@@ -6,7 +6,7 @@ import { clubConfig } from '@/data/clubConfig';
 import { Button } from '@/components/ui/Button';
 import { Badge } from '@/components/ui/Badge';
 
-export function HeroSection({ onOpenJoinModal }) {
+export function HeroSection() {
   return (
     <section
       id="hero"
@@ -57,7 +57,7 @@ export function HeroSection({ onOpenJoinModal }) {
                 variant="primary"
                 size="lg"
                 icon={Sparkles}
-                onClick={onOpenJoinModal}
+                href="#about"
               >
                 Explore The Club
               </Button>
@@ -112,3 +112,4 @@ export function HeroSection({ onOpenJoinModal }) {
     </section>
   );
 }
+

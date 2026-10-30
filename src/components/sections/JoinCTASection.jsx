@@ -127,9 +127,9 @@ export function JoinCTASection({ isModalOpen, setIsModalOpen }) {
             variant="secondary"
             size="lg"
             icon={ArrowRight}
-            href="#projects"
+            href="#radar"
           >
-            Review Active Projects First
+            Explore Research Radar
           </Button>
         </div>
 
@@ -265,3 +265,4 @@ export function JoinCTASection({ isModalOpen, setIsModalOpen }) {
     </section>
   );
 }
+

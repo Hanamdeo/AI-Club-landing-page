@@ -122,3 +122,4 @@ export const projectsData = [
     architectureDetails: "MCTS guided by a lightweight 3B policy network coupled with Lean 4's REPL socket interface for formal deductive validation."
   }
 ];
+

@@ -26,9 +26,9 @@ export const clubConfig = {
     { name: "Research Radar", href: "#radar" },
     { name: "Events", href: "#events" },
     { name: "GD Arena", href: "#gd-room" },
-    { name: "Projects", href: "#projects", badge: "Live Demos" },
     { name: "Gallery", href: "#gallery" },
     { name: "Insights", href: "#blog" },
     { name: "Team", href: "#team" },
   ],
 };
+

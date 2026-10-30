@@ -6,7 +6,7 @@ import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 import { MessagesSquare, Scale, Users, Flame, Check, ShieldAlert, Sparkles } from 'lucide-react';
 
-export function GDRoomSection({ onOpenJoinModal }) {
+export function GDRoomSection() {
   return (
     <section id="gd-room" className="relative py-28 px-4 sm:px-6 lg:px-8 bg-[#070A0F] border-t border-white/5 overflow-hidden">
       {/* Background glow */}
@@ -95,9 +95,10 @@ export function GDRoomSection({ onOpenJoinModal }) {
               variant="ember"
               size="md"
               icon={Sparkles}
-              onClick={onOpenJoinModal}
+              href="https://discord.gg/phoenix-ai"
+              target="_blank"
             >
-              Claim Debater Seat / Attend GD
+              Join Voice Lounge & Debates
             </Button>
           </div>
         </div>
@@ -138,3 +139,4 @@ export function GDRoomSection({ onOpenJoinModal }) {
     </section>
   );
 }
+

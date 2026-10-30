@@ -242,3 +242,4 @@ export function PhoenixModel({ progress = 0, flightVelocity = 1 }) {
     </group>
   );
 }
+

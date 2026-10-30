@@ -95,8 +95,8 @@ export function Footer() {
               <li><a href="#radar" className="hover:text-phoenix-cyan transition-colors">02. Research Radar</a></li>
               <li><a href="#events" className="hover:text-phoenix-cyan transition-colors">03. Event Schedule</a></li>
               <li><a href="#gd-room" className="hover:text-phoenix-cyan transition-colors">04. The GD Arena</a></li>
-              <li><a href="#projects" className="hover:text-phoenix-cyan transition-colors">05. Project Showcase</a></li>
-              <li><a href="#gallery" className="hover:text-phoenix-cyan transition-colors">06. Visual Archives</a></li>
+              <li><a href="#gallery" className="hover:text-phoenix-cyan transition-colors">05. Visual Archives</a></li>
+              <li><a href="#blog" className="hover:text-phoenix-cyan transition-colors">06. Insights & Dispatches</a></li>
             </ul>
           </div>
 
@@ -159,3 +159,4 @@ export function Footer() {
     </footer>
   );
 }
+

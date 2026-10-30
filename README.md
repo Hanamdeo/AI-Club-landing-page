@@ -108,3 +108,4 @@ npm start
 - **Reduced Motion**: Automatically honors `prefers-reduced-motion` media queries, settling the Phoenix into calm static positions per section without scroll-linked rotation.
 - **Graceful WebGL Fallback**: If WebGL context is unavailable or fails, an animated holographic SVG phoenix avatar is displayed automatically.
 - **Mobile Responsive**: Dynamically adjusts camera FOV and Phoenix scaling/positioning to prevent blocking touch targets or text readability on mobile devices.
+

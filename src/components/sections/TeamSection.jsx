@@ -12,7 +12,7 @@ export function TeamSection() {
         {/* Section Header */}
         <div className="max-w-3xl mb-14 space-y-4">
           <Badge variant="cyan" icon={Users}>
-            08 // OPERATING CORPS & MENTORS
+            07 // OPERATING CORPS & MENTORS
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
             Leadership & <span className="text-phoenix-cyan">Research Council</span>.
@@ -86,3 +86,4 @@ export function TeamSection() {
     </section>
   );
 }
+

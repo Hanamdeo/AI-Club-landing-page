@@ -51,3 +51,4 @@ export const gdRoomData = {
     "Zero tolerance for generic hype: focus on architectural bottlenecks, latency, and real-world failure modes."
   ]
 };
+

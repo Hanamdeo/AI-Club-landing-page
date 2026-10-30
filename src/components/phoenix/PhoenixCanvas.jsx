@@ -198,25 +198,7 @@ function SceneController({ isMobile, isReducedMotion }) {
       '<'
     );
 
-    // 07. Priority: Student AI Projects: Sweeps left beside cards
-    scrollTl.to(group.position, {
-      x: isMobile ? 0 : -1.9,
-      y: isMobile ? -0.5 : -0.3,
-      z: -0.9,
-      ease: 'power1.inOut',
-    });
-    scrollTl.to(
-      group.rotation,
-      {
-        x: -0.1,
-        y: isMobile ? 0 : 0.6,
-        z: 0.1,
-        ease: 'power1.inOut',
-      },
-      '<'
-    );
-
-    // 08. Gallery & Blog: Pulls back into deep space for parallax
+    // 07. Gallery & Chronicles: Pulls back into deep space for gallery parallax
     scrollTl.to(group.position, {
       x: isMobile ? 0 : 1.8,
       y: 0.4,
@@ -234,19 +216,55 @@ function SceneController({ isMobile, isReducedMotion }) {
       '<'
     );
 
-    // 11. Priority: Join Club CTA Grand Finale: Centered, full wingspan, triumphant pose
+    // 08. Insights & Dispatches: Sweeps gracefully across the background
+    scrollTl.to(group.position, {
+      x: isMobile ? 0 : -1.8,
+      y: 0.3,
+      z: -2.5,
+      ease: 'power1.inOut',
+    });
+    scrollTl.to(
+      group.rotation,
+      {
+        x: 0.1,
+        y: isMobile ? 0 : 0.4,
+        z: 0.05,
+        ease: 'power1.inOut',
+      },
+      '<'
+    );
+
+    // 09. Team & Leadership: Anchors right flank beside mentors
+    scrollTl.to(group.position, {
+      x: isMobile ? 0 : 1.7,
+      y: -0.2,
+      z: -1.5,
+      ease: 'power1.inOut',
+    });
+    scrollTl.to(
+      group.rotation,
+      {
+        x: 0.1,
+        y: isMobile ? 0 : -0.5,
+        z: 0.0,
+        ease: 'power1.inOut',
+      },
+      '<'
+    );
+
+    // 10. Finale & Footer: Centered soaring pose above footer
     scrollTl.to(group.position, {
       x: 0,
-      y: 0.15,
-      z: isMobile ? -0.8 : 0.4,
+      y: 0.5,
+      z: isMobile ? -1.0 : 0.2,
       ease: 'power2.out',
     });
     scrollTl.to(
       group.scale,
       {
-        x: 2.3 * scaleFactor,
-        y: 2.3 * scaleFactor,
-        z: 2.3 * scaleFactor,
+        x: 2.1 * scaleFactor,
+        y: 2.1 * scaleFactor,
+        z: 2.1 * scaleFactor,
         ease: 'power2.out',
       },
       '<'
@@ -254,7 +272,7 @@ function SceneController({ isMobile, isReducedMotion }) {
     scrollTl.to(
       group.rotation,
       {
-        x: 0.05,
+        x: 0.1,
         y: 0,
         z: 0,
         ease: 'power2.out',
@@ -347,3 +365,4 @@ export function PhoenixCanvas() {
     </div>
   );
 }
+

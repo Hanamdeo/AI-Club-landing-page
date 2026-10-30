@@ -5,7 +5,7 @@ import { Menu, X, ArrowUpRight, Flame, Sparkles } from 'lucide-react';
 import { clubConfig } from '@/data/clubConfig';
 import { Button } from '@/components/ui/Button';
 
-export function Navbar({ onOpenJoinModal }) {
+export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -78,10 +78,10 @@ export function Navbar({ onOpenJoinModal }) {
             <Button
               variant="primary"
               size="sm"
-              icon={Sparkles}
-              onClick={onOpenJoinModal}
+              icon={ArrowUpRight}
+              href="#events"
             >
-              Join Club
+              Explore Events
             </Button>
           </div>
 
@@ -123,12 +123,10 @@ export function Navbar({ onOpenJoinModal }) {
                 variant="primary"
                 size="md"
                 className="w-full"
-                onClick={() => {
-                  setMobileMenuOpen(false);
-                  onOpenJoinModal();
-                }}
+                href="#events"
+                onClick={() => setMobileMenuOpen(false)}
               >
-                Join AI Club
+                Explore Events
               </Button>
             </div>
           </div>
@@ -137,3 +135,4 @@ export function Navbar({ onOpenJoinModal }) {
     </header>
   );
 }
+

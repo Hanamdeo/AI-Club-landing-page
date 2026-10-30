@@ -6,7 +6,7 @@ import { eventsData, eventCategories } from '@/data/eventsData';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
 
-export function EventsSection({ onOpenJoinModal }) {
+export function EventsSection() {
   const [activeTab, setActiveTab] = useState('All');
 
   const filteredEvents = activeTab === 'All'
@@ -139,7 +139,8 @@ export function EventsSection({ onOpenJoinModal }) {
                     variant={evt.featured ? 'ember' : 'primary'}
                     size="sm"
                     icon={ArrowRight}
-                    onClick={onOpenJoinModal}
+                    href="https://discord.gg/phoenix-ai"
+                    target="_blank"
                   >
                     Register / RSVP
                   </Button>
@@ -152,3 +153,4 @@ export function EventsSection({ onOpenJoinModal }) {
     </section>
   );
 }
+

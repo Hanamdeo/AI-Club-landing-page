@@ -12,7 +12,7 @@ export function GallerySection() {
         {/* Section Header */}
         <div className="max-w-3xl mb-14 space-y-4">
           <Badge variant="cyan" icon={Camera}>
-            06 // CHRONICLES & MOMENTS
+            05 // CHRONICLES & MOMENTS
           </Badge>
           <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
             Club <span className="text-phoenix-cyan">Archives</span>.
@@ -74,3 +74,4 @@ export function GallerySection() {
     </section>
   );
 }
+
