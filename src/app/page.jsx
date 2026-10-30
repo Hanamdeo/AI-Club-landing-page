@@ -4,16 +4,14 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import { Navbar } from '@/components/layout/Navbar';
 import { HeroSection } from '@/components/sections/HeroSection';
+import { ClubStorySection } from '@/components/sections/ClubStorySection';
 import { AboutSection } from '@/components/sections/AboutSection';
-import { ResearchRadarSection } from '@/components/sections/ResearchRadarSection';
 import { EventsSection } from '@/components/sections/EventsSection';
 import { GDRoomSection } from '@/components/sections/GDRoomSection';
-import { GallerySection } from '@/components/sections/GallerySection';
-import { BlogSection } from '@/components/sections/BlogSection';
 import { TeamSection } from '@/components/sections/TeamSection';
 import { Footer } from '@/components/layout/Footer';
 
-// Dynamic import for the 3D Phoenix persistent canvas (SSR false)
+// Dynamic import for the 3D Phoenix persistent canvas on homepage (SSR false)
 const PhoenixCanvas = dynamic(
   () => import('@/components/phoenix/PhoenixCanvas').then((mod) => mod.PhoenixCanvas),
   { ssr: false }
@@ -22,42 +20,35 @@ const PhoenixCanvas = dynamic(
 export default function HomePage() {
   return (
     <main className="relative bg-background min-h-screen text-white">
-      {/* Persistent Fixed 3D WebGL Canvas Layer */}
+      {/* Persistent Fixed 3D WebGL Phoenix Canvas Layer (Homepage Only) */}
       <PhoenixCanvas />
 
-      {/* Top Navbar */}
+      {/* Global Top Navbar */}
       <Navbar />
 
-      {/* Content Sections */}
+      {/* Homepage Editorial Experience (PRD Section 3) */}
       <div className="relative z-20">
-        {/* 02. Hero Section */}
+        {/* 01. Hero Section + Telemetry + Phoenix Target */}
         <HeroSection />
 
-        {/* 03. About the Club */}
+        {/* 02. Club Visual Storytelling & Moments */}
+        <ClubStorySection />
+
+        {/* 03. About the Club & Pillars */}
         <AboutSection />
 
-        {/* 04. AI Research Radar */}
-        <ResearchRadarSection />
-
-        {/* 05. Events & Arena */}
+        {/* 04. Events & Sprints Preview */}
         <EventsSection />
 
-        {/* 06. GD Room (Group Discussion Arena) */}
+        {/* 05. GD Dialectic Room Preview */}
         <GDRoomSection />
 
-        {/* 07. Club Gallery */}
-        <GallerySection />
-
-        {/* 08. AI Insights & Blog */}
-        <BlogSection />
-
-        {/* 09. Team & Leadership */}
+        {/* 06. Team Organizational Hierarchy */}
         <TeamSection />
 
-        {/* 10. Technical Footer */}
+        {/* 07. Technical Footer */}
         <Footer />
       </div>
     </main>
   );
 }
-

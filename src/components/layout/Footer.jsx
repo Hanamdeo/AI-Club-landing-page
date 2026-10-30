@@ -1,13 +1,16 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { clubConfig } from '@/data/clubConfig';
-import { Github, Twitter, Linkedin, MessageSquare, Mail, Terminal, ArrowUp } from 'lucide-react';
+import { Github, Twitter, Linkedin, MessageSquare, Mail, Flame, ArrowUp, ArrowUpRight } from 'lucide-react';
 
 export function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const isRecruitmentOpen = clubConfig.recruitment?.isOpen;
 
   return (
     <footer className="relative bg-[#040608] border-t border-white/10 text-secondary overflow-hidden">
@@ -18,17 +21,17 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
           {/* Brand Identity Column (2 Cols) */}
           <div className="lg:col-span-2 space-y-5">
-            <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-navy-surface border border-phoenix-blue/40 flex items-center justify-center">
-                <span className="font-mono text-phoenix-cyan text-xs font-bold">PX</span>
+            <Link href="/" className="inline-flex items-center gap-3 group">
+              <div className="w-8 h-8 bg-navy-surface border border-phoenix-blue/40 flex items-center justify-center transition-colors group-hover:border-phoenix-blue">
+                <Flame className="w-4 h-4 text-phoenix-blue group-hover:text-phoenix-cyan transition-colors" />
               </div>
               <span className="font-display font-bold text-primary text-lg tracking-wider">
                 {clubConfig.name}
               </span>
-            </div>
+            </Link>
 
             <p className="text-sm text-secondary max-w-sm font-sans leading-relaxed">
-              Advancing artificial intelligence research through autonomous agents, low-level compilation, and critical dialectic. Building the future in the open.
+              Advancing artificial intelligence research through high-agency autonomous systems, low-level kernel compilation, and empirical dialectics. Building the future in the open.
             </p>
 
             <div className="text-xs font-mono text-secondary/80 space-y-1">
@@ -84,77 +87,108 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Navigation Links Column */}
-          <div>
-            <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-semibold mb-5 flex items-center gap-2">
-              <Terminal className="w-3.5 h-3.5 text-phoenix-blue" />
-              Index
+          {/* Quick Navigation Links */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold">
+              Navigation
             </h4>
-            <ul className="space-y-3 text-xs font-mono">
-              <li><a href="#about" className="hover:text-phoenix-cyan transition-colors">01. Ethos & Pillars</a></li>
-              <li><a href="#radar" className="hover:text-phoenix-cyan transition-colors">02. Research Radar</a></li>
-              <li><a href="#events" className="hover:text-phoenix-cyan transition-colors">03. Arena Sprints</a></li>
-              <li><a href="#gd-room" className="hover:text-phoenix-cyan transition-colors">04. The Dialectic</a></li>
-              <li><a href="#gallery" className="hover:text-phoenix-cyan transition-colors">05. Visual Chronicles</a></li>
-              <li><a href="#blog" className="hover:text-phoenix-cyan transition-colors">06. Dispatches</a></li>
-              <li><a href="#team" className="hover:text-phoenix-cyan transition-colors">07. Research Council</a></li>
+            <ul className="space-y-2.5 text-sm font-sans">
+              {clubConfig.navLinks.map((item) => (
+                <li key={item.name}>
+                  <Link
+                    href={item.href}
+                    className="hover:text-phoenix-cyan transition-colors flex items-center gap-1 group"
+                  >
+                    <span>{item.name}</span>
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Research Focus Areas Column */}
-          <div>
-            <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-semibold mb-5">
-              Focus Vectors
+          {/* Sprints & Archive Links */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold">
+              Activity Hubs
             </h4>
-            <ul className="space-y-3 text-xs font-mono text-secondary">
-              <li>• Test-Time Inference Search</li>
-              <li>• Autonomous Agent Protocols</li>
-              <li>• Embodied VLA Robotics</li>
-              <li>• Bare-Metal WebGPU & Triton</li>
-              <li>• Neuro-Symbolic Verification</li>
+            <ul className="space-y-2.5 text-sm font-sans">
+              <li>
+                <Link href="/events" className="hover:text-phoenix-cyan transition-colors">
+                  Upcoming Sprints
+                </Link>
+              </li>
+              <li>
+                <Link href="/events" className="hover:text-phoenix-cyan transition-colors">
+                  Past Event Highlights
+                </Link>
+              </li>
+              <li>
+                <Link href="/gd-archive" className="hover:text-phoenix-cyan transition-colors">
+                  The Dialectic Room
+                </Link>
+              </li>
+              <li>
+                <Link href="/gallery" className="hover:text-phoenix-cyan transition-colors">
+                  Visual Chronicles
+                </Link>
+              </li>
             </ul>
           </div>
 
-          {/* Telemetry Specs & Back to top Column */}
-          <div className="flex flex-col justify-between">
-            <div className="space-y-4">
-              <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-semibold">
-                Telemetry
-              </h4>
-              <div className="p-4 bg-navy-deep/60 border border-white/5 space-y-2 text-[11px] font-mono">
-                <div className="flex justify-between">
-                  <span className="text-secondary/60">Node Release:</span>
-                  <span className="text-primary">v5.0.0-phx</span>
+          {/* Membership / Recruitment Status Column (PRD Section 3.9 & Section 9) */}
+          <div className="space-y-4">
+            <h4 className="text-xs font-mono uppercase tracking-widest text-primary font-bold">
+              Membership
+            </h4>
+            {isRecruitmentOpen ? (
+              <div className="p-4 bg-navy-deep/60 border border-phoenix-blue/30 space-y-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-phoenix-cyan animate-pulse" />
+                  <span className="text-[11px] font-mono text-phoenix-cyan font-bold uppercase">
+                    Recruitment Active
+                  </span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-secondary/60">3D Asset:</span>
-                  <span className="text-phoenix-cyan">Anatomical GLB</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-secondary/60">Render Core:</span>
-                  <span className="text-emerald-400">R3F / Three.js</span>
-                </div>
+                <p className="text-xs text-secondary leading-relaxed">
+                  {clubConfig.recruitment.role}. Review deadline: {clubConfig.recruitment.deadline}.
+                </p>
+                <a
+                  href={clubConfig.recruitment.applicationUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-mono text-primary font-bold hover:text-phoenix-cyan transition-colors"
+                >
+                  <span>Submit Application</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
               </div>
-            </div>
-
-            <button
-              onClick={scrollToTop}
-              className="mt-8 inline-flex items-center gap-2 text-xs font-mono text-secondary hover:text-phoenix-cyan transition-colors cursor-pointer"
-            >
-              <ArrowUp className="w-4 h-4" />
-              <span>Return to Apex [Top]</span>
-            </button>
+            ) : (
+              <div className="p-4 bg-white/[0.02] border border-white/10 space-y-2">
+                <p className="text-xs font-mono text-secondary">Recruitment Closed</p>
+                <p className="text-xs text-secondary/80 leading-relaxed">
+                  General cohort applications are currently closed. Inquire at our Discord lounge for open research pods.
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Bottom Legal & ASCII Crest */}
-        <div className="pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-4 text-xs font-mono text-secondary/60">
-          <p>© {new Date().getFullYear()} {clubConfig.name}. Designed & Built by Student Researchers.</p>
-          <div className="flex items-center gap-3">
-            <span className="text-phoenix-blue">▲</span>
-            <span>INTELLIGENCE. IMAGINATION. IGNITED.</span>
-            <span className="text-phoenix-orange">▲</span>
+        {/* Bottom Bar: Developer Credits & Copyright (PRD Section 3.9) */}
+        <div className="pt-8 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-secondary">
+          <div className="flex flex-wrap items-center gap-3">
+            <span>© {new Date().getFullYear()} {clubConfig.name}. All rights reserved.</span>
+            <span>•</span>
+            <span className="text-secondary/70">
+              {clubConfig.developerCredits.team}
+            </span>
           </div>
+
+          <button
+            onClick={scrollToTop}
+            className="flex items-center gap-2 hover:text-primary transition-colors cursor-pointer group"
+          >
+            <span>Back to Top</span>
+            <ArrowUp className="w-3.5 h-3.5 group-hover:-translate-y-0.5 transition-transform" />
+          </button>
         </div>
       </div>
     </footer>
