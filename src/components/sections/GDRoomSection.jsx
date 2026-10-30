@@ -2,83 +2,86 @@
 
 import React from 'react';
 import { gdRoomData } from '@/data/gdData';
-import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
-import { MessagesSquare, Scale, Users, Flame, Check, ShieldAlert, Sparkles } from 'lucide-react';
+import { Scale, ShieldAlert, Sparkles, Check, ArrowUpRight } from 'lucide-react';
 
 export function GDRoomSection() {
   return (
-    <section id="gd-room" className="relative py-28 px-4 sm:px-6 lg:px-8 bg-[#070A0F] border-t border-white/5 overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-phoenix-ember/5 rounded-full blur-[140px] pointer-events-none" />
+    <section id="gd-room" className="relative py-32 px-6 sm:px-8 bg-[#05070B] border-t border-white/10 overflow-hidden">
+      {/* Background ambient lighting */}
+      <div className="absolute top-1/3 right-1/4 w-[450px] h-[450px] bg-phoenix-orange/5 rounded-full blur-[140px] pointer-events-none" />
 
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
-        <div className="max-w-3xl mb-14 space-y-4">
-          <Badge variant="ember" icon={MessagesSquare}>
-            04 // THE GD ARENA & DIALECTIC
-          </Badge>
-          <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-white tracking-tight">
-            The Group Discussion <span className="text-transparent bg-clip-text bg-gradient-to-r from-phoenix-ember to-orange-400">Arena</span>.
+        <div className="flex items-center gap-4 mb-16">
+          <span className="text-xs font-mono tracking-widest text-phoenix-orange uppercase">
+            04 // THE DIALECTIC ARENA & DEBATES
+          </span>
+          <div className="h-[1px] flex-1 bg-gradient-to-r from-phoenix-orange/30 via-white/10 to-transparent" />
+        </div>
+
+        <div className="max-w-3xl mb-12 space-y-3">
+          <h2 className="font-display text-4xl sm:text-5xl font-bold tracking-tight text-primary">
+            Critical Inquiries & <span className="text-gradient-flame">Debate</span>.
           </h2>
-          <p className="text-base sm:text-lg text-gray-400 font-sans leading-relaxed">
+          <p className="text-base text-secondary font-sans leading-relaxed">
             {gdRoomData.subtitle}
           </p>
         </div>
 
-        {/* Featured Live Upcoming Debate Card */}
-        <div className="relative p-6 sm:p-10 rounded-2xl bg-gradient-to-b from-surface-100 to-surface-200 border border-orange-500/30 shadow-[0_0_40px_rgba(255,69,0,0.1)] mb-14">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+        {/* Featured Dialectic Duel Stage */}
+        <div className="relative p-8 sm:p-12 bg-navy-deep/80 border border-white/10 mb-16">
+          {/* Dialectic Header */}
+          <div className="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-6 mb-8">
             <div className="flex items-center gap-3">
-              <span className="px-2.5 py-1 rounded bg-orange-500/20 text-phoenix-ember font-mono text-xs font-bold border border-orange-500/40">
+              <span className="px-2.5 py-1 text-xs font-mono uppercase tracking-wider bg-phoenix-orange/20 text-phoenix-orange font-bold border border-phoenix-orange/40">
                 {gdRoomData.upcomingTopic.code}
               </span>
-              <span className="text-xs font-mono text-gray-400">
-                📅 {gdRoomData.upcomingTopic.date} • {gdRoomData.venue}
+              <span className="text-xs font-mono text-secondary">
+                {gdRoomData.upcomingTopic.date} • {gdRoomData.venue}
               </span>
             </div>
-            <span className="text-xs font-mono text-emerald-400 bg-emerald-500/10 px-3 py-1 rounded-full border border-emerald-500/20 flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-              {gdRoomData.upcomingTopic.status}
+            <span className="text-xs font-mono text-phoenix-cyan">
+              ● {gdRoomData.upcomingTopic.status}
             </span>
           </div>
 
-          <h3 className="text-2xl sm:text-3xl font-display font-bold text-white mb-4 leading-snug">
+          <h3 className="text-2xl sm:text-3xl font-display font-bold text-primary mb-4 leading-snug max-w-4xl">
             {gdRoomData.upcomingTopic.topic}
           </h3>
 
-          <p className="text-sm sm:text-base text-gray-300 font-sans leading-relaxed mb-8 max-w-4xl">
+          <p className="text-base text-secondary font-sans leading-relaxed mb-10 max-w-4xl">
             {gdRoomData.upcomingTopic.abstract}
           </p>
 
-          {/* Dialectic Pro vs Con Split Box */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-            {/* Pro Stance */}
-            <div className="p-5 rounded-xl bg-surface-300/80 border border-cyan-500/20 space-y-3">
-              <div className="flex items-center gap-2 text-xs font-mono text-phoenix-cyan uppercase font-bold tracking-wider">
+          {/* Dialectic Two-Column Confrontation */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+            {/* The Thesis Box (Electric Blue) */}
+            <div className="p-6 bg-background/80 border-t-2 border-phoenix-blue space-y-4">
+              <div className="flex items-center gap-2 text-xs font-mono text-phoenix-blue uppercase tracking-widest font-bold">
                 <Scale className="w-4 h-4" />
-                <span>The Case for Open Weights & Proliferation</span>
+                <span>Thesis // Case for Open Proliferation</span>
               </div>
-              <ul className="space-y-2 text-xs font-sans text-gray-300">
+              <ul className="space-y-3 text-sm font-sans text-secondary">
                 {gdRoomData.upcomingTopic.proKeyPoints.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <Check className="w-3.5 h-3.5 text-phoenix-cyan shrink-0 mt-0.5" />
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <Check className="w-4 h-4 text-phoenix-cyan shrink-0 mt-0.5" />
                     <span>{point}</span>
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Con Stance */}
-            <div className="p-5 rounded-xl bg-surface-300/80 border border-orange-500/20 space-y-3">
-              <div className="flex items-center gap-2 text-xs font-mono text-phoenix-ember uppercase font-bold tracking-wider">
+            {/* The Antithesis Box (Flame Orange) */}
+            <div className="p-6 bg-background/80 border-t-2 border-phoenix-orange space-y-4">
+              <div className="flex items-center gap-2 text-xs font-mono text-phoenix-orange uppercase tracking-widest font-bold">
                 <ShieldAlert className="w-4 h-4" />
-                <span>The Case for Frontier Containment & Governance</span>
+                <span>Antithesis // Case for Frontier Containment</span>
               </div>
-              <ul className="space-y-2 text-xs font-sans text-gray-300">
+              <ul className="space-y-3 text-sm font-sans text-secondary">
                 {gdRoomData.upcomingTopic.conKeyPoints.map((point, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="w-1.5 h-1.5 rounded-full bg-phoenix-ember shrink-0 mt-1.5" />
+                  <li key={idx} className="flex items-start gap-2.5">
+                    <span className="w-1.5 h-1.5 rounded-full bg-phoenix-orange shrink-0 mt-2" />
                     <span>{point}</span>
                   </li>
                 ))}
@@ -87,50 +90,53 @@ export function GDRoomSection() {
           </div>
 
           {/* Action Row */}
-          <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <div className="text-xs font-mono text-gray-400">
-              Moderated by: <strong className="text-white">{gdRoomData.upcomingTopic.moderator}</strong>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6 pt-6 border-t border-white/10">
+            <div className="text-xs font-mono text-secondary">
+              Moderated by: <strong className="text-primary">{gdRoomData.upcomingTopic.moderator}</strong>
             </div>
             <Button
-              variant="ember"
+              variant="orange"
               size="md"
               icon={Sparkles}
               href="https://discord.gg/phoenix-ai"
               target="_blank"
             >
-              Join Voice Lounge & Debates
+              Attend Dialectic / Claim Debater Seat
             </Button>
           </div>
         </div>
 
-        {/* Past Discussion Consensus Archive */}
+        {/* Previous Debates Consensus Log (Clean Minimal Rows) */}
         <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h4 className="text-sm font-mono uppercase tracking-widest text-gray-400 font-semibold">
-              Recent Debate Outcomes & Consensus
-            </h4>
-            <span className="text-xs font-mono text-phoenix-cyan">
-              Cadence: {gdRoomData.meetingCadence}
-            </span>
+          <div className="flex items-center justify-between text-xs font-mono uppercase tracking-widest text-secondary font-semibold pb-2 border-b border-white/10">
+            <span>Recent Dialectic Consensus Log</span>
+            <span>Cadence: {gdRoomData.meetingCadence}</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="divide-y divide-white/5">
             {gdRoomData.pastDiscussions.map((past) => (
               <div
                 key={past.code}
-                className="p-5 rounded-xl bg-surface-100/60 border border-white/5 hover:border-white/15 transition-all space-y-2.5"
+                className="py-5 flex flex-col md:flex-row md:items-start justify-between gap-4"
               >
-                <div className="flex items-center justify-between text-xs font-mono text-gray-500">
-                  <span className="text-phoenix-ember font-bold">{past.code}</span>
-                  <span>{past.date} • {past.attendees} Debaters</span>
+                <div className="md:w-1/4">
+                  <span className="text-xs font-mono text-phoenix-orange font-bold uppercase block">
+                    {past.code} // {past.date}
+                  </span>
+                  <span className="text-[10px] font-mono text-secondary">
+                    {past.attendees} Participating Debaters
+                  </span>
                 </div>
-                <h5 className="text-sm font-display font-bold text-white leading-snug">
-                  {past.topic}
-                </h5>
-                <p className="text-xs font-sans text-gray-400 leading-relaxed border-t border-white/5 pt-2">
-                  <strong className="text-gray-300 font-mono">Consensus: </strong>
-                  {past.outcome}
-                </p>
+
+                <div className="md:w-3/4 space-y-1">
+                  <h4 className="text-base font-display font-bold text-primary">
+                    {past.topic}
+                  </h4>
+                  <p className="text-sm text-secondary font-sans leading-relaxed">
+                    <strong className="text-phoenix-cyan font-mono text-xs">Verdict: </strong>
+                    {past.outcome}
+                  </p>
+                </div>
               </div>
             ))}
           </div>
@@ -139,4 +145,3 @@ export function GDRoomSection() {
     </section>
   );
 }
-

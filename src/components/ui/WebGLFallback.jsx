@@ -8,14 +8,14 @@ export function WebGLFallback({ className = '' }) {
       {/* Stylized Glowing SVG Phoenix Hologram */}
       <div className="relative w-72 h-72 sm:w-96 sm:h-96 flex items-center justify-center">
         {/* Pulsing Aura Rings */}
-        <div className="absolute inset-0 rounded-full border border-phoenix-cyan/20 animate-ping opacity-25" />
-        <div className="absolute inset-6 rounded-full border border-phoenix-blue/30 animate-pulse" />
-        <div className="absolute inset-12 rounded-full border border-phoenix-ember/20" />
+        <div className="absolute inset-0 rounded-full border border-phoenix-blue/20 animate-ping opacity-25" />
+        <div className="absolute inset-6 rounded-full border border-phoenix-cyan/30 animate-pulse" />
+        <div className="absolute inset-12 rounded-full border border-phoenix-orange/20" />
 
         {/* Cyber Phoenix Emblem Vector */}
         <svg
           viewBox="0 0 200 200"
-          className="w-48 h-48 sm:w-64 sm:h-64 filter drop-shadow-[0_0_25px_rgba(0,240,255,0.6)]"
+          className="w-48 h-48 sm:w-64 sm:h-64 filter drop-shadow-[0_0_30px_rgba(20,125,255,0.6)]"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -43,27 +43,27 @@ export function WebGLFallback({ className = '' }) {
           />
           <defs>
             <linearGradient id="phoenixGradient" x1="0" y1="0" x2="200" y2="200" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#00F0FF" />
-              <stop offset="60%" stopColor="#0070F3" />
-              <stop offset="100%" stopColor="#FF4500" />
+              <stop offset="0%" stopColor="#49D8FF" />
+              <stop offset="60%" stopColor="#147DFF" />
+              <stop offset="100%" stopColor="#FF7138" />
             </linearGradient>
             <linearGradient id="innerFlameGradient" x1="50" y1="50" x2="150" y2="150" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#E0F7FF" />
-              <stop offset="50%" stopColor="#00F0FF" />
-              <stop offset="100%" stopColor="#0052CC" />
+              <stop offset="0%" stopColor="#F5F7FA" />
+              <stop offset="50%" stopColor="#49D8FF" />
+              <stop offset="100%" stopColor="#147DFF" />
             </linearGradient>
             <linearGradient id="tailGradient" x1="100" y1="135" x2="100" y2="190" gradientUnits="userSpaceOnUse">
-              <stop offset="0%" stopColor="#00F0FF" />
-              <stop offset="70%" stopColor="#FF4500" />
-              <stop offset="100%" stopColor="#FF6B00" />
+              <stop offset="0%" stopColor="#49D8FF" />
+              <stop offset="70%" stopColor="#FF7138" />
+              <stop offset="100%" stopColor="#E64B45" />
             </linearGradient>
           </defs>
         </svg>
 
         {/* Ambient status indicator */}
-        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1 bg-surface-200/80 border border-white/10 rounded-full">
-          <span className="w-1.5 h-1.5 rounded-full bg-phoenix-cyan animate-ping" />
-          <span className="text-[10px] font-mono uppercase tracking-widest text-gray-400">
+        <div className="absolute -bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1 bg-navy-deep/80 border border-white/10">
+          <span className="w-1.5 h-1.5 rounded-full bg-phoenix-blue animate-ping" />
+          <span className="text-[10px] font-mono uppercase tracking-widest text-secondary">
             Holographic Fallback Active
           </span>
         </div>
@@ -71,4 +71,3 @@ export function WebGLFallback({ className = '' }) {
     </div>
   );
 }
-

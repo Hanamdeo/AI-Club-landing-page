@@ -1,7 +1,7 @@
 'use client';
 
-import React, { useRef, useEffect, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import React, { useRef, useEffect, useState, Suspense } from 'react';
+import { Canvas } from '@react-three/fiber';
 import { PhoenixModel } from './PhoenixModel';
 import { PhoenixParticles } from './PhoenixParticles';
 import { WebGLFallback } from '@/components/ui/WebGLFallback';
@@ -27,78 +27,77 @@ function SceneController({ isMobile, isReducedMotion }) {
 
     // Mobile vs Desktop target coordinates
     const scaleFactor = isMobile ? 0.65 : 1.0;
-    const xOffset = isMobile ? 0 : 2.2;
-    const yOffset = isMobile ? 1.0 : 0.1;
+    const xHero = isMobile ? 0 : 2.1;
+    const yHero = isMobile ? 0.8 : -0.1;
 
-    // Set initial position: Navbar emblem region (top-left)
+    // Phase A: Set initial position in navbar emblem region
     gsap.set(group.position, {
       x: isMobile ? 0 : -3.2,
-      y: isMobile ? 3.0 : 2.5,
-      z: -4.0,
+      y: isMobile ? 2.8 : 2.4,
+      z: -3.8,
     });
     gsap.set(group.scale, {
-      x: 0.4 * scaleFactor,
-      y: 0.4 * scaleFactor,
-      z: 0.4 * scaleFactor,
+      x: 0.35 * scaleFactor,
+      y: 0.35 * scaleFactor,
+      z: 0.35 * scaleFactor,
     });
     gsap.set(group.rotation, {
       x: 0.1,
-      y: 0.5,
+      y: 0.4,
       z: 0,
     });
 
     if (isReducedMotion) {
-      // Gentle static placement beside hero
-      gsap.to(group.position, { x: xOffset, y: yOffset, z: 0, duration: 1 });
+      gsap.to(group.position, { x: xHero, y: yHero, z: 0, duration: 1 });
       gsap.to(group.scale, {
-        x: 1.8 * scaleFactor,
-        y: 1.8 * scaleFactor,
-        z: 1.8 * scaleFactor,
+        x: 1.0 * scaleFactor,
+        y: 1.0 * scaleFactor,
+        z: 1.0 * scaleFactor,
         duration: 1,
       });
       return;
     }
 
-    // Phase A & B: Flight entrance animation (Navbar -> Hero)
-    const introTl = gsap.timeline({ delay: 0.3 });
+    // Phase B: Cinematic curved flight entrance (Navbar -> Hero)
+    const introTl = gsap.timeline({ delay: 0.2 });
 
     introTl
-      // Curve flight swoop
+      // Dive & accelerate across center
       .to(group.position, {
-        x: isMobile ? 0 : 0.5,
-        y: isMobile ? 1.5 : -0.6,
-        z: -1.5,
-        duration: 1.2,
+        x: isMobile ? 0 : 0.4,
+        y: isMobile ? 1.4 : -0.8,
+        z: -1.2,
+        duration: 1.3,
         ease: 'power2.in',
-        onStart: () => setVelocity(2.5),
+        onStart: () => setVelocity(2.2),
       })
       .to(
         group.rotation,
         {
           x: -0.2,
-          y: -0.8,
-          z: 0.35, // banking
-          duration: 1.2,
+          y: -0.7,
+          z: 0.4, // aerodynamic banking
+          duration: 1.3,
           ease: 'power2.in',
         },
         '<'
       )
-      // Swoop up into hero right section
+      // Swoop up into hero right section with breathing room
       .to(group.position, {
-        x: xOffset,
-        y: yOffset,
+        x: xHero,
+        y: yHero,
         z: 0,
-        duration: 1.4,
+        duration: 1.5,
         ease: 'power3.out',
         onComplete: () => setVelocity(1.0),
       })
       .to(
         group.scale,
         {
-          x: 1.8 * scaleFactor,
-          y: 1.8 * scaleFactor,
-          z: 1.8 * scaleFactor,
-          duration: 1.4,
+          x: 1.0 * scaleFactor,
+          y: 1.0 * scaleFactor,
+          z: 1.0 * scaleFactor,
+          duration: 1.5,
           ease: 'power3.out',
         },
         '<'
@@ -106,16 +105,16 @@ function SceneController({ isMobile, isReducedMotion }) {
       .to(
         group.rotation,
         {
-          x: 0.1,
-          y: isMobile ? 0 : -0.6,
+          x: 0.05,
+          y: isMobile ? 0 : -0.5,
           z: 0.05,
-          duration: 1.4,
+          duration: 1.5,
           ease: 'power3.out',
         },
         '<'
       );
 
-    // Phase D: ScrollTrigger Journey across sections
+    // Phase D: ScrollTrigger Journey across editorial sections
     const scrollTl = gsap.timeline({
       scrollTrigger: {
         trigger: 'main',
@@ -126,11 +125,11 @@ function SceneController({ isMobile, isReducedMotion }) {
       },
     });
 
-    // 03. About Section: Cruising glide slightly backgrounded
+    // 01. About Section: Cruising glide slightly backgrounded
     scrollTl.to(group.position, {
-      x: isMobile ? 0 : 1.6,
-      y: isMobile ? -0.8 : -0.4,
-      z: -2.0,
+      x: isMobile ? 0 : 1.4,
+      y: isMobile ? -0.8 : -0.5,
+      z: -1.8,
       ease: 'power1.inOut',
     });
     scrollTl.to(
@@ -144,28 +143,28 @@ function SceneController({ isMobile, isReducedMotion }) {
       '<'
     );
 
-    // 04. AI Research Radar: Glides to left flank, projecting scan
+    // 02. AI Research Radar: Glides to left flank, projecting scan
     scrollTl.to(group.position, {
-      x: isMobile ? 0 : -2.2,
-      y: isMobile ? 0.8 : 0.2,
-      z: -0.8,
+      x: isMobile ? 0 : -1.8,
+      y: isMobile ? 0.6 : 0.2,
+      z: -0.9,
       ease: 'power1.inOut',
     });
     scrollTl.to(
       group.rotation,
       {
-        x: 0.2,
-        y: isMobile ? 0 : 0.8,
+        x: 0.15,
+        y: isMobile ? 0 : 0.7,
         z: -0.1,
         ease: 'power1.inOut',
       },
       '<'
     );
 
-    // 05. Events & Arena: High aerodynamic perch over events
+    // 03. Events & Arena: High aerodynamic perch over flagship banner
     scrollTl.to(group.position, {
-      x: isMobile ? 0 : 2.0,
-      y: isMobile ? 1.2 : 0.9,
+      x: isMobile ? 0 : 1.8,
+      y: isMobile ? 1.0 : 0.7,
       z: -1.2,
       ease: 'power1.inOut',
     });
@@ -173,24 +172,24 @@ function SceneController({ isMobile, isReducedMotion }) {
       group.rotation,
       {
         x: 0.1,
-        y: isMobile ? 0 : -0.7,
-        z: 0.2,
+        y: isMobile ? 0 : -0.6,
+        z: 0.15,
         ease: 'power1.inOut',
       },
       '<'
     );
 
-    // 06. GD Room: Center overhead council stance
+    // 04. Dialectic Arena (GD): Center overhead council stance
     scrollTl.to(group.position, {
       x: 0,
-      y: 1.1,
-      z: -1.6,
+      y: 0.9,
+      z: -1.4,
       ease: 'power1.inOut',
     });
     scrollTl.to(
       group.rotation,
       {
-        x: 0.35,
+        x: 0.3,
         y: 0,
         z: 0,
         ease: 'power1.inOut',
@@ -198,11 +197,11 @@ function SceneController({ isMobile, isReducedMotion }) {
       '<'
     );
 
-    // 07. Gallery & Chronicles: Pulls back into deep space for gallery parallax
+    // 05. Chronicles & Gallery: Pulls back into deep space for parallax
     scrollTl.to(group.position, {
-      x: isMobile ? 0 : 1.8,
+      x: isMobile ? 0 : 1.5,
       y: 0.4,
-      z: -3.2,
+      z: -2.8,
       ease: 'power1.inOut',
     });
     scrollTl.to(
@@ -216,11 +215,11 @@ function SceneController({ isMobile, isReducedMotion }) {
       '<'
     );
 
-    // 08. Insights & Dispatches: Sweeps gracefully across the background
+    // 06. Dispatches & Insights: Sweeps gracefully across the background
     scrollTl.to(group.position, {
-      x: isMobile ? 0 : -1.8,
-      y: 0.3,
-      z: -2.5,
+      x: isMobile ? 0 : -1.5,
+      y: 0.2,
+      z: -2.2,
       ease: 'power1.inOut',
     });
     scrollTl.to(
@@ -234,11 +233,11 @@ function SceneController({ isMobile, isReducedMotion }) {
       '<'
     );
 
-    // 09. Team & Leadership: Anchors right flank beside mentors
+    // 07. Research Council: Anchors right margin beside leadership directory
     scrollTl.to(group.position, {
-      x: isMobile ? 0 : 1.7,
-      y: -0.2,
-      z: -1.5,
+      x: isMobile ? 0 : 1.5,
+      y: -0.3,
+      z: -1.3,
       ease: 'power1.inOut',
     });
     scrollTl.to(
@@ -252,19 +251,19 @@ function SceneController({ isMobile, isReducedMotion }) {
       '<'
     );
 
-    // 10. Finale & Footer: Centered soaring pose above footer
+    // 08. Finale & Footer: Ascending soaring pose into the sky
     scrollTl.to(group.position, {
       x: 0,
-      y: 0.5,
+      y: 0.6,
       z: isMobile ? -1.0 : 0.2,
       ease: 'power2.out',
     });
     scrollTl.to(
       group.scale,
       {
-        x: 2.1 * scaleFactor,
-        y: 2.1 * scaleFactor,
-        z: 2.1 * scaleFactor,
+        x: 1.15 * scaleFactor,
+        y: 1.15 * scaleFactor,
+        z: 1.15 * scaleFactor,
         ease: 'power2.out',
       },
       '<'
@@ -289,7 +288,9 @@ function SceneController({ isMobile, isReducedMotion }) {
 
   return (
     <group ref={phoenixGroupRef}>
-      <PhoenixModel flightVelocity={velocity} />
+      <Suspense fallback={null}>
+        <PhoenixModel flightVelocity={velocity} />
+      </Suspense>
       <PhoenixParticles isMobile={isMobile} />
     </group>
   );
@@ -327,32 +328,32 @@ export function PhoenixCanvas() {
       className="fixed inset-0 pointer-events-none z-10 overflow-hidden"
     >
       <Canvas
-        camera={{ position: [0, 0, 5], fov: 45, near: 0.1, far: 1000 }}
+        camera={{ position: [0, 0, 5], fov: 42, near: 0.1, far: 1000 }}
         gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
         dpr={isMobile ? [1, 1.5] : [1, 2]}
       >
         {/* Cinematic Multi-Point Lighting */}
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.4} color="#0B1929" />
         
-        {/* Key Cyan Light */}
+        {/* Key Electric Blue Light from Front-Right */}
         <directionalLight
-          position={[5, 6, 4]}
-          intensity={1.8}
-          color="#00F0FF"
-        />
-
-        {/* Cobalt Rim Light (Opposite Angle for Edge Separation) */}
-        <directionalLight
-          position={[-5, 3, -3]}
+          position={[6, 5, 5]}
           intensity={2.5}
-          color="#0070F3"
+          color="#147DFF"
         />
 
-        {/* Ember Accent Fill Light (Warm Underglow) */}
+        {/* Cobalt / Cyan Rim Light from Top-Left */}
+        <directionalLight
+          position={[-6, 4, -4]}
+          intensity={3.2}
+          color="#49D8FF"
+        />
+
+        {/* Warm Flame Orange Accent Fill from Below */}
         <pointLight
           position={[0, -3, 2]}
-          intensity={1.5}
-          color="#FF4500"
+          intensity={1.6}
+          color="#FF7138"
           distance={10}
         />
 
@@ -365,4 +366,3 @@ export function PhoenixCanvas() {
     </div>
   );
 }
-

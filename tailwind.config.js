@@ -8,66 +8,42 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        background: "#07090D",
-        surface: {
-          50: "#1A202C",
-          100: "#141A24",
-          200: "#0F141D",
-          300: "#0A0D14",
-          DEFAULT: "#0D1117",
+        background: {
+          DEFAULT: "#05070B",
+          secondary: "#0A1018",
+        },
+        navy: {
+          deep: "#0B1929",
+          surface: "#0E1E32",
         },
         phoenix: {
-          cyan: "#00F0FF",
-          blue: "#0070F3",
-          cobalt: "#1E40AF",
-          ice: "#A5F3FC",
-          ember: "#FF4500",
-          flame: "#FF6B00",
-          crimson: "#DC2626",
+          blue: "#147DFF",
+          cyan: "#49D8FF",
+          orange: "#FF7138",
+          red: "#E64B45",
+        },
+        primary: "#F5F7FA",
+        secondary: "#929EAD",
+        muted: "#5B6876",
+        border: {
+          subtle: "rgba(255, 255, 255, 0.08)",
+          accent: "rgba(20, 125, 255, 0.25)",
         },
       },
       fontFamily: {
-        sans: [
-          'Inter',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'Segoe UI',
-          'Roboto',
-          'sans-serif',
-        ],
-        display: [
-          'Cabinet Grotesk',
-          'Inter',
-          'system-ui',
-          'sans-serif',
-        ],
-        mono: [
-          'JetBrains Mono',
-          'Fira Code',
-          'ui-monospace',
-          'SFMono-Regular',
-          'monospace',
-        ],
+        display: ['"Space Grotesk"', 'sans-serif'],
+        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       boxShadow: {
-        'glow-cyan': '0 0 35px -5px rgba(0, 240, 255, 0.35)',
-        'glow-blue': '0 0 35px -5px rgba(0, 112, 243, 0.4)',
-        'glow-ember': '0 0 35px -5px rgba(255, 69, 0, 0.35)',
-        'inner-glow': 'inset 0 0 20px 0 rgba(0, 240, 255, 0.1)',
+        'glow-blue': '0 0 50px -10px rgba(20, 125, 255, 0.45)',
+        'glow-cyan': '0 0 40px -10px rgba(73, 216, 255, 0.35)',
+        'glow-orange': '0 0 40px -10px rgba(255, 113, 56, 0.35)',
+        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.45)',
       },
       backgroundImage: {
-        'radial-gradient': 'radial-gradient(circle at center, var(--tw-gradient-stops))',
-        'grid-pattern': 'radial-gradient(rgba(0, 240, 255, 0.1) 1px, transparent 1px)',
-      },
-      animation: {
-        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'scan': 'scan 6s linear infinite',
-      },
-      keyframes: {
-        scan: {
-          '0%': { transform: 'translateY(-100%)' },
-          '100%': { transform: 'translateY(1000%)' },
-        },
+        'gradient-radial': 'radial-gradient(circle at center, var(--tw-gradient-stops))',
+        'noise-glow': 'radial-gradient(ellipse at 50% 0%, rgba(20, 125, 255, 0.12) 0%, transparent 70%)',
       },
     },
   },
