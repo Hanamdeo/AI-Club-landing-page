@@ -15,9 +15,10 @@ export function PhoenixParticles({ count = 90, isMobile = false }) {
     const vel = new Float32Array(particleCount * 3);
     const life = new Float32Array(particleCount);
 
-    const blueColor = new THREE.Color('#147DFF');
-    const cyanColor = new THREE.Color('#49D8FF');
-    const flameColor = new THREE.Color('#FF7138');
+    const cyanColor = new THREE.Color('#48BDE8'); // Circuit Cyan
+    const goldColor = new THREE.Color('#E6A12E'); // Beak Gold
+    const copperColor = new THREE.Color('#D97236'); // Node Copper
+    const whiteColor = new THREE.Color('#F4F6F8'); // Crisp White
 
     for (let i = 0; i < particleCount; i++) {
       // Spawn around trailing tail / wing tips
@@ -31,13 +32,15 @@ export function PhoenixParticles({ count = 90, isMobile = false }) {
 
       life[i] = Math.random();
 
-      // 60% electric blue, 25% icy cyan, 15% flame orange ember
+      // Palette distribution: 60% Circuit Cyan, 25% Beak Gold, 10% Node Copper, 5% Crisp White
       const rand = Math.random();
-      let chosenColor = blueColor;
-      if (rand > 0.85) {
-        chosenColor = flameColor;
+      let chosenColor = cyanColor;
+      if (rand > 0.95) {
+        chosenColor = whiteColor;
+      } else if (rand > 0.85) {
+        chosenColor = copperColor;
       } else if (rand > 0.6) {
-        chosenColor = cyanColor;
+        chosenColor = goldColor;
       }
 
       col[i * 3] = chosenColor.r;
@@ -93,10 +96,10 @@ export function PhoenixParticles({ count = 90, isMobile = false }) {
         />
       </bufferGeometry>
       <pointsMaterial
-        size={isMobile ? 0.09 : 0.13}
+        size={isMobile ? 0.08 : 0.12}
         vertexColors
         transparent
-        opacity={0.8}
+        opacity={0.85}
         blending={THREE.AdditiveBlending}
         depthWrite={false}
       />

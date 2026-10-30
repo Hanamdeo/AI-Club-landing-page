@@ -1,27 +1,27 @@
 export const clubConfig = {
-  name: "PHOENIX AI LAB",
-  shortName: "Phoenix AI",
+  name: "AI CLUB",
+  shortName: "AI Club",
   tagline: "INTELLIGENCE. IMAGINATION. IGNITED.",
   college: "Department of Artificial Intelligence & Computer Science",
   campus: "Main Innovation Complex, Room 402",
   established: 2024,
   location: "Campus Innovation Hub, Lab 402",
-  email: "contact@phoenix-aiclub.edu",
+  email: "contact@aiclub.engineering",
   cohort: "2026-2027",
   status: "LAB ONLINE // COHORT ACTIVE",
 
-  // Conditional Recruitment System (PRD Section 9 & FR-12)
+  // Conditional Recruitment System
   recruitment: {
-    isOpen: true, // Toggle to false to cleanly hide Join CTA across site
+    isOpen: true,
     title: "Fall 2026 Cohort Recruitment Open",
     badge: "Applications Active",
     role: "Junior Researchers, Kernel Developers & Event Leads",
-    applicationUrl: "https://forms.gle/phoenix-ai-recruitment-2026",
+    applicationUrl: "https://forms.gle/ai-club-recruitment-2026",
     deadline: "November 25, 2026",
-    notice: "Applications are reviewed on a rolling basis across technical, design, and operations tracks.",
+    notice: "Applications are reviewed on a rolling basis across technical, design, and systems tracks.",
   },
 
-  // Telemetry Statistics (PRD Section 3.3)
+  // Telemetry Statistics
   stats: [
     { label: "Active Members", value: "320+", change: "+45% this academic cycle" },
     { label: "Open Preprints & Papers", value: "14", change: "Published in open access" },
@@ -29,16 +29,16 @@ export const clubConfig = {
     { label: "National Podiums", value: "18", change: "Collegiate hackathons" },
   ],
 
-  // Official Socials & Links (PRD Section 3.9 & FR-13)
+  // Official Socials & Links
   socials: {
-    github: "https://github.com/phoenix-aiclub",
-    discord: "https://discord.gg/phoenix-ai",
-    twitter: "https://x.com/phoenix_ai_lab",
-    linkedin: "https://linkedin.com/company/phoenix-aiclub",
-    youtube: "https://youtube.com/@phoenix_ai_lab",
+    github: "https://github.com/ai-club",
+    discord: "https://discord.gg/ai-club",
+    twitter: "https://x.com/aiclub_lab",
+    linkedin: "https://linkedin.com/company/ai-club",
+    youtube: "https://youtube.com/@ai_club",
   },
 
-  // 4 Primary Public Routes (PRD Section 2)
+  // 4 Primary Public Routes
   navLinks: [
     { name: "Home", href: "/" },
     { name: "Events", href: "/events" },
@@ -46,9 +46,9 @@ export const clubConfig = {
     { name: "Gallery", href: "/gallery" },
   ],
 
-  // Developer Credits (PRD Section 3.9)
+  // Developer Credits
   developerCredits: {
-    team: "Phoenix AI Lab Web Engineering Core",
-    githubUrl: "https://github.com/phoenix-aiclub/aiclub-website",
+    team: "AI Club Web Engineering Core",
+    githubUrl: "https://github.com/ai-club/aiclub-website",
   },
 };
