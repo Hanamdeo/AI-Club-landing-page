@@ -24,6 +24,20 @@ export default function RootLayout({ children }) {
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700;800&display=swap"
           rel="stylesheet"
         />
+        <style
+          dangerouslySetInnerHTML={{
+            __html: `
+              html, body {
+                background-color: #05070B !important;
+                color: #F5F7FA !important;
+                font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                margin: 0;
+                padding: 0;
+              }
+              a { color: inherit; text-decoration: none; }
+            `,
+          }}
+        />
       </head>
       <body className="bg-background text-primary antialiased overflow-x-hidden selection:bg-phoenix-blue selection:text-white min-h-screen flex flex-col">
         <NoiseOverlay />

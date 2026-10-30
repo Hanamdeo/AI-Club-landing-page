@@ -5,9 +5,10 @@ const nextConfig = {
     'three',
     '@react-three/fiber',
     '@react-three/drei',
-    'lucide-react',
-    'gsap'
   ],
+  experimental: {
+    optimizePackageImports: ['lucide-react'],
+  },
   webpack: (config) => {
     config.externals = [...(config.externals || []), { canvas: 'canvas' }];
     return config;
