@@ -29,10 +29,10 @@ export function PhoenixModel({ flightVelocity = 1 }) {
           child.material.alphaTest = 0.12;
           child.material.depthWrite = true;
 
-          // Luminous cyber-aesthetic: bright icy cyan diffuse tint with brilliant electric blue emissive glow
-          child.material.color = new THREE.Color('#B4E5FF');
+          // Luminous cyber-aesthetic: electric blue dominates per directive
+          child.material.color = new THREE.Color('#38B6FF');
           child.material.emissive = new THREE.Color('#147DFF');
-          child.material.emissiveIntensity = 2.0;
+          child.material.emissiveIntensity = 2.4;
           child.material.roughness = 0.35;
           child.material.metalness = 0.3;
           child.material.needsUpdate = true;
@@ -75,13 +75,17 @@ export function PhoenixModel({ flightVelocity = 1 }) {
     <group ref={groupRef} dispose={null}>
       {/* 
         The model's bounding box center is at [-377, 170, 0] with wingspan ~964 units.
-        We offset by [+377, -170, 0] so the pivot point is at the exact center of mass / heart.
-        Scale 0.0029 normalizes the wingspan to ~2.8 units in Three.js world space.
-        Rotation Math.PI * 0.72 directs the phoenix forward-left towards the editorial headline.
+        Offset by [+377, -170, 0] so the pivot point is at the exact center of mass / heart.
+        Scale 0.0029 normalizes wingspan to ~2.8 units in Three.js world space.
+        Rotation:
+        - Y = -Math.PI * 0.65 (-117°) points the head and chest FORWARD (+Z towards viewer)
+          and diagonally left (-X towards the hero headline).
+        - X = -0.05 tilts slightly upward into soaring stance.
+        - Z = 0.06 provides gentle aerodynamic bank.
       */}
       <group
         scale={[0.0029, 0.0029, 0.0029]}
-        rotation={[0.05, Math.PI * 0.72, -0.05]}
+        rotation={[-0.05, -Math.PI * 0.65, 0.06]}
       >
         <group position={[377, -170, 0]}>
           <primitive object={scene} />

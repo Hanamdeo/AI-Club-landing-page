@@ -105,9 +105,9 @@ function SceneController({ isMobile, isReducedMotion }) {
       .to(
         group.rotation,
         {
-          x: 0.05,
-          y: isMobile ? 0 : -0.5,
-          z: 0.05,
+          x: 0.02,
+          y: 0,
+          z: 0.02,
           duration: 1.5,
           ease: 'power3.out',
         },
