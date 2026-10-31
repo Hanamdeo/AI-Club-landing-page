@@ -6,7 +6,14 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
-import StartupIntro from '@/components/ui/StartupIntro';
+// Dynamically import Three.js components with SSR disabled
+const StartupIntro = dynamic(() => import('@/components/ui/StartupIntro'), {
+  ssr: false,
+});
+const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
+  ssr: false,
+});
+
 import HUDNavbar from '@/components/ui/HUDNavbar';
 import DepthTelemetry from '@/components/ui/DepthTelemetry';
 import Zone1Hero from '@/components/ui/zones/Zone1Hero';
@@ -16,11 +23,6 @@ import Zone4Operations from '@/components/ui/zones/Zone4Operations';
 import Zone5Archive from '@/components/ui/zones/Zone5Archive';
 import Zone6Community from '@/components/ui/zones/Zone6Community';
 import Zone7Exit from '@/components/ui/zones/Zone7Exit';
-
-// Dynamically import SceneContainer with SSR disabled for Three.js safety
-const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
-  ssr: false,
-});
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -101,7 +103,7 @@ export default function Home() {
   return (
     <main className="relative bg-transparent text-ivory selection:bg-sage selection:text-graphite min-h-screen">
       {/* Cinematic Architectural Startup Animation */}
-      {isIntro && <StartupIntro onComplete={() => setIsIntro(false)} />}
+      {mounted && isIntro && <StartupIntro onComplete={() => setIsIntro(false)} />}
 
       {/* 1. Master WebGL 3D Data Centre Environment (Fixed) */}
       {mounted && (
