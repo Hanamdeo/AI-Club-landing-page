@@ -1,0 +1,11 @@
+{
+  "name": "ai-club-web",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --dir AiWeb2 dev",
+    "build": "pnpm --dir AiWeb2 build",
+    "start": "pnpm --dir AiWeb2 start"
+  }
+}
+
