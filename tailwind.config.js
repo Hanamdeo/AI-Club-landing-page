@@ -8,72 +8,44 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // Strict Color Palette Extracted from Logo
-        background: {
-          DEFAULT: "#050507", // Void Black
-          primary: "#050507",
-          elevated: "#0C0F14", // Surface Card
-          card: "#0C0F14",
-          glass: "rgba(12, 15, 20, 0.72)",
+        graphite: {
+          DEFAULT: '#171B1C',
+          deep: '#121516',
+          light: '#1d2223',
         },
-        surface: {
-          DEFAULT: "#0C0F14",
-          card: "#0C0F14",
-          elevated: "#11151C",
-          glass: "rgba(12, 15, 20, 0.72)",
+        charcoal: {
+          DEFAULT: '#222828',
+          subtle: '#293030',
+          dark: '#1b2020',
         },
-        circuit: {
-          cyan: "#48BDE8", // Primary Accent (AI text & inner circuits)
-          amber: "#E6A12E", // Secondary Accent (Eagle eye & upper beak)
-          gold: "#E6A12E",
-          copper: "#D97236", // Tertiary Accent (Lower beak circuit trace)
+        slate: {
+          struct: '#343D3C',
+          beam: '#3F4A49',
+          hairline: '#4A5655',
         },
-        text: {
-          primary: "#F4F6F8", // Crisp White (CLUB text & feathers)
-          muted: "#8A99AD", // Steel Grey
-          dim: "#5B6876",
+        sage: {
+          DEFAULT: '#A2B29F',
+          muted: '#8D9E8A',
+          glow: '#B6C4B4',
+          dim: '#5E6B5D',
         },
-        border: {
-          DEFAULT: "rgba(72, 189, 232, 0.14)",
-          hairline: "rgba(72, 189, 232, 0.14)", // Default hairline
-          active: "rgba(230, 161, 46, 0.45)", // Active/Focus (Beak Gold)
-          cyan: "rgba(72, 189, 232, 0.28)",
-          amber: "rgba(230, 161, 46, 0.35)",
+        ivory: {
+          DEFAULT: '#E6E2D8',
+          warm: '#F2EFE8',
+          dim: '#C4C0B6',
         },
-        // Legacy aliases mapped to new strict brand palette
-        phoenix: {
-          blue: "#48BDE8",
-          cyan: "#48BDE8",
-          orange: "#E6A12E",
-          red: "#D97236",
-        },
-        navy: {
-          deep: "#0C0F14",
-          surface: "#11151C",
-        },
-        primary: "#F4F6F8",
-        secondary: "#8A99AD",
-        muted: "#5B6876",
+        warmwhite: '#FFF8EE',
       },
       fontFamily: {
-        display: ['"Space Grotesk"', '"Syne"', 'sans-serif'],
-        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'sans-serif'],
-        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
-      },
-      letterSpacing: {
-        tightest: '-0.03em',
+        sans: ['var(--font-inter)', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
       },
       boxShadow: {
-        'circuit-cyan': '0 0 24px -2px rgba(72, 189, 232, 0.35)',
-        'circuit-gold': '0 0 24px -2px rgba(230, 161, 46, 0.35)',
-        'circuit-btn': '0 4px 20px -2px rgba(72, 189, 232, 0.4)',
-        'glow-blue': '0 0 35px -5px rgba(72, 189, 232, 0.35)',
-        'glow-cyan': '0 0 30px -5px rgba(72, 189, 232, 0.4)',
-        'glow-orange': '0 0 30px -5px rgba(230, 161, 46, 0.35)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.72)',
+        'glass-panel': '0 8px 32px 0 rgba(0, 0, 0, 0.35)',
+        'sage-glow': '0 0 25px -5px rgba(162, 178, 159, 0.3)',
       },
-      transitionTimingFunction: {
-        'spring': 'cubic-bezier(0.22, 1, 0.36, 1)',
+      backdropBlur: {
+        xs: '2px',
       },
     },
   },
