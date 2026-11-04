@@ -153,7 +153,7 @@ export default function InteractiveServerRack({ onOpenModal }) {
       >
         <div
           onClick={toggleTray}
-          className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-charcoal/90 backdrop-blur-md border border-sage/50 text-ivory text-xs font-mono font-medium shadow-glass-panel hover:border-sage hover:bg-charcoal cursor-pointer select-none whitespace-nowrap transition-all"
+          className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-charcoal/90 backdrop-blur-md border border-sage/50 text-ivory text-xs font-sans font-medium shadow-glass-panel hover:border-sage hover:bg-charcoal cursor-pointer select-none whitespace-nowrap transition-all"
         >
           <span className="w-2 h-2 rounded-full bg-sage animate-ping" />
           <Cpu className="w-3.5 h-3.5 text-sage" />

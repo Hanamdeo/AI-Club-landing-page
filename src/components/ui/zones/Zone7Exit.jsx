@@ -41,12 +41,12 @@ export default function Zone7Exit({ onReturnTop }) {
             {/* Left Manifesto & Contact */}
             <div className="lg:col-span-6 flex flex-col justify-between">
               <div>
-                <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-4 rounded-full bg-sage/15 border border-sage/40 text-xs font-mono font-medium text-sage uppercase tracking-wider">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-4 rounded-full bg-sage/15 border border-sage/40 text-xs font-sans font-semibold text-sage uppercase tracking-wider">
                   <Sparkles className="w-3.5 h-3.5" />
                   <span>Get Involved</span>
                 </div>
 
-                <h2 className="text-3xl sm:text-5xl font-display font-bold text-ivory tracking-tight mb-3 drop-shadow-sm">
+                <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight mb-3 drop-shadow-sm">
                   {ZONE_EXIT.motto}
                 </h2>
 
@@ -55,7 +55,7 @@ export default function Zone7Exit({ onReturnTop }) {
                 </p>
 
                 {/* Facility Details & Affiliation */}
-                <div className="p-5 rounded-2xl bg-black/15 border border-white/10 text-xs space-y-2 mb-6 font-mono">
+                <div className="p-5 rounded-2xl bg-black/15 border border-white/10 text-xs space-y-2 mb-6 font-sans">
                   <div className="text-slate-400">
                     Institution: <span className="text-ivory font-medium">{CLUB_META.institution}</span>
                   </div>
@@ -67,7 +67,7 @@ export default function Zone7Exit({ onReturnTop }) {
 
               {/* Social Channels */}
               <div>
-                <span className="text-xs text-slate-400 block mb-3 font-mono uppercase tracking-wider">
+                <span className="text-xs text-slate-400 block mb-3 font-sans font-medium uppercase tracking-wider">
                   Official Communication Channels
                 </span>
                 <div className="flex flex-wrap gap-2.5 font-sans">
@@ -151,7 +151,7 @@ export default function Zone7Exit({ onReturnTop }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-medium text-slate-300 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-sans font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">
                       Full Name
                     </label>
                     <input
@@ -165,7 +165,7 @@ export default function Zone7Exit({ onReturnTop }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-medium text-slate-300 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-sans font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">
                       Institution Email Address
                     </label>
                     <input
@@ -179,7 +179,7 @@ export default function Zone7Exit({ onReturnTop }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-medium text-slate-300 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-sans font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">
                       Primary Domain of Interest
                     </label>
                     <select
@@ -196,7 +196,7 @@ export default function Zone7Exit({ onReturnTop }) {
                   </div>
 
                   <div>
-                    <label className="block text-xs font-mono font-medium text-slate-300 mb-1.5 uppercase tracking-wide">
+                    <label className="block text-xs font-sans font-semibold text-slate-300 mb-1.5 uppercase tracking-wide">
                       GitHub / Portfolio Link
                     </label>
                     <input
@@ -210,7 +210,7 @@ export default function Zone7Exit({ onReturnTop }) {
 
                   <button
                     type="submit"
-                    className="w-full mt-4 flex items-center justify-center gap-2 py-3.5 px-4 bg-sage hover:bg-sage-glow text-graphite font-display font-semibold text-xs rounded-xl transition-all shadow-sage-glow cursor-pointer tracking-wider uppercase"
+                    className="w-full mt-4 flex items-center justify-center gap-2 py-3.5 px-4 bg-sage hover:bg-sage-glow text-graphite font-sans font-semibold text-xs rounded-xl transition-all shadow-sage-glow cursor-pointer tracking-wider uppercase"
                   >
                     <span>SUBMIT MEMBERSHIP APPLICATION</span>
                     <Send className="w-3.5 h-3.5" />
@@ -227,7 +227,7 @@ export default function Zone7Exit({ onReturnTop }) {
         <div>{ZONE_EXIT.footerNote}</div>
         <button
           onClick={handleReturn}
-          className="flex items-center gap-2 text-sage hover:text-sage-glow transition-colors cursor-pointer pointer-events-auto font-mono text-xs uppercase"
+          className="flex items-center gap-2 text-sage hover:text-sage-glow transition-colors cursor-pointer pointer-events-auto font-sans font-semibold text-xs uppercase"
         >
           <span>Return to Entrance</span>
           <ArrowUp className="w-4 h-4" />

@@ -9,6 +9,7 @@
   --accent-sage: #A2B29F;
   --accent-ivory: #E6E2D8;
   --light-warm: #FFF8EE;
+  --font-inter-fallback: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 * {
@@ -16,12 +17,16 @@
 }
 
 html,
-body {
+body,
+button,
+input,
+select,
+textarea {
   margin: 0;
   padding: 0;
   background-color: var(--bg-primary);
   color: var(--accent-ivory);
-  font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-inter), var(--font-inter-fallback);
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -29,27 +34,27 @@ body {
 }
 
 /* ============================================================== */
-/* 1. SPACE GROTESK: HEADINGS · HERO · SECTION TITLES (600–700)   */
+/* UNIFIED INTER TYPOGRAPHY SYSTEM ACROSS WHOLE PROJECT           */
 /* ============================================================== */
-h1, h2, h3, h4, .font-display {
-  font-family: var(--font-display), 'Space Grotesk', system-ui, sans-serif;
+h1, h2, h3, h4, h5, h6, .font-display {
+  font-family: var(--font-inter), var(--font-inter-fallback) !important;
   font-weight: 700;
-  letter-spacing: -0.028em;
+  letter-spacing: -0.025em;
 }
 
-/* ============================================================== */
-/* 2. INTER: BODY · PARAGRAPHS · NAVIGATION (400–500)             */
-/* ============================================================== */
-p, .font-sans {
-  font-family: var(--font-sans), 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+p, span, a, button, input, select, textarea, label, .font-sans {
+  font-family: var(--font-inter), var(--font-inter-fallback);
 }
 
-/* ============================================================== */
-/* 3. IBM PLEX MONO: RESEARCH / COMPUTE / 450+ / TELEMETRY / TAGS */
-/* ============================================================== */
-code, pre, .font-mono, .telemetry-tag, .num-normal {
-  font-family: var(--font-mono), 'IBM Plex Mono', Menlo, Monaco, monospace !important;
-  letter-spacing: 0.02em;
+/* Inter Tabular / Lining Numbers for stats & counters */
+.num-normal {
+  font-family: var(--font-inter), var(--font-inter-fallback) !important;
+  font-feature-settings: 'tnum' on, 'lnum' on;
+}
+
+/* Dedicated Monospace for UNIX Terminal CLI Buffer & Code */
+code, pre, .terminal-mono {
+  font-family: var(--font-mono), ui-monospace, Menlo, Monaco, monospace;
 }
 
 /* Custom Telemetry Selection */

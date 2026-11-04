@@ -33,16 +33,16 @@ export default function Zone6Community() {
                 className="p-5 rounded-2xl bg-black/15 border border-white/10 hover:border-sage/40 hover:bg-black/25 transition-all flex items-start gap-4"
               >
                 {/* Monogram Avatar Badge */}
-                <div className="w-12 h-12 rounded-xl bg-black/30 border border-white/10 flex items-center justify-center text-sm font-mono font-bold text-sage shrink-0">
+                <div className="w-12 h-12 rounded-xl bg-black/30 border border-white/10 flex items-center justify-center text-sm font-sans font-bold text-sage shrink-0">
                   {member.initials}
                 </div>
 
                 {/* Member Info */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-base font-display font-bold text-ivory truncate tracking-tight">
+                  <h3 className="text-base font-sans font-bold text-ivory truncate tracking-tight">
                     {member.name}
                   </h3>
-                  <div className="text-xs font-mono font-medium text-sage/90 truncate mt-0.5">
+                  <div className="text-xs font-sans font-semibold text-sage/90 truncate mt-0.5">
                     {member.role}
                   </div>
                   <div className="text-xs text-slate-400 mt-1 line-clamp-1 font-sans">

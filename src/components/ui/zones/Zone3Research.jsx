@@ -35,7 +35,7 @@ export default function Zone3Research() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
             {/* Left Radar Selector Pillars */}
             <div className="lg:col-span-5 flex flex-col gap-2.5">
-              <span className="text-xs text-slate-400 tracking-wide font-mono uppercase flex items-center gap-2 mb-1">
+              <span className="text-xs text-slate-400 tracking-wide font-sans font-medium uppercase flex items-center gap-2 mb-1">
                 <Radio className="w-3.5 h-3.5 text-sage animate-pulse" />
                 <span>Research Domains</span>
               </span>
@@ -53,10 +53,10 @@ export default function Zone3Research() {
                     }`}
                   >
                     <div>
-                      <div className="text-sm font-display font-bold tracking-tight">
+                      <div className="text-sm font-sans font-bold tracking-tight">
                         {domain.name}
                       </div>
-                      <div className="text-xs font-mono text-sage/80 mt-0.5">
+                      <div className="text-xs font-sans font-medium text-sage/80 mt-0.5">
                         {domain.badge}
                       </div>
                     </div>
@@ -74,15 +74,15 @@ export default function Zone3Research() {
             <div className="lg:col-span-7 p-6 sm:p-8 rounded-2xl bg-black/15 border border-white/10 flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-4">
-                  <span className="text-xs font-mono font-semibold text-sage uppercase tracking-wider">
+                  <span className="text-xs font-sans font-semibold text-sage uppercase tracking-wider">
                     {currentDomain.name}
                   </span>
-                  <span className="px-3 py-1 text-xs rounded-full bg-sage/20 text-sage border border-sage/40 font-mono font-medium">
+                  <span className="px-3 py-1 text-xs rounded-full bg-sage/20 text-sage border border-sage/40 font-sans font-medium">
                     {currentDomain.badge}
                   </span>
                 </div>
 
-                <h3 className="text-2xl font-display font-bold text-ivory mb-3 tracking-tight">
+                <h3 className="text-2xl font-sans font-bold text-ivory mb-3 tracking-tight">
                   {currentDomain.name}
                 </h3>
 
@@ -92,14 +92,14 @@ export default function Zone3Research() {
 
                 {/* Focus Keywords / Tags */}
                 <div className="mb-6">
-                  <span className="text-xs text-slate-400 block mb-2 font-mono uppercase tracking-wider">
+                  <span className="text-xs text-slate-400 block mb-2 font-sans font-medium uppercase tracking-wider">
                     Core Taxonomy
                   </span>
                   <div className="flex flex-wrap gap-2">
                     {currentDomain.keywords.map((kw, i) => (
                       <span
                         key={i}
-                        className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-mono rounded-full bg-black/25 border border-white/10 text-ivory/80"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 text-xs font-sans font-medium rounded-full bg-black/25 border border-white/10 text-ivory/80"
                       >
                         <Tag className="w-3 h-3 text-sage/70" />
                         {kw}
@@ -110,7 +110,7 @@ export default function Zone3Research() {
 
                 {/* Publications / Preprints List */}
                 <div>
-                  <span className="text-xs text-slate-400 block mb-2 font-mono uppercase tracking-wider">
+                  <span className="text-xs text-slate-400 block mb-2 font-sans font-medium uppercase tracking-wider">
                     Recent Lab Publications & Preprints
                   </span>
                   <div className="space-y-2.5">
@@ -127,7 +127,7 @@ export default function Zone3Research() {
                 </div>
               </div>
 
-              <div className="mt-6 pt-4 border-t border-white/10 text-xs font-mono text-slate-400">
+              <div className="mt-6 pt-4 border-t border-white/10 text-xs font-sans font-medium text-slate-400">
                 Open student research and peer-reviewed work
               </div>
             </div>

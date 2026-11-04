@@ -26,7 +26,7 @@ export default function Zone1Hero({ onExploreClick }) {
             {CLUB_META.institution}
           </span>
         </div>
-        <div className="hidden sm:block text-slate-400 tracking-wider text-xs font-mono uppercase">
+        <div className="hidden sm:block text-slate-400 tracking-wider text-xs font-sans font-medium uppercase">
           Autonomous Research Lab
         </div>
       </div>
@@ -35,7 +35,7 @@ export default function Zone1Hero({ onExploreClick }) {
       <div className="max-w-4xl my-auto py-12">
         <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-6 rounded-full bg-black/25 border border-white/10 text-xs text-sage tracking-wide font-medium">
           <Cpu className="w-3.5 h-3.5 text-sage" />
-          <span className="font-mono text-[11px] uppercase tracking-wider">Advanced AI & Computational Research</span>
+          <span className="font-sans font-medium text-[11px] uppercase tracking-wider">Advanced AI & Computational Research</span>
         </div>
 
         <h1 className="text-6xl sm:text-8xl lg:text-9xl font-display font-extrabold tracking-tight text-ivory mb-4 drop-shadow-md">
@@ -66,10 +66,10 @@ export default function Zone1Hero({ onExploreClick }) {
         <div className="grid grid-cols-3 gap-8 max-w-md">
           {ZONE_HERO.metricsSummary.map((item, idx) => (
             <div key={idx}>
-              <span className="block text-[11px] text-slate-400 tracking-wider uppercase font-mono">
+              <span className="block text-[11px] text-slate-400 tracking-wider uppercase font-sans font-medium">
                 {item.label}
               </span>
-              <span className="text-sm font-display text-sage font-bold tracking-tight num-normal mt-0.5 block">
+              <span className="text-sm text-sage font-bold tracking-tight num-normal mt-0.5 block">
                 {item.value}
               </span>
             </div>
@@ -80,7 +80,7 @@ export default function Zone1Hero({ onExploreClick }) {
           onClick={handleEnter}
           className="flex items-center gap-3 text-xs text-ivory/60 hover:text-sage transition-colors cursor-pointer self-start sm:self-auto pointer-events-auto"
         >
-          <span className="tracking-widest font-mono uppercase text-[11px]">SCROLL TO TRAVEL</span>
+          <span className="tracking-widest font-sans font-semibold uppercase text-[11px]">SCROLL TO TRAVEL</span>
           <div className="w-5 h-8 rounded-full border border-white/20 flex items-start justify-center p-1">
             <span className="w-1 h-2 rounded-full bg-sage animate-bounce" />
           </div>
