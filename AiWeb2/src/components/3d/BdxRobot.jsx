@@ -3,8 +3,6 @@
 import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
-import { ChevronRight, X, Heart, Compass } from 'lucide-react';
 import { audioManager } from '@/utils/audioManager';
 
 // 7 Companion Waypoints tracking the visitor's journey through facility zones
@@ -13,59 +11,37 @@ const COMPANION_WAYPOINTS = [
     progress: 0.0,
     pos: new THREE.Vector3(1.15, 0.74, 6.8),
     idleRotY: -0.28,
-    tag: 'ENTRANCE',
-    text: "Beep-boop! I'm BDX-01, your companion. Scroll to explore the data centre corridor with me!",
   },
   {
     progress: 0.166,
     pos: new THREE.Vector3(-0.95, 0.74, -19.5),
     idleRotY: 0.45,
-    tag: 'FOUNDATION',
-    text: "We're in the Foundation Bay! Click [INSPECT NODE] on the rack to your left to view cluster GPUs.",
   },
   {
     progress: 0.333,
     pos: new THREE.Vector3(-1.25, 0.74, -44.5),
     idleRotY: 0.35,
-    tag: 'RESEARCH LAB',
-    text: "Look at the neural core on the left! Click and drag the hologram sphere to spin the network.",
   },
   {
     progress: 0.5,
     pos: new THREE.Vector3(1.1, 0.74, -76.0),
     idleRotY: -0.35,
-    tag: 'OPERATIONS',
-    text: "Operations flight board: hackathons, CUDA acceleration workshops, and reading groups.",
   },
   {
     progress: 0.666,
     pos: new THREE.Vector3(-1.0, 0.74, -106.0),
     idleRotY: 0.3,
-    tag: 'ARCHIVE',
-    text: "Project Archive: explore student open-source repositories like AuraKV and OmniSplat.",
   },
   {
     progress: 0.833,
     pos: new THREE.Vector3(0.95, 0.74, -136.0),
     idleRotY: -0.25,
-    tag: 'COMMUNITY',
-    text: "Community Hub: our core team of student researchers, engineers, and faculty mentorship.",
   },
   {
     progress: 1.0,
     pos: new THREE.Vector3(0.65, 0.74, -167.0),
     idleRotY: -0.4,
-    tag: 'THE EXIT',
-    text: "We've reached the facility exit! Ready to build with us? Submit your cohort application above!",
   },
-];
-
-const EASTER_EGG_FACTS = [
-  "Our cluster is currently training a 7B reasoning model at 94% efficiency!",
-  "Fun fact: We consume more coffee and green tea per epoch than any other lab on campus.",
-  "Press [~] or click [CLI] in the top navigation to access the club terminal!",
-  "I run on 100% synthetic clean compute and GPU heat exhaust.",
-  "Did you know? Our team won 1st place in last semester's Inter-College Hackathon!",
 ];
 
 /**
@@ -103,14 +79,6 @@ export default function BdxRobot({
 
   // Interaction State
   const [hovered, setHovered] = useState(false);
-  const [speechVisible, setSpeechVisible] = useState(true);
-  const [speechContent, setSpeechContent] = useState({
-    tag: COMPANION_WAYPOINTS[0].tag,
-    text: COMPANION_WAYPOINTS[0].text,
-  });
-  const [petCount, setPetCount] = useState(0);
-  const [isNearCamera, setIsNearCamera] = useState(true);
-  const lastZoneIdx = useRef(0);
 
   // Jump animation timing
   const jumpTime = useRef(0);
@@ -142,22 +110,12 @@ export default function BdxRobot({
     };
   }, []);
 
-  // Pet / Click interaction
+  // Pet / Click interaction (triggers jump hop and sound chirp)
   const handlePet = useCallback(
     (e) => {
       if (e) e.stopPropagation();
       isJumping.current = true;
       jumpTime.current = 0;
-      setPetCount((prev) => prev + 1);
-      setSpeechVisible(true);
-
-      const randomFact =
-        EASTER_EGG_FACTS[Math.floor(Math.random() * EASTER_EGG_FACTS.length)];
-      setSpeechContent({
-        tag: 'BDX-01 INTEL',
-        text: randomFact,
-      });
-
       audioManager.playChirp();
     },
     []
@@ -167,7 +125,7 @@ export default function BdxRobot({
   const blinkTimer = useRef(0);
   const isBlinking = useRef(false);
 
-  useFrame(({ clock, camera }, delta) => {
+  useFrame(({ clock }, delta) => {
     const t = clock.getElapsedTime();
 
     // 1. Waypoint interpolation along the corridor based on scrollProgress
@@ -190,19 +148,6 @@ export default function BdxRobot({
     tempTargetPos.current.lerpVectors(startW.pos, endW.pos, easeT);
     const targetIdleRotY = THREE.MathUtils.lerp(startW.idleRotY, endW.idleRotY, easeT);
 
-    // Dynamic Zone Dialogue Triggering
-    const currentZone = Math.min(6, Math.max(0, Math.round(p * 6)));
-    if (currentZone !== lastZoneIdx.current) {
-      lastZoneIdx.current = currentZone;
-      const zoneData = COMPANION_WAYPOINTS[currentZone];
-      setSpeechContent({
-        tag: zoneData.tag,
-        text: zoneData.text,
-      });
-      setSpeechVisible(true);
-      audioManager.playChirp();
-    }
-
     // 2. Physical lerp towards target position
     currentPos.current.lerp(tempTargetPos.current, Math.min(1, delta * 4.2));
 
@@ -212,10 +157,6 @@ export default function BdxRobot({
     prevPos.current.copy(currentPos.current);
 
     const isWalking = speed > 0.16;
-
-    // Check camera distance
-    const distToCam = camera.position.distanceTo(currentPos.current);
-    setIsNearCamera(distToCam < 24);
 
     // 3. Walking gait animation
     let walkBob = 0;
@@ -380,67 +321,7 @@ export default function BdxRobot({
         if (typeof document !== 'undefined') document.body.style.cursor = 'default';
       }}
     >
-      {/* 3D DREI SPEECH BUBBLE OVERLAY (Travels with the robot across all zones) */}
-      {speechVisible && isNearCamera && (
-        <Html
-          position={[0, 0.95, 0.08]}
-          center
-          distanceFactor={6.8}
-          zIndexRange={[100, 0]}
-        >
-          <div
-            onClick={(e) => e.stopPropagation()}
-            className="w-72 sm:w-80 p-3.5 rounded-2xl bg-charcoal/90 backdrop-blur-md border border-sage/40 shadow-glass-panel text-ivory text-xs select-none pointer-events-auto transition-all animate-fade-in"
-          >
-            {/* Header with status & close button */}
-            <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
-              <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-sage animate-ping" />
-                <span className="text-[10px] font-mono tracking-widest text-sage font-bold uppercase">
-                  BDX-01 // {speechContent.tag}
-                </span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                {petCount > 0 && (
-                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-sage/20 text-[10px] text-sage font-medium">
-                    <Heart className="w-2.5 h-2.5 fill-sage" />
-                    <span>{petCount}</span>
-                  </span>
-                )}
-                <button
-                  onClick={() => setSpeechVisible(false)}
-                  className="p-1 rounded-full text-slate-400 hover:text-ivory hover:bg-white/10 transition-colors"
-                >
-                  <X className="w-3 h-3" />
-                </button>
-              </div>
-            </div>
 
-            {/* Fact / Zone Commentary Body */}
-            <p className="text-ivory/90 leading-relaxed text-xs mb-3 font-normal">
-              {speechContent.text}
-            </p>
-
-            {/* Bottom Actions: Pet or Next Fact */}
-            <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px]">
-              <span className="text-slate-400 text-[10px] flex items-center gap-1">
-                <Compass className="w-3 h-3 text-sage" />
-                <span>Zone {lastZoneIdx.current + 1}/7</span>
-              </span>
-              <button
-                onClick={handlePet}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sage/20 hover:bg-sage text-sage hover:text-graphite font-semibold transition-all cursor-pointer"
-              >
-                <span>PET BDX</span>
-                <ChevronRight className="w-3 h-3" />
-              </button>
-            </div>
-
-            {/* Bubble Tail Pointing Down to Robot Head */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-sage/40" />
-          </div>
-        </Html>
-      )}
 
       {/* ============================================================== */}
       {/* 1. BIPED FEET (CHUNKY ORANGE BOOTS WITH YELLOW SOLES)          */}
