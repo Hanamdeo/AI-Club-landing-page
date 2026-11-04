@@ -17,7 +17,7 @@ export default function Zone5Archive() {
         <GlassPanel>
           {/* Section Header */}
           <div className="mb-6 border-b border-white/10 pb-5">
-            <h2 className="text-3xl sm:text-5xl font-display font-bold text-ivory tracking-tight drop-shadow-sm">
+            <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight drop-shadow-sm">
               {ZONE_PROJECTS.heading}
             </h2>
             <p className="text-base sm:text-lg text-sage/90 font-light mt-1.5 tracking-wide font-sans">

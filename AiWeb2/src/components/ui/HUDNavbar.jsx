@@ -28,9 +28,9 @@ export default function HUDNavbar({ activeZoneIndex = 0, onNavigate, onToggleTer
         {/* Brand Node */}
         <button
           onClick={() => handleNavClick(0)}
-          className="flex items-center gap-2.5 text-xs font-display font-bold text-ivory hover:text-sage transition-colors cursor-pointer shrink-0"
+          className="flex items-center gap-2.5 text-xs font-sans font-bold text-ivory hover:text-sage transition-colors cursor-pointer shrink-0"
         >
-          <div className="w-6 h-6 rounded-md bg-white/5 border border-sage/40 flex items-center justify-center font-mono">
+          <div className="w-6 h-6 rounded-md bg-white/5 border border-sage/40 flex items-center justify-center font-sans">
             <span className="text-[10px] text-sage font-bold">AI</span>
           </div>
           <span className="hidden xs:inline tracking-wider font-bold">AI CLUB</span>
@@ -45,7 +45,7 @@ export default function HUDNavbar({ activeZoneIndex = 0, onNavigate, onToggleTer
               <button
                 key={zone.id}
                 onClick={() => handleNavClick(idx)}
-                className={`relative px-2.5 sm:px-3 py-1 text-xs font-display rounded-full transition-all cursor-pointer font-medium whitespace-nowrap ${
+                className={`relative px-2.5 sm:px-3 py-1 text-xs font-sans rounded-full transition-all cursor-pointer font-medium whitespace-nowrap ${
                   isActive
                     ? 'text-sage bg-black/40 border border-sage/50 shadow-sage-glow'
                     : 'text-ivory/70 hover:text-ivory hover:bg-white/5'
@@ -65,7 +65,7 @@ export default function HUDNavbar({ activeZoneIndex = 0, onNavigate, onToggleTer
           {/* CLI Terminal Launcher */}
           <button
             onClick={handleTerminalClick}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-mono font-medium bg-black/30 border border-white/10 text-sage hover:border-sage/60 hover:bg-sage/10 transition-all cursor-pointer"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-sans font-medium bg-black/30 border border-white/10 text-sage hover:border-sage/60 hover:bg-sage/10 transition-all cursor-pointer"
             title="Launch Interactive Terminal CLI [~]"
           >
             <Terminal className="w-3.5 h-3.5 text-sage" />

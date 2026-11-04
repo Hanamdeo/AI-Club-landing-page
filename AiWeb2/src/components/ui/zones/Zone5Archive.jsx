@@ -17,7 +17,7 @@ export default function Zone5Archive() {
         <GlassPanel>
           {/* Section Header */}
           <div className="mb-6 border-b border-white/10 pb-5">
-            <h2 className="text-3xl sm:text-5xl font-display font-bold text-ivory tracking-tight drop-shadow-sm">
+            <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight drop-shadow-sm">
               {ZONE_PROJECTS.heading}
             </h2>
             <p className="text-base sm:text-lg text-sage/90 font-light mt-1.5 tracking-wide font-sans">
@@ -35,15 +35,15 @@ export default function Zone5Archive() {
                 <div>
                   {/* Category & Status */}
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-mono font-medium text-sage tracking-wider uppercase">
+                    <span className="text-xs font-sans font-semibold text-sage tracking-wider uppercase">
                       {proj.category}
                     </span>
-                    <span className="px-3 py-0.5 text-[11px] font-mono rounded-full bg-black/30 border border-white/10 text-ivory/80 font-medium">
+                    <span className="px-3 py-0.5 text-[11px] font-sans rounded-full bg-black/30 border border-white/10 text-ivory/80 font-medium">
                       {proj.state}
                     </span>
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-display font-bold text-ivory mb-2 tracking-tight">
+                  <h3 className="text-lg sm:text-xl font-sans font-bold text-ivory mb-2 tracking-tight">
                     {proj.title}
                   </h3>
 
@@ -51,8 +51,8 @@ export default function Zone5Archive() {
                     {proj.description}
                   </p>
 
-                  {/* Benchmark / Metric Highlight with Space Grotesk Display Numbers */}
-                  <div className="flex items-center gap-2 px-3.5 py-2 mb-4 rounded-xl bg-black/20 border border-white/10 text-xs font-mono font-semibold text-sage num-normal">
+                  {/* Benchmark / Metric Highlight with Inter Tabular Numbers */}
+                  <div className="flex items-center gap-2 px-3.5 py-2 mb-4 rounded-xl bg-black/20 border border-white/10 text-xs font-sans font-semibold text-sage num-normal">
                     <BarChart3 className="w-3.5 h-3.5" />
                     <span>{proj.metrics}</span>
                   </div>
@@ -62,7 +62,7 @@ export default function Zone5Archive() {
                     {proj.techStack.map((tech, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1 text-[11px] font-mono rounded-full bg-black/25 border border-white/10 text-slate-300"
+                        className="px-3 py-1 text-[11px] font-sans font-medium rounded-full bg-black/25 border border-white/10 text-slate-300"
                       >
                         {tech}
                       </span>

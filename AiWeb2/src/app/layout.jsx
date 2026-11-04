@@ -1,26 +1,19 @@
-import { Inter, Space_Grotesk, IBM_Plex_Mono } from 'next/font/google';
+import { Inter, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 
-// 1. Inter: Body · Paragraphs · Navigation (400–500 weight)
+// Unified Inter typography system across whole project
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-sans',
+  variable: '--font-inter',
 });
 
-// 2. Space Grotesk: Headings · Hero · Section Titles (600–700 weight)
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-display',
-});
-
-// 3. IBM Plex Mono: RESEARCH / COMPUTE / 450+ / Telemetry · Badges · Stats
+// Monospace reserved for UNIX terminal CLI buffers and system commands
 const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-mono',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500'],
 });
 
 export const metadata = {
@@ -48,7 +41,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}
+      className={`dark ${inter.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
         {children}

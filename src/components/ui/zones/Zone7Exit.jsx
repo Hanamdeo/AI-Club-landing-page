@@ -118,7 +118,7 @@ export default function Zone7Exit({ onReturnTop }) {
                   <div className="w-14 h-14 rounded-full bg-sage/20 border border-sage/40 flex items-center justify-center mb-4">
                     <CheckCircle className="w-7 h-7 text-sage" />
                   </div>
-                  <h3 className="text-xl font-display font-bold text-ivory mb-2">
+                  <h3 className="text-xl font-sans font-bold text-ivory mb-2">
                     Application Received
                   </h3>
                   <p className="text-sm text-ivory/80 max-w-sm mb-6 leading-relaxed">
@@ -142,7 +142,7 @@ export default function Zone7Exit({ onReturnTop }) {
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="border-b border-white/10 pb-3 mb-4">
-                    <h3 className="text-lg font-display font-bold text-ivory tracking-tight">
+                    <h3 className="text-lg font-sans font-bold text-ivory tracking-tight">
                       Cohort Application
                     </h3>
                     <p className="text-xs text-slate-400 mt-0.5 font-sans">

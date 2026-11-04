@@ -118,7 +118,7 @@ export default function StartupIntro({ onComplete }) {
         ref={topShutterRef}
         className="absolute top-0 left-0 w-full h-1/2 bg-[#121516] border-b border-white/10 z-10 flex items-end justify-center pb-8"
       >
-        <div className="absolute top-6 left-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-mono">
+        <div className="absolute top-6 left-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-sans font-medium">
           Facility Initialization
         </div>
       </div>
@@ -128,7 +128,7 @@ export default function StartupIntro({ onComplete }) {
         ref={bottomShutterRef}
         className="absolute bottom-0 left-0 w-full h-1/2 bg-[#121516] border-t border-white/10 z-10 flex items-start justify-center pt-8"
       >
-        <div className="absolute bottom-6 right-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-mono">
+        <div className="absolute bottom-6 right-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-sans font-medium">
           AI Club Autonomous Systems
         </div>
       </div>
@@ -152,9 +152,9 @@ export default function StartupIntro({ onComplete }) {
           </Canvas>
         </div>
 
-        {/* Title & Tagline with Space Grotesk */}
+        {/* Title & Tagline with Inter */}
         <div ref={logoTextRef} className="space-y-1 mb-5">
-          <h1 className="text-3xl sm:text-4xl font-display font-bold tracking-tight text-ivory">
+          <h1 className="text-3xl sm:text-4xl font-sans font-bold tracking-tight text-ivory">
             AI CLUB
           </h1>
           <p className="text-xs sm:text-sm text-sage font-light tracking-wide font-sans">
@@ -170,7 +170,7 @@ export default function StartupIntro({ onComplete }) {
               className="w-full h-full bg-sage origin-left rounded-full"
             />
           </div>
-          <div className="flex justify-between items-center text-xs text-slate-400 font-mono">
+          <div className="flex justify-between items-center text-xs text-slate-400 font-sans font-medium">
             <span className="uppercase text-[11px] tracking-wider">Starting Systems</span>
             <span className="num-normal text-sage font-semibold">{progressNum}%</span>
           </div>

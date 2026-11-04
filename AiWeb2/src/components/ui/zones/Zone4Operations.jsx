@@ -25,7 +25,7 @@ export default function Zone4Operations() {
         <GlassPanel>
           {/* Section Header */}
           <div className="mb-6 border-b border-white/10 pb-5">
-            <h2 className="text-3xl sm:text-5xl font-display font-bold text-ivory tracking-tight drop-shadow-sm">
+            <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight drop-shadow-sm">
               {ZONE_OPERATIONS.heading}
             </h2>
             <p className="text-base sm:text-lg text-sage/90 font-light mt-1.5 tracking-wide font-sans">
@@ -46,11 +46,11 @@ export default function Zone4Operations() {
                   <div>
                     {/* Event Type & Status Badges */}
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="text-[11px] font-mono font-medium uppercase px-3 py-1 rounded-full bg-black/30 border border-white/10 text-ivory/80 tracking-wider">
+                      <span className="text-[11px] font-sans font-semibold uppercase px-3 py-1 rounded-full bg-black/30 border border-white/10 text-ivory/80 tracking-wider">
                         {event.type}
                       </span>
                       <span
-                        className={`text-[11px] font-mono font-medium px-3 py-1 rounded-full border ${
+                        className={`text-[11px] font-sans font-semibold px-3 py-1 rounded-full border ${
                           event.status === 'Registration Open'
                             ? 'bg-sage/20 border-sage/40 text-sage'
                             : 'bg-black/30 border-white/10 text-slate-400'
@@ -61,7 +61,7 @@ export default function Zone4Operations() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-lg sm:text-xl font-display font-bold text-ivory mb-2 tracking-tight">
+                    <h3 className="text-lg sm:text-xl font-sans font-bold text-ivory mb-2 tracking-tight">
                       {event.title}
                     </h3>
 
@@ -70,7 +70,7 @@ export default function Zone4Operations() {
                     </p>
 
                     {/* Metadata Details with Normal Numbers */}
-                    <div className="space-y-2 text-xs text-slate-300 mb-5 font-mono">
+                    <div className="space-y-2 text-xs text-slate-300 mb-5 font-sans">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-sage" />
                         <span className="num-normal font-medium">{event.date}</span>
