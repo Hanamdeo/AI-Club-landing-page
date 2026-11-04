@@ -38,11 +38,11 @@ export default function Zone1Hero({ onExploreClick }) {
           <span className="font-sans font-medium text-[11px] uppercase tracking-wider">Advanced AI & Computational Research</span>
         </div>
 
-        <h1 className="text-6xl sm:text-8xl lg:text-9xl font-display font-extrabold tracking-tight text-ivory mb-4 drop-shadow-md">
+        <h1 className="text-6xl sm:text-8xl lg:text-9xl font-sans font-extrabold tracking-tight text-ivory mb-4 drop-shadow-md">
           {ZONE_HERO.title}
         </h1>
 
-        <p className="text-2xl sm:text-3xl lg:text-4xl font-display font-light text-sage mb-6 tracking-wide drop-shadow-sm">
+        <p className="text-2xl sm:text-3xl lg:text-4xl font-sans font-light text-sage mb-6 tracking-wide drop-shadow-sm">
           {ZONE_HERO.motto}
         </p>
 
@@ -53,7 +53,7 @@ export default function Zone1Hero({ onExploreClick }) {
         <div className="flex flex-wrap items-center gap-4">
           <button
             onClick={handleEnter}
-            className="group flex items-center gap-3 px-7 py-3.5 bg-sage hover:bg-sage-glow text-graphite font-semibold text-xs rounded-xl transition-all duration-300 shadow-sage-glow pointer-events-auto cursor-pointer tracking-wider font-display uppercase"
+            className="group flex items-center gap-3 px-7 py-3.5 bg-sage hover:bg-sage-glow text-graphite font-semibold text-xs rounded-xl transition-all duration-300 shadow-sage-glow pointer-events-auto cursor-pointer tracking-wider font-sans uppercase"
           >
             <span>ENTER THE FACILITY</span>
             <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-1" />

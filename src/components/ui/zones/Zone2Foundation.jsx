@@ -25,7 +25,7 @@ export default function Zone2Foundation({ onInspectRack }) {
           {/* Section Header with Interactive Landmark Hint */}
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 border-b border-white/10 pb-6">
             <div>
-              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-bold text-ivory tracking-tight drop-shadow-sm">
+              <h2 className="text-3xl sm:text-5xl lg:text-6xl font-sans font-bold text-ivory tracking-tight drop-shadow-sm">
                 {ZONE_ABOUT.heading}
               </h2>
               <p className="text-base sm:text-lg text-sage/90 font-light mt-2 tracking-wide font-sans">
