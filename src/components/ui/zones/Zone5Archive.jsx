@@ -1,14 +1,14 @@
 'use client';
 
 import React from 'react';
-import { Archive, Github, ExternalLink, BarChart3 } from 'lucide-react';
+import { Github, ExternalLink, BarChart3 } from 'lucide-react';
 import { ZONE_PROJECTS } from '@/data/clubData';
 import GlassPanel from '../GlassPanel';
 
 /**
  * Zone 05: Project Archive (Student Projects & Open-Source)
  * Transparent rounded project showcase interface at Z = -105.
- * Clean, human-readable typography without pseudo-code prefixes.
+ * High-impact Space Grotesk display typography with transparent card styling.
  */
 export default function Zone5Archive() {
   return (
@@ -16,11 +16,11 @@ export default function Zone5Archive() {
       <div className="w-full max-w-6xl">
         <GlassPanel>
           {/* Section Header */}
-          <div className="mb-6 border-b border-slate-struct/30 pb-5">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-ivory tracking-tight drop-shadow-sm font-sans">
+          <div className="mb-6 border-b border-white/10 pb-5">
+            <h2 className="text-3xl sm:text-5xl font-display font-bold text-ivory tracking-tight drop-shadow-sm">
               {ZONE_PROJECTS.heading}
             </h2>
-            <p className="text-base sm:text-lg text-sage/90 font-light mt-1.5 tracking-wide">
+            <p className="text-base sm:text-lg text-sage/90 font-light mt-1.5 tracking-wide font-sans">
               {ZONE_PROJECTS.subheading}
             </p>
           </div>
@@ -30,29 +30,29 @@ export default function Zone5Archive() {
             {ZONE_PROJECTS.projects.map((proj) => (
               <div
                 key={proj.id}
-                className="p-6 rounded-2xl bg-charcoal/20 backdrop-blur-xs border border-slate-struct/35 hover:border-sage/40 transition-all flex flex-col justify-between"
+                className="p-6 rounded-2xl bg-black/15 border border-white/10 hover:border-sage/40 hover:bg-black/25 transition-all flex flex-col justify-between"
               >
                 <div>
                   {/* Category & Status */}
                   <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-medium text-sage tracking-wide uppercase">
+                    <span className="text-xs font-mono font-medium text-sage tracking-wider uppercase">
                       {proj.category}
                     </span>
-                    <span className="px-3 py-0.5 text-[11px] rounded-full bg-charcoal/40 border border-slate-struct/40 text-ivory/80 font-medium">
+                    <span className="px-3 py-0.5 text-[11px] font-mono rounded-full bg-black/30 border border-white/10 text-ivory/80 font-medium">
                       {proj.state}
                     </span>
                   </div>
 
-                  <h3 className="text-lg sm:text-xl font-bold text-ivory mb-2 tracking-tight">
+                  <h3 className="text-lg sm:text-xl font-display font-bold text-ivory mb-2 tracking-tight">
                     {proj.title}
                   </h3>
 
-                  <p className="text-sm text-ivory/80 leading-relaxed mb-4 font-normal">
+                  <p className="text-sm text-ivory/80 leading-relaxed mb-4 font-normal font-sans">
                     {proj.description}
                   </p>
 
-                  {/* Benchmark / Metric Highlight with Normal Numbers */}
-                  <div className="flex items-center gap-2 px-3.5 py-2 mb-4 rounded-xl bg-charcoal/30 border border-slate-struct/30 text-xs font-semibold text-sage num-normal">
+                  {/* Benchmark / Metric Highlight with Space Grotesk Display Numbers */}
+                  <div className="flex items-center gap-2 px-3.5 py-2 mb-4 rounded-xl bg-black/20 border border-white/10 text-xs font-mono font-semibold text-sage num-normal">
                     <BarChart3 className="w-3.5 h-3.5" />
                     <span>{proj.metrics}</span>
                   </div>
@@ -62,7 +62,7 @@ export default function Zone5Archive() {
                     {proj.techStack.map((tech, i) => (
                       <span
                         key={i}
-                        className="px-3 py-1 text-[11px] font-medium rounded-full bg-charcoal/40 border border-slate-struct/30 text-slate-300"
+                        className="px-3 py-1 text-[11px] font-mono rounded-full bg-black/25 border border-white/10 text-slate-300"
                       >
                         {tech}
                       </span>
@@ -71,13 +71,13 @@ export default function Zone5Archive() {
                 </div>
 
                 {/* External Action Links */}
-                <div className="flex items-center gap-3 pt-3 border-t border-slate-struct/35">
+                <div className="flex items-center gap-3 pt-3 border-t border-white/10">
                   {proj.github && (
                     <a
                       href={proj.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-medium text-ivory/80 hover:text-sage transition-colors"
+                      className="inline-flex items-center gap-1.5 text-xs font-medium text-ivory/80 hover:text-sage transition-colors font-sans"
                     >
                       <Github className="w-3.5 h-3.5" />
                       <span>Source Code</span>
@@ -89,7 +89,7 @@ export default function Zone5Archive() {
                       href={proj.liveDemo}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-sage hover:text-sage-glow transition-colors ml-auto"
+                      className="inline-flex items-center gap-1.5 text-xs font-semibold text-sage hover:text-sage-glow transition-colors ml-auto font-sans"
                     >
                       <ExternalLink className="w-3.5 h-3.5" />
                       <span>Live Preview</span>

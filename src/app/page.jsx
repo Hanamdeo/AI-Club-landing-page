@@ -16,6 +16,9 @@ const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
 
 import HUDNavbar from '@/components/ui/HUDNavbar';
 import DepthTelemetry from '@/components/ui/DepthTelemetry';
+import ServerBladeModal from '@/components/ui/ServerBladeModal';
+import TerminalCLI from '@/components/ui/TerminalCLI';
+
 import Zone1Hero from '@/components/ui/zones/Zone1Hero';
 import Zone2Foundation from '@/components/ui/zones/Zone2Foundation';
 import Zone3Research from '@/components/ui/zones/Zone3Research';
@@ -29,6 +32,10 @@ export default function Home() {
   const [isIntro, setIsIntro] = useState(true);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
+
+  // Modal & Terminal States
+  const [isRackModalOpen, setIsRackModalOpen] = useState(false);
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   const containerRef = useRef(null);
   const lenisRef = useRef(null);
@@ -79,13 +86,23 @@ export default function Home() {
       });
     });
 
+    // Keyboard shortcut [~] / [ ` ] to toggle Terminal
+    const handleGlobalKey = (e) => {
+      if ((e.key === '`' || e.key === '~') && !isRackModalOpen) {
+        e.preventDefault();
+        setIsTerminalOpen((prev) => !prev);
+      }
+    };
+    window.addEventListener('keydown', handleGlobalKey);
+
     return () => {
+      window.removeEventListener('keydown', handleGlobalKey);
       cancelAnimationFrame(rafId);
       lenis.destroy();
       ctx.revert();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, []);
+  }, [isRackModalOpen]);
 
   // Jump smoothly to a specific facility zone
   const handleNavigateToZone = (index) => {
@@ -105,9 +122,13 @@ export default function Home() {
       {/* Cinematic Architectural Startup Animation */}
       {mounted && isIntro && <StartupIntro onComplete={() => setIsIntro(false)} />}
 
-      {/* 1. Master WebGL 3D Data Centre Environment (Fixed) */}
+      {/* 1. Master WebGL 3D Data Centre Environment (Fixed) with Interactive Landmarks */}
       {mounted && (
-        <SceneContainer scrollProgress={scrollProgress} isIntro={isIntro} />
+        <SceneContainer
+          scrollProgress={scrollProgress}
+          isIntro={isIntro}
+          onOpenRackModal={() => setIsRackModalOpen(true)}
+        />
       )}
 
       {/* 2. Minimal HUD Navigation (Fades in once intro completes) */}
@@ -119,6 +140,7 @@ export default function Home() {
         <HUDNavbar
           activeZoneIndex={activeZoneIndex}
           onNavigate={handleNavigateToZone}
+          onToggleTerminal={() => setIsTerminalOpen((prev) => !prev)}
         />
       </div>
 
@@ -134,6 +156,19 @@ export default function Home() {
         />
       </div>
 
+      {/* Interactive Server Rack Telemetry Modal */}
+      <ServerBladeModal
+        isOpen={isRackModalOpen}
+        onClose={() => setIsRackModalOpen(false)}
+      />
+
+      {/* Interactive Terminal CLI Window */}
+      <TerminalCLI
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+        onNavigateToZone={handleNavigateToZone}
+      />
+
       {/* 4. Scrollable Container with 7 Architectural Facility Zones */}
       <div ref={containerRef} className="relative z-10 w-full pointer-events-none">
         {/* ZONE 01: ENTRANCE — HERO */}
@@ -143,7 +178,7 @@ export default function Home() {
 
         {/* ZONE 02: THE FOUNDATION — ABOUT US */}
         <div id="zone-about" className="w-full">
-          <Zone2Foundation />
+          <Zone2Foundation onInspectRack={() => setIsRackModalOpen(true)} />
         </div>
 
         {/* ZONE 03: RESEARCH LAB — AI RESEARCH */}

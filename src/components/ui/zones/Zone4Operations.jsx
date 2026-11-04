@@ -8,7 +8,7 @@ import GlassPanel from '../GlassPanel';
 /**
  * Zone 04: Operations Centre (Events & Competitions)
  * Transparent rounded operational flight-board interface at Z = -75.
- * Clean, human-readable typography without pseudo-code prefixes.
+ * High-impact Space Grotesk display typography with transparent card styling.
  */
 export default function Zone4Operations() {
   const [registeredIds, setRegisteredIds] = useState([]);
@@ -24,11 +24,11 @@ export default function Zone4Operations() {
       <div className="w-full max-w-6xl">
         <GlassPanel>
           {/* Section Header */}
-          <div className="mb-6 border-b border-slate-struct/30 pb-5">
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-ivory tracking-tight drop-shadow-sm font-sans">
+          <div className="mb-6 border-b border-white/10 pb-5">
+            <h2 className="text-3xl sm:text-5xl font-display font-bold text-ivory tracking-tight drop-shadow-sm">
               {ZONE_OPERATIONS.heading}
             </h2>
-            <p className="text-base sm:text-lg text-sage/90 font-light mt-1.5 tracking-wide">
+            <p className="text-base sm:text-lg text-sage/90 font-light mt-1.5 tracking-wide font-sans">
               {ZONE_OPERATIONS.subheading}
             </p>
           </div>
@@ -41,19 +41,19 @@ export default function Zone4Operations() {
               return (
                 <div
                   key={event.id}
-                  className="p-6 rounded-2xl bg-charcoal/20 backdrop-blur-xs border border-slate-struct/35 hover:border-slate-struct/60 transition-all flex flex-col justify-between"
+                  className="p-6 rounded-2xl bg-black/15 border border-white/10 hover:border-sage/40 hover:bg-black/25 transition-all flex flex-col justify-between"
                 >
                   <div>
                     {/* Event Type & Status Badges */}
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="text-[11px] font-medium uppercase px-3 py-1 rounded-full bg-charcoal/40 border border-slate-struct/40 text-ivory/80 tracking-wide">
+                      <span className="text-[11px] font-mono font-medium uppercase px-3 py-1 rounded-full bg-black/30 border border-white/10 text-ivory/80 tracking-wider">
                         {event.type}
                       </span>
                       <span
-                        className={`text-[11px] font-medium px-3 py-1 rounded-full border ${
-                          event.status === 'REGISTRATION OPEN'
+                        className={`text-[11px] font-mono font-medium px-3 py-1 rounded-full border ${
+                          event.status === 'Registration Open'
                             ? 'bg-sage/20 border-sage/40 text-sage'
-                            : 'bg-charcoal/40 border-slate-struct/40 text-slate-400'
+                            : 'bg-black/30 border-white/10 text-slate-400'
                         }`}
                       >
                         {event.status}
@@ -61,16 +61,16 @@ export default function Zone4Operations() {
                     </div>
 
                     {/* Title */}
-                    <h3 className="text-lg sm:text-xl font-bold text-ivory mb-2 tracking-tight">
+                    <h3 className="text-lg sm:text-xl font-display font-bold text-ivory mb-2 tracking-tight">
                       {event.title}
                     </h3>
 
-                    <p className="text-sm text-ivory/80 leading-relaxed mb-4 font-normal">
+                    <p className="text-sm text-ivory/80 leading-relaxed mb-4 font-normal font-sans">
                       {event.description}
                     </p>
 
                     {/* Metadata Details with Normal Numbers */}
-                    <div className="space-y-2 text-xs text-slate-300 mb-5">
+                    <div className="space-y-2 text-xs text-slate-300 mb-5 font-mono">
                       <div className="flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-sage" />
                         <span className="num-normal font-medium">{event.date}</span>
@@ -87,13 +87,13 @@ export default function Zone4Operations() {
                   </div>
 
                   {/* Register / Action Button */}
-                  <div className="pt-3 border-t border-slate-struct/35">
+                  <div className="pt-3 border-t border-white/10">
                     <button
                       onClick={() => handleRegister(event.id)}
-                      className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-semibold rounded-xl transition-all cursor-pointer tracking-wider ${
+                      className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-display font-semibold rounded-xl transition-all cursor-pointer tracking-wider uppercase ${
                         isRegistered
                           ? 'bg-sage/20 border border-sage text-sage cursor-default'
-                          : 'bg-charcoal/40 hover:bg-slate-struct/60 border border-slate-struct/40 text-ivory'
+                          : 'bg-black/30 hover:bg-white/10 border border-white/15 text-ivory'
                       }`}
                     >
                       {isRegistered ? (

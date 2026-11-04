@@ -1,20 +1,88 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback, useMemo } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import { Html } from '@react-three/drei';
+import { ChevronRight, X, Heart, Compass } from 'lucide-react';
+import { audioManager } from '@/utils/audioManager';
+
+// 7 Companion Waypoints tracking the visitor's journey through facility zones
+const COMPANION_WAYPOINTS = [
+  {
+    progress: 0.0,
+    pos: new THREE.Vector3(1.15, 0.74, 6.8),
+    idleRotY: -0.28,
+    tag: 'ENTRANCE',
+    text: "Beep-boop! I'm BDX-01, your companion. Scroll to explore the data centre corridor with me!",
+  },
+  {
+    progress: 0.166,
+    pos: new THREE.Vector3(-0.95, 0.74, -19.5),
+    idleRotY: 0.45,
+    tag: 'FOUNDATION',
+    text: "We're in the Foundation Bay! Click [INSPECT NODE] on the rack to your left to view cluster GPUs.",
+  },
+  {
+    progress: 0.333,
+    pos: new THREE.Vector3(-1.25, 0.74, -44.5),
+    idleRotY: 0.35,
+    tag: 'RESEARCH LAB',
+    text: "Look at the neural core on the left! Click and drag the hologram sphere to spin the network.",
+  },
+  {
+    progress: 0.5,
+    pos: new THREE.Vector3(1.1, 0.74, -76.0),
+    idleRotY: -0.35,
+    tag: 'OPERATIONS',
+    text: "Operations flight board: hackathons, CUDA acceleration workshops, and reading groups.",
+  },
+  {
+    progress: 0.666,
+    pos: new THREE.Vector3(-1.0, 0.74, -106.0),
+    idleRotY: 0.3,
+    tag: 'ARCHIVE',
+    text: "Project Archive: explore student open-source repositories like AuraKV and OmniSplat.",
+  },
+  {
+    progress: 0.833,
+    pos: new THREE.Vector3(0.95, 0.74, -136.0),
+    idleRotY: -0.25,
+    tag: 'COMMUNITY',
+    text: "Community Hub: our core team of student researchers, engineers, and faculty mentorship.",
+  },
+  {
+    progress: 1.0,
+    pos: new THREE.Vector3(0.65, 0.74, -167.0),
+    idleRotY: -0.4,
+    tag: 'THE EXIT',
+    text: "We've reached the facility exit! Ready to build with us? Submit your cohort application above!",
+  },
+];
+
+const EASTER_EGG_FACTS = [
+  "Our cluster is currently training a 7B reasoning model at 94% efficiency!",
+  "Fun fact: We consume more coffee and green tea per epoch than any other lab on campus.",
+  "Press [~] or click [CLI] in the top navigation to access the club terminal!",
+  "I run on 100% synthetic clean compute and GPU heat exhaust.",
+  "Did you know? Our team won 1st place in last semester's Inter-College Hackathon!",
+];
 
 /**
  * BdxRobot
- * High-precision 3D BDX biped companion robot (Disney / NVIDIA):
- * - TWO BRILLIANT GLOWING WHITE ROBOTIC EYES on a sleek dark visor
- * - Expressive cursor-tracking pupils with concentric high-tech reticle detailing
- * - Natural digital blinking animation
- * - Articulated industrial neck with full physical clearance (no orange torso clipping / glitches)
- * - Flush ear pivot caps (no horizontal orange wing flaps)
- * - Dynamic head & neck gaze tracking following the user's cursor across the screen
+ * High-precision Disney / NVIDIA BDX Biped Companion Robot:
+ * - Walks alongside the visitor as they scroll down the server room corridor
+ * - Natural walking gait: alternating biped digitigrade strides, foot rolls, forward lean
+ * - Smoothly turns to look at the visitor / zone landmarks when scrolling halts
+ * - Zone-aware guidance: automatically provides commentary as you enter each facility zone
+ * - Interactive pet reactions: excited hop, ear waggle, eye pulse, FM audio chirp
  */
-export default function BdxRobot({ scale = 1, isStatic = false }) {
+export default function BdxRobot({
+  scale = 1,
+  isStatic = false,
+  scrollProgress = 0,
+  isIntro = false,
+}) {
   const rootRef = useRef();
   const torsoRef = useRef();
   const neckRef = useRef();
@@ -26,18 +94,38 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
   const leftLegRef = useRef();
   const rightLegRef = useRef();
 
-  // Mouse & Touch tracker for cursor following (normalized -1.0 to +1.0)
+  // Runtime physical state for walking & movement
+  const currentPos = useRef(new THREE.Vector3(1.15, 0.74, 6.8));
+  const prevPos = useRef(new THREE.Vector3(1.15, 0.74, 6.8));
+  const currentRotY = useRef(-0.28);
+  const walkPhase = useRef(0);
+  const tempTargetPos = useRef(new THREE.Vector3());
+
+  // Interaction State
+  const [hovered, setHovered] = useState(false);
+  const [speechVisible, setSpeechVisible] = useState(true);
+  const [speechContent, setSpeechContent] = useState({
+    tag: COMPANION_WAYPOINTS[0].tag,
+    text: COMPANION_WAYPOINTS[0].text,
+  });
+  const [petCount, setPetCount] = useState(0);
+  const [isNearCamera, setIsNearCamera] = useState(true);
+  const lastZoneIdx = useRef(0);
+
+  // Jump animation timing
+  const jumpTime = useRef(0);
+  const isJumping = useRef(false);
+
+  // Mouse & Touch tracker for gaze tracking
   const cursorRef = useRef({ x: 0, y: 0 });
   const smoothedCursor = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const handleMove = (e) => {
-      // Support mouse, touch, and stylus events
       const clientX = e.clientX ?? (e.touches && e.touches[0]?.clientX);
       const clientY = e.clientY ?? (e.touches && e.touches[0]?.clientY);
 
       if (clientX !== undefined && clientY !== undefined) {
-        // Normalize screen coordinates to [-1.0, 1.0]
         const nx = (clientX / window.innerWidth) * 2 - 1;
         const ny = -(clientY / window.innerHeight) * 2 + 1;
         cursorRef.current.x = nx;
@@ -54,36 +142,159 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
     };
   }, []);
 
+  // Pet / Click interaction
+  const handlePet = useCallback(
+    (e) => {
+      if (e) e.stopPropagation();
+      isJumping.current = true;
+      jumpTime.current = 0;
+      setPetCount((prev) => prev + 1);
+      setSpeechVisible(true);
+
+      const randomFact =
+        EASTER_EGG_FACTS[Math.floor(Math.random() * EASTER_EGG_FACTS.length)];
+      setSpeechContent({
+        tag: 'BDX-01 INTEL',
+        text: randomFact,
+      });
+
+      audioManager.playChirp();
+    },
+    []
+  );
+
   // Blink timing state
   const blinkTimer = useRef(0);
   const isBlinking = useRef(false);
 
-  useFrame(({ clock }, delta) => {
+  useFrame(({ clock, camera }, delta) => {
     const t = clock.getElapsedTime();
 
-    // 1. Snappy & fluid cursor smoothing (responsive 0.16 per frame)
+    // 1. Waypoint interpolation along the corridor based on scrollProgress
+    const p = Math.max(0, Math.min(1, scrollProgress));
+    let startW = COMPANION_WAYPOINTS[0];
+    let endW = COMPANION_WAYPOINTS[COMPANION_WAYPOINTS.length - 1];
+
+    for (let i = 0; i < COMPANION_WAYPOINTS.length - 1; i++) {
+      if (p >= COMPANION_WAYPOINTS[i].progress && p <= COMPANION_WAYPOINTS[i + 1].progress) {
+        startW = COMPANION_WAYPOINTS[i];
+        endW = COMPANION_WAYPOINTS[i + 1];
+        break;
+      }
+    }
+
+    const span = endW.progress - startW.progress;
+    const localT = span > 0 ? (p - startW.progress) / span : 0;
+    const easeT = localT * localT * (3 - 2 * localT);
+
+    tempTargetPos.current.lerpVectors(startW.pos, endW.pos, easeT);
+    const targetIdleRotY = THREE.MathUtils.lerp(startW.idleRotY, endW.idleRotY, easeT);
+
+    // Dynamic Zone Dialogue Triggering
+    const currentZone = Math.min(6, Math.max(0, Math.round(p * 6)));
+    if (currentZone !== lastZoneIdx.current) {
+      lastZoneIdx.current = currentZone;
+      const zoneData = COMPANION_WAYPOINTS[currentZone];
+      setSpeechContent({
+        tag: zoneData.tag,
+        text: zoneData.text,
+      });
+      setSpeechVisible(true);
+      audioManager.playChirp();
+    }
+
+    // 2. Physical lerp towards target position
+    currentPos.current.lerp(tempTargetPos.current, Math.min(1, delta * 4.2));
+
+    // Calculate real speed of translation along corridor
+    const distDelta = currentPos.current.distanceTo(prevPos.current);
+    const speed = distDelta / Math.max(delta, 0.001);
+    prevPos.current.copy(currentPos.current);
+
+    const isWalking = speed > 0.16;
+
+    // Check camera distance
+    const distToCam = camera.position.distanceTo(currentPos.current);
+    setIsNearCamera(distToCam < 24);
+
+    // 3. Walking gait animation
+    let walkBob = 0;
+    let walkSway = 0;
+
+    if (isWalking) {
+      walkPhase.current += delta * Math.min(18, Math.max(7, speed * 4.2));
+      const stepSine = Math.sin(walkPhase.current);
+
+      // Biped digitigrade leg swing
+      if (leftLegRef.current && rightLegRef.current) {
+        leftLegRef.current.rotation.x = stepSine * 0.42;
+        rightLegRef.current.rotation.x = -stepSine * 0.42;
+      }
+
+      // Biped bounce (two steps per gait cycle)
+      walkBob = Math.abs(Math.sin(walkPhase.current)) * 0.04;
+      walkSway = Math.sin(walkPhase.current) * 0.03;
+
+      // Lean body slightly forward into movement
+      if (torsoRef.current) {
+        torsoRef.current.rotation.x += (0.08 - torsoRef.current.rotation.x) * (delta * 6);
+      }
+
+      // When walking forward down corridor, angle slightly into movement direction
+      const forwardAngle = Math.PI - 0.25;
+      currentRotY.current += (forwardAngle - currentRotY.current) * (delta * 3.5);
+    } else {
+      // Settling back to upright idle stance
+      if (leftLegRef.current && rightLegRef.current) {
+        leftLegRef.current.rotation.x += (0 - leftLegRef.current.rotation.x) * (delta * 6);
+        rightLegRef.current.rotation.x += (0 - rightLegRef.current.rotation.x) * (delta * 6);
+      }
+      if (torsoRef.current) {
+        torsoRef.current.rotation.x += (0 - torsoRef.current.rotation.x) * (delta * 6);
+      }
+
+      // Smoothly turn to face visitor / landmark in current zone
+      currentRotY.current += (targetIdleRotY - currentRotY.current) * (delta * 3.5);
+    }
+
+    // 4. Cursor tracking smoothing
     smoothedCursor.current.x += (cursorRef.current.x - smoothedCursor.current.x) * 0.16;
     smoothedCursor.current.y += (cursorRef.current.y - smoothedCursor.current.y) * 0.16;
 
     const mx = smoothedCursor.current.x;
     const my = smoothedCursor.current.y;
 
-    // 2. Playful Biped Sway & Weight Shift
-    const sway = Math.sin(t * 2.2);
-    const bob = Math.abs(Math.sin(t * 2.2));
+    // Idle sway & weight shift
+    const idleSway = Math.sin(t * 2.2) * 0.02;
+    const idleBob = Math.abs(Math.sin(t * 2.2)) * 0.03;
 
+    // Jump / Pet Physics
+    let jumpOffsetY = 0;
+    let jumpHeadWaggle = 0;
+    if (isJumping.current) {
+      jumpTime.current += delta * 2.6;
+      const progress = jumpTime.current;
+      if (progress < 1.0) {
+        jumpOffsetY = Math.sin(progress * Math.PI) * 0.24;
+        jumpHeadWaggle = Math.sin(progress * Math.PI * 4) * 0.16;
+      } else {
+        isJumping.current = false;
+        jumpTime.current = 0;
+      }
+    }
+
+    // Apply Root Transforms (moves along corridor with user)
     if (rootRef.current && !isStatic) {
-      rootRef.current.position.y = -0.1 + bob * 0.03;
-      rootRef.current.position.x = sway * 0.02;
-      rootRef.current.rotation.z = -sway * 0.02;
+      rootRef.current.position.set(
+        currentPos.current.x + (isWalking ? walkSway : idleSway),
+        currentPos.current.y + (isWalking ? walkBob : idleBob) + jumpOffsetY,
+        currentPos.current.z
+      );
+      rootRef.current.rotation.y = currentRotY.current;
+      rootRef.current.rotation.z = isWalking ? walkSway * 0.6 : -idleSway;
     }
 
-    if (torsoRef.current && !isStatic) {
-      torsoRef.current.rotation.y = sway * 0.02 + mx * 0.06;
-    }
-
-    // 3. Dynamic Cursor Tracking: Articulated Neck & Head Tracking
-    // Neck base swivel (turns left/right and slight tilt)
+    // 5. Gaze tracking: Neck & Head
     if (neckRef.current) {
       const neckTargetYaw = mx * 0.25;
       const neckTargetPitch = -my * 0.12;
@@ -91,22 +302,17 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
       neckRef.current.rotation.x = neckTargetPitch;
     }
 
-    // Head provides pronounced gaze tracking + adorable puppy/bird cocked head tilt
-    // Safe clamped angles prevent any geometry clipping with torso/neck
     if (headRef.current) {
-      // Yaw: turns left/right to follow cursor (up to ~28 degrees)
       const headTargetYaw = mx * 0.48;
-      // Pitch: tilts up/down to follow cursor (up to ~15 degrees)
       const headTargetPitch = -my * 0.26;
-      // Inquisitive head tilt: cocks head sideways when curious (up to ~10 degrees)
-      const headCuriousTilt = -mx * 0.18 + Math.sin(t * 1.5) * 0.03;
+      const headCuriousTilt = -mx * 0.18 + Math.sin(t * 1.5) * 0.03 + jumpHeadWaggle;
 
       headRef.current.rotation.y = headTargetYaw;
       headRef.current.rotation.x = headTargetPitch;
       headRef.current.rotation.z = headCuriousTilt;
     }
 
-    // 4. Lifelike White Eye Blinking & Pupil Tracking
+    // 6. White Eye Blinking
     blinkTimer.current += delta;
     if (blinkTimer.current > 3.4) {
       isBlinking.current = true;
@@ -120,30 +326,22 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
     const pupilShiftX = mx * 0.016;
     const pupilShiftY = my * 0.014;
 
-    // Both white eyes blink smoothly (scale Y)
     if (leftEyeRef.current && rightEyeRef.current) {
       leftEyeRef.current.scale.y += (eyeScaleY - leftEyeRef.current.scale.y) * 0.55;
       rightEyeRef.current.scale.y += (eyeScaleY - rightEyeRef.current.scale.y) * 0.55;
     }
 
-    // Pupils actively dart towards cursor
     if (leftPupilRef.current && rightPupilRef.current) {
       leftPupilRef.current.position.x = pupilShiftX;
       leftPupilRef.current.position.y = pupilShiftY;
       rightPupilRef.current.position.x = pupilShiftX;
       rightPupilRef.current.position.y = pupilShiftY;
     }
-
-    // 5. Leg flex
-    if (leftLegRef.current && rightLegRef.current && !isStatic) {
-      leftLegRef.current.rotation.x = -sway * 0.05;
-      rightLegRef.current.rotation.x = sway * 0.05;
-    }
   });
 
   // Materials
   const orangeMat = new THREE.MeshStandardMaterial({
-    color: '#F06522',
+    color: hovered ? '#FF7A38' : '#F06522',
     roughness: 0.3,
     metalness: 0.15,
   });
@@ -167,7 +365,83 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
   });
 
   return (
-    <group ref={rootRef} scale={scale} dispose={null}>
+    <group
+      ref={rootRef}
+      scale={scale}
+      dispose={null}
+      onClick={handlePet}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        setHovered(true);
+        if (typeof document !== 'undefined') document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        setHovered(false);
+        if (typeof document !== 'undefined') document.body.style.cursor = 'default';
+      }}
+    >
+      {/* 3D DREI SPEECH BUBBLE OVERLAY (Travels with the robot across all zones) */}
+      {speechVisible && isNearCamera && (
+        <Html
+          position={[0, 0.95, 0.08]}
+          center
+          distanceFactor={6.8}
+          zIndexRange={[100, 0]}
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="w-72 sm:w-80 p-3.5 rounded-2xl bg-charcoal/90 backdrop-blur-md border border-sage/40 shadow-glass-panel text-ivory text-xs select-none pointer-events-auto transition-all animate-fade-in"
+          >
+            {/* Header with status & close button */}
+            <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-sage animate-ping" />
+                <span className="text-[10px] font-mono tracking-widest text-sage font-bold uppercase">
+                  BDX-01 // {speechContent.tag}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                {petCount > 0 && (
+                  <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-sage/20 text-[10px] text-sage font-medium">
+                    <Heart className="w-2.5 h-2.5 fill-sage" />
+                    <span>{petCount}</span>
+                  </span>
+                )}
+                <button
+                  onClick={() => setSpeechVisible(false)}
+                  className="p-1 rounded-full text-slate-400 hover:text-ivory hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </div>
+            </div>
+
+            {/* Fact / Zone Commentary Body */}
+            <p className="text-ivory/90 leading-relaxed text-xs mb-3 font-normal">
+              {speechContent.text}
+            </p>
+
+            {/* Bottom Actions: Pet or Next Fact */}
+            <div className="flex items-center justify-between pt-2 border-t border-white/10 text-[11px]">
+              <span className="text-slate-400 text-[10px] flex items-center gap-1">
+                <Compass className="w-3 h-3 text-sage" />
+                <span>Zone {lastZoneIdx.current + 1}/7</span>
+              </span>
+              <button
+                onClick={handlePet}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-sage/20 hover:bg-sage text-sage hover:text-graphite font-semibold transition-all cursor-pointer"
+              >
+                <span>PET BDX</span>
+                <ChevronRight className="w-3 h-3" />
+              </button>
+            </div>
+
+            {/* Bubble Tail Pointing Down to Robot Head */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[6px] border-l-transparent border-r-[6px] border-r-transparent border-t-[8px] border-t-sage/40" />
+          </div>
+        </Html>
+      )}
+
       {/* ============================================================== */}
       {/* 1. BIPED FEET (CHUNKY ORANGE BOOTS WITH YELLOW SOLES)          */}
       {/* ============================================================== */}
@@ -258,13 +532,11 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
           <cylinderGeometry args={[0.065, 0.065, 0.16, 16]} />
         </mesh>
 
-        {/* Torso Module (Orange Top Block, White Lower Block) */}
+        {/* Torso Module */}
         <group ref={torsoRef} position={[0, 0.2, 0]}>
-          {/* Lower White Torso Block */}
           <mesh position={[0, -0.06, 0]} material={whiteMat} castShadow>
             <boxGeometry args={[0.38, 0.14, 0.24]} />
           </mesh>
-          {/* Upper Orange Torso Block */}
           <mesh position={[0, 0.08, 0]} material={orangeMat} castShadow>
             <boxGeometry args={[0.4, 0.16, 0.25]} />
           </mesh>
@@ -284,21 +556,18 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
           </mesh>
 
           {/* ============================================================ */}
-          {/* 4. TALL ARTICULATED INDUSTRIAL NECK (AMPLE TORSO CLEARANCE) */}
+          {/* 4. TALL ARTICULATED INDUSTRIAL NECK                          */}
           {/* ============================================================ */}
           <group ref={neckRef} position={[0, 0.18, 0]}>
-            {/* Lower Neck Swivel Base Collar */}
             <mesh position={[0, 0.06, 0]} material={darkMetalMat}>
               <boxGeometry args={[0.16, 0.12, 0.14]} />
             </mesh>
             <mesh position={[0, 0.06, 0]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
               <cylinderGeometry args={[0.04, 0.04, 0.18, 16]} />
             </mesh>
-            {/* Middle Articulated Neck Link */}
             <mesh position={[0, 0.17, 0.01]} rotation={[-0.1, 0, 0]} material={darkMetalMat}>
               <boxGeometry args={[0.14, 0.14, 0.12]} />
             </mesh>
-            {/* Upper Neck Riser Collar & Pivot Pin (Gives Full Vertical Clearance) */}
             <mesh position={[0, 0.27, 0.02]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
               <cylinderGeometry args={[0.042, 0.042, 0.16, 16]} />
             </mesh>
@@ -307,12 +576,12 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
             {/* 5. SOLID BDX PERISCOPE HEAD WITH DUAL GLOWING WHITE EYES   */}
             {/* ========================================================== */}
             <group ref={headRef} position={[0, 0.33, 0.03]}>
-              {/* Lower Orange Jaw Tray (Slim & Recessed, No Torso Collision) */}
+              {/* Lower Orange Jaw Tray */}
               <mesh position={[0, -0.03, 0]} material={orangeMat} castShadow>
                 <boxGeometry args={[0.56, 0.06, 0.60]} />
               </mesh>
 
-              {/* Left Orange Ear Pivot Plate (Flush with Head Wall, No Flap) */}
+              {/* Left Orange Ear Pivot Plate */}
               <mesh position={[-0.285, 0.04, -0.06]} rotation={[0, 0, Math.PI / 2]} material={orangeMat}>
                 <cylinderGeometry args={[0.065, 0.065, 0.018, 24]} />
               </mesh>
@@ -320,7 +589,7 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
                 <cylinderGeometry args={[0.022, 0.022, 0.012, 16]} />
               </mesh>
 
-              {/* Right Orange Ear Pivot Plate (Flush with Head Wall, No Flap) */}
+              {/* Right Orange Ear Pivot Plate */}
               <mesh position={[0.285, 0.04, -0.06]} rotation={[0, 0, Math.PI / 2]} material={orangeMat}>
                 <cylinderGeometry args={[0.065, 0.065, 0.018, 24]} />
               </mesh>
@@ -330,76 +599,53 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
 
               {/* Upper White Canopy Hood */}
               <group position={[0, 0.07, 0]}>
-                {/* White Main Hull */}
                 <mesh material={whiteMat} castShadow receiveShadow>
                   <boxGeometry args={[0.56, 0.14, 0.62]} />
                 </mesh>
-
-                {/* Overhanging Brow Visor Canopy (Forward +Z) */}
                 <mesh position={[0, 0.035, 0.14]} rotation={[-0.16, 0, 0]} material={whiteMat} castShadow>
                   <boxGeometry args={[0.56, 0.07, 0.32]} />
                 </mesh>
-
-                {/* Back of Head Rounded Shell */}
                 <mesh position={[0, 0, -0.31]} material={whiteMat}>
                   <cylinderGeometry args={[0.27, 0.27, 0.14, 24]} />
                 </mesh>
               </group>
 
-              {/* Front Dark Visor Screen Panel (+Z Direction, Clean Flush Capping) */}
+              {/* Front Dark Visor Screen Panel */}
               <group position={[0, 0.035, 0.31]}>
-                {/* Inset Glossy Dark Visor Screen */}
                 <mesh material={darkMetalMat}>
                   <boxGeometry args={[0.50, 0.17, 0.03]} />
                 </mesh>
-
-                {/* Visor Bezel Rim */}
                 <mesh position={[0, 0, -0.005]}>
                   <boxGeometry args={[0.52, 0.18, 0.02]} />
                   <meshStandardMaterial color="#111314" roughness={0.5} />
                 </mesh>
 
-                {/* ====================================================== */}
-                {/* TWO BRILLIANT GLOWING WHITE ROBOTIC EYES               */}
-                {/* ====================================================== */}
-
                 {/* LEFT GLOWING WHITE ROBOTIC EYE */}
                 <group position={[-0.13, 0.01, 0.02]}>
-                  {/* Sleek Dark Titanium Socket Ring */}
                   <mesh>
                     <torusGeometry args={[0.072, 0.008, 16, 32]} />
                     <meshStandardMaterial color="#252B2E" roughness={0.25} metalness={0.9} />
                   </mesh>
-
-                  {/* Recessed Dark Eye Housing */}
                   <mesh position={[0, 0, -0.005]}>
                     <circleGeometry args={[0.068, 24]} />
                     <meshStandardMaterial color="#0A0C0E" roughness={0.2} />
                   </mesh>
 
-                  {/* GLOWING PURE WHITE ROBOTIC EYE (Blinks smoothly on Y-scale) */}
                   <group ref={leftEyeRef}>
-                    {/* Convex Glowing Pure White Eye Dome */}
                     <mesh rotation={[Math.PI / 2, 0, 0]}>
                       <sphereGeometry args={[0.064, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.45]} />
                       <meshBasicMaterial color="#FFFFFF" />
                     </mesh>
 
-                    {/* DYNAMIC OPTICAL PUPIL & RETICLE (Tracks Cursor) */}
                     <group ref={leftPupilRef} position={[0, 0, 0.064]}>
-                      {/* Dark Expressive Optical Pupil */}
                       <mesh>
                         <circleGeometry args={[0.022, 32]} />
                         <meshBasicMaterial color="#0F1214" />
                       </mesh>
-
-                      {/* Concentric Precision Reticle Ring */}
                       <mesh position={[0, 0, 0.001]}>
                         <ringGeometry args={[0.026, 0.03, 32]} />
                         <meshBasicMaterial color="#0F1214" transparent opacity={0.65} side={THREE.DoubleSide} />
                       </mesh>
-
-                      {/* Inner Glowing White Sensor Point */}
                       <mesh position={[0, 0, 0.002]}>
                         <circleGeometry args={[0.007, 16]} />
                         <meshBasicMaterial color="#FFFFFF" />
@@ -410,41 +656,30 @@ export default function BdxRobot({ scale = 1, isStatic = false }) {
 
                 {/* RIGHT GLOWING WHITE ROBOTIC EYE */}
                 <group position={[0.13, 0.01, 0.02]}>
-                  {/* Sleek Dark Titanium Socket Ring */}
                   <mesh>
                     <torusGeometry args={[0.072, 0.008, 16, 32]} />
                     <meshStandardMaterial color="#252B2E" roughness={0.25} metalness={0.9} />
                   </mesh>
-
-                  {/* Recessed Dark Eye Housing */}
                   <mesh position={[0, 0, -0.005]}>
                     <circleGeometry args={[0.068, 24]} />
                     <meshStandardMaterial color="#0A0C0E" roughness={0.2} />
                   </mesh>
 
-                  {/* GLOWING PURE WHITE ROBOTIC EYE (Blinks smoothly on Y-scale) */}
                   <group ref={rightEyeRef}>
-                    {/* Convex Glowing Pure White Eye Dome */}
                     <mesh rotation={[Math.PI / 2, 0, 0]}>
                       <sphereGeometry args={[0.064, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.45]} />
                       <meshBasicMaterial color="#FFFFFF" />
                     </mesh>
 
-                    {/* DYNAMIC OPTICAL PUPIL & RETICLE (Tracks Cursor) */}
                     <group ref={rightPupilRef} position={[0, 0, 0.064]}>
-                      {/* Dark Expressive Optical Pupil */}
                       <mesh>
                         <circleGeometry args={[0.022, 32]} />
                         <meshBasicMaterial color="#0F1214" />
                       </mesh>
-
-                      {/* Concentric Precision Reticle Ring */}
                       <mesh position={[0, 0, 0.001]}>
                         <ringGeometry args={[0.026, 0.03, 32]} />
                         <meshBasicMaterial color="#0F1214" transparent opacity={0.65} side={THREE.DoubleSide} />
                       </mesh>
-
-                      {/* Inner Glowing White Sensor Point */}
                       <mesh position={[0, 0, 0.002]}>
                         <circleGeometry args={[0.007, 16]} />
                         <meshBasicMaterial color="#FFFFFF" />

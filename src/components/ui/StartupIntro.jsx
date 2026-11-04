@@ -116,9 +116,9 @@ export default function StartupIntro({ onComplete }) {
       {/* Top Architectural Shutter */}
       <div
         ref={topShutterRef}
-        className="absolute top-0 left-0 w-full h-1/2 bg-[#121516] border-b border-slate-struct/40 z-10 flex items-end justify-center pb-8"
+        className="absolute top-0 left-0 w-full h-1/2 bg-[#121516] border-b border-white/10 z-10 flex items-end justify-center pb-8"
       >
-        <div className="absolute top-6 left-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-medium">
+        <div className="absolute top-6 left-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-mono">
           Facility Initialization
         </div>
       </div>
@@ -126,9 +126,9 @@ export default function StartupIntro({ onComplete }) {
       {/* Bottom Architectural Shutter */}
       <div
         ref={bottomShutterRef}
-        className="absolute bottom-0 left-0 w-full h-1/2 bg-[#121516] border-t border-slate-struct/40 z-10 flex items-start justify-center pt-8"
+        className="absolute bottom-0 left-0 w-full h-1/2 bg-[#121516] border-t border-white/10 z-10 flex items-start justify-center pt-8"
       >
-        <div className="absolute bottom-6 right-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-medium">
+        <div className="absolute bottom-6 right-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-mono">
           AI Club Autonomous Systems
         </div>
       </div>
@@ -138,7 +138,7 @@ export default function StartupIntro({ onComplete }) {
         ref={centerContentRef}
         className="relative z-20 flex flex-col items-center justify-center text-center px-6"
       >
-        {/* Interactive 3D BDX Robot Canvas (Properly Centered & Scaled) */}
+        {/* Interactive 3D BDX Robot Canvas */}
         <div className="w-64 h-64 sm:w-80 sm:h-80 relative mb-1 cursor-grab active:cursor-grabbing">
           <Canvas
             camera={{ position: [0, 0.08, 2.85], fov: 40 }}
@@ -152,25 +152,25 @@ export default function StartupIntro({ onComplete }) {
           </Canvas>
         </div>
 
-        {/* Title & Tagline */}
+        {/* Title & Tagline with Space Grotesk */}
         <div ref={logoTextRef} className="space-y-1 mb-5">
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-ivory font-sans">
+          <h1 className="text-3xl sm:text-4xl font-display font-bold tracking-tight text-ivory">
             AI CLUB
           </h1>
-          <p className="text-xs sm:text-sm text-sage font-light tracking-wide">
+          <p className="text-xs sm:text-sm text-sage font-light tracking-wide font-sans">
             Where Curiosity Meets Intelligence
           </p>
         </div>
 
         {/* Hairline Progress Indicator */}
         <div className="w-48 sm:w-64 space-y-2">
-          <div className="w-full h-1 bg-charcoal/80 rounded-full overflow-hidden border border-slate-struct/40">
+          <div className="w-full h-1 bg-black/40 rounded-full overflow-hidden border border-white/10">
             <div
               ref={progressLineRef}
               className="w-full h-full bg-sage origin-left rounded-full"
             />
           </div>
-          <div className="flex justify-between items-center text-xs text-slate-400 font-medium">
+          <div className="flex justify-between items-center text-xs text-slate-400 font-mono">
             <span className="uppercase text-[11px] tracking-wider">Starting Systems</span>
             <span className="num-normal text-sage font-semibold">{progressNum}%</span>
           </div>

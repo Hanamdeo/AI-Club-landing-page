@@ -5,6 +5,7 @@ import { Canvas } from '@react-three/fiber';
 import CameraController from './CameraController';
 import DataCentreCorridor from './DataCentreCorridor';
 import ServerRackInstanced from './ServerRackInstanced';
+import InteractiveServerRack from './landmarks/InteractiveServerRack';
 import BdxRobot from './BdxRobot';
 import EntranceGate from './landmarks/EntranceGate';
 import FoundationBay from './landmarks/FoundationBay';
@@ -18,11 +19,18 @@ import ExitPortal from './landmarks/ExitPortal';
  * SceneContainer
  * Master WebGL Canvas containing the continuous 3D Data Centre facility.
  * Fixed in the background behind transparent HTML overlay views.
+ * Configured with active pointer raycasting for robot and landmark interactions.
  */
-export default function SceneContainer({ scrollProgress = 0, isIntro = false }) {
+export default function SceneContainer({
+  scrollProgress = 0,
+  isIntro = false,
+  onOpenRackModal,
+}) {
   return (
     <div className="fixed inset-0 w-full h-full pointer-events-none z-0">
       <Canvas
+        className="pointer-events-auto"
+        style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
         camera={{ position: [0, 2.2, 16.5], fov: 55, near: 0.1, far: 140 }}
         dpr={[1, 1.5]}
         gl={{
@@ -54,10 +62,15 @@ export default function SceneContainer({ scrollProgress = 0, isIntro = false }) 
         {/* Instanced Server Rack Cluster (80+ Racks) */}
         <ServerRackInstanced />
 
-        {/* BDX Biped Companion Robot: Standing in Corridor Facing Forward into Camera with Two White Eyes */}
-        <group position={[1.22, 0.74, 6.8]} rotation={[0, -0.23, 0]}>
-          <BdxRobot scale={1.1} />
-        </group>
+        {/* Zone 02 Interactive Server Rack Inspection Landmark */}
+        <InteractiveServerRack onOpenModal={onOpenRackModal} />
+
+        {/* BDX Biped Companion Robot: Dynamically walks and explores with the visitor on scroll */}
+        <BdxRobot
+          scale={1.1}
+          scrollProgress={scrollProgress}
+          isIntro={isIntro}
+        />
 
         {/* Zone-Specific Architectural Landmarks */}
         <EntranceGate />
