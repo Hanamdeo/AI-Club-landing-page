@@ -1,8 +1,10 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Terminal as TerminalIcon, X, Minus, Square, Send, CornerDownLeft } from 'lucide-react';
-import { CLUB_META, ZONE_PROJECTS, ZONE_TEAM, ZONE_ABOUT } from '@/data/clubData';
+import { Terminal as TerminalIcon, X, CornerDownLeft } from 'lucide-react';
+import { getUpcomingEvents, getUpcomingDiscussions, getCuratedNews, getAllProjects, getTeamMembers } from '@/lib/contentSelectors';
+import { RESEARCH_TRACKS, COMPUTE_SPECS } from '@/data/research';
+import { CLUB_INFO } from '@/data/clubInfo';
 import { audioManager } from '@/utils/audioManager';
 
 const WELCOME_BANNER = [
@@ -11,71 +13,51 @@ const WELCOME_BANNER = [
   " / /| |  / /   / /   / /  / / / / __  |",
   "/ ___ |_/ /   / /___/ /__/ /_/ / /_/ / ",
   "/_/  |_/___/   \\____/_____/\\____/_____/  ",
-  "AICLUB-OS [v2.4.0-compute-rel] (x86_64-cluster)",
+  "AICLUB-OS [v2.8.0-signal-v2] (x86_64-cluster)",
   "Type 'help' to inspect available system commands. Press [~] or [ESC] to exit.",
   "----------------------------------------------------------------------",
 ];
 
 const AVAILABLE_COMMANDS = [
   { cmd: 'help', desc: 'Display list of available terminal commands' },
+  { cmd: 'events', desc: 'Display upcoming workshops, hackathons & operations' },
+  { cmd: 'gd', desc: 'Display Group Discussions & reading circle schedules' },
+  { cmd: 'news', desc: 'Display curated AI Radar breakthroughs & releases' },
   { cmd: 'projects', desc: 'Inspect open-source research projects and repositories' },
-  { cmd: 'stats', desc: 'Display real-time cluster compute metrics and metrics summary' },
-  { cmd: 'specs', desc: 'Print physical hardware cluster compute architecture' },
+  { cmd: 'research', desc: 'Print cognitive tracks and hardware compute cluster specs' },
   { cmd: 'team', desc: 'List core lab leads, researchers, and faculty advisor' },
+  { cmd: 'join', desc: 'Navigate directly to Section 09 recruitment intake' },
   { cmd: 'sound', desc: 'Control facility ambience (usage: sound on | sound off)' },
-  { cmd: 'whoami', desc: 'Display your visitor terminal node session identifier' },
-  { cmd: 'join', desc: 'Navigate to Zone 07 application dispatch' },
-  { cmd: 'matrix', desc: 'Toggle ASCII neural matrix simulation stream' },
   { cmd: 'clear', desc: 'Clear the terminal output screen buffer' },
   { cmd: 'exit', desc: 'Close interactive CLI terminal window' },
 ];
 
 /**
  * TerminalCLI
- * Retro-futuristic interactive UNIX-style terminal window.
- * Allows visitors to query real club data, toggle sound, explore projects, and run Easter eggs.
+ * Interactive UNIX-style terminal window querying real club data and navigating sections.
  */
-export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
+export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
   const [history, setHistory] = useState([
     { type: 'banner', lines: WELCOME_BANNER },
-    { type: 'system', text: "System check: ALL NODES OPERATIONAL. Ready for input." },
+    { type: 'system', text: "System check: BDX-01 & ALL COMPUTE CLUSTERS OPERATIONAL. Ready for input." },
   ]);
   const [inputVal, setInputVal] = useState('');
   const [cmdHistory, setCmdHistory] = useState([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
-  const [matrixActive, setMatrixActive] = useState(false);
 
   const inputRef = useRef(null);
   const endRef = useRef(null);
 
-  // Focus input whenever opened
   useEffect(() => {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 80);
     }
   }, [isOpen]);
 
-  // Scroll to bottom on new output
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [history, matrixActive]);
+  }, [history]);
 
-  // Matrix digital rain timer
-  useEffect(() => {
-    if (!matrixActive) return;
-    const chars = '0123456789ABCDEF010101XYZ';
-    const interval = setInterval(() => {
-      let rain = '';
-      for (let i = 0; i < 48; i++) {
-        rain += chars[Math.floor(Math.random() * chars.length)] + (Math.random() > 0.8 ? ' ' : '');
-      }
-      setHistory((prev) => [...prev.slice(-30), { type: 'matrix', text: rain }]);
-    }, 120);
-
-    return () => clearInterval(interval);
-  }, [matrixActive]);
-
-  // Global keydown listeners: ESC and backtick
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === '`' || e.key === '~') {
@@ -94,8 +76,6 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
     if (!trimmed) return;
 
     audioManager.playBeep(1050, 0.05);
-
-    // Record command history
     setCmdHistory((prev) => [...prev, trimmed]);
     setHistoryIndex(-1);
 
@@ -113,42 +93,103 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
         });
         break;
 
-      case 'projects':
+      case 'events': {
+        const events = getUpcomingEvents();
+        newHistory.push({
+          type: 'events',
+          items: events,
+        });
+        if (onNavigateToSection && arg === 'go') {
+          setTimeout(() => {
+            onNavigateToSection('events', 'events');
+            onClose();
+          }, 400);
+        }
+        break;
+      }
+
+      case 'gd': {
+        const gds = getUpcomingDiscussions();
+        newHistory.push({
+          type: 'gd',
+          items: gds,
+        });
+        if (onNavigateToSection && arg === 'go') {
+          setTimeout(() => {
+            onNavigateToSection('discussions', 'discussions');
+            onClose();
+          }, 400);
+        }
+        break;
+      }
+
+      case 'news': {
+        const news = getCuratedNews();
+        newHistory.push({
+          type: 'news',
+          items: news,
+        });
+        if (onNavigateToSection && arg === 'go') {
+          setTimeout(() => {
+            onNavigateToSection('radar', 'radar');
+            onClose();
+          }, 400);
+        }
+        break;
+      }
+
+      case 'projects': {
+        const projects = getAllProjects();
         newHistory.push({
           type: 'projects',
-          projects: ZONE_PROJECTS.projects,
+          items: projects,
         });
+        if (onNavigateToSection && arg === 'go') {
+          setTimeout(() => {
+            onNavigateToSection('projects', 'projects');
+            onClose();
+          }, 400);
+        }
         break;
+      }
 
-      case 'stats':
+      case 'research': {
         newHistory.push({
-          type: 'stats',
-          stats: ZONE_ABOUT.stats,
+          type: 'research',
+          tracks: RESEARCH_TRACKS,
+          specs: COMPUTE_SPECS,
         });
         break;
+      }
 
-      case 'specs':
-        newHistory.push({
-          type: 'specs',
-          lines: [
-            "COMPUTE CLUSTER // HARDWARE SPECIFICATION:",
-            "  * Accelerator Pod 01: 8x NVIDIA H100 80GB SXM5 (NVLink 900 GB/s)",
-            "  * Workstation Pod 02: 12x NVIDIA RTX 4090 24GB (Edge Inference)",
-            "  * Host Processors: Dual AMD EPYC 9654 (192 Cores, 384 Threads @ 3.55 GHz)",
-            "  * System Memory: 1.5 TB DDR5-4800 ECC Registered",
-            "  * Interconnect: NVIDIA Quantum-2 InfiniBand 400Gb/s Low-Latency Fabric",
-            "  * Storage Pool: 120 TB NVMe PCIe Gen5 ZFS RAID-10 Scratch Storage",
-            "  * Thermal Control: Direct-to-Chip Fluorochemical Liquid Closed-Loop",
-          ],
-        });
-        break;
-
-      case 'team':
+      case 'team': {
+        const members = getTeamMembers();
         newHistory.push({
           type: 'team',
-          members: ZONE_TEAM.members,
+          members: members,
         });
+        if (onNavigateToSection && arg === 'go') {
+          setTimeout(() => {
+            onNavigateToSection('team', 'team');
+            onClose();
+          }, 400);
+        }
         break;
+      }
+
+      case 'join': {
+        newHistory.push({
+          type: 'system',
+          text: "Navigating to Section 09: Join the Network application gateway...",
+        });
+        if (onNavigateToSection) {
+          setTimeout(() => {
+            onNavigateToSection('join-network', 'join');
+            onClose();
+          }, 500);
+        }
+        break;
+      }
 
       case 'sound':
         if (arg === 'on') {
@@ -164,34 +205,6 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
             text: `Facility audio toggled: ${state ? '[ON]' : '[OFF]'}`,
           });
         }
-        break;
-
-      case 'whoami':
-        newHistory.push({
-          type: 'system',
-          text: `NODE-SESSION // VISITOR_${Math.floor(1000 + Math.random() * 9000)} | TLS_1.3 | AUTH: GUEST_RESEARCHER | ACC: /facility/corridor/z01`,
-        });
-        break;
-
-      case 'join':
-        newHistory.push({
-          type: 'system',
-          text: "Navigating to Zone 07 Facility Application Gate...",
-        });
-        if (onNavigateToZone) {
-          setTimeout(() => {
-            onNavigateToZone(6);
-            onClose();
-          }, 600);
-        }
-        break;
-
-      case 'matrix':
-        setMatrixActive((prev) => !prev);
-        newHistory.push({
-          type: 'system',
-          text: matrixActive ? "Matrix telemetry stream terminated." : "Matrix neural stream initiated...",
-        });
         break;
 
       case 'clear':
@@ -251,10 +264,10 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-graphite/80 backdrop-blur-md animate-fade-in pointer-events-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-graphite/80 backdrop-blur-md animate-fade-in pointer-events-auto font-mono text-xs text-ivory/90">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-3xl h-[80vh] max-h-[640px] rounded-2xl bg-[#121617]/95 border border-slate-struct/70 shadow-2xl flex flex-col overflow-hidden font-mono text-xs text-ivory/90 select-text"
+        className="w-full max-w-3xl h-[80vh] max-h-[640px] rounded-2xl bg-[#121617]/95 border border-slate-struct/70 shadow-2xl flex flex-col overflow-hidden select-text"
       >
         {/* Terminal Header Bar */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-[#171B1C] border-b border-slate-struct/50 select-none shrink-0">
@@ -267,7 +280,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
             <div className="flex items-center gap-2 ml-2">
               <TerminalIcon className="w-3.5 h-3.5 text-sage" />
               <span className="text-[11px] font-semibold text-ivory/80 tracking-wide">
-                AICLUB-OS // aiclub@facility-core:~
+                AICLUB-OS // aiclub@signal-v2:~
               </span>
             </div>
           </div>
@@ -275,7 +288,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-sage animate-ping" />
             <span className="text-[10px] text-sage font-bold uppercase hidden sm:inline">
-              NODE_ALPHA: ONLINE
+              SIGNAL_V2: ONLINE
             </span>
             <button
               onClick={onClose}
@@ -327,49 +340,88 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
               );
             }
 
+            if (item.type === 'events') {
+              return (
+                <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
+                  <div className="text-sage font-bold">// UPCOMING OPERATIONS BOARD:</div>
+                  {item.items.map((ev, i) => (
+                    <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-ivory font-bold">{ev.title}</span>
+                        <span className="text-sage text-[10px] font-semibold">{ev.category}</span>
+                      </div>
+                      <div className="text-slate-400 text-[10px]">{ev.date} • {ev.venue}</div>
+                      <div className="text-slate-500 text-[10px]">{ev.description}</div>
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+
+            if (item.type === 'gd') {
+              return (
+                <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
+                  <div className="text-sage font-bold">// DISCUSSION ROOM TOPICS:</div>
+                  {item.items.map((gd, i) => (
+                    <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
+                      <div className="flex items-center justify-between">
+                        <span className="text-ivory font-bold">{gd.topic}</span>
+                        <span className="text-sage text-[10px]">{gd.category}</span>
+                      </div>
+                      <div className="text-slate-400 text-[10px]">{gd.date} • Moderator: {gd.moderator}</div>
+                      <div className="text-slate-500 text-[10px]">{gd.abstract}</div>
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+
+            if (item.type === 'news') {
+              return (
+                <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
+                  <div className="text-sage font-bold">// AI RADAR VERIFIED DISPATCHES:</div>
+                  {item.items.map((n, i) => (
+                    <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
+                      <div className="text-ivory font-bold">{n.headline}</div>
+                      <div className="text-slate-400 text-[10px]">{n.source} • {n.date}</div>
+                      <div className="text-slate-500 text-[10px]">{n.summary}</div>
+                    </div>
+                  ))}
+                </div>
+              );
+            }
+
             if (item.type === 'projects') {
               return (
                 <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
                   <div className="text-sage font-bold">// RESEARCH & OPEN-SOURCE REPOSITORIES:</div>
-                  {item.projects.map((p, i) => (
+                  {item.items.map((p, i) => (
                     <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
                       <div className="flex items-center justify-between">
                         <span className="text-ivory font-bold">{p.title}</span>
-                        <span className="text-sage text-[10px] font-semibold">{p.metrics}</span>
+                        <span className="text-sage text-[10px] font-semibold">{p.category}</span>
                       </div>
                       <div className="text-slate-400 text-[10px] mt-0.5">{p.description}</div>
-                      <div className="text-sage/70 text-[9px] mt-0.5">Stack: {p.techStack.join(' • ')}</div>
+                      <div className="text-sage/70 text-[9px] mt-0.5">Stack: {p.technologies.join(' • ')}</div>
                     </div>
                   ))}
                 </div>
               );
             }
 
-            if (item.type === 'stats') {
+            if (item.type === 'research') {
               return (
-                <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-1.5">
-                  <div className="text-sage font-bold">// REAL-TIME FACILITY TELEMETRY:</div>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
-                    {item.stats.map((s, i) => (
-                      <div key={i} className="p-2 rounded bg-charcoal/40 border border-slate-struct/20">
-                        <div className="text-lg font-bold text-sage">{s.value}</div>
-                        <div className="text-[10px] text-ivory/80 font-medium">{s.label}</div>
-                        <div className="text-[9px] text-slate-400">{s.unit}</div>
-                      </div>
-                    ))}
+                <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
+                  <div className="text-sage font-bold">// COGNITIVE TRACKS & COMPUTE ARCHITECTURE:</div>
+                  <div className="text-slate-300 text-[10px]">
+                    Accelerators: {item.specs.accelerators}
                   </div>
-                </div>
-              );
-            }
-
-            if (item.type === 'specs') {
-              return (
-                <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-1">
-                  {item.lines.map((l, i) => (
-                    <div key={i} className={i === 0 ? 'text-sage font-bold' : 'text-slate-300'}>
-                      {l}
-                    </div>
-                  ))}
+                  <div className="text-slate-300 text-[10px]">
+                    Host: {item.specs.hostProcessors}
+                  </div>
+                  <div className="text-slate-300 text-[10px]">
+                    Interconnect: {item.specs.interconnect}
+                  </div>
                 </div>
               );
             }
@@ -387,14 +439,6 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
                       </div>
                     ))}
                   </div>
-                </div>
-              );
-            }
-
-            if (item.type === 'matrix') {
-              return (
-                <div key={idx} className="text-emerald-400 font-mono text-[10px] tracking-widest opacity-80">
-                  {item.text}
                 </div>
               );
             }
@@ -425,7 +469,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
             value={inputVal}
             onChange={(e) => setInputVal(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Type 'help' or command..."
+            placeholder="Type 'help' or command (e.g. 'events', 'gd', 'news', 'join')..."
             className="flex-1 bg-transparent text-ivory outline-none border-none font-mono text-xs placeholder:text-slate-600 caret-sage"
             autoFocus
             spellCheck={false}
@@ -441,4 +485,3 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToZone }) {
     </div>
   );
 }
-

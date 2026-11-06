@@ -5,59 +5,45 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { audioManager } from '@/utils/audioManager';
 
-// 7 Companion Waypoints tracking the visitor's journey through facility zones
-const COMPANION_WAYPOINTS = [
+// Waypoints along the 3-section corridor arc:
+// Progress 0.0 -> Section 1 (The Arrival: Entrance Gate)
+// Progress 0.5 -> Section 2 (The Intelligence Core: Computing Infrastructure)
+// Progress 1.0 -> Section 3 (The Projection Chamber: Pedestal & Hologram Emission)
+const FACILITY_WAYPOINTS = [
   {
     progress: 0.0,
     pos: new THREE.Vector3(1.15, 0.74, 6.8),
     idleRotY: -0.28,
   },
   {
-    progress: 0.166,
-    pos: new THREE.Vector3(-0.95, 0.74, -19.5),
-    idleRotY: 0.45,
-  },
-  {
-    progress: 0.333,
-    pos: new THREE.Vector3(-1.25, 0.74, -44.5),
-    idleRotY: 0.35,
-  },
-  {
     progress: 0.5,
-    pos: new THREE.Vector3(1.1, 0.74, -76.0),
-    idleRotY: -0.35,
-  },
-  {
-    progress: 0.666,
-    pos: new THREE.Vector3(-1.0, 0.74, -106.0),
-    idleRotY: 0.3,
-  },
-  {
-    progress: 0.833,
-    pos: new THREE.Vector3(0.95, 0.74, -136.0),
-    idleRotY: -0.25,
+    pos: new THREE.Vector3(-0.95, 0.74, -18.5),
+    idleRotY: 0.42,
   },
   {
     progress: 1.0,
-    pos: new THREE.Vector3(0.65, 0.74, -167.0),
-    idleRotY: -0.4,
+    pos: new THREE.Vector3(1.1, 0.88, -34.8),
+    idleRotY: -0.32,
   },
 ];
 
 /**
  * BdxRobot
  * High-precision Disney / NVIDIA BDX Biped Companion Robot:
- * - Walks alongside the visitor as they scroll down the server room corridor
- * - Natural walking gait: alternating biped digitigrade strides, foot rolls, forward lean
- * - Smoothly turns to look at the visitor / zone landmarks when scrolling halts
- * - Zone-aware guidance: automatically provides commentary as you enter each facility zone
- * - Interactive pet reactions: excited hop, ear waggle, eye pulse, FM audio chirp
+ * - Gait walking during corridor transit (Sections 1 to 2)
+ * - Transitions to stationary pedestal docking at Section 3 (The Projection Chamber)
+ * - Articulated Holographic Projector with volumetric sage-green light cone beam
+ * - Hover / Floating mode for companion docking
+ * - Gaze tracking, lifelike eye blinking, interactive chirps & jump reactions
  */
 export default function BdxRobot({
   scale = 1,
   isStatic = false,
+  hoverMode = false,
   scrollProgress = 0,
-  isIntro = false,
+  isProjecting = false,
+  onToggleProjector,
+  animationState = 'idle', // 'intro' | 'hover' | 'walk' | 'projector' | 'info' | 'idle'
 }) {
   const rootRef = useRef();
   const torsoRef = useRef();
@@ -69,8 +55,10 @@ export default function BdxRobot({
   const rightPupilRef = useRef();
   const leftLegRef = useRef();
   const rightLegRef = useRef();
+  const projectorBeamRef = useRef();
+  const projectorLensRef = useRef();
 
-  // Runtime physical state for walking & movement
+  // Physical tracking state
   const currentPos = useRef(new THREE.Vector3(1.15, 0.74, 6.8));
   const prevPos = useRef(new THREE.Vector3(1.15, 0.74, 6.8));
   const currentRotY = useRef(-0.28);
@@ -79,12 +67,10 @@ export default function BdxRobot({
 
   // Interaction State
   const [hovered, setHovered] = useState(false);
-
-  // Jump animation timing
   const jumpTime = useRef(0);
   const isJumping = useRef(false);
 
-  // Mouse & Touch tracker for gaze tracking
+  // Gaze tracking
   const cursorRef = useRef({ x: 0, y: 0 });
   const smoothedCursor = useRef({ x: 0, y: 0 });
 
@@ -110,150 +96,154 @@ export default function BdxRobot({
     };
   }, []);
 
-  // Pet / Click interaction (triggers jump hop and sound chirp)
-  const handlePet = useCallback(
+  const handleClick = useCallback(
     (e) => {
       if (e) e.stopPropagation();
       isJumping.current = true;
       jumpTime.current = 0;
       audioManager.playChirp();
+      if (onToggleProjector) onToggleProjector();
     },
-    []
+    [onToggleProjector]
   );
 
-  // Blink timing state
+  // Blink timing
   const blinkTimer = useRef(0);
   const isBlinking = useRef(false);
 
   useFrame(({ clock }, delta) => {
     const t = clock.getElapsedTime();
 
-    // 1. Waypoint interpolation along the corridor based on scrollProgress
-    const p = Math.max(0, Math.min(1, scrollProgress));
-    let startW = COMPANION_WAYPOINTS[0];
-    let endW = COMPANION_WAYPOINTS[COMPANION_WAYPOINTS.length - 1];
+    if (hoverMode) {
+      // 1. FLOATING / HOVER COMPANION MODE (Used in docked companion UI)
+      const hoverFloatY = Math.sin(t * 2.2) * 0.08;
+      const hoverFloatRotY = Math.sin(t * 1.2) * 0.06;
 
-    for (let i = 0; i < COMPANION_WAYPOINTS.length - 1; i++) {
-      if (p >= COMPANION_WAYPOINTS[i].progress && p <= COMPANION_WAYPOINTS[i + 1].progress) {
-        startW = COMPANION_WAYPOINTS[i];
-        endW = COMPANION_WAYPOINTS[i + 1];
-        break;
+      if (rootRef.current) {
+        rootRef.current.position.y = hoverFloatY;
+        rootRef.current.rotation.y = hoverFloatRotY;
+      }
+
+      // Smooth leg settling in hover
+      if (leftLegRef.current && rightLegRef.current) {
+        leftLegRef.current.rotation.x = 0.15 + Math.sin(t * 2.0) * 0.03;
+        rightLegRef.current.rotation.x = 0.15 - Math.sin(t * 2.0) * 0.03;
+      }
+    } else if (!isStatic) {
+      // 2. CORRIDOR WAYPOINT TRAVEL (Experience A)
+      const p = Math.max(0, Math.min(1, scrollProgress));
+      let startW = FACILITY_WAYPOINTS[0];
+      let endW = FACILITY_WAYPOINTS[FACILITY_WAYPOINTS.length - 1];
+
+      for (let i = 0; i < FACILITY_WAYPOINTS.length - 1; i++) {
+        if (p >= FACILITY_WAYPOINTS[i].progress && p <= FACILITY_WAYPOINTS[i + 1].progress) {
+          startW = FACILITY_WAYPOINTS[i];
+          endW = FACILITY_WAYPOINTS[i + 1];
+          break;
+        }
+      }
+
+      const span = endW.progress - startW.progress;
+      const localT = span > 0 ? (p - startW.progress) / span : 0;
+      const easeT = localT * localT * (3 - 2 * localT);
+
+      tempTargetPos.current.lerpVectors(startW.pos, endW.pos, easeT);
+      const targetIdleRotY = THREE.MathUtils.lerp(startW.idleRotY, endW.idleRotY, easeT);
+
+      currentPos.current.lerp(tempTargetPos.current, Math.min(1, delta * 4.2));
+
+      // Calculate translation speed
+      const distDelta = currentPos.current.distanceTo(prevPos.current);
+      const speed = distDelta / Math.max(delta, 0.001);
+      prevPos.current.copy(currentPos.current);
+
+      const isWalking = speed > 0.16 && p < 0.95;
+
+      let walkBob = 0;
+      let walkSway = 0;
+
+      if (isWalking) {
+        walkPhase.current += delta * Math.min(18, Math.max(7, speed * 4.2));
+        const stepSine = Math.sin(walkPhase.current);
+
+        if (leftLegRef.current && rightLegRef.current) {
+          leftLegRef.current.rotation.x = stepSine * 0.42;
+          rightLegRef.current.rotation.x = -stepSine * 0.42;
+        }
+
+        walkBob = Math.abs(Math.sin(walkPhase.current)) * 0.04;
+        walkSway = Math.sin(walkPhase.current) * 0.03;
+
+        if (torsoRef.current) {
+          torsoRef.current.rotation.x += (0.08 - torsoRef.current.rotation.x) * (delta * 6);
+        }
+
+        const forwardAngle = Math.PI - 0.25;
+        currentRotY.current += (forwardAngle - currentRotY.current) * (delta * 3.5);
+      } else {
+        // Settling back to upright idle stance
+        if (leftLegRef.current && rightLegRef.current) {
+          leftLegRef.current.rotation.x += (0 - leftLegRef.current.rotation.x) * (delta * 6);
+          rightLegRef.current.rotation.x += (0 - rightLegRef.current.rotation.x) * (delta * 6);
+        }
+        if (torsoRef.current) {
+          torsoRef.current.rotation.x += (0 - torsoRef.current.rotation.x) * (delta * 6);
+        }
+
+        // At Section 03 (p > 0.9), orient towards the camera / user directly
+        const targetRot = p > 0.9 ? 0.15 : targetIdleRotY;
+        currentRotY.current += (targetRot - currentRotY.current) * (delta * 3.5);
+      }
+
+      // Idle sway & jump
+      const idleSway = Math.sin(t * 2.2) * 0.02;
+      const idleBob = Math.abs(Math.sin(t * 2.2)) * 0.03;
+
+      let jumpOffsetY = 0;
+      if (isJumping.current) {
+        jumpTime.current += delta * 2.6;
+        const progress = jumpTime.current;
+        if (progress < 1.0) {
+          jumpOffsetY = Math.sin(progress * Math.PI) * 0.24;
+        } else {
+          isJumping.current = false;
+          jumpTime.current = 0;
+        }
+      }
+
+      if (rootRef.current) {
+        rootRef.current.position.set(
+          currentPos.current.x + (isWalking ? walkSway : idleSway),
+          currentPos.current.y + (isWalking ? walkBob : idleBob) + jumpOffsetY,
+          currentPos.current.z
+        );
+        rootRef.current.rotation.y = currentRotY.current;
+        rootRef.current.rotation.z = isWalking ? walkSway * 0.6 : -idleSway;
       }
     }
 
-    const span = endW.progress - startW.progress;
-    const localT = span > 0 ? (p - startW.progress) / span : 0;
-    const easeT = localT * localT * (3 - 2 * localT);
-
-    tempTargetPos.current.lerpVectors(startW.pos, endW.pos, easeT);
-    const targetIdleRotY = THREE.MathUtils.lerp(startW.idleRotY, endW.idleRotY, easeT);
-
-    // 2. Physical lerp towards target position
-    currentPos.current.lerp(tempTargetPos.current, Math.min(1, delta * 4.2));
-
-    // Calculate real speed of translation along corridor
-    const distDelta = currentPos.current.distanceTo(prevPos.current);
-    const speed = distDelta / Math.max(delta, 0.001);
-    prevPos.current.copy(currentPos.current);
-
-    const isWalking = speed > 0.16;
-
-    // 3. Walking gait animation
-    let walkBob = 0;
-    let walkSway = 0;
-
-    if (isWalking) {
-      walkPhase.current += delta * Math.min(18, Math.max(7, speed * 4.2));
-      const stepSine = Math.sin(walkPhase.current);
-
-      // Biped digitigrade leg swing
-      if (leftLegRef.current && rightLegRef.current) {
-        leftLegRef.current.rotation.x = stepSine * 0.42;
-        rightLegRef.current.rotation.x = -stepSine * 0.42;
-      }
-
-      // Biped bounce (two steps per gait cycle)
-      walkBob = Math.abs(Math.sin(walkPhase.current)) * 0.04;
-      walkSway = Math.sin(walkPhase.current) * 0.03;
-
-      // Lean body slightly forward into movement
-      if (torsoRef.current) {
-        torsoRef.current.rotation.x += (0.08 - torsoRef.current.rotation.x) * (delta * 6);
-      }
-
-      // When walking forward down corridor, angle slightly into movement direction
-      const forwardAngle = Math.PI - 0.25;
-      currentRotY.current += (forwardAngle - currentRotY.current) * (delta * 3.5);
-    } else {
-      // Settling back to upright idle stance
-      if (leftLegRef.current && rightLegRef.current) {
-        leftLegRef.current.rotation.x += (0 - leftLegRef.current.rotation.x) * (delta * 6);
-        rightLegRef.current.rotation.x += (0 - rightLegRef.current.rotation.x) * (delta * 6);
-      }
-      if (torsoRef.current) {
-        torsoRef.current.rotation.x += (0 - torsoRef.current.rotation.x) * (delta * 6);
-      }
-
-      // Smoothly turn to face visitor / landmark in current zone
-      currentRotY.current += (targetIdleRotY - currentRotY.current) * (delta * 3.5);
-    }
-
-    // 4. Cursor tracking smoothing
+    // 3. Cursor tracking smoothing
     smoothedCursor.current.x += (cursorRef.current.x - smoothedCursor.current.x) * 0.16;
     smoothedCursor.current.y += (cursorRef.current.y - smoothedCursor.current.y) * 0.16;
 
     const mx = smoothedCursor.current.x;
     const my = smoothedCursor.current.y;
 
-    // Idle sway & weight shift
-    const idleSway = Math.sin(t * 2.2) * 0.02;
-    const idleBob = Math.abs(Math.sin(t * 2.2)) * 0.03;
-
-    // Jump / Pet Physics
-    let jumpOffsetY = 0;
-    let jumpHeadWaggle = 0;
-    if (isJumping.current) {
-      jumpTime.current += delta * 2.6;
-      const progress = jumpTime.current;
-      if (progress < 1.0) {
-        jumpOffsetY = Math.sin(progress * Math.PI) * 0.24;
-        jumpHeadWaggle = Math.sin(progress * Math.PI * 4) * 0.16;
-      } else {
-        isJumping.current = false;
-        jumpTime.current = 0;
-      }
-    }
-
-    // Apply Root Transforms (moves along corridor with user)
-    if (rootRef.current && !isStatic) {
-      rootRef.current.position.set(
-        currentPos.current.x + (isWalking ? walkSway : idleSway),
-        currentPos.current.y + (isWalking ? walkBob : idleBob) + jumpOffsetY,
-        currentPos.current.z
-      );
-      rootRef.current.rotation.y = currentRotY.current;
-      rootRef.current.rotation.z = isWalking ? walkSway * 0.6 : -idleSway;
-    }
-
-    // 5. Gaze tracking: Neck & Head
+    // Gaze tracking
     if (neckRef.current) {
-      const neckTargetYaw = mx * 0.25;
-      const neckTargetPitch = -my * 0.12;
-      neckRef.current.rotation.y = neckTargetYaw;
-      neckRef.current.rotation.x = neckTargetPitch;
+      neckRef.current.rotation.y = mx * 0.25;
+      neckRef.current.rotation.x = -my * 0.12;
     }
 
     if (headRef.current) {
-      const headTargetYaw = mx * 0.48;
-      const headTargetPitch = -my * 0.26;
-      const headCuriousTilt = -mx * 0.18 + Math.sin(t * 1.5) * 0.03 + jumpHeadWaggle;
-
-      headRef.current.rotation.y = headTargetYaw;
-      headRef.current.rotation.x = headTargetPitch;
-      headRef.current.rotation.z = headCuriousTilt;
+      // In projector mode, head orients slightly upwards towards the projection field
+      const projectorPitchOffset = isProjecting ? -0.1 : 0;
+      headRef.current.rotation.y = mx * 0.48;
+      headRef.current.rotation.x = -my * 0.26 + projectorPitchOffset;
+      headRef.current.rotation.z = -mx * 0.18 + Math.sin(t * 1.5) * 0.03;
     }
 
-    // 6. White Eye Blinking
+    // 4. White Eye Blinking
     blinkTimer.current += delta;
     if (blinkTimer.current > 3.4) {
       isBlinking.current = true;
@@ -264,53 +254,75 @@ export default function BdxRobot({
     }
 
     const eyeScaleY = isBlinking.current ? 0.08 : 1.0;
-    const pupilShiftX = mx * 0.016;
-    const pupilShiftY = my * 0.014;
-
     if (leftEyeRef.current && rightEyeRef.current) {
       leftEyeRef.current.scale.y += (eyeScaleY - leftEyeRef.current.scale.y) * 0.55;
       rightEyeRef.current.scale.y += (eyeScaleY - rightEyeRef.current.scale.y) * 0.55;
     }
 
-    if (leftPupilRef.current && rightPupilRef.current) {
-      leftPupilRef.current.position.x = pupilShiftX;
-      leftPupilRef.current.position.y = pupilShiftY;
-      rightPupilRef.current.position.x = pupilShiftX;
-      rightPupilRef.current.position.y = pupilShiftY;
+    // 5. Holographic Projector Volumetric Beam Animation
+    if (projectorBeamRef.current) {
+      if (isProjecting) {
+        projectorBeamRef.current.visible = true;
+        const pulse = 0.35 + Math.sin(t * 4.0) * 0.1;
+        projectorBeamRef.current.material.opacity = pulse;
+        projectorBeamRef.current.rotation.z = t * 0.2;
+      } else {
+        projectorBeamRef.current.visible = false;
+      }
+    }
+
+    if (projectorLensRef.current) {
+      projectorLensRef.current.material.opacity = isProjecting ? 0.95 : 0.4;
     }
   });
 
   // Materials
-  const orangeMat = new THREE.MeshStandardMaterial({
-    color: hovered ? '#FF7A38' : '#F06522',
-    roughness: 0.3,
-    metalness: 0.15,
-  });
+  const orangeMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: hovered ? '#FF7A38' : '#F06522',
+        roughness: 0.3,
+        metalness: 0.15,
+      }),
+    [hovered]
+  );
 
-  const whiteMat = new THREE.MeshStandardMaterial({
-    color: '#F5F5F0',
-    roughness: 0.3,
-    metalness: 0.1,
-  });
+  const whiteMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#F5F5F0',
+        roughness: 0.3,
+        metalness: 0.1,
+      }),
+    []
+  );
 
-  const darkMetalMat = new THREE.MeshStandardMaterial({
-    color: '#181B1C',
-    roughness: 0.35,
-    metalness: 0.85,
-  });
+  const darkMetalMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#181B1C',
+        roughness: 0.35,
+        metalness: 0.85,
+      }),
+    []
+  );
 
-  const chromePinMat = new THREE.MeshStandardMaterial({
-    color: '#B0B7C0',
-    roughness: 0.2,
-    metalness: 0.9,
-  });
+  const chromePinMat = useMemo(
+    () =>
+      new THREE.MeshStandardMaterial({
+        color: '#B0B7C0',
+        roughness: 0.2,
+        metalness: 0.9,
+      }),
+    []
+  );
 
   return (
     <group
       ref={rootRef}
       scale={scale}
       dispose={null}
-      onClick={handlePet}
+      onClick={handleClick}
       onPointerOver={(e) => {
         e.stopPropagation();
         setHovered(true);
@@ -321,8 +333,6 @@ export default function BdxRobot({
         if (typeof document !== 'undefined') document.body.style.cursor = 'default';
       }}
     >
-
-
       {/* ============================================================== */}
       {/* 1. BIPED FEET (CHUNKY ORANGE BOOTS WITH YELLOW SOLES)          */}
       {/* ============================================================== */}
@@ -435,6 +445,56 @@ export default function BdxRobot({
           <mesh position={[0.16, 0.04, 0.13]} material={chromePinMat}>
             <sphereGeometry args={[0.016, 8, 8]} />
           </mesh>
+
+          {/* ============================================================ */}
+          {/* BDX-01 INTEGRATED HOLOGRAPHIC PROJECTOR EMITTER ON CHEST     */}
+          {/* ============================================================ */}
+          <group position={[0, 0.06, 0.13]}>
+            {/* Projector Bezel Housing */}
+            <mesh rotation={[Math.PI / 2, 0, 0]}>
+              <cylinderGeometry args={[0.045, 0.05, 0.02, 24]} />
+              <meshStandardMaterial color="#222828" roughness={0.3} metalness={0.8} />
+            </mesh>
+            {/* Glowing Sage Hologram Emitter Lens */}
+            <mesh ref={projectorLensRef} position={[0, 0, 0.012]} rotation={[Math.PI / 2, 0, 0]}>
+              <circleGeometry args={[0.038, 24]} />
+              <meshBasicMaterial color="#A2B29F" transparent opacity={0.6} />
+            </mesh>
+
+            {/* VOLUMETRIC HOLOGRAPHIC LIGHT BEAM CONE */}
+            <group position={[0, 0, 0.02]} rotation={[Math.PI / 2, 0, 0]}>
+              <mesh ref={projectorBeamRef} position={[0, 1.4, 0]} visible={isProjecting}>
+                <coneGeometry args={[1.2, 2.8, 32, 1, true]} />
+                <meshBasicMaterial
+                  color="#A2B29F"
+                  transparent
+                  opacity={0.3}
+                  side={THREE.DoubleSide}
+                  blending={THREE.AdditiveBlending}
+                  depthWrite={false}
+                />
+              </mesh>
+              {/* Central Intense Beam Core */}
+              {isProjecting && (
+                <mesh position={[0, 1.4, 0]}>
+                  <cylinderGeometry args={[0.04, 0.6, 2.8, 16, 1, true]} />
+                  <meshBasicMaterial
+                    color="#E6E2D8"
+                    transparent
+                    opacity={0.4}
+                    side={THREE.DoubleSide}
+                    blending={THREE.AdditiveBlending}
+                    depthWrite={false}
+                  />
+                </mesh>
+              )}
+            </group>
+
+            {/* Focused Projector Spotlight */}
+            {isProjecting && (
+              <pointLight position={[0, 0, 0.3]} color="#A2B29F" intensity={2.5} distance={4} />
+            )}
+          </group>
 
           {/* ============================================================ */}
           {/* 4. TALL ARTICULATED INDUSTRIAL NECK                          */}

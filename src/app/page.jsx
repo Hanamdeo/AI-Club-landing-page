@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -18,26 +18,35 @@ import HUDNavbar from '@/components/ui/HUDNavbar';
 import DepthTelemetry from '@/components/ui/DepthTelemetry';
 import ServerBladeModal from '@/components/ui/ServerBladeModal';
 import TerminalCLI from '@/components/ui/TerminalCLI';
+import BdxHolographicProjector from '@/components/ui/BdxHolographicProjector';
 
+// EXPERIENCE A: IMMERSIVE 3D FACILITY (SECTIONS 01 - 03)
 import Zone1Hero from '@/components/ui/zones/Zone1Hero';
 import Zone2Foundation from '@/components/ui/zones/Zone2Foundation';
-import Zone3Research from '@/components/ui/zones/Zone3Research';
-import Zone4Operations from '@/components/ui/zones/Zone4Operations';
-import Zone5Archive from '@/components/ui/zones/Zone5Archive';
-import Zone6Community from '@/components/ui/zones/Zone6Community';
-import Zone7Exit from '@/components/ui/zones/Zone7Exit';
+import Section03ProjectionChamber from '@/components/ui/zones/Section03ProjectionChamber';
+
+// EXPERIENCE B: EDITORIAL ARCHIVE (SECTIONS 04 - 09)
+import DiscussionRoom from '@/components/ui/editorial/DiscussionRoom';
+import OperationsBoard from '@/components/ui/editorial/OperationsBoard';
+import AiRadar from '@/components/ui/editorial/AiRadar';
+import ProjectArchive from '@/components/ui/editorial/ProjectArchive';
+import ThePeople from '@/components/ui/editorial/ThePeople';
+import JoinTheNetwork from '@/components/ui/editorial/JoinTheNetwork';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [isIntro, setIsIntro] = useState(true);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [activeZoneIndex, setActiveZoneIndex] = useState(0);
+  const [scrollProgress3D, setScrollProgress3D] = useState(0);
+  const [activeSection, setActiveSection] = useState('hero');
+  const [activeNavId, setActiveNavId] = useState('hero');
+  const [isEditorialMode, setIsEditorialMode] = useState(false);
 
   // Modal & Terminal States
   const [isRackModalOpen, setIsRackModalOpen] = useState(false);
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   const containerRef = useRef(null);
+  const immersiveContainerRef = useRef(null);
   const lenisRef = useRef(null);
 
   // Initialize GSAP & Lenis smooth scroll
@@ -45,7 +54,6 @@ export default function Home() {
     setMounted(true);
     gsap.registerPlugin(ScrollTrigger);
 
-    // Initialize smooth scrolling with Lenis
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -61,28 +69,66 @@ export default function Home() {
       requestAnimationFrame(raf);
     }
     const rafId = requestAnimationFrame(raf);
-
-    // Synchronize Lenis scroll with GSAP ScrollTrigger
     lenis.on('scroll', ScrollTrigger.update);
 
-    // Master ScrollTrigger tracking total facility travel
+    // 1. ScrollTrigger dedicated to Experience A (Sections 1 to 3)
     const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: containerRef.current,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 1.2,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          setScrollProgress(progress);
+      if (immersiveContainerRef.current) {
+        ScrollTrigger.create({
+          trigger: immersiveContainerRef.current,
+          start: 'top top',
+          end: 'bottom bottom',
+          scrub: 1.0,
+          onUpdate: (self) => {
+            const p = self.progress;
+            setScrollProgress3D(p);
 
-          // Determine current active zone (0 to 6)
-          const zoneIndex = Math.min(
-            6,
-            Math.max(0, Math.round(progress * 6))
-          );
-          setActiveZoneIndex(zoneIndex);
-        },
+            if (p < 0.35) {
+              setActiveSection('hero');
+              setActiveNavId('hero');
+              setIsEditorialMode(false);
+            } else if (p < 0.75) {
+              setActiveSection('about');
+              setActiveNavId('hero');
+              setIsEditorialMode(false);
+            } else {
+              setActiveSection('chamber');
+              setActiveNavId('hero');
+              setIsEditorialMode(false);
+            }
+          },
+        });
+      }
+
+      // 2. Observer triggers for Editorial Sections 4 to 9
+      const editorialSections = [
+        { id: 'discussions', navId: 'discussions' },
+        { id: 'events', navId: 'events' },
+        { id: 'radar', navId: 'radar' },
+        { id: 'projects', navId: 'projects' },
+        { id: 'team', navId: 'team' },
+        { id: 'join-network', navId: 'join' },
+      ];
+
+      editorialSections.forEach(({ id, navId }) => {
+        const el = document.getElementById(id);
+        if (el) {
+          ScrollTrigger.create({
+            trigger: el,
+            start: 'top 50%',
+            end: 'bottom 50%',
+            onEnter: () => {
+              setActiveSection(id);
+              setActiveNavId(navId);
+              setIsEditorialMode(true);
+            },
+            onEnterBack: () => {
+              setActiveSection(id);
+              setActiveNavId(navId);
+              setIsEditorialMode(true);
+            },
+          });
+        }
       });
     });
 
@@ -104,55 +150,70 @@ export default function Home() {
     };
   }, [isRackModalOpen]);
 
-  // Jump smoothly to a specific facility zone
-  const handleNavigateToZone = (index) => {
-    if (!containerRef.current) return;
-    const totalHeight = containerRef.current.offsetHeight - window.innerHeight;
-    const targetScroll = (index / 6) * totalHeight;
+  // Smooth scroll navigation to target element ID
+  const handleNavigateToSection = useCallback((targetId, navId) => {
+    setActiveNavId(navId);
+    const targetElement = document.getElementById(targetId);
+    if (!targetElement) return;
 
     if (lenisRef.current) {
-      lenisRef.current.scrollTo(targetScroll, { duration: 1.4 });
+      lenisRef.current.scrollTo(targetElement, { duration: 1.4, offset: -40 });
     } else {
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      targetElement.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
 
   return (
-    <main className="relative bg-transparent text-ivory selection:bg-sage selection:text-graphite min-h-screen">
+    <main className="relative bg-graphite text-ivory selection:bg-sage selection:text-graphite min-h-screen">
       {/* Cinematic Architectural Startup Animation */}
       {mounted && isIntro && <StartupIntro onComplete={() => setIsIntro(false)} />}
 
-      {/* 1. Master WebGL 3D Data Centre Environment (Fixed) with Interactive Landmarks */}
+      {/* 1. Master WebGL 3D Data Centre Canvas (Experience A: Sections 01 - 03) */}
       {mounted && (
         <SceneContainer
-          scrollProgress={scrollProgress}
+          scrollProgress={scrollProgress3D}
           isIntro={isIntro}
+          isProjecting={activeSection === 'chamber'}
           onOpenRackModal={() => setIsRackModalOpen(true)}
+          sceneOpacity={isEditorialMode ? 0.08 : 1.0}
         />
       )}
 
-      {/* 2. Minimal HUD Navigation (Fades in once intro completes) */}
+      {/* 2. Minimal HUD Navigation Bar */}
       <div
         className={`transition-opacity duration-700 ${
           isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
         <HUDNavbar
-          activeZoneIndex={activeZoneIndex}
-          onNavigate={handleNavigateToZone}
+          activeNavId={activeNavId}
+          onNavigateToSection={handleNavigateToSection}
           onToggleTerminal={() => setIsTerminalOpen((prev) => !prev)}
+          isEditorialMode={isEditorialMode}
         />
       </div>
 
-      {/* 3. Spatial Telemetry & Depth Meter */}
+      {/* 3. Spatial Telemetry & Depth Meter (in Experience A) */}
+      <div
+        className={`transition-opacity duration-700 ${
+          isIntro || isEditorialMode ? 'opacity-0 pointer-events-none' : 'opacity-100'
+        }`}
+      >
+        <DepthTelemetry
+          scrollProgress={scrollProgress3D}
+          activeZoneIndex={activeSection === 'hero' ? 0 : activeSection === 'about' ? 1 : 2}
+        />
+      </div>
+
+      {/* 4. Interactive BDX-01 Autonomous Holographic Projector (Persistent) */}
       <div
         className={`transition-opacity duration-700 ${
           isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
-        <DepthTelemetry
-          scrollProgress={scrollProgress}
-          activeZoneIndex={activeZoneIndex}
+        <BdxHolographicProjector
+          activeSection={activeSection}
+          onNavigateSection={handleNavigateToSection}
         />
       </div>
 
@@ -166,45 +227,56 @@ export default function Home() {
       <TerminalCLI
         isOpen={isTerminalOpen}
         onClose={() => setIsTerminalOpen(false)}
-        onNavigateToZone={handleNavigateToZone}
+        onNavigateToSection={handleNavigateToSection}
       />
 
-      {/* 4. Scrollable Container with 7 Architectural Facility Zones */}
-      <div ref={containerRef} className="relative z-10 w-full pointer-events-none">
-        {/* ZONE 01: ENTRANCE — HERO */}
-        <div id="zone-hero" className="w-full">
-          <Zone1Hero onExploreClick={() => handleNavigateToZone(1)} />
+      {/* ============================================================== */}
+      {/* EXPERIENCE A: IMMERSIVE 3D FACILITY (SECTIONS 01 TO 03)        */}
+      {/* ============================================================== */}
+      <div ref={immersiveContainerRef} className="relative z-10 w-full pointer-events-none">
+        {/* SECTION 01: THE ARRIVAL */}
+        <div id="section-arrival" className="w-full">
+          <Zone1Hero
+            onExploreClick={() => handleNavigateToSection('intelligence-core', 'hero')}
+          />
         </div>
 
-        {/* ZONE 02: THE FOUNDATION — ABOUT US */}
-        <div id="zone-about" className="w-full">
+        {/* SECTION 02: THE INTELLIGENCE CORE */}
+        <div id="intelligence-core" className="w-full">
           <Zone2Foundation onInspectRack={() => setIsRackModalOpen(true)} />
         </div>
 
-        {/* ZONE 03: RESEARCH LAB — AI RESEARCH */}
-        <div id="zone-research" className="w-full">
-          <Zone3Research />
+        {/* SECTION 03: THE PROJECTION CHAMBER */}
+        <div id="section-chamber" className="w-full">
+          <Section03ProjectionChamber
+            onTransitionToEditorial={() => handleNavigateToSection('discussions', 'discussions')}
+          />
         </div>
+      </div>
 
-        {/* ZONE 04: OPERATIONS CENTRE — EVENTS */}
-        <div id="zone-operations" className="w-full">
-          <Zone4Operations />
-        </div>
+      {/* ============================================================== */}
+      {/* EXPERIENCE B: EDITORIAL ARCHIVE WEBSITE (SECTIONS 04 TO 09)    */}
+      {/* ============================================================== */}
+      <div className="relative z-20 w-full bg-graphite/95 backdrop-blur-md">
+        {/* SECTION 04: THE DISCUSSION ROOM */}
+        <DiscussionRoom />
 
-        {/* ZONE 05: PROJECT ARCHIVE — PROJECTS */}
-        <div id="zone-projects" className="w-full">
-          <Zone5Archive />
-        </div>
+        {/* SECTION 05: THE OPERATIONS BOARD */}
+        <OperationsBoard />
 
-        {/* ZONE 06: COMMUNITY HUB — TEAM */}
-        <div id="zone-team" className="w-full">
-          <Zone6Community />
-        </div>
+        {/* SECTION 06: AI RADAR */}
+        <AiRadar />
 
-        {/* ZONE 07: THE EXIT — JOIN AI CLUB */}
-        <div id="zone-exit" className="w-full">
-          <Zone7Exit onReturnTop={() => handleNavigateToZone(0)} />
-        </div>
+        {/* SECTION 07: PROJECT ARCHIVE */}
+        <ProjectArchive />
+
+        {/* SECTION 08: THE PEOPLE */}
+        <ThePeople />
+
+        {/* SECTION 09: JOIN THE NETWORK */}
+        <JoinTheNetwork
+          onReturnTop={() => handleNavigateToSection('section-arrival', 'hero')}
+        />
       </div>
     </main>
   );

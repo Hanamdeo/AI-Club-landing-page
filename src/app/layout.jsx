@@ -17,17 +17,20 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata = {
-  title: 'AI CLUB // Autonomous Data Centre Experience',
+  title: 'THE SIGNAL — AI CLUB // Immersive 3D Experience + BDX-01 Projector',
   description:
-    'Explore the next-generation collegiate artificial intelligence facility. Continuous 3D architectural journey through research labs, operations, project archives, and student leadership.',
+    'Explore the next-generation collegiate artificial intelligence facility. 3D corridor journey with autonomous robotic companion BDX-01, interactive holographic projector, and editorial research archive.',
   keywords: [
     'AI Club',
+    'BDX-01',
+    'Autonomous Projector',
     'Data Centre',
     'Machine Learning',
     'Deep Learning',
     'Generative AI',
     'Computer Vision',
     'Student Research',
+    'MITS Gwalior',
   ],
 };
 
