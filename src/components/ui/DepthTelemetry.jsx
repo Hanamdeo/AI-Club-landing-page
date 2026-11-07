@@ -14,7 +14,11 @@ const CORRIDOR_SECTIONS = [
  * Built with clinical precision: tabular JetBrains Mono metrics, restrained hairline borders,
  * and zero visual flicker or distracting pings.
  */
-export default function DepthTelemetry({ scrollProgress = 0, activeZoneIndex = 0 }) {
+export default function DepthTelemetry({
+  scrollProgress = 0,
+  activeZoneIndex = 0,
+  coordRef,
+}) {
   const currentDepth = useMemo(() => {
     const startZ = 12.5;
     const endZ = -35.0;
@@ -35,7 +39,7 @@ export default function DepthTelemetry({ scrollProgress = 0, activeZoneIndex = 0
 
         {/* Tabular Coordinate Value */}
         <div className="text-sm font-bold text-sage font-mono mt-0.5 tnum tracking-tight flex items-baseline gap-1">
-          <span>{currentDepth}</span>
+          <span ref={coordRef} id="depth-coord-val">{currentDepth}</span>
           <span className="text-[10px] text-slate-400 font-normal">m</span>
         </div>
 

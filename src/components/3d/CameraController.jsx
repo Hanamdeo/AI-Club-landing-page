@@ -13,7 +13,11 @@ import { useFrame, useThree } from '@react-three/fiber';
  *
  * Provides physical lerp damping and gentle mouse perspective parallax.
  */
-export default function CameraController({ scrollProgress = 0, isIntro = false }) {
+export default function CameraController({
+  scrollProgress = 0,
+  scrollProgressRef,
+  isIntro = false,
+}) {
   const { camera } = useThree();
   const mouseRef = useRef({ x: 0, y: 0, targetX: 0, targetY: 0 });
 
@@ -63,7 +67,8 @@ export default function CameraController({ scrollProgress = 0, isIntro = false }
       tempPos.current.set(0, 2.2, 16.5);
       tempTarget.current.set(0, 1.6, 0);
     } else {
-      const p = Math.max(0, Math.min(1, scrollProgress));
+      const rawP = scrollProgressRef ? scrollProgressRef.current : scrollProgress;
+      const p = Math.max(0, Math.min(1, rawP));
       let startW = waypoints[0];
       let endW = waypoints[waypoints.length - 1];
 

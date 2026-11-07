@@ -36,10 +36,14 @@ import JoinTheNetwork from '@/components/ui/editorial/JoinTheNetwork';
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [isIntro, setIsIntro] = useState(true);
-  const [scrollProgress3D, setScrollProgress3D] = useState(0);
   const [activeSection, setActiveSection] = useState('hero');
   const [activeNavId, setActiveNavId] = useState('hero');
   const [isEditorialMode, setIsEditorialMode] = useState(false);
+
+  // Performance-optimized shared refs: zero React re-render thrashing during scroll
+  const scrollProgressRef = useRef(0);
+  const currentSectionRef = useRef('hero');
+  const depthCoordRef = useRef(null);
 
   // Modal & Terminal States
   const [isRackModalOpen, setIsRackModalOpen] = useState(false);
@@ -55,12 +59,12 @@ export default function Home() {
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 0.8,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       orientation: 'vertical',
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.2,
     });
     lenisRef.current = lenis;
 
@@ -72,27 +76,29 @@ export default function Home() {
     lenis.on('scroll', ScrollTrigger.update);
 
     // 1. ScrollTrigger dedicated to Experience A (Sections 1 to 3)
+    // Snappy scrub: 0.2 and zero-overhead direct ref updates
     const ctx = gsap.context(() => {
       if (immersiveContainerRef.current) {
         ScrollTrigger.create({
           trigger: immersiveContainerRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 1.0,
+          scrub: 0.2,
           onUpdate: (self) => {
             const p = self.progress;
-            setScrollProgress3D(p);
+            scrollProgressRef.current = p;
 
-            if (p < 0.35) {
-              setActiveSection('hero');
-              setActiveNavId('hero');
-              setIsEditorialMode(false);
-            } else if (p < 0.75) {
-              setActiveSection('about');
-              setActiveNavId('hero');
-              setIsEditorialMode(false);
-            } else {
-              setActiveSection('chamber');
+            // Direct DOM update for DepthTelemetry coordinate (zero React re-render)
+            if (depthCoordRef.current) {
+              const currentZ = 12.5 + p * (-35.0 - 12.5);
+              depthCoordRef.current.innerText = currentZ.toFixed(1);
+            }
+
+            // Only trigger React state updates when crossing zone thresholds!
+            const newZone = p < 0.35 ? 'hero' : p < 0.75 ? 'about' : 'chamber';
+            if (currentSectionRef.current !== newZone) {
+              currentSectionRef.current = newZone;
+              setActiveSection(newZone);
               setActiveNavId('hero');
               setIsEditorialMode(false);
             }
@@ -171,7 +177,7 @@ export default function Home() {
       {/* 1. Master WebGL 3D Data Centre Canvas (Experience A: Sections 01 - 03) */}
       {mounted && (
         <SceneContainer
-          scrollProgress={scrollProgress3D}
+          scrollProgressRef={scrollProgressRef}
           isIntro={isIntro}
           isProjecting={activeSection === 'chamber'}
           onOpenRackModal={() => setIsRackModalOpen(true)}
@@ -200,7 +206,7 @@ export default function Home() {
         }`}
       >
         <DepthTelemetry
-          scrollProgress={scrollProgress3D}
+          coordRef={depthCoordRef}
           activeZoneIndex={activeSection === 'hero' ? 0 : activeSection === 'about' ? 1 : 2}
         />
       </div>
@@ -256,8 +262,9 @@ export default function Home() {
 
       {/* ============================================================== */}
       {/* EXPERIENCE B: EDITORIAL ARCHIVE WEBSITE (SECTIONS 04 TO 09)    */}
+      {/* High-performance opaque graphite surface (eliminates GPU blur lag) */}
       {/* ============================================================== */}
-      <div className="relative z-20 w-full bg-graphite/95 backdrop-blur-md">
+      <div className="relative z-20 w-full bg-[#101415]/98 border-t border-white/[0.08]">
         {/* SECTION 04: THE DISCUSSION ROOM */}
         <DiscussionRoom />
 

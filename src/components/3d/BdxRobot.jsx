@@ -41,6 +41,7 @@ export default function BdxRobot({
   isStatic = false,
   hoverMode = false,
   scrollProgress = 0,
+  scrollProgressRef,
   isProjecting = false,
   onToggleProjector,
 }) {
@@ -129,7 +130,8 @@ export default function BdxRobot({
       }
     } else if (!isStatic) {
       // 2. CORRIDOR WAYPOINT TRAVEL (Experience A)
-      const p = Math.max(0, Math.min(1, scrollProgress));
+      const rawP = scrollProgressRef ? scrollProgressRef.current : scrollProgress;
+      const p = Math.max(0, Math.min(1, rawP));
       let startW = FACILITY_WAYPOINTS[0];
       let endW = FACILITY_WAYPOINTS[FACILITY_WAYPOINTS.length - 1];
 
