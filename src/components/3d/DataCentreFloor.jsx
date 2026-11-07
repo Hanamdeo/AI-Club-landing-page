@@ -78,14 +78,14 @@ export default function DataCentreFloor() {
 
   return (
     <group position={[0, 0, 0]}>
-      {/* 1. Main Raised Floor Base: Semi-reflective anti-static slate-graphite epoxy */}
+      {/* 1. Main Raised Floor Base: Anti-static semi-matte slate-graphite epoxy (no harsh specular blowout) */}
       <mesh position={[0, -0.01, -25]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[11.5, 95]} />
         <meshStandardMaterial
-          color="#181D1E"
-          roughness={0.24}
-          metalness={0.62}
-          envMapIntensity={0.9}
+          color="#151A1B"
+          roughness={0.58}
+          metalness={0.35}
+          envMapIntensity={0.4}
         />
       </mesh>
 

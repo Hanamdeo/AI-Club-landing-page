@@ -1,24 +1,25 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Terminal, Menu, X, Radio, Sparkles } from 'lucide-react';
+import React, { useState, useCallback } from 'react';
+import { Terminal, Menu, X } from 'lucide-react';
 import AudioToggle from './AudioToggle';
 import { audioManager } from '@/utils/audioManager';
 
 export const NAV_LINKS = [
-  { id: 'hero', label: 'Home', targetId: 'section-arrival' },
+  { id: 'hero', label: 'Facility', targetId: 'section-arrival' },
   { id: 'discussions', label: 'Discussions', targetId: 'discussions' },
-  { id: 'events', label: 'Events', targetId: 'events' },
-  { id: 'radar', label: 'AI Radar', targetId: 'radar' },
-  { id: 'projects', label: 'Projects', targetId: 'projects' },
-  { id: 'team', label: 'Team', targetId: 'team' },
-  { id: 'join', label: 'Join', targetId: 'join-network' },
+  { id: 'events', label: 'Operations', targetId: 'events' },
+  { id: 'radar', label: 'Radar', targetId: 'radar' },
+  { id: 'projects', label: 'Archive', targetId: 'projects' },
+  { id: 'team', label: 'Collective', targetId: 'team' },
+  { id: 'join', label: 'Intake', targetId: 'join-network' },
 ];
 
 /**
  * HUDNavbar
- * Minimal, responsive floating navigation bar with active section indicator,
- * mobile drawer navigation, CLI launcher, and procedural audio toggle.
+ * Precision architectural floating HUD navbar.
+ * Synthesizes Swiss engineering restraint (Taste Skill) with high-density developer telemetry (UI UX Pro Max).
+ * Features hairline borders, tight negative tracking, tabular telemetry, and stepped tactile feedback.
  */
 export default function HUDNavbar({
   activeNavId = 'hero',
@@ -28,38 +29,47 @@ export default function HUDNavbar({
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const handleNavClick = (targetId, navId) => {
-    audioManager.playClick();
-    setMobileMenuOpen(false);
-    if (onNavigateToSection) onNavigateToSection(targetId, navId);
-  };
+  const handleNavClick = useCallback(
+    (targetId, navId) => {
+      audioManager.playClick();
+      setMobileMenuOpen(false);
+      if (onNavigateToSection) onNavigateToSection(targetId, navId);
+    },
+    [onNavigateToSection]
+  );
 
-  const handleTerminalClick = () => {
+  const handleTerminalClick = useCallback(() => {
     audioManager.playClick();
     if (onToggleTerminal) onToggleTerminal();
-  };
+  }, [onToggleTerminal]);
 
   return (
     <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none select-none font-sans">
-      <nav className="pointer-events-auto flex items-center justify-between gap-2 sm:gap-4 px-3 sm:px-5 py-2 rounded-full bg-black/40 backdrop-blur-md border border-white/10 shadow-glass-panel max-w-5xl w-full">
-        {/* Brand Node */}
+      <nav className="pointer-events-auto flex items-center justify-between gap-3 px-3.5 sm:px-5 py-2 rounded-xl bg-[#0D1011]/85 backdrop-blur-md border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)] max-w-5xl w-full transition-colors duration-200">
+        {/* Brand Node: Architectural Identification Pill */}
         <button
           onClick={() => handleNavClick('section-arrival', 'hero')}
-          className="flex items-center gap-2.5 text-xs font-bold text-ivory hover:text-sage transition-colors cursor-pointer shrink-0"
+          className="flex items-center gap-2.5 text-xs text-ivory hover:text-sage transition-colors cursor-pointer shrink-0 group btn-tactile"
+          aria-label="AI Club Facility Root"
         >
-          <div className="w-6 h-6 rounded-md bg-white/5 border border-sage/40 flex items-center justify-center font-mono">
-            <span className="text-[10px] text-sage font-bold">AI</span>
+          <div className="w-6 h-6 rounded-md bg-[#15191A] border border-white/[0.12] group-hover:border-sage/50 flex items-center justify-center font-mono transition-colors">
+            <span className="text-[10px] text-sage font-bold tracking-tight">AI</span>
           </div>
           <div className="flex flex-col text-left">
-            <span className="hidden xs:inline tracking-wider font-bold text-xs">AI CLUB</span>
-            <span className="hidden md:inline text-[9px] font-mono text-sage/80 -mt-1">
-              {isEditorialMode ? 'EDITORIAL ARCHIVE' : 'IMMERSIVE 3D'}
+            <div className="flex items-center gap-1.5">
+              <span className="tracking-tight font-bold text-xs text-ivory group-hover:text-sage transition-colors">
+                THE SIGNAL
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-signal-green" title="Systems Nominal" />
+            </div>
+            <span className="hidden sm:inline text-[9px] font-mono text-slate-400 tracking-wider uppercase -mt-0.5">
+              {isEditorialMode ? 'EDITORIAL ARCHIVE' : 'AUTONOMOUS FACILITY'}
             </span>
           </div>
         </button>
 
-        {/* Desktop Rounded Navigation Links */}
-        <div className="hidden lg:flex items-center gap-1 sm:gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+        {/* Desktop Technical Navigation Links */}
+        <div className="hidden lg:flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
           {NAV_LINKS.map((link) => {
             const isActive = activeNavId === link.id;
 
@@ -67,15 +77,15 @@ export default function HUDNavbar({
               <button
                 key={link.id}
                 onClick={() => handleNavClick(link.targetId, link.id)}
-                className={`relative px-3 py-1 text-xs rounded-full transition-all cursor-pointer font-medium whitespace-nowrap ${
+                className={`relative px-3 py-1 text-xs rounded-md transition-all cursor-pointer font-medium whitespace-nowrap btn-tactile ${
                   isActive
-                    ? 'text-sage bg-black/60 border border-sage/50 shadow-sage-glow'
-                    : 'text-ivory/70 hover:text-ivory hover:bg-white/5'
+                    ? 'text-sage bg-white/[0.06] border border-sage/40 font-semibold'
+                    : 'text-ivory/70 hover:text-ivory hover:bg-white/[0.03] border border-transparent'
                 }`}
               >
                 <span>{link.label}</span>
                 {isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-0.5 bg-sage rounded-full" />
+                  <span className="absolute bottom-0 left-2 right-2 h-[1px] bg-sage" />
                 )}
               </button>
             );
@@ -87,11 +97,12 @@ export default function HUDNavbar({
           {/* CLI Terminal Launcher */}
           <button
             onClick={handleTerminalClick}
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-full text-xs font-medium bg-black/40 border border-white/10 text-sage hover:border-sage/60 hover:bg-sage/10 transition-all cursor-pointer font-mono"
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[#15191A] border border-white/[0.08] text-sage hover:border-sage/40 hover:bg-white/[0.04] transition-all cursor-pointer font-mono btn-tactile"
             title="Launch Interactive Terminal CLI [~]"
           >
             <Terminal className="w-3.5 h-3.5 text-sage" />
             <span className="hidden md:inline text-[11px] tracking-wider font-semibold">CLI</span>
+            <span className="hidden lg:inline text-[9px] text-slate-500 font-mono">[~]</span>
           </button>
 
           {/* Procedural Audio Ambience Toggle */}
@@ -100,7 +111,7 @@ export default function HUDNavbar({
           {/* Mobile Hamburger Button */}
           <button
             onClick={() => setMobileMenuOpen((prev) => !prev)}
-            className="lg:hidden p-1.5 rounded-full bg-white/5 border border-white/10 text-ivory hover:text-sage transition-colors cursor-pointer"
+            className="lg:hidden p-1.5 rounded-lg bg-[#15191A] border border-white/[0.08] text-ivory hover:text-sage transition-colors cursor-pointer btn-tactile"
             aria-label="Toggle navigation menu"
           >
             {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
@@ -110,9 +121,10 @@ export default function HUDNavbar({
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-x-4 top-20 z-50 p-4 rounded-2xl bg-[#141819]/95 backdrop-blur-xl border border-white/15 shadow-2xl pointer-events-auto flex flex-col gap-2 animate-fade-in lg:hidden">
-          <div className="text-[10px] font-mono uppercase text-sage font-bold px-2 mb-1">
-            // FACILITY DIRECTORY:
+        <div className="fixed inset-x-4 top-20 z-50 p-4 rounded-xl bg-[#0D1011]/95 backdrop-blur-xl border border-white/[0.12] shadow-2xl pointer-events-auto flex flex-col gap-1.5 animate-fade-in lg:hidden font-sans">
+          <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 px-2 py-1 mb-1 border-b border-white/[0.06]">
+            <span>// FACILITY DIRECTORY</span>
+            <span className="text-sage font-bold">7 SECTORS</span>
           </div>
           {NAV_LINKS.map((link) => {
             const isActive = activeNavId === link.id;
@@ -120,10 +132,10 @@ export default function HUDNavbar({
               <button
                 key={link.id}
                 onClick={() => handleNavClick(link.targetId, link.id)}
-                className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium text-left transition-all ${
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium text-left transition-all btn-tactile ${
                   isActive
-                    ? 'bg-sage/20 border border-sage/40 text-sage'
-                    : 'text-ivory/80 hover:bg-white/5 hover:text-ivory'
+                    ? 'bg-white/[0.06] border border-sage/40 text-sage font-semibold'
+                    : 'text-ivory/80 hover:bg-white/[0.03] hover:text-ivory border border-transparent'
                 }`}
               >
                 <span>{link.label}</span>

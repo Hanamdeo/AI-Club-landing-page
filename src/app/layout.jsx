@@ -1,19 +1,19 @@
-import { Inter, IBM_Plex_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 
-// Unified Inter typography system across whole project
+// Primary Neo-Grotesque Display & Sans typography
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
 });
 
-// Monospace reserved for UNIX terminal CLI buffers and system commands
-const ibmPlexMono = IBM_Plex_Mono({
+// Precision Monospace for Telemetry, HUD, UNIX terminal & Code
+const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-mono',
-  weight: ['400', '500'],
+  weight: ['400', '500', '600', '700'],
 });
 
 export const metadata = {
@@ -44,7 +44,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${ibmPlexMono.variable}`}
+      className={`dark ${inter.variable} ${jetbrainsMono.variable}`}
     >
       <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
         {children}
