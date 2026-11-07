@@ -48,36 +48,36 @@ export default function OperationsBoard() {
   };
 
   return (
-    <section id="events" className="relative w-full py-24 px-6 md:px-12 lg:px-16 border-t border-white/10 font-sans">
+    <section id="events" className="relative w-full py-20 sm:py-24 px-6 md:px-12 lg:px-16 border-t border-white/[0.08] font-sans">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full bg-sage/10 border border-sage/30 text-xs font-mono text-sage uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Section 05 // Live Operations</span>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 mb-3 rounded-md bg-[#15191A] border border-white/[0.08] text-[11px] font-mono text-sage uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-sage" />
+              <span>Live Operations & Events</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-ivory tracking-tight">
               THE OPERATIONS BOARD
             </h2>
-            <p className="text-base sm:text-lg text-sage/90 font-light mt-2 max-w-2xl">
-              Flagship hackathons, systems engineering workshops, and competitive challenges organized by the AI Club cohorts.
+            <p className="text-sm sm:text-base text-sage/90 font-light mt-2 max-w-2xl">
+              Flagship hackathons, systems engineering workshops, and competitive challenges organized by AI Club cohorts.
             </p>
           </div>
 
           {/* Quick Counter */}
-          <div className="p-3 px-5 rounded-2xl bg-black/40 border border-white/10 text-right self-start md:self-auto">
-            <span className="block text-[11px] font-mono text-slate-400 uppercase">
-              Total Operations Scheduled
+          <div className="p-3 px-4 rounded-xl bg-[#141819] border border-white/[0.08] text-right self-start md:self-auto">
+            <span className="block text-[10px] font-mono text-slate-400 uppercase font-medium">
+              Operations Scheduled
             </span>
-            <span className="text-2xl font-bold text-sage num-normal">
+            <span className="text-xl font-bold text-sage num-normal font-mono tnum">
               {events.length} Events
             </span>
           </div>
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar pb-2">
+        <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar pb-1">
           {categories.map((cat) => (
             <button
               key={cat}
@@ -85,10 +85,10 @@ export default function OperationsBoard() {
                 audioManager.playClick();
                 setSelectedCategory(cat);
               }}
-              className={`px-3.5 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-all cursor-pointer btn-tactile ${
                 selectedCategory === cat
-                  ? 'bg-sage/20 border border-sage text-sage shadow-sage-glow'
-                  : 'bg-black/20 border border-white/10 text-ivory/70 hover:border-white/20 hover:text-ivory'
+                  ? 'bg-[#1B2122] border border-sage/60 text-sage font-semibold'
+                  : 'bg-[#141819] border border-white/[0.08] text-ivory/70 hover:border-white/[0.16] hover:text-ivory'
               }`}
             >
               {cat}
@@ -97,32 +97,32 @@ export default function OperationsBoard() {
         </div>
 
         {/* Operational Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           {filteredEvents.map((event) => {
             const isRegistered = registeredIds.includes(event.id);
 
             return (
               <div
                 key={event.id}
-                className="rounded-2xl bg-charcoal/40 border border-white/10 p-6 sm:p-7 hover:border-sage/40 hover:bg-charcoal/60 transition-all flex flex-col justify-between shadow-glass-panel"
+                className="rounded-xl bg-[#141819] border border-white/[0.08] hover:border-white/[0.16] p-6 transition-all flex flex-col justify-between card-lift crosshair-corner"
               >
                 <div>
                   {/* Category & Status */}
                   <div className="flex items-center justify-between gap-2 mb-3">
-                    <span className="text-[11px] font-mono uppercase px-3 py-1 rounded-full bg-black/40 border border-white/10 text-ivory/80 font-medium">
+                    <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded bg-[#1B2122] border border-white/[0.08] text-ivory/80 font-medium">
                       {event.category}
                     </span>
                     <div className="flex items-center gap-2">
                       {event.featured && (
-                        <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-sage/20 border border-sage/40 text-sage font-semibold uppercase">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sage/15 border border-sage/30 text-sage font-semibold uppercase">
                           Featured
                         </span>
                       )}
                       <span
-                        className={`text-[11px] font-mono font-medium px-2.5 py-0.5 rounded-full border ${
+                        className={`text-[10px] font-mono font-medium px-2 py-0.5 rounded border ${
                           event.registrationStatus === 'open'
-                            ? 'bg-sage/20 border-sage/40 text-sage'
-                            : 'bg-black/40 border-white/10 text-slate-400'
+                            ? 'bg-sage/15 border-sage/30 text-sage'
+                            : 'bg-black/30 border-white/[0.08] text-slate-400'
                         }`}
                       >
                         {event.registrationStatus === 'open' ? 'Reg Open' : 'Closed'}
@@ -131,42 +131,43 @@ export default function OperationsBoard() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-xl font-bold text-ivory mb-2 leading-snug tracking-tight">
+                  <h3 className="text-lg sm:text-xl font-display font-bold text-ivory mb-2 leading-snug tracking-tight">
                     {event.title}
                   </h3>
 
                   {/* Description */}
-                  <p className="text-sm text-ivory/80 leading-relaxed mb-4 line-clamp-3 font-normal">
+                  <p className="text-xs sm:text-sm text-ivory/75 leading-relaxed mb-4 line-clamp-2 font-normal">
                     {event.description}
                   </p>
 
                   {/* Logistics Details */}
-                  <div className="space-y-2 text-xs text-slate-300 mb-5 font-mono bg-black/25 p-3 rounded-xl border border-white/5">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-sage" />
-                      <span>{event.date}</span>
-                      <span className="text-slate-500">•</span>
-                      <Clock className="w-3.5 h-3.5 text-sage" />
-                      <span>{event.time}</span>
+                  <div className="grid grid-cols-2 gap-2 text-xs text-slate-300 mb-5 font-mono bg-[#101415] p-3 rounded-lg border border-white/[0.05]">
+                    <div className="flex items-center gap-2 truncate">
+                      <Calendar className="w-3.5 h-3.5 text-sage shrink-0" />
+                      <span className="truncate">{event.date}</span>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <MapPin className="w-3.5 h-3.5 text-sage" />
-                      <span>{event.venue}</span>
+                    <div className="flex items-center gap-2 truncate">
+                      <Clock className="w-3.5 h-3.5 text-sage shrink-0" />
+                      <span className="truncate">{event.time}</span>
+                    </div>
+                    <div className="flex items-center gap-2 truncate">
+                      <MapPin className="w-3.5 h-3.5 text-sage shrink-0" />
+                      <span className="truncate">{event.venue}</span>
                     </div>
                     {event.seats && (
-                      <div className="flex items-center gap-2">
-                        <Users className="w-3.5 h-3.5 text-sage" />
-                        <span>Capacity: {event.seats}</span>
+                      <div className="flex items-center gap-2 truncate">
+                        <Users className="w-3.5 h-3.5 text-sage shrink-0" />
+                        <span className="truncate">Seats: {event.seats}</span>
                       </div>
                     )}
                   </div>
                 </div>
 
                 {/* Actions: Inspect Details & Register */}
-                <div className="pt-4 border-t border-white/10 flex items-center gap-3">
+                <div className="pt-3 border-t border-white/[0.08] flex items-center gap-3">
                   <button
                     onClick={() => handleOpenModal(event)}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-black/30 hover:bg-white/10 border border-white/10 text-xs text-ivory font-medium transition-all cursor-pointer"
+                    className="flex-1 flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg bg-[#101415] hover:bg-white/[0.06] border border-white/[0.08] hover:border-white/[0.16] text-xs text-ivory font-medium transition-all cursor-pointer btn-tactile"
                   >
                     <Info className="w-3.5 h-3.5 text-sage" />
                     <span>View Dossier</span>
@@ -175,12 +176,12 @@ export default function OperationsBoard() {
                   <button
                     onClick={() => handleRegister(event.id, event.registrationUrl)}
                     disabled={event.registrationStatus !== 'open'}
-                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-semibold rounded-xl transition-all cursor-pointer tracking-wider uppercase ${
+                    className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-semibold rounded-lg transition-all cursor-pointer tracking-wider uppercase btn-tactile ${
                       isRegistered
-                        ? 'bg-sage/20 border border-sage text-sage cursor-default'
+                        ? 'bg-sage/20 border border-sage/50 text-sage cursor-default'
                         : event.registrationStatus === 'open'
-                        ? 'bg-sage hover:bg-sage-glow text-graphite shadow-sage-glow'
-                        : 'bg-black/30 border border-white/10 text-slate-500 cursor-not-allowed'
+                        ? 'bg-sage hover:bg-sage-glow text-graphite shadow-tactile active:shadow-tactile-active font-bold'
+                        : 'bg-black/30 border border-white/[0.08] text-slate-500 cursor-not-allowed'
                     }`}
                   >
                     {isRegistered ? (

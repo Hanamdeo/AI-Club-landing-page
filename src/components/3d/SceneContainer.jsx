@@ -69,6 +69,29 @@ export default function SceneContainer({
           intensity={1.5}
         />
 
+        {/* Studio-Grade Lighting Suite for NEX-01 Autonomous Companion */}
+        {/* Soft Key Light: Reveals smooth ceramic curves and visor reflections */}
+        <directionalLight
+          position={[2.8, 3.8, 11.2]}
+          color="#FFFDF7"
+          intensity={1.15}
+        />
+
+        {/* Cyan Rim Light: Grazes helmet silhouette and ear fins from behind */}
+        <directionalLight
+          position={[1.2, 3.2, 5.0]}
+          color="#00E5FF"
+          intensity={0.95}
+        />
+
+        {/* Floor Indirect Bounce Fill: Softens under-chin and thruster shadows */}
+        <pointLight
+          position={[1.3, 0.4, 8.5]}
+          color="#E8E2D5"
+          intensity={0.65}
+          distance={4.0}
+        />
+
         {/* 3. Server Rack Face Cross-Wash Lighting (Reveals front panels & caddies) */}
         <directionalLight
           position={[-6, 5.0, -15]}
@@ -126,9 +149,9 @@ export default function SceneContainer({
         {/* Section 03: The Projection Chamber Landmark */}
         <ProjectionChamber isProjecting={isProjecting} />
 
-        {/* BDX-01 Autonomous Robot Companion */}
+        {/* NEX-01 Autonomous Robot Companion */}
         <BdxRobot
-          scale={1.05}
+          scale={0.94}
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
           isIntro={isIntro}

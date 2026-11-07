@@ -26,7 +26,6 @@ export default function EnterpriseServerRacks() {
   const caddyLatchesRef = useRef();
   const gpuNodesRef = useRef();
   const fanShroudsRef = useRef();
-  const fanBladesRef = useRef();
   const torSwitchesRef = useRef();
   const greenLedsRef = useRef();
   const cyanLedsRef = useRef();
@@ -43,7 +42,6 @@ export default function EnterpriseServerRacks() {
     latchTransforms,
     gpuTransforms,
     fanShroudTransforms,
-    fanBladeTransforms,
     torTransforms,
     greenLedTransforms,
     cyanLedTransforms,
@@ -58,7 +56,6 @@ export default function EnterpriseServerRacks() {
     const lMats = [];
     const gMats = [];
     const fsMats = [];
-    const fbMats = [];
     const torMats = [];
     const grnLeds = [];
     const cynLeds = [];
@@ -227,13 +224,6 @@ export default function EnterpriseServerRacks() {
               dummy.updateMatrix();
               fsMats.push(dummy.matrix.clone());
 
-              // Fan Impeller Blades (spins on X axis)
-              dummy.position.set(frontX + dir * 0.035, gpuY, fanZ);
-              dummy.rotation.set(0, 0, Math.PI / 2);
-              dummy.scale.set(0.14, 0.015, 0.14);
-              dummy.updateMatrix();
-              fbMats.push(dummy.matrix.clone());
-
               // Fan status ring LED
               dummy.position.set(frontX + dir * 0.038, gpuY + 0.17, fanZ);
               dummy.rotation.set(0, 0, 0);
@@ -327,7 +317,6 @@ export default function EnterpriseServerRacks() {
       latchTransforms: lMats,
       gpuTransforms: gMats,
       fanShroudTransforms: fsMats,
-      fanBladeTransforms: fbMats,
       torTransforms: torMats,
       greenLedTransforms: grnLeds,
       cyanLedTransforms: cynLeds,
@@ -355,7 +344,6 @@ export default function EnterpriseServerRacks() {
     applyMatrices(caddyLatchesRef, latchTransforms);
     applyMatrices(gpuNodesRef, gpuTransforms);
     applyMatrices(fanShroudsRef, fanShroudTransforms);
-    applyMatrices(fanBladesRef, fanBladeTransforms);
     applyMatrices(torSwitchesRef, torTransforms);
     applyMatrices(greenLedsRef, greenLedTransforms);
     applyMatrices(cyanLedsRef, cyanLedTransforms);
@@ -370,7 +358,6 @@ export default function EnterpriseServerRacks() {
     latchTransforms,
     gpuTransforms,
     fanShroudTransforms,
-    fanBladeTransforms,
     torTransforms,
     greenLedTransforms,
     cyanLedTransforms,
@@ -391,11 +378,6 @@ export default function EnterpriseServerRacks() {
     }
     if (amberLedsRef.current) {
       amberLedsRef.current.material.opacity = 0.75 + Math.sin(t * 2.8) * 0.20;
-    }
-
-    // 2. High-speed rotation of GPU intake fans (around local X axis)
-    if (fanBladesRef.current) {
-      fanBladesRef.current.rotation.x = t * 7.5;
     }
   });
 
@@ -509,20 +491,7 @@ export default function EnterpriseServerRacks() {
         />
       </instancedMesh>
 
-      {/* 9. GPU High-CFM Rotating Fan Impellers (#1A2123) */}
-      <instancedMesh
-        ref={fanBladesRef}
-        args={[null, null, fanBladeTransforms.length]}
-      >
-        <cylinderGeometry args={[1, 1, 1, 16]} />
-        <meshStandardMaterial
-          color="#1A2123"
-          roughness={0.25}
-          metalness={0.85}
-        />
-      </instancedMesh>
-
-      {/* 10. Top-of-Rack 48-Port Fiber Switches (#323E40) */}
+      {/* 9. Top-of-Rack 48-Port Fiber Switches (#323E40) */}
       <instancedMesh
         ref={torSwitchesRef}
         args={[null, null, torTransforms.length]}

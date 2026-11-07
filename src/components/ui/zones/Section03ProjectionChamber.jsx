@@ -29,12 +29,12 @@ export default function Section03ProjectionChamber({ onTransitionToEditorial }) 
         <div className="flex items-center gap-3">
           <span className="w-2 h-2 rounded-full bg-signal-green ring-2 ring-signal-green/20" />
           <span className="font-mono text-ivory tracking-widest text-[11px] uppercase font-bold">
-            SECTOR 03 // PROJECTION CHAMBER
+            PROJECTION CHAMBER
           </span>
         </div>
         <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-sage">
           <Radio className="w-3.5 h-3.5 text-sage" />
-          <span>BDX-01 DOCKED // 5.8 GHz CARRIER</span>
+          <span>BDX-01 COMPANION</span>
         </div>
       </div>
 
@@ -59,7 +59,7 @@ export default function Section03ProjectionChamber({ onTransitionToEditorial }) 
           {featuredEvent && (
             <div className="p-4 rounded-xl bg-[#15191A]/90 border border-white/[0.08] mb-6">
               <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-2">
-                <span className="text-sage font-bold tracking-wider">// LATEST DISPATCH</span>
+                <span className="text-sage font-bold tracking-wider">LATEST DISPATCH</span>
                 <span className="uppercase text-[9px] px-1.5 py-0.5 rounded bg-white/[0.04]">
                   {featuredEvent.category}
                 </span>

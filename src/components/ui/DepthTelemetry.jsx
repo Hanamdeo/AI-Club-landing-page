@@ -3,9 +3,9 @@
 import React, { useMemo } from 'react';
 
 const CORRIDOR_SECTIONS = [
-  { id: 'arrival', label: 'Sector 01: Arrival Threshold', targetZ: 12.5 },
-  { id: 'core', label: 'Sector 02: Intelligence Core', targetZ: -15.0 },
-  { id: 'chamber', label: 'Sector 03: Projection Chamber', targetZ: -35.0 },
+  { id: 'arrival', label: '01 Arrival', targetZ: 12.5 },
+  { id: 'core', label: '02 Intelligence Core', targetZ: -15.0 },
+  { id: 'chamber', label: '03 Projection Chamber', targetZ: -35.0 },
 ];
 
 /**
@@ -34,7 +34,7 @@ export default function DepthTelemetry({
         {/* Header Telemetry Identifier */}
         <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 uppercase font-semibold">
           <span className="w-1.5 h-1.5 rounded-full bg-sage ring-2 ring-sage/20" />
-          <span>FACILITY WAYPOINT Z</span>
+          <span>CORRIDOR DEPTH</span>
         </div>
 
         {/* Tabular Coordinate Value */}

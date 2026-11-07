@@ -128,7 +128,7 @@ export default function BdxHolographicProjector({
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-sage ring-2 ring-sage/20" />
                 <span className="text-[10px] font-mono tracking-widest text-sage uppercase font-bold">
-                  BDX-01 // HOLOGRAM EMITTER
+                  BDX-01 COMPANION DISPATCH
                 </span>
               </div>
 
@@ -256,7 +256,7 @@ export default function BdxHolographicProjector({
 
             {/* Bottom Telemetry Status Line */}
             <div className="flex items-center justify-between px-3.5 py-1.5 bg-[#15191A] border-t border-white/[0.06] text-[9px] font-mono text-slate-500">
-              <span>SYNC: CORRIDOR_WAYPOINT</span>
+              <span>FEED: LIVE UPDATES</span>
               <span className="text-sage">STATUS: ACTIVE</span>
             </div>
           </div>

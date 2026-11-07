@@ -34,7 +34,7 @@ export default function Zone2Foundation({ onInspectRack }) {
           {/* Section Marker */}
           <div className="inline-flex items-center gap-2 px-2.5 py-1 mb-4 rounded-md bg-[#15191A] border border-white/[0.08] text-[11px] font-mono text-sage uppercase tracking-wider w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-sage" />
-            <span>Sector 02 // Core Architecture</span>
+            <span>Research Foundations</span>
           </div>
 
           <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-ivory tracking-tight mb-2 leading-[1.05]">
@@ -75,7 +75,7 @@ export default function Zone2Foundation({ onInspectRack }) {
           {/* Core Research Domains: 4-Column Technical Tags */}
           <div className="mb-6">
             <div className="text-[10px] font-mono uppercase text-slate-400 tracking-wider mb-2 font-semibold">
-              // ACTIVE RESEARCH DOMAINS:
+              ACTIVE RESEARCH DOMAINS
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
               {RESEARCH_TRACKS.slice(0, 4).map((track) => (
@@ -122,24 +122,24 @@ export default function Zone2Foundation({ onInspectRack }) {
             <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pb-3 border-b border-white/[0.06]">
               <span className="flex items-center gap-1.5">
                 <span className="w-1.5 h-1.5 rounded-full bg-signal-green" />
-                <span>NODE_02 // ONLINE</span>
+                <span>COMPUTE CLUSTER ACTIVE</span>
               </span>
-              <span className="text-sage font-semibold">42U SXM5</span>
+              <span className="text-sage font-semibold">LAB SYSTEMS</span>
             </div>
 
             {/* Diagnostic Details */}
             <div className="py-3.5 space-y-2 font-mono text-xs">
               <div className="flex justify-between items-baseline">
                 <span className="text-slate-500 text-[11px]">ARCHITECTURE</span>
-                <span className="text-ivory font-semibold text-[11px]">HIGH-DENSITY COMPUTE</span>
+                <span className="text-ivory font-semibold text-[11px]">DISTRIBUTED GPU NODES</span>
               </div>
               <div className="flex justify-between items-baseline">
                 <span className="text-slate-500 text-[11px]">COOLING LOOP</span>
-                <span className="text-sage text-[11px]">IN-ROW LIQUID // NOMINAL</span>
+                <span className="text-sage text-[11px]">CHILLED AIR PLENUM</span>
               </div>
               <div className="flex justify-between items-baseline">
                 <span className="text-slate-500 text-[11px]">INTERCONNECT</span>
-                <span className="text-ivory text-[11px]">NVLINK 4.0 FULL MESH</span>
+                <span className="text-ivory text-[11px]">HIGH-SPEED FABRIC</span>
               </div>
             </div>
 
@@ -149,7 +149,7 @@ export default function Zone2Foundation({ onInspectRack }) {
               className="w-full mt-2 flex items-center justify-center gap-2.5 py-3 px-4 rounded-lg bg-[#15191A] hover:bg-white/[0.06] border border-white/[0.12] hover:border-sage/50 text-xs font-mono font-semibold text-sage transition-all cursor-pointer btn-tactile"
             >
               <Cpu className="w-3.5 h-3.5 text-sage" />
-              <span>INSPECT SERVER BLADE [↗]</span>
+              <span>INSPECT COMPUTE NODE</span>
             </button>
           </div>
         </div>

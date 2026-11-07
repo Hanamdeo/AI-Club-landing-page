@@ -8,6 +8,14 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        facility: {
+          bg: '#171B19',
+          primary: '#E9E7DD',
+          secondary: '#B5B8AF',
+          sage: '#A7B7A1',
+          cyan: '#24BFEA',
+          border: '#343B35',
+        },
         graphite: {
           DEFAULT: '#171B1C',
           deep: '#121516',
@@ -44,9 +52,10 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-geist)', 'var(--font-inter)', 'Geist', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-        display: ['var(--font-geist)', 'var(--font-inter)', 'Geist', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-        mono: ['var(--font-mono)', 'JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Courier New', 'monospace'],
+        sans: ['var(--font-inter)', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: ['var(--font-archivo)', 'Archivo', 'var(--font-inter)', 'sans-serif'],
+        archivo: ['var(--font-archivo)', 'Archivo', 'sans-serif'],
+        mono: ['var(--font-mono)', 'IBM Plex Mono', 'JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       letterSpacing: {
         tightest: '-0.035em',

@@ -21,6 +21,13 @@ export default function StartupIntro({ onComplete }) {
   const [progressNum, setProgressNum] = useState(0);
 
   useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
+        if (onComplete) onComplete();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+
     // Progress counter animation from 0 to 100
     const counterObj = { val: 0 };
     const counterTween = gsap.to(counterObj, {
@@ -103,6 +110,7 @@ export default function StartupIntro({ onComplete }) {
     });
 
     return () => {
+      window.removeEventListener('keydown', handleKeyDown);
       counterTween.kill();
       ctx.revert();
     };
@@ -121,6 +129,12 @@ export default function StartupIntro({ onComplete }) {
         <div className="absolute top-6 left-8 text-xs text-slate-500 uppercase tracking-widest hidden sm:block font-sans font-medium">
           Facility Initialization
         </div>
+        <button
+          onClick={() => onComplete && onComplete()}
+          className="absolute top-6 right-8 text-xs font-mono text-ivory/50 hover:text-sage transition-colors cursor-pointer z-30"
+        >
+          [SKIP INTRO ↵]
+        </button>
       </div>
 
       {/* Bottom Architectural Shutter */}
@@ -148,7 +162,7 @@ export default function StartupIntro({ onComplete }) {
             <directionalLight position={[4, 5, 4]} intensity={2.4} color="#FFF8EE" />
             <directionalLight position={[-4, 3, 2]} intensity={1.2} color="#E6E2D8" />
 
-            <BdxRobot scale={1.0} />
+            <BdxRobot scale={1.0} hoverMode={true} />
           </Canvas>
         </div>
 

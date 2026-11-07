@@ -279,16 +279,16 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             </div>
             <div className="flex items-center gap-2 ml-2">
               <TerminalIcon className="w-3.5 h-3.5 text-sage" />
-              <span className="text-[11px] font-semibold text-ivory/80 tracking-wide">
-                AICLUB-OS // aiclub@signal-v2:~
+              <span className="text-[11px] font-semibold text-ivory/80 tracking-wide font-mono">
+                aiclub@mitsgwalior:~
               </span>
             </div>
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-sage animate-ping" />
-            <span className="text-[10px] text-sage font-bold uppercase hidden sm:inline">
-              SIGNAL_V2: ONLINE
+            <span className="w-2 h-2 rounded-full bg-signal-green" />
+            <span className="text-[10px] text-sage font-bold uppercase hidden sm:inline font-mono">
+              CONNECTED
             </span>
             <button
               onClick={onClose}
@@ -318,7 +318,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'input') {
               return (
                 <div key={idx} className="flex items-center gap-2 text-ivory">
-                  <span className="text-sage font-bold">aiclub@facility:~$</span>
+                  <span className="text-sage font-bold">aiclub@mits:~$</span>
                   <span className="text-ivory font-semibold">{item.text}</span>
                 </div>
               );
@@ -327,7 +327,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'help') {
               return (
                 <div key={idx} className="p-2.5 rounded-lg bg-black/40 border border-slate-struct/30 space-y-1">
-                  <div className="text-sage font-bold mb-1.5">// AVAILABLE SYSTEM COMMANDS:</div>
+                  <div className="text-sage font-bold mb-1.5">AVAILABLE SYSTEM COMMANDS:</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
                     {item.commands.map((c, i) => (
                       <div key={i} className="flex items-start gap-2">
@@ -343,7 +343,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'events') {
               return (
                 <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
-                  <div className="text-sage font-bold">// UPCOMING OPERATIONS BOARD:</div>
+                  <div className="text-sage font-bold">UPCOMING OPERATIONS BOARD:</div>
                   {item.items.map((ev, i) => (
                     <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
                       <div className="flex items-center justify-between">
@@ -361,7 +361,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'gd') {
               return (
                 <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
-                  <div className="text-sage font-bold">// DISCUSSION ROOM TOPICS:</div>
+                  <div className="text-sage font-bold">DISCUSSION ROOM TOPICS:</div>
                   {item.items.map((gd, i) => (
                     <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
                       <div className="flex items-center justify-between">
@@ -379,7 +379,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'news') {
               return (
                 <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
-                  <div className="text-sage font-bold">// AI RADAR VERIFIED DISPATCHES:</div>
+                  <div className="text-sage font-bold">AI RADAR DISPATCHES:</div>
                   {item.items.map((n, i) => (
                     <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
                       <div className="text-ivory font-bold">{n.headline}</div>
@@ -394,7 +394,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'projects') {
               return (
                 <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
-                  <div className="text-sage font-bold">// RESEARCH & OPEN-SOURCE REPOSITORIES:</div>
+                  <div className="text-sage font-bold">RESEARCH & OPEN-SOURCE REPOSITORIES:</div>
                   {item.items.map((p, i) => (
                     <div key={i} className="border-b border-slate-struct/20 pb-1.5 last:border-0 last:pb-0">
                       <div className="flex items-center justify-between">
@@ -412,7 +412,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'research') {
               return (
                 <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
-                  <div className="text-sage font-bold">// COGNITIVE TRACKS & COMPUTE ARCHITECTURE:</div>
+                  <div className="text-sage font-bold">COMPUTE ARCHITECTURE & TRACKS:</div>
                   <div className="text-slate-300 text-[10px]">
                     Accelerators: {item.specs.accelerators}
                   </div>
@@ -429,7 +429,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
             if (item.type === 'team') {
               return (
                 <div key={idx} className="p-3 rounded-lg bg-black/40 border border-slate-struct/30 space-y-2">
-                  <div className="text-sage font-bold">// CORE LAB RESEARCHERS & LEADS:</div>
+                  <div className="text-sage font-bold">CORE RESEARCHERS & LEADS:</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {item.members.map((m, i) => (
                       <div key={i} className="p-2 rounded bg-charcoal/30 border border-slate-struct/20">

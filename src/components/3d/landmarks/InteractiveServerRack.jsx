@@ -3,8 +3,6 @@
 import React, { useRef, useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
-import { Html } from '@react-three/drei';
-import { Cpu, Activity } from 'lucide-react';
 import { audioManager } from '@/utils/audioManager';
 
 /**
@@ -143,26 +141,6 @@ export default function InteractiveServerRack({ onOpenModal }) {
           <cylinderGeometry args={[0.11, 0.11, 0.10, 20]} />
         </mesh>
       </group>
-
-      {/* 3. Floating 3D Beacon Tag (Drei Html) */}
-      <Html
-        position={[0, 1.35, 0.56]}
-        center
-        distanceFactor={7.5}
-        zIndexRange={[80, 0]}
-      >
-        <div
-          onClick={toggleTray}
-          className="group flex items-center gap-2 px-3 py-1.5 rounded-full bg-charcoal/90 backdrop-blur-md border border-sage/50 text-ivory text-xs font-sans font-medium shadow-glass-panel hover:border-sage hover:bg-charcoal cursor-pointer select-none whitespace-nowrap transition-all"
-        >
-          <span className="w-2 h-2 rounded-full bg-sage animate-ping" />
-          <Cpu className="w-3.5 h-3.5 text-sage" />
-          <span className="text-[11px] font-semibold text-ivory tracking-wide">
-            {isOpen ? 'NODE ALPHA // EXTENDED' : 'NODE ALPHA // INSPECT RACK'}
-          </span>
-          <Activity className="w-3 h-3 text-sage/70 group-hover:text-sage" />
-        </div>
-      </Html>
     </group>
   );
 }

@@ -63,7 +63,7 @@ export default function HUDNavbar({
               <span className="w-1.5 h-1.5 rounded-full bg-signal-green" title="Systems Nominal" />
             </div>
             <span className="hidden sm:inline text-[9px] font-mono text-slate-400 tracking-wider uppercase -mt-0.5">
-              {isEditorialMode ? 'EDITORIAL ARCHIVE' : 'AUTONOMOUS FACILITY'}
+              {isEditorialMode ? 'RESEARCH ARCHIVE' : 'RESEARCH COLLECTIVE'}
             </span>
           </div>
         </button>
@@ -123,8 +123,8 @@ export default function HUDNavbar({
       {mobileMenuOpen && (
         <div className="fixed inset-x-4 top-20 z-50 p-4 rounded-xl bg-[#0D1011]/95 backdrop-blur-xl border border-white/[0.12] shadow-2xl pointer-events-auto flex flex-col gap-1.5 animate-fade-in lg:hidden font-sans">
           <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 px-2 py-1 mb-1 border-b border-white/[0.06]">
-            <span>// FACILITY DIRECTORY</span>
-            <span className="text-sage font-bold">7 SECTORS</span>
+            <span>DIRECTORY</span>
+            <span className="text-sage font-bold">SECTIONS</span>
           </div>
           {NAV_LINKS.map((link) => {
             const isActive = activeNavId === link.id;

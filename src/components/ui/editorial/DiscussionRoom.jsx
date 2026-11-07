@@ -42,34 +42,34 @@ export default function DiscussionRoom() {
   };
 
   return (
-    <section id="discussions" className="relative w-full py-24 px-6 md:px-12 lg:px-16 border-t border-white/10 font-sans">
+    <section id="discussions" className="relative w-full py-20 sm:py-24 px-6 md:px-12 lg:px-16 border-t border-white/[0.08] font-sans">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3 rounded-full bg-sage/10 border border-sage/30 text-xs font-mono text-sage uppercase tracking-wider">
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Section 04 // Knowledge Exchange</span>
+            <div className="inline-flex items-center gap-2 px-2.5 py-1 mb-3 rounded-md bg-[#15191A] border border-white/[0.08] text-[11px] font-mono text-sage uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-sage" />
+              <span>Knowledge Exchange</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight">
+            <h2 className="text-3xl sm:text-5xl font-display font-extrabold text-ivory tracking-tight">
               THE DISCUSSION ROOM
             </h2>
-            <p className="text-base sm:text-lg text-sage/90 font-light mt-2 max-w-2xl">
-              Weekly reading circles, technical deconstructions, and adversarial paper debates exploring the bleeding edge of AI theory.
+            <p className="text-sm sm:text-base text-sage/90 font-light mt-2 max-w-2xl">
+              Weekly reading circles, technical deconstructions, and adversarial paper debates exploring the frontier of AI theory.
             </p>
           </div>
 
           {/* View Tab Toggle: Upcoming vs Archive */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10 self-start md:self-auto shrink-0">
+          <div className="flex items-center gap-1 p-1 rounded-lg bg-[#141819] border border-white/[0.08] self-start md:self-auto shrink-0">
             <button
               onClick={() => {
                 audioManager.playClick();
                 setViewTab('upcoming');
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-md text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer btn-tactile ${
                 viewTab === 'upcoming'
-                  ? 'bg-sage text-graphite shadow-sage-glow'
-                  : 'text-ivory/70 hover:text-ivory hover:bg-white/5'
+                  ? 'bg-sage text-graphite shadow-tactile font-bold'
+                  : 'text-ivory/70 hover:text-ivory hover:bg-white/[0.04]'
               }`}
             >
               Upcoming GDs
@@ -79,19 +79,19 @@ export default function DiscussionRoom() {
                 audioManager.playClick();
                 setViewTab('past');
               }}
-              className={`px-4 py-2 rounded-lg text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer ${
+              className={`px-3.5 py-1.5 rounded-md text-xs font-semibold tracking-wider uppercase transition-all cursor-pointer btn-tactile ${
                 viewTab === 'past'
-                  ? 'bg-sage text-graphite shadow-sage-glow'
-                  : 'text-ivory/70 hover:text-ivory hover:bg-white/5'
+                  ? 'bg-sage text-graphite shadow-tactile font-bold'
+                  : 'text-ivory/70 hover:text-ivory hover:bg-white/[0.04]'
               }`}
             >
-              Past Archive & Resources
+              Past Archive
             </button>
           </div>
         </div>
 
         {/* Category Filter Pills */}
-        <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar pb-2">
+        <div className="flex items-center gap-2 mb-8 overflow-x-auto no-scrollbar pb-1">
           <Filter className="w-3.5 h-3.5 text-sage shrink-0 mr-1" />
           {categories.map((cat) => (
             <button
@@ -100,10 +100,10 @@ export default function DiscussionRoom() {
                 audioManager.playClick();
                 setSelectedCategory(cat);
               }}
-              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-md text-xs font-medium whitespace-nowrap transition-all cursor-pointer btn-tactile ${
                 selectedCategory === cat
-                  ? 'bg-sage/20 border border-sage text-sage shadow-sage-glow'
-                  : 'bg-black/20 border border-white/10 text-ivory/70 hover:border-white/20 hover:text-ivory'
+                  ? 'bg-[#1B2122] border border-sage/60 text-sage font-semibold'
+                  : 'bg-[#141819] border border-white/[0.08] text-ivory/70 hover:border-white/[0.16] hover:text-ivory'
               }`}
             >
               {cat}
@@ -113,84 +113,85 @@ export default function DiscussionRoom() {
 
         {/* Discussions Grid */}
         {filteredDiscussions.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {filteredDiscussions.map((gd) => {
               const isRegistered = registeredIds.includes(gd.id);
 
               return (
                 <div
                   key={gd.id}
-                  className="rounded-2xl bg-charcoal/40 border border-white/10 p-6 sm:p-7 hover:border-sage/40 hover:bg-charcoal/60 transition-all flex flex-col justify-between shadow-glass-panel"
+                  className="rounded-xl bg-[#141819] border border-white/[0.08] hover:border-white/[0.16] p-6 transition-all flex flex-col justify-between card-lift crosshair-corner"
                 >
                   <div>
                     {/* Category & Status */}
                     <div className="flex items-center justify-between gap-2 mb-3">
-                      <span className="text-[11px] font-mono uppercase px-3 py-1 rounded-full bg-black/40 border border-white/10 text-sage font-medium">
+                      <span className="text-[10px] font-mono uppercase px-2.5 py-0.5 rounded bg-[#1B2122] border border-white/[0.08] text-sage font-medium">
                         {gd.category}
                       </span>
                       {gd.featured && (
-                        <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-sage/20 border border-sage/40 text-sage font-semibold uppercase">
+                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sage/15 border border-sage/30 text-sage font-semibold uppercase">
                           Featured Topic
                         </span>
                       )}
                     </div>
 
                     {/* Topic Title */}
-                    <h3 className="text-xl font-bold text-ivory mb-2.5 leading-snug tracking-tight">
+                    <h3 className="text-lg sm:text-xl font-display font-bold text-ivory mb-2 leading-snug tracking-tight">
                       {gd.topic}
                     </h3>
 
                     {/* Abstract / Description */}
-                    <p className="text-sm text-ivory/80 leading-relaxed mb-5 font-normal">
+                    <p className="text-xs sm:text-sm text-ivory/75 leading-relaxed mb-4 line-clamp-2 font-normal">
                       {gd.abstract}
                     </p>
 
-                    {/* Session Logistics Metadata */}
-                    <div className="space-y-2 text-xs text-slate-300 mb-6 font-mono bg-black/25 p-3 rounded-xl border border-white/5">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-sage" />
-                        <span>{gd.date}</span>
-                        <span className="text-slate-500">•</span>
-                        <Clock className="w-3.5 h-3.5 text-sage" />
-                        <span>{gd.time}</span>
+                    {/* Compact Logistics Metadata */}
+                    <div className="grid grid-cols-2 gap-2 text-xs text-slate-300 mb-4 font-mono bg-[#101415] p-3 rounded-lg border border-white/[0.05]">
+                      <div className="flex items-center gap-2 truncate">
+                        <Calendar className="w-3.5 h-3.5 text-sage shrink-0" />
+                        <span className="truncate">{gd.date}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <MapPin className="w-3.5 h-3.5 text-sage" />
-                        <span>{gd.venue}</span>
+                      <div className="flex items-center gap-2 truncate">
+                        <Clock className="w-3.5 h-3.5 text-sage shrink-0" />
+                        <span className="truncate">{gd.time}</span>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <User className="w-3.5 h-3.5 text-sage" />
-                        <span>Moderator: {gd.moderator}</span>
+                      <div className="flex items-center gap-2 truncate">
+                        <MapPin className="w-3.5 h-3.5 text-sage shrink-0" />
+                        <span className="truncate">{gd.venue}</span>
+                      </div>
+                      <div className="flex items-center gap-2 truncate">
+                        <User className="w-3.5 h-3.5 text-sage shrink-0" />
+                        <span className="truncate">{gd.moderator}</span>
                       </div>
                     </div>
 
                     {/* Past Summary or Resources */}
                     {gd.summary && (
-                      <div className="mb-5 p-3 rounded-xl bg-black/30 border border-white/10 text-xs text-ivory/80 leading-relaxed">
-                        <span className="text-sage font-mono font-bold block mb-1">
-                          // DISCUSSION SUMMARY:
+                      <div className="mb-4 p-3 rounded-lg bg-[#101415] border border-white/[0.06] text-xs text-ivory/80 leading-relaxed font-normal">
+                        <span className="text-sage font-mono font-semibold block mb-1 text-[10px] uppercase">
+                          Discussion Summary:
                         </span>
-                        {gd.summary}
+                        <p className="line-clamp-2">{gd.summary}</p>
                       </div>
                     )}
 
                     {gd.resources && gd.resources.length > 0 && (
-                      <div className="mb-5">
-                        <span className="text-[11px] font-mono text-slate-400 block mb-2 font-medium uppercase">
-                          Referenced Reading & Papers:
+                      <div className="mb-4">
+                        <span className="text-[10px] font-mono text-slate-400 block mb-1.5 font-medium uppercase">
+                          Referenced Papers:
                         </span>
-                        <div className="space-y-1.5">
+                        <div className="flex flex-wrap gap-2">
                           {gd.resources.map((res, i) => (
                             <a
                               key={i}
                               href={res.url}
                               target="_blank"
                               rel="noopener noreferrer"
-                              className="flex items-center gap-2 text-xs text-sage hover:underline"
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-[#101415] border border-white/[0.06] hover:border-sage/40 text-[11px] text-sage font-mono transition-colors"
                             >
-                              <FileText className="w-3.5 h-3.5 shrink-0" />
-                              <span className="truncate">{res.name}</span>
-                              <ArrowUpRight className="w-3 h-3 shrink-0" />
+                              <FileText className="w-3 h-3 shrink-0" />
+                              <span className="truncate max-w-[180px]">{res.name}</span>
+                              <ArrowUpRight className="w-3 h-3 shrink-0 opacity-70" />
                             </a>
                           ))}
                         </div>
@@ -200,13 +201,13 @@ export default function DiscussionRoom() {
 
                   {/* Action Bar for Upcoming Sessions */}
                   {viewTab === 'upcoming' && (
-                    <div className="pt-4 border-t border-white/10">
+                    <div className="pt-3 border-t border-white/[0.08]">
                       <button
                         onClick={() => handleRegister(gd.id)}
-                        className={`w-full flex items-center justify-center gap-2 py-3 px-4 text-xs font-semibold rounded-xl transition-all cursor-pointer tracking-wider uppercase ${
+                        className={`w-full flex items-center justify-center gap-2 py-2.5 px-4 text-xs font-semibold rounded-lg transition-all cursor-pointer tracking-wider uppercase btn-tactile ${
                           isRegistered
-                            ? 'bg-sage/20 border border-sage text-sage cursor-default'
-                            : 'bg-sage hover:bg-sage-glow text-graphite shadow-sage-glow'
+                            ? 'bg-sage/20 border border-sage/50 text-sage cursor-default'
+                            : 'bg-sage hover:bg-sage-glow text-graphite shadow-tactile active:shadow-tactile-active font-bold'
                         }`}
                       >
                         {isRegistered ? (
@@ -228,7 +229,7 @@ export default function DiscussionRoom() {
             })}
           </div>
         ) : (
-          <div className="p-12 text-center rounded-2xl bg-black/20 border border-white/10 text-slate-400 text-sm">
+          <div className="p-12 text-center rounded-xl bg-[#141819] border border-white/[0.08] text-slate-400 text-xs font-mono">
             No discussions found for the selected category.
           </div>
         )}

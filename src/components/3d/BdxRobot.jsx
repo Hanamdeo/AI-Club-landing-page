@@ -5,39 +5,42 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { audioManager } from '@/utils/audioManager';
 
-// Waypoints along the 3-section corridor arc:
-// Progress 0.0 -> Section 1 (The Arrival: Facing visitor, welcoming stance)
-// Progress 0.5 -> Section 2 (The Intelligence Core: Walking along rack corridor)
-// Progress 1.0 -> Section 3 (The Projection Chamber: Pedestal & Hologram Emission)
-const FACILITY_WAYPOINTS = [
+// Facility corridor waypoints across the 3 Immersive Experience A Sections
+const WAYPOINTS_CONFIG = [
   {
     progress: 0.0,
-    pos: new THREE.Vector3(1.10, 0.70, 6.8),
-    idleRotY: -0.18, // Welcoming angle facing directly towards the visitor/camera (+Z)
+    desktopPos: new THREE.Vector3(1.28, 1.55, 8.2),
+    mobilePos: new THREE.Vector3(0.25, 1.08, 8.0),
+    idleRotY: -0.28, // Welcoming angle facing slightly inward towards the visitor (+Z)
   },
   {
     progress: 0.5,
-    pos: new THREE.Vector3(-0.95, 0.70, -18.5),
+    desktopPos: new THREE.Vector3(-0.95, 0.85, -18.5),
+    mobilePos: new THREE.Vector3(-0.45, 0.85, -18.5),
     idleRotY: 0.35,
   },
   {
     progress: 1.0,
-    pos: new THREE.Vector3(1.10, 0.82, -34.8),
+    desktopPos: new THREE.Vector3(1.10, 0.95, -34.8),
+    mobilePos: new THREE.Vector3(0.35, 0.95, -34.8),
     idleRotY: 0.12,
   },
 ];
 
 /**
- * BdxRobot
- * High-precision Disney / NVIDIA BDX Biped Companion Robot:
- * - Proper anatomical hierarchy (Hips -> Thigh -> Knee -> Shin -> Ankle -> Feet)
- * - Front face with dual glowing white eyes facing forward towards the visitor (+Z)
- * - Lifelike cursor gaze tracking, organic eye blinks, and interactive jump/chirp
- * - Natural walking gait that rotates from the hips during scroll transit
- * - Articulated Holographic Projector with volumetric sage light beam
+ * High-Fidelity NEX-01 Companion Robot
+ * Engineered directly from the reference 3D render:
+ * - Prominent, fully exposed curved obsidian visor screen facing forward (+Z)
+ * - Dual smiling cyan digital LED arch eyes (◠ ◠) with micro-LED dot matrix glow
+ * - Thick, smooth white beveled bezel framing the curved face shield
+ * - Teardrop flipper arms naturally pointing DOWNWARD along the body (-Y)
+ * - Large cylindrical headphone ear cups with rear-pointing aerodynamic cyan fins
+ * - Distinct shield-shaped chest arc reactor with 12 segmented cyan power blocks and core button
+ * - Cobalt-navy tapered conical hover thruster base with cyan propulsion glow
+ * - High-gloss automotive clearcoat pearl white finish with studio reflections
  */
 export default function BdxRobot({
-  scale = 1,
+  scale = 0.94,
   isStatic = false,
   hoverMode = false,
   scrollProgress = 0,
@@ -46,22 +49,21 @@ export default function BdxRobot({
   onToggleProjector,
 }) {
   const rootRef = useRef();
-  const hipsRef = useRef();
-  const torsoRef = useRef();
-  const neckRef = useRef();
+  const hoverGroupRef = useRef();
+  const bodyRef = useRef();
   const headRef = useRef();
-  const leftEyeRef = useRef();
-  const rightEyeRef = useRef();
-  const leftLegRef = useRef();
-  const rightLegRef = useRef();
+  const eyeDisplayRef = useRef();
+  const leftEyeMeshRef = useRef();
+  const rightEyeMeshRef = useRef();
+  const leftArmRef = useRef();
+  const rightArmRef = useRef();
   const projectorBeamRef = useRef();
   const projectorLensRef = useRef();
 
   // Physical tracking state
-  const currentPos = useRef(new THREE.Vector3(1.10, 0.70, 6.8));
-  const prevPos = useRef(new THREE.Vector3(1.10, 0.70, 6.8));
-  const currentRotY = useRef(-0.18);
-  const walkPhase = useRef(0);
+  const currentPos = useRef(new THREE.Vector3(1.28, 1.55, 8.2));
+  const prevPos = useRef(new THREE.Vector3(1.28, 1.55, 8.2));
+  const currentRotY = useRef(-0.28);
   const tempTargetPos = useRef(new THREE.Vector3());
 
   // Interaction State
@@ -72,6 +74,17 @@ export default function BdxRobot({
   // Gaze tracking
   const cursorRef = useRef({ x: 0, y: 0 });
   const smoothedCursor = useRef({ x: 0, y: 0 });
+
+  // Responsive state detection
+  const isMobileRef = useRef(false);
+  useEffect(() => {
+    const checkMobile = () => {
+      isMobileRef.current = window.innerWidth < 1024;
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const handleMove = (e) => {
@@ -106,39 +119,153 @@ export default function BdxRobot({
     [onToggleProjector]
   );
 
-  // Blink timing
+  // Digital Eye Blink Timer
   const blinkTimer = useRef(0);
   const isBlinking = useRef(false);
 
+  // =========================================================================
+  // 1. PROCEDURAL DIGITAL MICRO-LED MATRIX CANVAS TEXTURE (ARCH EYES ◠ ◠)
+  // =========================================================================
+  const ledEyeTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 1024;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+
+    // Deep midnight visor screen background
+    ctx.fillStyle = '#060B14';
+    ctx.fillRect(0, 0, 1024, 512);
+
+    const dotSpacing = 11;
+    const dotSize = 4.4;
+
+    const drawArchEye = (centerX, centerY, outerR, innerR) => {
+      for (let x = centerX - outerR - 15; x <= centerX + outerR + 15; x += dotSpacing) {
+        for (let y = centerY - outerR - 15; y <= centerY + 15; y += dotSpacing) {
+          const dx = x - centerX;
+          const dy = y - centerY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist >= innerR && dist <= outerR && dy <= 0) {
+            const angle = Math.atan2(-dy, dx);
+            if (angle >= 0.14 * Math.PI && angle <= 0.86 * Math.PI) {
+              // Cyan bloom aura
+              const grad = ctx.createRadialGradient(x, y, 0, x, y, dotSize * 2.4);
+              grad.addColorStop(0, '#00F0FF');
+              grad.addColorStop(0.35, 'rgba(0, 210, 255, 0.7)');
+              grad.addColorStop(1, 'rgba(0, 210, 255, 0)');
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.arc(x, y, dotSize * 2.4, 0, Math.PI * 2);
+              ctx.fill();
+
+              // High-intensity white-cyan micro-LED dot
+              ctx.fillStyle = '#E6FCFF';
+              ctx.beginPath();
+              ctx.arc(x, y, dotSize * 0.95, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+      }
+    };
+
+    drawArchEye(310, 310, 150, 95);
+    drawArchEye(714, 310, 150, 95);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    return tex;
+  }, []);
+
+  // =========================================================================
+  // 2. PROCEDURAL CHEST ARC REACTOR TEXTURE (12 SEGMENTED CYAN BARS)
+  // =========================================================================
+  const chestReactorTexture = useMemo(() => {
+    if (typeof document === 'undefined') return null;
+    const canvas = document.createElement('canvas');
+    canvas.width = 512;
+    canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+
+    ctx.fillStyle = '#0f141d';
+    ctx.fillRect(0, 0, 512, 512);
+
+    const cx = 256;
+    const cy = 256;
+    const numSegments = 12;
+    const segRadius = 160;
+    const segThickness = 44;
+
+    for (let i = 0; i < numSegments; i++) {
+      const startA = (i / numSegments) * Math.PI * 2 - Math.PI / 2 + 0.05;
+      const endA = ((i + 0.82) / numSegments) * Math.PI * 2 - Math.PI / 2;
+
+      ctx.strokeStyle = '#00E5FF';
+      ctx.lineWidth = segThickness;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.arc(cx, cy, segRadius, startA, endA);
+      ctx.stroke();
+
+      ctx.strokeStyle = '#E6FCFF';
+      ctx.lineWidth = segThickness * 0.42;
+      ctx.stroke();
+    }
+
+    ctx.fillStyle = '#161d28';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 96, 0, Math.PI * 2);
+    ctx.fill();
+
+    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 66);
+    coreGrad.addColorStop(0, '#FFFFFF');
+    coreGrad.addColorStop(0.3, '#00F0FF');
+    coreGrad.addColorStop(0.8, '#0090C4');
+    coreGrad.addColorStop(1, '#004A6B');
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 66, 0, Math.PI * 2);
+    ctx.fill();
+
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.needsUpdate = true;
+    return tex;
+  }, []);
+
+  // Frame animation loop
   useFrame(({ clock }, delta) => {
     const t = clock.getElapsedTime();
 
     if (hoverMode) {
-      // 1. FLOATING / HOVER COMPANION MODE (Used in docked companion UI)
-      const hoverFloatY = Math.sin(t * 2.2) * 0.05;
-      const hoverFloatRotY = Math.sin(t * 1.2) * 0.06;
+      // DOCKED COMPANION CANVAS HOVER
+      const hoverFloatY = Math.sin(t * 2.0) * 0.05;
+      const hoverFloatRotY = Math.sin(t * 1.1) * 0.07;
+      const hoverFloatRotZ = Math.cos(t * 1.3) * 0.025;
 
       if (rootRef.current) {
         rootRef.current.position.y = hoverFloatY;
         rootRef.current.rotation.y = hoverFloatRotY;
+        rootRef.current.rotation.z = hoverFloatRotZ;
       }
 
-      // Gentle leg dangle in hover mode
-      if (leftLegRef.current && rightLegRef.current) {
-        leftLegRef.current.rotation.x = 0.12 + Math.sin(t * 2.0) * 0.03;
-        rightLegRef.current.rotation.x = 0.12 - Math.sin(t * 2.0) * 0.03;
+      // Natural downward flipper sway
+      if (leftArmRef.current && rightArmRef.current) {
+        leftArmRef.current.rotation.z = -0.20 + Math.sin(t * 2.0) * 0.025;
+        rightArmRef.current.rotation.z = 0.20 - Math.sin(t * 2.0) * 0.025;
       }
     } else if (!isStatic) {
-      // 2. CORRIDOR WAYPOINT TRAVEL (Experience A)
+      // CORRIDOR WAYPOINT TRAVEL
       const rawP = scrollProgressRef ? scrollProgressRef.current : scrollProgress;
       const p = Math.max(0, Math.min(1, rawP));
-      let startW = FACILITY_WAYPOINTS[0];
-      let endW = FACILITY_WAYPOINTS[FACILITY_WAYPOINTS.length - 1];
+      let startW = WAYPOINTS_CONFIG[0];
+      let endW = WAYPOINTS_CONFIG[WAYPOINTS_CONFIG.length - 1];
 
-      for (let i = 0; i < FACILITY_WAYPOINTS.length - 1; i++) {
-        if (p >= FACILITY_WAYPOINTS[i].progress && p <= FACILITY_WAYPOINTS[i + 1].progress) {
-          startW = FACILITY_WAYPOINTS[i];
-          endW = FACILITY_WAYPOINTS[i + 1];
+      for (let i = 0; i < WAYPOINTS_CONFIG.length - 1; i++) {
+        if (p >= WAYPOINTS_CONFIG[i].progress && p <= WAYPOINTS_CONFIG[i + 1].progress) {
+          startW = WAYPOINTS_CONFIG[i];
+          endW = WAYPOINTS_CONFIG[i + 1];
           break;
         }
       }
@@ -147,62 +274,43 @@ export default function BdxRobot({
       const localT = span > 0 ? (p - startW.progress) / span : 0;
       const easeT = localT * localT * (3 - 2 * localT);
 
-      tempTargetPos.current.lerpVectors(startW.pos, endW.pos, easeT);
+      const startPos = isMobileRef.current ? startW.mobilePos : startW.desktopPos;
+      const endPos = isMobileRef.current ? endW.mobilePos : endW.desktopPos;
+
+      const safeDelta = Math.min(delta, 0.05);
+
+      tempTargetPos.current.lerpVectors(startPos, endPos, easeT);
       const targetIdleRotY = THREE.MathUtils.lerp(startW.idleRotY, endW.idleRotY, easeT);
 
-      currentPos.current.lerp(tempTargetPos.current, Math.min(1, delta * 4.2));
+      currentPos.current.lerp(tempTargetPos.current, 1 - Math.exp(-safeDelta * 4.2));
 
-      // Calculate motion speed
       const distDelta = currentPos.current.distanceTo(prevPos.current);
-      const speed = distDelta / Math.max(delta, 0.001);
+      const speed = distDelta / Math.max(safeDelta, 0.001);
       prevPos.current.copy(currentPos.current);
 
-      const isWalking = speed > 0.18 && p < 0.95;
+      const isCruising = speed > 0.15 && p < 0.95;
 
-      let walkBob = 0;
-      let walkSway = 0;
+      // Realistic floating hover bobbing & organic sway
+      const hoverBob = Math.sin(t * 2.0) * 0.035;
+      const hoverSway = Math.cos(t * 1.4) * 0.02;
+      const cruiseTiltX = isCruising ? 0.09 : 0;
+      const cruiseRollZ = isCruising ? -hoverSway * 1.1 : Math.sin(t * 1.4) * 0.02;
 
-      if (isWalking) {
-        walkPhase.current += delta * Math.min(16, Math.max(6, speed * 3.8));
-        const stepSine = Math.sin(walkPhase.current);
-
-        // Natural leg swing from HIP joints
-        if (leftLegRef.current && rightLegRef.current) {
-          leftLegRef.current.rotation.x = stepSine * 0.38;
-          rightLegRef.current.rotation.x = -stepSine * 0.38;
-        }
-
-        walkBob = Math.abs(Math.sin(walkPhase.current)) * 0.03;
-        walkSway = Math.sin(walkPhase.current) * 0.02;
-
-        if (torsoRef.current) {
-          torsoRef.current.rotation.x += (0.06 - torsoRef.current.rotation.x) * (delta * 5);
-        }
-
-        // When actively walking down the corridor, orient along the travel direction
-        const walkDirectionAngle = -0.35;
-        currentRotY.current += (walkDirectionAngle - currentRotY.current) * (delta * 3.0);
-      } else {
-        // Settling back to upright standing idle stance
-        if (leftLegRef.current && rightLegRef.current) {
-          leftLegRef.current.rotation.x += (0 - leftLegRef.current.rotation.x) * (delta * 6);
-          rightLegRef.current.rotation.x += (0 - rightLegRef.current.rotation.x) * (delta * 6);
-        }
-        if (torsoRef.current) {
-          torsoRef.current.rotation.x += (0 - torsoRef.current.rotation.x) * (delta * 6);
-        }
-
-        // Facing forward towards the visitor/camera (+Z)
-        currentRotY.current += (targetIdleRotY - currentRotY.current) * (delta * 3.5);
+      if (bodyRef.current) {
+        bodyRef.current.rotation.x += (cruiseTiltX - bodyRef.current.rotation.x) * (1 - Math.exp(-safeDelta * 3.5));
       }
 
-      // Idle sway & jump
-      const idleSway = Math.sin(t * 1.8) * 0.015;
-      const idleBob = Math.abs(Math.sin(t * 1.8)) * 0.015;
+      if (isCruising) {
+        const cruiseAngle = -0.28;
+        currentRotY.current += (cruiseAngle - currentRotY.current) * (1 - Math.exp(-safeDelta * 3.0));
+      } else {
+        currentRotY.current += (targetIdleRotY - currentRotY.current) * (1 - Math.exp(-safeDelta * 3.5));
+      }
 
+      // Smooth interactive hop/jump
       let jumpOffsetY = 0;
       if (isJumping.current) {
-        jumpTime.current += delta * 2.6;
+        jumpTime.current += safeDelta * 2.8;
         const progress = jumpTime.current;
         if (progress < 1.0) {
           jumpOffsetY = Math.sin(progress * Math.PI) * 0.22;
@@ -214,60 +322,64 @@ export default function BdxRobot({
 
       if (rootRef.current) {
         rootRef.current.position.set(
-          currentPos.current.x + (isWalking ? walkSway : idleSway),
-          currentPos.current.y + (isWalking ? walkBob : idleBob) + jumpOffsetY,
+          currentPos.current.x + hoverSway,
+          currentPos.current.y + hoverBob + jumpOffsetY,
           currentPos.current.z
         );
         rootRef.current.rotation.y = currentRotY.current;
-        rootRef.current.rotation.z = isWalking ? walkSway * 0.5 : -idleSway;
+        rootRef.current.rotation.z = cruiseRollZ;
+      }
+
+      // Natural downward wing arm stabilization (arms hang naturally along body!)
+      if (leftArmRef.current && rightArmRef.current) {
+        const armSway = Math.sin(t * 2.0) * 0.025;
+        leftArmRef.current.rotation.z = -0.20 - armSway + (isCruising ? 0.05 : 0);
+        rightArmRef.current.rotation.z = 0.20 + armSway - (isCruising ? 0.05 : 0);
+        leftArmRef.current.rotation.x = isCruising ? 0.10 : 0.04;
+        rightArmRef.current.rotation.x = isCruising ? 0.10 : 0.04;
       }
     }
 
-    // 3. Cursor Gaze Tracking
-    smoothedCursor.current.x += (cursorRef.current.x - smoothedCursor.current.x) * 0.14;
-    smoothedCursor.current.y += (cursorRef.current.y - smoothedCursor.current.y) * 0.14;
+    // Inquisitive Cursor Gaze Tracking (Grounded & Stable)
+    smoothedCursor.current.x += (cursorRef.current.x - smoothedCursor.current.x) * 0.10;
+    smoothedCursor.current.y += (cursorRef.current.y - smoothedCursor.current.y) * 0.10;
 
     const mx = smoothedCursor.current.x;
     const my = smoothedCursor.current.y;
 
-    if (neckRef.current) {
-      neckRef.current.rotation.y = mx * 0.22;
-      neckRef.current.rotation.x = -my * 0.10;
-    }
-
     if (headRef.current) {
-      const projectorPitch = isProjecting ? -0.08 : 0;
-      headRef.current.rotation.y = mx * 0.38;
-      headRef.current.rotation.x = -my * 0.20 + projectorPitch;
-      headRef.current.rotation.z = -mx * 0.12 + Math.sin(t * 1.4) * 0.02;
+      const projectorPitch = isProjecting ? -0.06 : 0;
+      // Controlled horizontal yaw and subtle pitch looking toward the visitor
+      const targetRotY = mx * 0.28;
+      const targetRotX = 0.08 - my * 0.14 + projectorPitch;
+
+      const safeDelta = Math.min(delta, 0.05);
+      const headLerp = 1 - Math.exp(-safeDelta * 5.0);
+      headRef.current.rotation.y += (targetRotY - headRef.current.rotation.y) * headLerp;
+      headRef.current.rotation.x += (targetRotX - headRef.current.rotation.x) * headLerp;
+      // PERMANENT ROLL LOCK: Keeps the head completely upright - eliminates constant spinning!
+      headRef.current.rotation.z = 0;
     }
 
-    // 4. Lifelike Eye Blinking
-    blinkTimer.current += delta;
-    if (blinkTimer.current > 3.6) {
+    // Digital Eye Blinking Animation (Squashes into sharp horizontal scanlines)
+    const safeDelta = Math.min(delta, 0.05);
+    blinkTimer.current += safeDelta;
+    if (blinkTimer.current > 3.8) {
       isBlinking.current = true;
-      if (blinkTimer.current > 3.74) {
+      if (blinkTimer.current > 3.96) {
         blinkTimer.current = Math.random() * 0.8;
         isBlinking.current = false;
       }
     }
 
-    const eyeScaleY = isBlinking.current ? 0.08 : 1.0;
-    if (leftEyeRef.current && rightEyeRef.current) {
-      leftEyeRef.current.scale.y += (eyeScaleY - leftEyeRef.current.scale.y) * 0.5;
-      rightEyeRef.current.scale.y += (eyeScaleY - rightEyeRef.current.scale.y) * 0.5;
+    const eyeScaleY = isBlinking.current ? 0.06 : 1.0;
+    const eyeLerp = 1 - Math.exp(-safeDelta * 14.0);
+    if (eyeDisplayRef.current) {
+      eyeDisplayRef.current.scale.y += (eyeScaleY - eyeDisplayRef.current.scale.y) * eyeLerp;
     }
-
-    // 5. Hologram Projector Light Beam
-    if (projectorBeamRef.current) {
-      if (isProjecting) {
-        projectorBeamRef.current.visible = true;
-        const pulse = 0.32 + Math.sin(t * 3.5) * 0.08;
-        projectorBeamRef.current.material.opacity = pulse;
-        projectorBeamRef.current.rotation.z = t * 0.15;
-      } else {
-        projectorBeamRef.current.visible = false;
-      }
+    if (leftEyeMeshRef.current && rightEyeMeshRef.current) {
+      leftEyeMeshRef.current.scale.y += (eyeScaleY - leftEyeMeshRef.current.scale.y) * eyeLerp;
+      rightEyeMeshRef.current.scale.y += (eyeScaleY - rightEyeMeshRef.current.scale.y) * eyeLerp;
     }
 
     if (projectorLensRef.current) {
@@ -275,53 +387,89 @@ export default function BdxRobot({
     }
   });
 
-  // Materials
-  const orangeMat = useMemo(
+  // =========================================================================
+  // 3. PHOTOREALISTIC STUDIO MATERIALS MATCHING REFERENCE RENDER
+  // =========================================================================
+  const pearlCeramicMat = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
-        color: hovered ? '#FF7A38' : '#F06522',
-        roughness: 0.35,
-        metalness: 0.15,
+      new THREE.MeshPhysicalMaterial({
+        color: hovered ? '#FFFFFF' : '#F5F6FA',
+        roughness: 0.16,
+        metalness: 0.04,
+        clearcoat: 0.94, // High-gloss lacquered clearcoat reflection
+        clearcoatRoughness: 0.08,
+        reflectivity: 0.90,
       }),
     [hovered]
   );
 
-  const whiteMat = useMemo(
+  const visorGlassMat = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
-        color: '#F4F4EE',
-        roughness: 0.32,
-        metalness: 0.08,
+      new THREE.MeshPhysicalMaterial({
+        color: '#080E1A',
+        roughness: 0.08,
+        metalness: 0.12,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.04,
+        transparent: true,
+        opacity: 0.94,
+        reflectivity: 0.95,
       }),
     []
   );
 
-  const darkMetalMat = useMemo(
+  const cobaltThrusterMat = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
-        color: '#1E2325',
-        roughness: 0.40,
-        metalness: 0.82,
+      new THREE.MeshPhysicalMaterial({
+        color: '#152A4A', // Exact deep cobalt-navy from reference thruster base
+        roughness: 0.24,
+        metalness: 0.65,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.15,
       }),
     []
   );
 
-  const chromePinMat = useMemo(
+  const titaniumTrimMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#B8C0C8',
-        roughness: 0.22,
-        metalness: 0.90,
+        color: '#9EABB8',
+        roughness: 0.24,
+        metalness: 0.88,
       }),
     []
   );
 
-  const soleMat = useMemo(
+  const darkMechanicalMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
-        color: '#F59E0B',
-        roughness: 0.55,
-        metalness: 0.1,
+        color: '#141822',
+        roughness: 0.35,
+        metalness: 0.75,
+      }),
+    []
+  );
+
+  const cyanEmissiveMat = useMemo(
+    () =>
+      new THREE.MeshBasicMaterial({
+        color: '#00E5FF',
+      }),
+    []
+  );
+
+  const cyanGlassMat = useMemo(
+    () =>
+      new THREE.MeshPhysicalMaterial({
+        color: '#00D8F6',
+        emissive: '#0090B8',
+        emissiveIntensity: 0.50,
+        roughness: 0.12,
+        metalness: 0.25,
+        transmission: 0.75,
+        transparent: true,
+        opacity: 0.90,
+        ior: 1.45,
       }),
     []
   );
@@ -342,174 +490,211 @@ export default function BdxRobot({
         if (typeof document !== 'undefined') document.body.style.cursor = 'default';
       }}
     >
-      {/* ============================================================== */}
-      {/* 1. CENTRAL HIP CHASSIS (PELVIS PIVOT)                          */}
-      {/* ============================================================== */}
-      <group ref={hipsRef} position={[0, 0, 0]}>
-        {/* Main Hip Crossbeam */}
-        <mesh material={darkMetalMat} castShadow>
-          <boxGeometry args={[0.48, 0.09, 0.16]} />
-        </mesh>
-        {/* Left Hip Bearing Joint */}
-        <mesh position={[-0.24, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-          <cylinderGeometry args={[0.06, 0.06, 0.14, 20]} />
-        </mesh>
-        {/* Right Hip Bearing Joint */}
-        <mesh position={[0.24, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-          <cylinderGeometry args={[0.06, 0.06, 0.14, 20]} />
-        </mesh>
+      <group ref={hoverGroupRef}>
+        {/* ============================================================== */}
+        {/* 1. HEAD ASSEMBLY (CUTE ROUND HELMET + CURVED VISOR FACE)       */}
+        {/* ============================================================== */}
+        <group ref={headRef} position={[0, 0.42, 0]}>
+          {/* Main Lacquered White Rear Helmet Shell (Recessed to Z = -0.08) */}
+          <mesh position={[0, 0, -0.08]} castShadow receiveShadow material={pearlCeramicMat} scale={[1.10, 0.98, 1.0]}>
+            <sphereGeometry args={[0.48, 48, 40]} />
+          </mesh>
 
-        {/* ============================================================ */}
-        {/* 2. DIGITIGRADE LEGS & FEET (ATTACHED AT HIP JOINTS)         */}
-        {/* ============================================================ */}
-        {/* LEFT LEG (Pivots from Hip at X = -0.24, Y = 0) */}
-        <group ref={leftLegRef} position={[-0.24, 0, 0]}>
-          {/* Upper Thigh: Angled downward and forward */}
-          <group rotation={[0.28, 0, 0]}>
-            <mesh position={[0, -0.15, 0]} material={darkMetalMat} castShadow>
-              <boxGeometry args={[0.10, 0.28, 0.08]} />
-            </mesh>
-            {/* White Thigh Armor Plate */}
-            <mesh position={[-0.06, -0.14, 0]} material={whiteMat} castShadow>
-              <boxGeometry args={[0.03, 0.24, 0.14]} />
-            </mesh>
+          {/* Smooth Visor Outer Lip Bezel Frame (Encircles the curved visor at Z = 0.34) */}
+          <mesh position={[0, 0.02, 0.34]} scale={[1.06, 0.86, 0.9]} material={pearlCeramicMat} castShadow>
+            <torusGeometry args={[0.42, 0.045, 24, 52]} />
+          </mesh>
 
-            {/* Knee Joint: at Y = -0.28 */}
-            <group position={[0, -0.28, 0]}>
-              <mesh rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-                <cylinderGeometry args={[0.05, 0.05, 0.15, 16]} />
+          {/* Curved Obsidian Visor Glass Screen (Sits proudly forward at Z = 0.22, reaches Z = 0.58) */}
+          <mesh
+            position={[0, 0.02, 0.22]}
+            rotation={[Math.PI / 2, 0, 0]}
+            scale={[1.04, 0.84, 0.84]}
+            material={visorGlassMat}
+            castShadow
+          >
+            <sphereGeometry args={[0.44, 48, 36, 0, Math.PI * 2, 0, Math.PI * 0.48]} />
+          </mesh>
+
+          {/* ============================================================ */}
+          {/* DIGITAL MICRO-LED MATRIX DISPLAY SCREEN (VISOR FACE)         */}
+          {/* ============================================================ */}
+          {ledEyeTexture && (
+            <group ref={eyeDisplayRef} position={[0, 0.04, 0.575]} renderOrder={9}>
+              <mesh>
+                <planeGeometry args={[0.54, 0.28]} />
+                <meshBasicMaterial
+                  map={ledEyeTexture}
+                  transparent
+                  opacity={0.96}
+                  blending={THREE.AdditiveBlending}
+                  depthWrite={false}
+                />
               </mesh>
+            </group>
+          )}
 
-              {/* Lower Shin: Angled backward towards ankle */}
-              <group rotation={[-0.56, 0, 0]}>
-                <mesh position={[0, -0.16, 0]} material={darkMetalMat} castShadow>
-                  <boxGeometry args={[0.09, 0.30, 0.07]} />
-                </mesh>
+          {/* High-Definition 3D Luminous Arch Meshes for Expressive Smiling Eyes (◠ ◠) at Z = 0.585 */}
+          <group position={[0, 0.04, 0.585]}>
+            {/* Left Eye Glowing Cyan Arch (◠) */}
+            <group ref={leftEyeMeshRef} position={[-0.145, 0, 0]} renderOrder={10}>
+              <mesh rotation={[0, 0, Math.PI * 0.14]}>
+                <torusGeometry args={[0.078, 0.024, 20, 36, Math.PI * 0.72]} />
+                <meshBasicMaterial color="#00E5FF" toneMapped={false} />
+              </mesh>
+              {/* Inner High-Intensity White Core Segment */}
+              <mesh position={[0, 0, 0.005]} rotation={[0, 0, Math.PI * 0.15]} renderOrder={11}>
+                <torusGeometry args={[0.078, 0.010, 16, 32, Math.PI * 0.70]} />
+                <meshBasicMaterial color="#E8FFFF" toneMapped={false} />
+              </mesh>
+            </group>
 
-                {/* Ankle Joint: at Y = -0.30 */}
-                <group position={[0, -0.30, 0]}>
-                  <mesh rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-                    <cylinderGeometry args={[0.038, 0.038, 0.14, 16]} />
-                  </mesh>
-
-                  {/* Left Chunky Orange Boot: Sits flat on the ground */}
-                  <group rotation={[0.28, 0, 0]} position={[0, -0.04, 0.08]}>
-                    {/* Yellow Rubber Sole */}
-                    <mesh position={[0, -0.03, 0]} material={soleMat} receiveShadow>
-                      <boxGeometry args={[0.22, 0.03, 0.38]} />
-                    </mesh>
-                    {/* Orange Main Shoe Chassis */}
-                    <mesh position={[0, 0.03, 0]} material={orangeMat} castShadow>
-                      <boxGeometry args={[0.20, 0.08, 0.36]} />
-                    </mesh>
-                    {/* Rear Heel Block */}
-                    <mesh position={[0, 0.08, -0.08]} material={orangeMat} castShadow>
-                      <boxGeometry args={[0.14, 0.07, 0.14]} />
-                    </mesh>
-                  </group>
-                </group>
-              </group>
+            {/* Right Eye Glowing Cyan Arch (◠) */}
+            <group ref={rightEyeMeshRef} position={[0.145, 0, 0]} renderOrder={10}>
+              <mesh rotation={[0, 0, Math.PI * 0.14]}>
+                <torusGeometry args={[0.078, 0.024, 20, 36, Math.PI * 0.72]} />
+                <meshBasicMaterial color="#00E5FF" toneMapped={false} />
+              </mesh>
+              {/* Inner High-Intensity White Core Segment */}
+              <mesh position={[0, 0, 0.005]} rotation={[0, 0, Math.PI * 0.15]} renderOrder={11}>
+                <torusGeometry args={[0.078, 0.010, 16, 32, Math.PI * 0.70]} />
+                <meshBasicMaterial color="#E8FFFF" toneMapped={false} />
+              </mesh>
             </group>
           </group>
-        </group>
 
-        {/* RIGHT LEG (Pivots from Hip at X = 0.24, Y = 0) */}
-        <group ref={rightLegRef} position={[0.24, 0, 0]}>
-          {/* Upper Thigh: Angled downward and forward */}
-          <group rotation={[0.28, 0, 0]}>
-            <mesh position={[0, -0.15, 0]} material={darkMetalMat} castShadow>
-              <boxGeometry args={[0.10, 0.28, 0.08]} />
+          {/* Forward Soft Eye Glow Projection */}
+          <pointLight position={[0, 0.04, 0.75]} color="#00E5FF" intensity={1.2} distance={2.5} decay={2} />
+
+          {/* ============================================================ */}
+          {/* PROMINENT HEADPHONE EAR CUPS + REAR CYAN AERODYNAMIC FINS    */}
+          {/* ============================================================ */}
+          {/* Left Ear Module */}
+          <group position={[-0.56, 0.02, 0]}>
+            {/* Outer White Cylindrical Bezel with Beveled Lip */}
+            <mesh rotation={[0, 0, Math.PI / 2]} material={pearlCeramicMat} castShadow>
+              <cylinderGeometry args={[0.18, 0.18, 0.07, 36]} />
             </mesh>
-            {/* White Thigh Armor Plate */}
-            <mesh position={[0.06, -0.14, 0]} material={whiteMat} castShadow>
-              <boxGeometry args={[0.03, 0.24, 0.14]} />
+            {/* Recessed Dark Metallic Well */}
+            <mesh position={[-0.036, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={darkMechanicalMat}>
+              <cylinderGeometry args={[0.14, 0.14, 0.018, 36]} />
+            </mesh>
+            {/* Concentric Glowing Cyan Blue LED Ring */}
+            <mesh position={[-0.044, 0, 0]} rotation={[0, Math.PI / 2, 0]} material={cyanEmissiveMat}>
+              <torusGeometry args={[0.088, 0.015, 16, 36]} />
+            </mesh>
+            {/* Center Cyan Dot */}
+            <mesh position={[-0.046, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={cyanEmissiveMat}>
+              <cylinderGeometry args={[0.036, 0.036, 0.014, 24]} />
             </mesh>
 
-            {/* Knee Joint: at Y = -0.28 */}
-            <group position={[0, -0.28, 0]}>
-              <mesh rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-                <cylinderGeometry args={[0.05, 0.05, 0.15, 16]} />
+            {/* Rear Cyan Aerodynamic Stabilizer Fin (Angled backward and upward!) */}
+            <group position={[0.02, 0.08, -0.12]} rotation={[-0.45, 0, -0.15]}>
+              <mesh material={cyanGlassMat} castShadow>
+                <boxGeometry args={[0.035, 0.20, 0.16]} />
               </mesh>
+              <mesh position={[0, 0.10, 0]} material={cobaltThrusterMat}>
+                <coneGeometry args={[0.032, 0.09, 4]} />
+              </mesh>
+            </group>
+          </group>
 
-              {/* Lower Shin: Angled backward towards ankle */}
-              <group rotation={[-0.56, 0, 0]}>
-                <mesh position={[0, -0.16, 0]} material={darkMetalMat} castShadow>
-                  <boxGeometry args={[0.09, 0.30, 0.07]} />
-                </mesh>
+          {/* Right Ear Module */}
+          <group position={[0.56, 0.02, 0]}>
+            {/* Outer White Cylindrical Bezel with Beveled Lip */}
+            <mesh rotation={[0, 0, Math.PI / 2]} material={pearlCeramicMat} castShadow>
+              <cylinderGeometry args={[0.18, 0.18, 0.07, 36]} />
+            </mesh>
+            {/* Recessed Dark Metallic Well */}
+            <mesh position={[0.036, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={darkMechanicalMat}>
+              <cylinderGeometry args={[0.14, 0.14, 0.018, 36]} />
+            </mesh>
+            {/* Concentric Glowing Cyan Blue LED Ring */}
+            <mesh position={[0.044, 0, 0]} rotation={[0, Math.PI / 2, 0]} material={cyanEmissiveMat}>
+              <torusGeometry args={[0.088, 0.015, 16, 36]} />
+            </mesh>
+            {/* Center Cyan Dot */}
+            <mesh position={[0.046, 0, 0]} rotation={[0, 0, Math.PI / 2]} material={cyanEmissiveMat}>
+              <cylinderGeometry args={[0.036, 0.036, 0.014, 24]} />
+            </mesh>
 
-                {/* Ankle Joint: at Y = -0.30 */}
-                <group position={[0, -0.30, 0]}>
-                  <mesh rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-                    <cylinderGeometry args={[0.038, 0.038, 0.14, 16]} />
-                  </mesh>
-
-                  {/* Right Chunky Orange Boot: Sits flat on the ground */}
-                  <group rotation={[0.28, 0, 0]} position={[0, -0.04, 0.08]}>
-                    {/* Yellow Rubber Sole */}
-                    <mesh position={[0, -0.03, 0]} material={soleMat} receiveShadow>
-                      <boxGeometry args={[0.22, 0.03, 0.38]} />
-                    </mesh>
-                    {/* Orange Main Shoe Chassis */}
-                    <mesh position={[0, 0.03, 0]} material={orangeMat} castShadow>
-                      <boxGeometry args={[0.20, 0.08, 0.36]} />
-                    </mesh>
-                    {/* Rear Heel Block */}
-                    <mesh position={[0, 0.08, -0.08]} material={orangeMat} castShadow>
-                      <boxGeometry args={[0.14, 0.07, 0.14]} />
-                    </mesh>
-                  </group>
-                </group>
-              </group>
+            {/* Rear Cyan Aerodynamic Stabilizer Fin (Angled backward and upward!) */}
+            <group position={[-0.02, 0.08, -0.12]} rotation={[-0.45, 0, 0.15]}>
+              <mesh material={cyanGlassMat} castShadow>
+                <boxGeometry args={[0.035, 0.20, 0.16]} />
+              </mesh>
+              <mesh position={[0, 0.10, 0]} material={cobaltThrusterMat}>
+                <coneGeometry args={[0.032, 0.09, 4]} />
+              </mesh>
             </group>
           </group>
         </group>
 
         {/* ============================================================== */}
-        {/* 3. TORSO MODULE (EXTENDS UPWARD FROM HIPS)                     */}
+        {/* 2. RECESSED NARROW MAGNETIC NECK SEAM                          */}
         {/* ============================================================== */}
-        <group ref={torsoRef} position={[0, 0.06, 0]}>
-          {/* Lower White Belly Tray */}
-          <mesh position={[0, 0.04, 0]} material={whiteMat} castShadow>
-            <boxGeometry args={[0.38, 0.10, 0.24]} />
-          </mesh>
-          {/* Main Orange Chest Block */}
-          <mesh position={[0, 0.16, 0]} material={orangeMat} castShadow>
-            <boxGeometry args={[0.42, 0.16, 0.26]} />
+        <mesh position={[0, -0.05, 0]} material={darkMechanicalMat}>
+          <cylinderGeometry args={[0.22, 0.22, 0.06, 32]} />
+        </mesh>
+
+        {/* ============================================================== */}
+        {/* 3. PEAR-EGG BODY + CHEST SHIELD ARC REACTOR + COBALT THRUSTER  */}
+        {/* ============================================================== */}
+        <group ref={bodyRef} position={[0, -0.10, 0]}>
+          {/* Main Glossy Pearl White Torso Capsule */}
+          <mesh
+            position={[0, -0.22, 0]}
+            scale={[0.88, 1.05, 0.82]}
+            material={pearlCeramicMat}
+            castShadow
+            receiveShadow
+          >
+            <sphereGeometry args={[0.45, 40, 36]} />
           </mesh>
 
-          {/* Corner Fastener Rivets */}
-          <mesh position={[-0.17, 0.20, 0.132]} material={chromePinMat}>
-            <sphereGeometry args={[0.014, 8, 8]} />
-          </mesh>
-          <mesh position={[0.17, 0.20, 0.132]} material={chromePinMat}>
-            <sphereGeometry args={[0.014, 8, 8]} />
-          </mesh>
-          <mesh position={[-0.17, 0.11, 0.132]} material={chromePinMat}>
-            <sphereGeometry args={[0.014, 8, 8]} />
-          </mesh>
-          <mesh position={[0.17, 0.11, 0.132]} material={chromePinMat}>
-            <sphereGeometry args={[0.014, 8, 8]} />
-          </mesh>
-
-          {/* Chest Holographic Projector Emitter */}
-          <group position={[0, 0.15, 0.132]}>
-            <mesh rotation={[Math.PI / 2, 0, 0]}>
-              <cylinderGeometry args={[0.045, 0.05, 0.02, 24]} />
-              <meshStandardMaterial color="#222828" roughness={0.3} metalness={0.8} />
-            </mesh>
-            <mesh ref={projectorLensRef} position={[0, 0, 0.011]} rotation={[Math.PI / 2, 0, 0]}>
-              <circleGeometry args={[0.038, 24]} />
-              <meshBasicMaterial color="#A2B29F" transparent opacity={0.5} />
+          {/* ============================================================ */}
+          {/* SHIELD-SHAPED CHEST ARC REACTOR EMBLEM                       */}
+          {/* ============================================================ */}
+          <group position={[0, -0.19, 0.38]} rotation={[-0.14, 0, 0]}>
+            {/* Inverted Rounded Shield Outer Bezel in Pearl White */}
+            <mesh rotation={[Math.PI / 2, 0, Math.PI]} material={pearlCeramicMat} scale={[1.18, 0.35, 1.05]} castShadow>
+              <cylinderGeometry args={[0.18, 0.14, 0.06, 3]} />
             </mesh>
 
-            {/* Volumetric Hologram Cone */}
-            <group position={[0, 0, 0.02]} rotation={[Math.PI / 2, 0, 0]}>
+            {/* Titanium Inner Bezel Rim */}
+            <mesh position={[0, 0, 0.012]} rotation={[Math.PI / 2, 0, Math.PI]} material={titaniumTrimMat} scale={[1.10, 0.25, 0.98]}>
+              <cylinderGeometry args={[0.17, 0.13, 0.05, 3]} />
+            </mesh>
+
+            {/* High-Resolution Segmented Arc Reactor Power Faceplate */}
+            {chestReactorTexture && (
+              <mesh position={[0, 0, 0.026]}>
+                <circleGeometry args={[0.135, 36]} />
+                <meshBasicMaterial map={chestReactorTexture} />
+              </mesh>
+            )}
+
+            {/* Central Holographic Core Projector Lens */}
+            <mesh
+              ref={projectorLensRef}
+              position={[0, 0, 0.038]}
+              rotation={[Math.PI / 2, 0, 0]}
+              material={cyanEmissiveMat}
+            >
+              <cylinderGeometry args={[0.034, 0.034, 0.018, 24]} />
+            </mesh>
+
+            {/* Soft Controlled Chest Glow */}
+            <pointLight position={[0, 0, 0.08]} color="#00E5FF" intensity={0.9} distance={1.4} decay={2} />
+
+            {/* Volumetric Hologram Cone (Activates during Section 3 Projection) */}
+            <group position={[0, 0, 0.06]} rotation={[Math.PI / 2, 0, 0]}>
               <mesh ref={projectorBeamRef} position={[0, 1.4, 0]} visible={isProjecting}>
                 <coneGeometry args={[1.2, 2.8, 32, 1, true]} />
                 <meshBasicMaterial
-                  color="#A2B29F"
+                  color="#00E5FF"
                   transparent
-                  opacity={0.3}
+                  opacity={0.35}
                   side={THREE.DoubleSide}
                   blending={THREE.AdditiveBlending}
                   depthWrite={false}
@@ -519,149 +704,61 @@ export default function BdxRobot({
           </group>
 
           {/* ============================================================ */}
-          {/* 4. INDUSTRIAL PERISCOPE NECK                                 */}
+          {/* TAPERED METALLIC COBALT-NAVY HOVER THRUSTER CONE             */}
           {/* ============================================================ */}
-          <group ref={neckRef} position={[0, 0.25, 0]}>
-            <mesh position={[0, 0.05, 0]} material={darkMetalMat} castShadow>
-              <boxGeometry args={[0.15, 0.10, 0.14]} />
-            </mesh>
-            <mesh position={[0, 0.05, 0]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-              <cylinderGeometry args={[0.038, 0.038, 0.17, 16]} />
-            </mesh>
-            <mesh position={[0, 0.14, 0.01]} rotation={[-0.08, 0, 0]} material={darkMetalMat} castShadow>
-              <boxGeometry args={[0.13, 0.12, 0.12]} />
-            </mesh>
-            <mesh position={[0, 0.22, 0.02]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-              <cylinderGeometry args={[0.038, 0.038, 0.15, 16]} />
+          <group position={[0, -0.58, 0]}>
+            {/* Deep Cobalt Thruster Bell (Smooth taper matching reference) */}
+            <mesh material={cobaltThrusterMat} castShadow>
+              <cylinderGeometry args={[0.24, 0.11, 0.22, 36]} />
             </mesh>
 
-            {/* ========================================================== */}
-            {/* 5. SOLID BDX HEAD (FACING FORWARD TOWARDS VISITOR AT +Z)   */}
-            {/* ========================================================== */}
-            <group ref={headRef} position={[0, 0.28, 0.02]}>
-              {/* Lower Orange Jaw Tray */}
-              <mesh position={[0, 0, 0]} material={orangeMat} castShadow>
-                <boxGeometry args={[0.52, 0.06, 0.54]} />
-              </mesh>
+            {/* Rounded Bottom Cap */}
+            <mesh position={[0, -0.11, 0]} material={cobaltThrusterMat} scale={[1, 0.7, 1]}>
+              <sphereGeometry args={[0.11, 28, 24]} />
+            </mesh>
 
-              {/* Upper White Canopy Hood */}
-              <group position={[0, 0.09, 0]}>
-                <mesh material={whiteMat} castShadow receiveShadow>
-                  <boxGeometry args={[0.52, 0.13, 0.54]} />
-                </mesh>
-                {/* Sloped Brow Visor Edge */}
-                <mesh position={[0, 0.025, 0.12]} rotation={[-0.14, 0, 0]} material={whiteMat} castShadow>
-                  <boxGeometry args={[0.52, 0.06, 0.28]} />
-                </mesh>
-                {/* Rear Rounded Cowl */}
-                <mesh position={[0, 0, -0.27]} material={whiteMat}>
-                  <cylinderGeometry args={[0.25, 0.25, 0.13, 24]} />
-                </mesh>
-              </group>
+            {/* Glowing Cyan Thruster Exhaust Ring */}
+            <mesh position={[0, -0.05, 0]} rotation={[Math.PI / 2, 0, 0]} material={cyanEmissiveMat}>
+              <torusGeometry args={[0.15, 0.014, 16, 36]} />
+            </mesh>
 
-              {/* Left Orange Ear Pivot Disc */}
-              <mesh position={[-0.265, 0.04, -0.05]} rotation={[0, 0, Math.PI / 2]} material={orangeMat}>
-                <cylinderGeometry args={[0.06, 0.06, 0.018, 24]} />
-              </mesh>
-              <mesh position={[-0.275, 0.04, -0.05]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-                <cylinderGeometry args={[0.02, 0.02, 0.012, 16]} />
-              </mesh>
+            {/* Soft Downward Propulsion Light */}
+            <pointLight position={[0, -0.22, 0]} color="#00E5FF" intensity={1.5} distance={2.4} decay={2} />
+          </group>
 
-              {/* Right Orange Ear Pivot Disc */}
-              <mesh position={[0.265, 0.04, -0.05]} rotation={[0, 0, Math.PI / 2]} material={orangeMat}>
-                <cylinderGeometry args={[0.06, 0.06, 0.018, 24]} />
-              </mesh>
-              <mesh position={[0.275, 0.04, -0.05]} rotation={[0, 0, Math.PI / 2]} material={chromePinMat}>
-                <cylinderGeometry args={[0.02, 0.02, 0.012, 16]} />
-              </mesh>
+          {/* ============================================================ */}
+          {/* 4. SEAMLESS TEARDROP FLIPPER ARMS (HANGING NATURALLY DOWN!)   */}
+          {/* ============================================================ */}
+          {/* Left Wing Arm */}
+          <group ref={leftArmRef} position={[-0.40, -0.14, 0]}>
+            {/* Polished Titanium Shoulder Ball Bearing */}
+            <mesh material={titaniumTrimMat}>
+              <sphereGeometry args={[0.06, 24, 24]} />
+            </mesh>
+            {/* Smooth Lacquered Flipper Arm Body (Hangs naturally along torso) */}
+            <mesh position={[-0.02, -0.12, 0.01]} material={pearlCeramicMat} castShadow>
+              <capsuleGeometry args={[0.048, 0.22, 16, 28]} />
+            </mesh>
+            {/* Dark Mechanical Inner Tip Accent */}
+            <mesh position={[-0.02, -0.21, 0.015]} material={darkMechanicalMat}>
+              <capsuleGeometry args={[0.035, 0.06, 8, 16]} />
+            </mesh>
+          </group>
 
-              {/* ======================================================== */}
-              {/* FRONT VISOR SCREEN WITH DUAL GLOWING WHITE EYES (+Z FACE) */}
-              {/* ======================================================== */}
-              <group position={[0, 0.05, 0.272]}>
-                {/* Dark Visor Glass Screen */}
-                <mesh material={darkMetalMat}>
-                  <boxGeometry args={[0.48, 0.16, 0.02]} />
-                </mesh>
-                <mesh position={[0, 0, -0.003]}>
-                  <boxGeometry args={[0.50, 0.17, 0.01]} />
-                  <meshStandardMaterial color="#0C0E10" roughness={0.3} metalness={0.9} />
-                </mesh>
-
-                {/* LEFT GLOWING WHITE ROBOTIC EYE */}
-                <group position={[-0.12, 0.01, 0.016]}>
-                  {/* Outer Bezel */}
-                  <mesh>
-                    <torusGeometry args={[0.065, 0.007, 16, 32]} />
-                    <meshStandardMaterial color="#252B2E" roughness={0.25} metalness={0.9} />
-                  </mesh>
-                  {/* Dark Eye Socket Background */}
-                  <mesh position={[0, 0, -0.004]}>
-                    <circleGeometry args={[0.062, 24]} />
-                    <meshBasicMaterial color="#000000" />
-                  </mesh>
-
-                  {/* Glowing White Eye Globe */}
-                  <group ref={leftEyeRef}>
-                    <mesh rotation={[Math.PI / 2, 0, 0]}>
-                      <sphereGeometry args={[0.058, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.45]} />
-                      <meshBasicMaterial color="#FFFFFF" />
-                    </mesh>
-
-                    {/* Dark Pupil */}
-                    <group position={[0, 0, 0.058]}>
-                      <mesh>
-                        <circleGeometry args={[0.020, 32]} />
-                        <meshBasicMaterial color="#101416" />
-                      </mesh>
-                      {/* Specular Catchlight Sparkle */}
-                      <mesh position={[0.008, 0.008, 0.001]}>
-                        <circleGeometry args={[0.006, 16]} />
-                        <meshBasicMaterial color="#FFFFFF" />
-                      </mesh>
-                    </group>
-                  </group>
-                </group>
-
-                {/* RIGHT GLOWING WHITE ROBOTIC EYE */}
-                <group position={[0.12, 0.01, 0.016]}>
-                  {/* Outer Bezel */}
-                  <mesh>
-                    <torusGeometry args={[0.065, 0.007, 16, 32]} />
-                    <meshStandardMaterial color="#252B2E" roughness={0.25} metalness={0.9} />
-                  </mesh>
-                  {/* Dark Eye Socket Background */}
-                  <mesh position={[0, 0, -0.004]}>
-                    <circleGeometry args={[0.062, 24]} />
-                    <meshBasicMaterial color="#000000" />
-                  </mesh>
-
-                  {/* Glowing White Eye Globe */}
-                  <group ref={rightEyeRef}>
-                    <mesh rotation={[Math.PI / 2, 0, 0]}>
-                      <sphereGeometry args={[0.058, 32, 16, 0, Math.PI * 2, 0, Math.PI * 0.45]} />
-                      <meshBasicMaterial color="#FFFFFF" />
-                    </mesh>
-
-                    {/* Dark Pupil */}
-                    <group position={[0, 0, 0.058]}>
-                      <mesh>
-                        <circleGeometry args={[0.020, 32]} />
-                        <meshBasicMaterial color="#101416" />
-                      </mesh>
-                      {/* Specular Catchlight Sparkle */}
-                      <mesh position={[0.008, 0.008, 0.001]}>
-                        <circleGeometry args={[0.006, 16]} />
-                        <meshBasicMaterial color="#FFFFFF" />
-                      </mesh>
-                    </group>
-                  </group>
-                </group>
-
-                {/* Gentle eye forward light */}
-                <pointLight position={[0, 0.01, 0.16]} distance={1.8} intensity={0.5} color="#FFFFFF" />
-              </group>
-            </group>
+          {/* Right Wing Arm */}
+          <group ref={rightArmRef} position={[0.40, -0.14, 0]}>
+            {/* Polished Titanium Shoulder Ball Bearing */}
+            <mesh material={titaniumTrimMat}>
+              <sphereGeometry args={[0.06, 24, 24]} />
+            </mesh>
+            {/* Smooth Lacquered Flipper Arm Body (Hangs naturally along torso) */}
+            <mesh position={[0.02, -0.12, 0.01]} material={pearlCeramicMat} castShadow>
+              <capsuleGeometry args={[0.048, 0.22, 16, 28]} />
+            </mesh>
+            {/* Dark Mechanical Inner Tip Accent */}
+            <mesh position={[0.02, -0.21, 0.015]} material={darkMechanicalMat}>
+              <capsuleGeometry args={[0.035, 0.06, 8, 16]} />
+            </mesh>
           </group>
         </group>
       </group>

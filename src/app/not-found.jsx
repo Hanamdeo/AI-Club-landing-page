@@ -13,15 +13,15 @@ export default function NotFound() {
         </div>
 
         <p className="text-xs font-mono text-sage uppercase tracking-widest mb-2">
-          Sector Error // 404
+          Error 404 • Page Not Found
         </p>
 
         <h1 className="text-3xl font-extrabold tracking-tight mb-3">
-          Signal Lost
+          Page Not Found
         </h1>
 
         <p className="text-sm text-slate-400 mb-8 leading-relaxed">
-          The requested data node does not exist within the facility grid or has been decommissioned.
+          The requested page does not exist or has been moved.
         </p>
 
         <Link

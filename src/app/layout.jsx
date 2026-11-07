@@ -1,25 +1,33 @@
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter, Archivo, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 
-// Primary Neo-Grotesque Display & Sans typography
+// Primary Neo-Grotesque Body typography
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
 });
 
-// Precision Monospace for Telemetry, HUD, UNIX terminal & Code
-const jetbrainsMono = JetBrains_Mono({
+// Powerful Archivo Display typography for Master Headings
+const archivo = Archivo({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-archivo',
+  weight: ['400', '600', '700', '800', '900'],
+});
+
+// Precision Monospace for Telemetry, HUD, UNIX terminal & Technical Labels
+const ibmPlexMono = IBM_Plex_Mono({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-mono',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '500', '600'],
 });
 
 export const metadata = {
-  title: 'THE SIGNAL — AI CLUB // Immersive 3D Experience + BDX-01 Projector',
+  title: 'AI CLUB — Madhav Institute of Technology & Science',
   description:
-    'Explore the next-generation collegiate artificial intelligence facility. 3D corridor journey with autonomous robotic companion BDX-01, interactive holographic projector, and editorial research archive.',
+    'Explore the collegiate artificial intelligence research collective at MITS Gwalior. 3D facility journey with robotic companion BDX-01, interactive research archives, and open student engineering.',
   keywords: [
     'AI Club',
     'BDX-01',
@@ -44,7 +52,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${jetbrainsMono.variable}`}
+      className={`dark ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
         {children}

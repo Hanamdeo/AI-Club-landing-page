@@ -41,11 +41,18 @@ async function capture() {
   ]);
 
   const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-  await sleep(2000);
 
   try {
-    // 1. Get WebSocket debugger URL
-    const targetsRes = await fetch(`http://127.0.0.1:${port}/json`);
+    let targetsRes = null;
+    for (let i = 0; i < 15; i++) {
+      try {
+        targetsRes = await fetch(`http://127.0.0.1:${port}/json`);
+        if (targetsRes.ok) break;
+      } catch (e) {
+        await sleep(500);
+      }
+    }
+    if (!targetsRes || !targetsRes.ok) throw new Error('Could not connect to Chrome debugger');
     const targets = await targetsRes.json();
     const wsUrl = targets[0]?.webSocketDebuggerUrl;
     if (!wsUrl) throw new Error('No webSocketDebuggerUrl found');
@@ -82,8 +89,29 @@ async function capture() {
       deviceScaleFactor: 1,
       mobile: false,
     });
-    await send('Page.navigate', { url: 'http://127.0.0.1:3000' });
-    await sleep(6500); // Wait for dev server compile, fonts, and 3D scene
+    await send('Page.navigate', { url: 'http://127.0.0.1:3001' });
+    
+    // Poll and click Skip Intro as soon as it appears
+    for (let i = 0; i < 20; i++) {
+      await sleep(1000);
+      const evalRes = await send('Runtime.evaluate', {
+        expression: `(() => {
+          const btn = Array.from(document.querySelectorAll('button')).find(b => b.textContent.includes('SKIP'));
+          if (btn) {
+            btn.click();
+            return true;
+          }
+          return false;
+        })()`,
+        returnByValue: true
+      });
+      if (evalRes?.result?.value) {
+        console.log('Clicked SKIP INTRO at attempt', i + 1);
+        break;
+      }
+    }
+
+    await sleep(4000); // Wait for shutter to animate away and hero section to render
 
     const desktopShot = await send('Page.captureScreenshot', { format: 'jpeg', quality: 85 });
     fs.mkdirSync('shots', { recursive: true });

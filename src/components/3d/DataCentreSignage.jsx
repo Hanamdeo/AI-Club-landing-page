@@ -14,18 +14,18 @@ export default function DataCentreSignage() {
   const signageBanners = [
     {
       z: 7.5,
-      title: 'SECTOR 01 // HIGH-DENSITY AI COMPUTE',
-      sub: 'COLD AISLE 01 • RACKS 01-16 • 415V 3-PHASE',
+      title: 'MITS GWALIOR • AI RESEARCH LAB',
+      sub: 'DEPARTMENT OF COMPUTER SCIENCE & AI',
     },
     {
       z: -10.0,
-      title: 'FOUNDATION CLUSTER // DISTRIBUTED ML',
-      sub: 'HOPPER SXM5 ACCELERATOR PODS • 900 GB/s NVLINK',
+      title: 'COMPUTE INFRASTRUCTURE • GPU NODES',
+      sub: 'DISTRIBUTED TRAINING & INFERENCE CLUSTER',
     },
     {
       z: -28.0,
-      title: 'PROJECTION CHAMBER // AUTONOMOUS LINK',
-      sub: 'BDX-01 DOCKING PLATFORM • OPTICAL ARRAY ONLINE',
+      title: 'PROJECTION CHAMBER • BDX-01',
+      sub: 'AUTONOMOUS RESEARCH COMPANION PLATFORM',
     },
   ];
 

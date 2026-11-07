@@ -10,7 +10,7 @@ export const CLUB_INFO = {
   campus: "Madhav Institute of Technology & Science",
   tagline: "Where Curiosity Meets Intelligence.",
   motto: "Pioneering Machine Intelligence, Open Research, and Distributed Systems.",
-  facilityCode: "BDX-LAB // SECTOR-01",
+  facilityCode: "MITS Gwalior • CSE & AI",
   status: "Operational",
   contactEmail: "aiclub@mitsgwalior.in",
   locationCoordinates: "Department of CSE & AI, Innovation Annex",
