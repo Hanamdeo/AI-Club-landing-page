@@ -52,10 +52,11 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-        display: ['var(--font-archivo)', 'var(--font-space)', 'Archivo', 'Space Grotesk', 'sans-serif'],
-        archivo: ['var(--font-archivo)', 'Archivo', 'sans-serif'],
+        sans: ['var(--font-space)', 'var(--font-inter)', 'Space Grotesk', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: ['var(--font-syne)', 'var(--font-space)', 'var(--font-archivo)', 'Syne', 'Space Grotesk', 'Archivo', 'sans-serif'],
+        syne: ['var(--font-syne)', 'Syne', 'sans-serif'],
         space: ['var(--font-space)', 'Space Grotesk', 'sans-serif'],
+        archivo: ['var(--font-syne)', 'var(--font-archivo)', 'Syne', 'Archivo', 'sans-serif'],
         mono: ['var(--font-mono)', 'IBM Plex Mono', 'JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       letterSpacing: {

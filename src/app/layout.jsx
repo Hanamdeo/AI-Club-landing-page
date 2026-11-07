@@ -1,27 +1,35 @@
-import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk } from 'next/font/google';
+import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk, Syne } from 'next/font/google';
 import './globals.css';
 
-// Primary Neo-Grotesque Body typography
+// Futuristic Neo-Grotesque Space typography for interface & body
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-space',
+  weight: ['400', '500', '600', '700'],
+});
+
+// Striking Avant-Garde Syne typography for High-Impact Master Headings
+const syne = Syne({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-syne',
+  weight: ['400', '500', '600', '700', '800'],
+});
+
+// Clean Inter typography for body fallback
 const inter = Inter({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-inter',
 });
 
-// Powerful Archivo Display typography for Master Headings
+// Powerful Archivo Display typography
 const archivo = Archivo({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-archivo',
   weight: ['400', '600', '700', '800', '900'],
-});
-
-// Space Grotesk for High-Tech / Futuristic Section Titles
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-space',
-  weight: ['400', '500', '600', '700'],
 });
 
 // Precision Monospace for Telemetry, HUD, UNIX terminal & Technical Labels
@@ -60,7 +68,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${archivo.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}
+      className={`dark ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
         {children}
