@@ -2,8 +2,6 @@
 
 import React, { useState, useCallback } from 'react';
 import { Terminal, Menu, X } from 'lucide-react';
-import AudioToggle from './AudioToggle';
-import { audioManager } from '@/utils/audioManager';
 
 export const NAV_LINKS = [
   { id: 'hero', label: 'Facility', targetId: 'section-arrival' },
@@ -31,7 +29,6 @@ export default function HUDNavbar({
 
   const handleNavClick = useCallback(
     (targetId, navId) => {
-      audioManager.playClick();
       setMobileMenuOpen(false);
       if (onNavigateToSection) onNavigateToSection(targetId, navId);
     },
@@ -39,7 +36,6 @@ export default function HUDNavbar({
   );
 
   const handleTerminalClick = useCallback(() => {
-    audioManager.playClick();
     if (onToggleTerminal) onToggleTerminal();
   }, [onToggleTerminal]);
 
@@ -104,9 +100,6 @@ export default function HUDNavbar({
             <span className="hidden md:inline text-[11px] tracking-wider font-semibold">CLI</span>
             <span className="hidden lg:inline text-[9px] text-slate-500 font-mono">[~]</span>
           </button>
-
-          {/* Procedural Audio Ambience Toggle */}
-          <AudioToggle />
 
           {/* Mobile Hamburger Button */}
           <button

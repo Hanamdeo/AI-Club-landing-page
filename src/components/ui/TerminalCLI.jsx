@@ -192,19 +192,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
       }
 
       case 'sound':
-        if (arg === 'on') {
-          audioManager.setSoundEnabled(true);
-          newHistory.push({ type: 'system', text: "Atmospheric server ambience enabled: [ON]" });
-        } else if (arg === 'off') {
-          audioManager.setSoundEnabled(false);
-          newHistory.push({ type: 'system', text: "Atmospheric server ambience muted: [OFF]" });
-        } else {
-          const state = audioManager.toggleSound();
-          newHistory.push({
-            type: 'system',
-            text: `Facility audio toggled: ${state ? '[ON]' : '[OFF]'}`,
-          });
-        }
+        newHistory.push({ type: 'system', text: "Facility audio has been permanently disabled." });
         break;
 
       case 'clear':
