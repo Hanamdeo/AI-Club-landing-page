@@ -1,5 +1,5 @@
 {
-  "name": "aiclub-web",
+  "name": "aiweb2-aiclub",
   "version": "1.0.0",
   "private": true,
   "scripts": {
@@ -27,3 +27,4 @@
     "tailwindcss": "^3.4.15"
   }
 }
+
