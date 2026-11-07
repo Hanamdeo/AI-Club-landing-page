@@ -1,52 +1,150 @@
 'use client';
 
-import React from 'react';
-import { FACILITY_ZONES } from '@/data/clubData';
+import React, { useState, useCallback } from 'react';
+import { Terminal, Menu, X } from 'lucide-react';
+import AudioToggle from './AudioToggle';
+import { audioManager } from '@/utils/audioManager';
+
+export const NAV_LINKS = [
+  { id: 'hero', label: 'Facility', targetId: 'section-arrival' },
+  { id: 'discussions', label: 'Discussions', targetId: 'discussions' },
+  { id: 'events', label: 'Operations', targetId: 'events' },
+  { id: 'radar', label: 'Radar', targetId: 'radar' },
+  { id: 'projects', label: 'Archive', targetId: 'projects' },
+  { id: 'team', label: 'Collective', targetId: 'team' },
+  { id: 'join', label: 'Intake', targetId: 'join-network' },
+];
 
 /**
  * HUDNavbar
- * Minimal, non-intrusive floating navigation bar.
- * Clean, elegant capsule without developer pseudo-code clutter.
+ * Precision architectural floating HUD navbar.
+ * Synthesizes Swiss engineering restraint (Taste Skill) with high-density developer telemetry (UI UX Pro Max).
+ * Features hairline borders, tight negative tracking, tabular telemetry, and stepped tactile feedback.
  */
-export default function HUDNavbar({ activeZoneIndex = 0, onNavigate }) {
+export default function HUDNavbar({
+  activeNavId = 'hero',
+  onNavigateToSection,
+  onToggleTerminal,
+  isEditorialMode = false,
+}) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const handleNavClick = useCallback(
+    (targetId, navId) => {
+      audioManager.playClick();
+      setMobileMenuOpen(false);
+      if (onNavigateToSection) onNavigateToSection(targetId, navId);
+    },
+    [onNavigateToSection]
+  );
+
+  const handleTerminalClick = useCallback(() => {
+    audioManager.playClick();
+    if (onToggleTerminal) onToggleTerminal();
+  }, [onToggleTerminal]);
+
   return (
-    <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none select-none">
-      <nav className="pointer-events-auto flex items-center justify-between gap-3 sm:gap-6 px-4 sm:px-6 py-2.5 rounded-full bg-charcoal/35 backdrop-blur-md border border-slate-struct/50 shadow-glass-panel max-w-4xl w-full">
-        {/* Brand Node */}
+    <header className="fixed top-4 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none select-none font-sans">
+      <nav className="pointer-events-auto flex items-center justify-between gap-3 px-3.5 sm:px-5 py-2 rounded-xl bg-[#0D1011]/85 backdrop-blur-md border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)] max-w-5xl w-full transition-colors duration-200">
+        {/* Brand Node: Architectural Identification Pill */}
         <button
-          onClick={() => onNavigate(0)}
-          className="flex items-center gap-2.5 text-xs font-sans font-bold text-ivory hover:text-sage transition-colors cursor-pointer"
+          onClick={() => handleNavClick('section-arrival', 'hero')}
+          className="flex items-center gap-2.5 text-xs text-ivory hover:text-sage transition-colors cursor-pointer shrink-0 group btn-tactile"
+          aria-label="AI Club Facility Root"
         >
-          <div className="w-6 h-6 rounded-md bg-slate-struct/40 border border-sage/40 flex items-center justify-center">
-            <span className="text-[10px] text-sage font-bold">AI</span>
+          <div className="w-6 h-6 rounded-md bg-[#15191A] border border-white/[0.12] group-hover:border-sage/50 flex items-center justify-center font-mono transition-colors">
+            <span className="text-[10px] text-sage font-bold tracking-tight">AI</span>
           </div>
-          <span className="tracking-wider font-semibold">AI CLUB</span>
+          <div className="flex flex-col text-left">
+            <div className="flex items-center gap-1.5">
+              <span className="tracking-tight font-bold text-xs text-ivory group-hover:text-sage transition-colors">
+                THE SIGNAL
+              </span>
+              <span className="w-1.5 h-1.5 rounded-full bg-signal-green" title="Systems Nominal" />
+            </div>
+            <span className="hidden sm:inline text-[9px] font-mono text-slate-400 tracking-wider uppercase -mt-0.5">
+              {isEditorialMode ? 'RESEARCH ARCHIVE' : 'RESEARCH COLLECTIVE'}
+            </span>
+          </div>
         </button>
 
-        {/* Minimal Rounded Navigation Links */}
-        <div className="flex items-center gap-1 sm:gap-2">
-          {FACILITY_ZONES.map((zone, idx) => {
-            const isActive = activeZoneIndex === idx;
+        {/* Desktop Technical Navigation Links */}
+        <div className="hidden lg:flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
+          {NAV_LINKS.map((link) => {
+            const isActive = activeNavId === link.id;
 
             return (
               <button
-                key={zone.id}
-                onClick={() => onNavigate(idx)}
-                className={`relative px-3 py-1 text-xs font-sans rounded-full transition-all cursor-pointer font-medium ${
+                key={link.id}
+                onClick={() => handleNavClick(link.targetId, link.id)}
+                className={`relative px-3 py-1 text-xs rounded-md transition-all cursor-pointer font-medium whitespace-nowrap btn-tactile ${
                   isActive
-                    ? 'text-sage bg-charcoal/70 border border-sage/50 shadow-sage-glow'
-                    : 'text-ivory/70 hover:text-ivory hover:bg-charcoal/30'
+                    ? 'text-sage bg-white/[0.06] border border-sage/40 font-semibold'
+                    : 'text-ivory/70 hover:text-ivory hover:bg-white/[0.03] border border-transparent'
                 }`}
               >
-                <span>{zone.label}</span>
+                <span>{link.label}</span>
                 {isActive && (
-                  <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-0.5 bg-sage rounded-full" />
+                  <span className="absolute bottom-0 left-2 right-2 h-[1px] bg-sage" />
                 )}
               </button>
             );
           })}
         </div>
+
+        {/* Action Controls: CLI Launcher, Audio Toggle & Mobile Menu */}
+        <div className="flex items-center gap-2 shrink-0">
+          {/* CLI Terminal Launcher */}
+          <button
+            onClick={handleTerminalClick}
+            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium bg-[#15191A] border border-white/[0.08] text-sage hover:border-sage/40 hover:bg-white/[0.04] transition-all cursor-pointer font-mono btn-tactile"
+            title="Launch Interactive Terminal CLI [~]"
+          >
+            <Terminal className="w-3.5 h-3.5 text-sage" />
+            <span className="hidden md:inline text-[11px] tracking-wider font-semibold">CLI</span>
+            <span className="hidden lg:inline text-[9px] text-slate-500 font-mono">[~]</span>
+          </button>
+
+          {/* Procedural Audio Ambience Toggle */}
+          <AudioToggle />
+
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            className="lg:hidden p-1.5 rounded-lg bg-[#15191A] border border-white/[0.08] text-ivory hover:text-sage transition-colors cursor-pointer btn-tactile"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
+          </button>
+        </div>
       </nav>
+
+      {/* Mobile Drawer Menu */}
+      {mobileMenuOpen && (
+        <div className="fixed inset-x-4 top-20 z-50 p-4 rounded-xl bg-[#0D1011]/95 backdrop-blur-xl border border-white/[0.12] shadow-2xl pointer-events-auto flex flex-col gap-1.5 animate-fade-in lg:hidden font-sans">
+          <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 px-2 py-1 mb-1 border-b border-white/[0.06]">
+            <span>DIRECTORY</span>
+            <span className="text-sage font-bold">SECTIONS</span>
+          </div>
+          {NAV_LINKS.map((link) => {
+            const isActive = activeNavId === link.id;
+            return (
+              <button
+                key={link.id}
+                onClick={() => handleNavClick(link.targetId, link.id)}
+                className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium text-left transition-all btn-tactile ${
+                  isActive
+                    ? 'bg-white/[0.06] border border-sage/40 text-sage font-semibold'
+                    : 'text-ivory/80 hover:bg-white/[0.03] hover:text-ivory border border-transparent'
+                }`}
+              >
+                <span>{link.label}</span>
+                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-sage" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </header>
   );
 }

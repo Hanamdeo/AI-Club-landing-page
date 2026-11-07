@@ -1,14 +1,60 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700;800;900&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  /* ============================================================== */
+  /* DESIGN TOKENS (Taste Skill + UI UX Pro Max Unified Foundation)  */
+  /* ============================================================== */
+
+  /* Master Color Palette - Preserved Base + Elevated Surfaces */
   --bg-primary: #171B1C;
+  --bg-void: #0D1011;
   --surface-secondary: #222828;
+  --surface-carbon: #15191A;
+  --surface-elevated: #1D2223;
   --struct-element: #343D3C;
+
+  /* Accent Signatures */
   --accent-sage: #A2B29F;
+  --accent-sage-muted: #8D9E8A;
+  --accent-sage-glow: #B6C4B4;
+  --accent-sage-dim: #5E6B5D;
   --accent-ivory: #E6E2D8;
+  --accent-ivory-warm: #F2EFE8;
+  --accent-ivory-dim: #C4C0B6;
   --light-warm: #FFF8EE;
+
+  /* Operational Telemetry Signals */
+  --signal-green: #22C55E;
+  --signal-amber: #F59E0B;
+  --signal-red: #EF4444;
+
+  /* Architectural Hairlines */
+  --hairline-border: rgba(255, 255, 255, 0.08);
+  --hairline-subtle: rgba(255, 255, 255, 0.04);
+  --hairline-strong: rgba(255, 255, 255, 0.14);
+  --hairline-sage: rgba(162, 178, 159, 0.35);
+
+  /* Spacing Scale (UI UX Pro Max 4px/8px Baseline Rhythm) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Typography Variables */
+  --font-syne: 'Syne', sans-serif;
+  --font-space: 'Space Grotesk', sans-serif;
+  --font-geist: 'Geist', sans-serif;
+  --font-inter-fallback: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 * {
@@ -16,17 +62,101 @@
 }
 
 html,
-body {
+body,
+button,
+input,
+select,
+textarea {
   margin: 0;
   padding: 0;
   background-color: var(--bg-primary);
   color: var(--accent-ivory);
-  font-family: var(--font-inter), 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-space), var(--font-inter), var(--font-geist), var(--font-inter-fallback);
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  font-variant-numeric: normal;
+}
+
+/* ============================================================== */
+/* UNIFIED TYPOGRAPHY SYSTEM (Syne, Space Grotesk, Inter, Mono)   */
+/* ============================================================== */
+
+/* High-Impact Display Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-syne), var(--font-space), var(--font-archivo), sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+
+.font-display {
+  font-family: var(--font-syne), var(--font-space), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+.font-syne {
+  font-family: var(--font-syne), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-space {
+  font-family: var(--font-space), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-archivo {
+  font-family: var(--font-archivo), sans-serif;
+  letter-spacing: -0.025em;
+}
+
+/* Precision Body Copy */
+p, span, a, button, input, select, textarea, label {
+  font-family: var(--font-space), var(--font-inter), sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Futuristic Cyber Text Gradients */
+.text-gradient-ivory {
+  background: linear-gradient(180deg, #FFFFFF 0%, #E8E5DD 70%, #C4C0B6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyber {
+  background: linear-gradient(135deg, #FFFFFF 0%, #EAE7DC 45%, #A7B7A1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-sage {
+  background: linear-gradient(135deg, #E6F0E4 0%, #A7B7A1 60%, #8D9E8A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #E0F7FF 0%, #24BFEA 60%, #0090C4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-sage {
+  text-shadow: 0 0 24px rgba(167, 183, 161, 0.4);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 24px rgba(36, 191, 234, 0.45);
+}
+
+/* Tabular Lining Figures for stats, timers & cluster telemetry */
+.num-normal, .tnum {
+  font-family: var(--font-mono), 'IBM Plex Mono', 'JetBrains Mono', monospace !important;
+  font-feature-settings: 'tnum' on, 'lnum' on, 'zero' on;
+}
+
+/* Dedicated Monospace for UNIX Terminal CLI Buffer & Code */
+code, pre, .terminal-mono, .font-mono {
+  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, Menlo, Monaco, monospace;
 }
 
 /* Custom Telemetry Selection */
@@ -41,58 +171,133 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #171B1C;
+  background: var(--bg-void);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #343D3C;
-  border-radius: 4px;
+  background: var(--struct-element);
+  border-radius: 2px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #A2B29F;
+  background: var(--accent-sage);
 }
 
-/* Transparent Architectural Glass & HUD */
+/* ============================================================== */
+/* ARCHITECTURAL SURFACES & RESTRAINED HAIRLINES                  */
+/* ============================================================== */
+
+/* Restrained Architectural Panel: Crisp 1px hairline border */
 .glass-panel {
-  background: rgba(23, 27, 28, 0.22);
+  background: rgba(18, 22, 23, 0.72);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(52, 61, 60, 0.45);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.25);
+  border: 1px solid var(--hairline-border);
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.28);
 }
 
 .glass-panel-subtle {
-  background: rgba(23, 27, 28, 0.15);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid rgba(52, 61, 60, 0.35);
+  background: rgba(18, 22, 23, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid var(--hairline-subtle);
 }
 
 .glass-border-sage {
-  border-color: rgba(162, 178, 159, 0.35);
+  border-color: var(--hairline-sage);
 }
 
-/* Restrained LED & Beacon Glows */
+/* Solid Industrial Carbon Panel (Zero glass slop) */
+.panel-industrial {
+  background-color: var(--surface-carbon);
+  border: 1px solid var(--hairline-border);
+}
+
+/* Restrained LED & Beacon Indicators (Clean, not blinding) */
 .sage-indicator {
-  box-shadow: 0 0 8px 1px rgba(162, 178, 159, 0.5);
+  box-shadow: 0 0 6px 1px rgba(162, 178, 159, 0.4);
 }
 
 .amber-indicator {
-  box-shadow: 0 0 8px 1px rgba(235, 170, 75, 0.5);
+  box-shadow: 0 0 6px 1px rgba(245, 158, 11, 0.4);
 }
 
-/* Monospace Telemetry Details */
-.telemetry-tag {
-  font-family: 'JetBrains Mono', Menlo, Monaco, Consolas, monospace;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.green-indicator {
+  box-shadow: 0 0 6px 1px rgba(34, 197, 94, 0.4);
 }
 
-/* Normal Proportional Numbers (Inter) */
-.num-normal {
-  font-family: var(--font-inter), 'Inter', sans-serif !important;
-  font-variant-numeric: normal !important;
-  letter-spacing: -0.02em;
+/* ============================================================== */
+/* TACTILE MECHANICAL FEEDBACK (Taste Skill Rule 5)               */
+/* ============================================================== */
+
+/* Stepped Physical Button Press */
+.btn-tactile {
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1),
+              background-color 150ms ease,
+              border-color 150ms ease,
+              box-shadow 150ms ease;
+  will-change: transform;
+}
+.btn-tactile:hover {
+  transform: translateY(-1px);
+}
+.btn-tactile:active {
+  transform: translateY(1px);
+}
+
+/* Restrained Card Lift (Strict 2px lift, hairline brightening) */
+.card-lift {
+  transition: transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 180ms ease,
+              background-color 180ms ease;
+  will-change: transform;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  border-color: var(--hairline-strong);
+}
+
+/* Architectural Corner Registration Crosshairs */
+.crosshair-corner {
+  position: relative;
+}
+.crosshair-corner::before,
+.crosshair-corner::after {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-color: rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+}
+.crosshair-corner::before {
+  top: -1px;
+  left: -1px;
+  border-top: 1px solid;
+  border-left: 1px solid;
+}
+.crosshair-corner::after {
+  bottom: -1px;
+  right: -1px;
+  border-bottom: 1px solid;
+  border-right: 1px solid;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.99); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hide scrollbars while allowing scroll */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

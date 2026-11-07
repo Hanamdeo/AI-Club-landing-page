@@ -5,7 +5,7 @@ import React from 'react';
 /**
  * GlassPanel
  * Architectural transparent glass interface panel with modern rounded borders.
- * Clean, minimal, without pseudo-code telemetry headers or text clutter.
+ * Truly transparent background allowing the continuous 3D Data Centre scene to shine through.
  */
 export default function GlassPanel({
   children,
@@ -13,7 +13,7 @@ export default function GlassPanel({
 }) {
   return (
     <div
-      className={`relative bg-graphite/20 backdrop-blur-md border border-slate-struct/40 rounded-2xl shadow-glass-panel pointer-events-auto p-6 md:p-10 transition-all ${className}`}
+      className={`relative bg-black/10 border border-white/10 rounded-2xl pointer-events-auto p-6 md:p-10 transition-all ${className}`}
     >
       {children}
     </div>

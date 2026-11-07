@@ -1,59 +1,71 @@
 'use client';
 
 import React, { useMemo } from 'react';
-import { FACILITY_ZONES } from '@/data/clubData';
+
+const CORRIDOR_SECTIONS = [
+  { id: 'arrival', label: '01 Arrival', targetZ: 12.5 },
+  { id: 'core', label: '02 Intelligence Core', targetZ: -15.0 },
+  { id: 'chamber', label: '03 Projection Chamber', targetZ: -35.0 },
+];
 
 /**
  * DepthTelemetry
- * Displays live virtual data centre depth, corridor coordinates,
- * and a vertical facility waypoint ladder in rounded glass capsules.
- * Clean, human-readable formatting without code comments.
+ * Displays real-time corridor depth coordinates and waypoint progress.
+ * Built with clinical precision: tabular JetBrains Mono metrics, restrained hairline borders,
+ * and zero visual flicker or distracting pings.
  */
-export default function DepthTelemetry({ scrollProgress = 0, activeZoneIndex = 0 }) {
-  // Compute approximate real-time Z-depth in meters
+export default function DepthTelemetry({
+  scrollProgress = 0,
+  activeZoneIndex = 0,
+  coordRef,
+}) {
   const currentDepth = useMemo(() => {
-    // Range from +12m at entry down to -165m at exit
-    const startZ = 12.0;
-    const endZ = -165.0;
+    const startZ = 12.5;
+    const endZ = -35.0;
     const z = startZ + scrollProgress * (endZ - startZ);
     return z.toFixed(1);
   }, [scrollProgress]);
 
-  const activeZone = FACILITY_ZONES[activeZoneIndex] || FACILITY_ZONES[0];
+  const activeZone = CORRIDOR_SECTIONS[activeZoneIndex] || CORRIDOR_SECTIONS[0];
 
   return (
-    <aside className="fixed bottom-6 right-6 z-40 hidden md:flex flex-col items-end gap-3 pointer-events-none select-none font-sans">
-      {/* Real-Time Facility Coordinate Box */}
-      <div className="p-3.5 px-4 rounded-2xl bg-charcoal/40 backdrop-blur-md border border-slate-struct/50 shadow-glass-panel text-right text-xs">
-        <div className="flex items-center justify-end gap-2 text-[11px] text-slate-400 font-medium">
-          <span className="w-1.5 h-1.5 rounded-full bg-sage sage-indicator" />
-          <span>Facility Depth</span>
+    <aside className="fixed bottom-6 left-6 z-40 hidden md:flex flex-col items-start gap-2 pointer-events-none select-none font-sans">
+      <div className="p-3.5 px-4 rounded-xl bg-[#0D1011]/85 backdrop-blur-md border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.35)] text-left">
+        {/* Header Telemetry Identifier */}
+        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 uppercase font-semibold">
+          <span className="w-1.5 h-1.5 rounded-full bg-sage ring-2 ring-sage/20" />
+          <span>CORRIDOR DEPTH</span>
         </div>
-        <div className="text-sm font-bold text-sage num-normal mt-0.5">
-          {currentDepth} m
+
+        {/* Tabular Coordinate Value */}
+        <div className="text-sm font-bold text-sage font-mono mt-0.5 tnum tracking-tight flex items-baseline gap-1">
+          <span ref={coordRef} id="depth-coord-val">{currentDepth}</span>
+          <span className="text-[10px] text-slate-400 font-normal">m</span>
         </div>
-        <div className="text-[11px] text-ivory/70 mt-0.5 font-medium">
+
+        {/* Active Sector Name */}
+        <div className="text-[11px] text-ivory/80 mt-0.5 font-medium tracking-tight">
           {activeZone.label}
         </div>
       </div>
 
-      {/* Vertical Waypoint Progress Ladder */}
-      <div className="flex flex-col items-center gap-1.5 p-2 rounded-full bg-charcoal/40 backdrop-blur-sm border border-slate-struct/40">
-        {FACILITY_ZONES.map((zone, idx) => {
+      {/* Segmented Architectural Coordinate Gauge */}
+      <div className="flex items-center gap-1 px-2.5 py-1 rounded-md bg-[#0D1011]/70 backdrop-blur-sm border border-white/[0.06]">
+        {CORRIDOR_SECTIONS.map((sec, idx) => {
           const isActive = idx === activeZoneIndex;
           const isPassed = idx < activeZoneIndex;
 
           return (
             <div
-              key={zone.id}
-              className={`w-1.5 transition-all duration-300 rounded-full ${
+              key={sec.id}
+              className={`h-1 transition-all duration-200 rounded-sm ${
                 isActive
-                  ? 'h-4 bg-sage shadow-sage-glow'
+                  ? 'w-6 bg-sage'
                   : isPassed
-                  ? 'h-1.5 bg-slate-struct'
-                  : 'h-1 bg-slate-struct/40'
+                  ? 'w-3 bg-slate-400/50'
+                  : 'w-2 bg-white/10'
               }`}
-              title={zone.label}
+              title={sec.label}
             />
           );
         })}
