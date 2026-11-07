@@ -44,15 +44,15 @@ export default function JoinTheNetwork({ onReturnTop }) {
     <section id="join-network" className="relative w-full py-20 px-6 md:px-12 lg:px-16 border-t border-white/[0.08] font-sans">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
-        <div className="mb-10">
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 mb-3 rounded-md bg-[#15191A] border border-white/[0.08] text-[11px] font-mono text-sage uppercase tracking-wider">
-            <span className="w-1.5 h-1.5 rounded-full bg-sage" />
-            <span>Membership Intake</span>
+        <div className="mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-md bg-[#131718] border border-white/[0.1] text-[10px] font-mono tracking-widest text-[#A7B7A1] uppercase">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse shadow-[0_0_8px_#22C55E]" />
+            <span>SECTOR 09 // MEMBERSHIP INTAKE</span>
           </div>
-          <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight">
+          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-archivo font-black tracking-tight text-gradient-cyber leading-[0.98] drop-shadow-sm">
             JOIN THE NETWORK
           </h2>
-          <p className="text-sm sm:text-base text-ivory/70 font-light mt-2 max-w-2xl leading-relaxed">
+          <p className="text-sm sm:text-base text-[#B5B8AF] font-normal mt-3 max-w-2xl leading-relaxed">
             Whether you want to optimize GPU memory pipelines, construct novel multi-modal architectures, or engineer open-source AI tooling, your curiosity belongs here.
           </p>
         </div>

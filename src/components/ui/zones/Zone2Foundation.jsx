@@ -32,16 +32,16 @@ export default function Zone2Foundation({ onInspectRack }) {
         {/* ============================================================== */}
         <div className="lg:col-span-7 flex flex-col justify-center pointer-events-auto">
           {/* Section Marker */}
-          <div className="inline-flex items-center gap-2 px-2.5 py-1 mb-4 rounded-md bg-[#15191A] border border-white/[0.08] text-[11px] font-mono text-sage uppercase tracking-wider w-fit">
-            <span className="w-1.5 h-1.5 rounded-full bg-sage" />
-            <span>Research Foundations</span>
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-md bg-[#181D1E] border border-white/[0.08] text-[10px] font-mono text-[#A7B7A1] uppercase tracking-widest w-fit">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+            <span>SECTOR 02 // INTELLIGENCE CORE</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-extrabold text-ivory tracking-tight mb-2 leading-[1.05]">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-archivo font-black text-gradient-cyber tracking-tight mb-2 leading-[1.05]">
             THE INTELLIGENCE CORE
           </h2>
 
-          <p className="text-sm sm:text-base text-sage font-light mb-6 tracking-tight">
+          <p className="text-sm sm:text-base font-space font-medium text-[#B6C4B4] mb-6 tracking-tight">
             Foundational Machine Learning, Novel Architectures & Distributed Systems
           </p>
 

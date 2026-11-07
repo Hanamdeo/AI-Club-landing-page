@@ -77,25 +77,73 @@ textarea {
 }
 
 /* ============================================================== */
-/* UNIFIED TYPOGRAPHY SYSTEM (Geist Sans + JetBrains Mono)        */
+/* UNIFIED TYPOGRAPHY SYSTEM (Archivo, Space Grotesk, Inter, Mono)*/
 /* ============================================================== */
 
-/* High-Impact Display Headings: Tight -0.035em tracking */
-h1, h2, h3, h4, h5, h6, .font-display {
-  font-family: var(--font-geist), var(--font-inter), var(--font-inter-fallback) !important;
+/* High-Impact Display Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-archivo), var(--font-space), var(--font-inter), sans-serif;
   font-weight: 700;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
+}
+
+.font-display {
+  font-family: var(--font-archivo), var(--font-space), sans-serif;
+  letter-spacing: -0.03em;
+}
+
+.font-space {
+  font-family: var(--font-space), sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.font-archivo {
+  font-family: var(--font-archivo), sans-serif;
+  letter-spacing: -0.025em;
 }
 
 /* Precision Body Copy */
-p, span, a, button, input, select, textarea, label, .font-sans {
-  font-family: var(--font-geist), var(--font-inter), var(--font-inter-fallback);
+p, span, a, button, input, select, textarea, label {
+  font-family: var(--font-inter), sans-serif;
   letter-spacing: -0.01em;
+}
+
+/* Futuristic Cyber Text Gradients */
+.text-gradient-ivory {
+  background: linear-gradient(180deg, #FFFFFF 0%, #E8E5DD 70%, #C4C0B6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyber {
+  background: linear-gradient(135deg, #FFFFFF 0%, #EAE7DC 45%, #A7B7A1 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-sage {
+  background: linear-gradient(135deg, #E6F0E4 0%, #A7B7A1 60%, #8D9E8A 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-gradient-cyan {
+  background: linear-gradient(135deg, #E0F7FF 0%, #24BFEA 60%, #0090C4 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.text-glow-sage {
+  text-shadow: 0 0 24px rgba(167, 183, 161, 0.4);
+}
+
+.text-glow-cyan {
+  text-shadow: 0 0 24px rgba(36, 191, 234, 0.45);
 }
 
 /* Tabular Lining Figures for stats, timers & cluster telemetry */
 .num-normal, .tnum {
-  font-family: var(--font-mono), 'JetBrains Mono', var(--font-geist), monospace !important;
+  font-family: var(--font-mono), 'IBM Plex Mono', 'JetBrains Mono', monospace !important;
   font-feature-settings: 'tnum' on, 'lnum' on, 'zero' on;
 }
 

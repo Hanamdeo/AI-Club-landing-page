@@ -37,14 +37,20 @@ export default function Zone1Hero({ onExploreClick }) {
           {/* LEFT SIDE: ~52% WIDTH COMPACT EDITORIAL CONTENT PANEL      */}
           {/* ========================================================== */}
           <div className="w-full lg:w-[52%] max-w-[560px] xl:max-w-[620px] pointer-events-auto">
-            <div className="relative p-6 sm:p-8 rounded-2xl bg-[#171B19]/80 backdrop-blur-md border border-[#343B35] shadow-[0_8px_32px_rgba(0,0,0,0.45)] crosshair-corner">
-              {/* Master Display Heading with Archivo ExtraBold */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-archivo font-extrabold tracking-tight text-[#E9E7DD] mb-2 leading-[0.94]">
+            <div className="relative p-6 sm:p-8 rounded-2xl bg-[#141819]/85 backdrop-blur-md border border-white/[0.1] shadow-[0_12px_40px_rgba(0,0,0,0.55)] crosshair-corner">
+              {/* Telemetry Sector Badge */}
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 mb-3.5 rounded-md bg-[#181D1E] border border-white/[0.08] text-[10px] font-mono tracking-widest text-[#A7B7A1] uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+                <span>SECTOR 01 // THE ARRIVAL</span>
+              </div>
+
+              {/* Master Display Heading with Archivo ExtraBold & Metallic Gradient */}
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-archivo font-black tracking-tight text-gradient-cyber mb-2 leading-[0.94] drop-shadow-sm">
                 {CLUB_INFO.name}
               </h1>
 
-              {/* Tagline Below Heading */}
-              <p className="text-lg sm:text-xl lg:text-2xl font-sans font-light text-[#A7B7A1] mb-4 tracking-tight">
+              {/* Tagline Below Heading with Space Grotesk */}
+              <p className="text-lg sm:text-xl lg:text-2xl font-space font-medium text-[#B6C4B4] mb-4 tracking-tight">
                 {CLUB_INFO.tagline}
               </p>
 
@@ -57,13 +63,13 @@ export default function Zone1Hero({ onExploreClick }) {
               <div className="flex flex-wrap items-center gap-4">
                 <button
                   onClick={handleEnter}
-                  className="group flex items-center gap-3 px-6 py-3.5 bg-[#A7B7A1] hover:bg-[#B6C4B4] text-[#171B19] font-archivo font-bold text-xs rounded-lg transition-all cursor-pointer tracking-wider uppercase btn-tactile shadow-tactile active:shadow-tactile-active"
+                  className="group flex items-center gap-3 px-6 py-3.5 bg-gradient-to-r from-[#A7B7A1] to-[#B6C4B4] hover:from-[#B6C4B4] hover:to-[#C8D6C6] text-[#141819] font-archivo font-extrabold text-xs rounded-lg transition-all cursor-pointer tracking-wider uppercase btn-tactile shadow-[0_4px_20px_rgba(167,183,161,0.35)] active:shadow-tactile-active"
                 >
                   <span>EXPLORE FACILITY</span>
-                  <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5 text-[#171B19]" />
+                  <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5 text-[#141819]" />
                 </button>
 
-                <span className="hidden sm:inline-block font-mono text-[11px] text-[#B5B8AF]/70 uppercase tracking-wider">
+                <span className="hidden sm:inline-block font-mono text-[11px] text-[#A7B7A1]/80 uppercase tracking-wider">
                   [PRESS ↓ OR SCROLL]
                 </span>
               </div>
@@ -79,65 +85,75 @@ export default function Zone1Hero({ onExploreClick }) {
       </div>
 
       {/* ============================================================== */}
-      {/* INDEPENDENT BOTTOM HORIZONTAL STRIP: STATISTICS & HUD           */}
+      {/* SEAMLESS BOTTOM HORIZONTAL STRIP: TELEMETRY DOCK & EXPLORE HUD */}
+      {/* Smooth atmospheric gradient fade, eliminating harsh cutoffs    */}
       {/* ============================================================== */}
-      <div className="relative z-30 w-full pt-4 pb-1 border-t border-[#343B35] flex flex-col md:flex-row md:items-center justify-between gap-4 pointer-events-auto">
+      <div className="relative z-30 w-full pt-8 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-4 pointer-events-auto">
         {/* Mobile Telemetry Sector Badge */}
         <div className="flex items-center gap-2 md:hidden font-mono text-xs text-[#A7B7A1]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse" />
+          <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
           <span>SECTOR 01: THE ARRIVAL</span>
         </div>
 
-        {/* 3 Required Verified Statistics (Independent bottom horizontal strip) */}
+        {/* 3 Required Verified Statistics in Frosted Floating Telemetry Dock */}
         {/* Padded left to never collide with DepthTelemetry on desktop */}
-        <div className="flex flex-wrap items-center gap-6 sm:gap-8 md:gap-12 md:pl-36 lg:pl-44">
+        <div className="flex items-center gap-5 sm:gap-7 md:gap-9 px-4 sm:px-6 py-2.5 rounded-xl bg-[#121618]/70 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.4)] crosshair-corner md:ml-32 lg:ml-40">
           {/* Metric 1 */}
           <div className="flex flex-col">
-            <span className="text-[10px] text-[#B5B8AF] tracking-wider uppercase font-mono font-medium">
-              Verified Members
-            </span>
-            <span className="text-base sm:text-lg text-[#E9E7DD] font-bold font-mono tracking-tight mt-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_6px_#24BFEA]" />
+              <span className="text-[10px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
+                Verified Members
+              </span>
+            </div>
+            <span className="text-base sm:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
               450+
             </span>
           </div>
 
-          <div className="w-[1px] h-7 bg-[#343B35] hidden sm:block" />
+          <div className="w-[1px] h-7 bg-white/[0.08] hidden sm:block" />
 
           {/* Metric 2 */}
           <div className="flex flex-col">
-            <span className="text-[10px] text-[#B5B8AF] tracking-wider uppercase font-mono font-medium">
-              Shipped Projects
-            </span>
-            <span className="text-base sm:text-lg text-[#E9E7DD] font-bold font-mono tracking-tight mt-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse shadow-[0_0_6px_#22C55E]" />
+              <span className="text-[10px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
+                Shipped Projects
+              </span>
+            </div>
+            <span className="text-base sm:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
               32
             </span>
           </div>
 
-          <div className="w-[1px] h-7 bg-[#343B35] hidden sm:block" />
+          <div className="w-[1px] h-7 bg-white/[0.08] hidden sm:block" />
 
           {/* Metric 3 */}
           <div className="flex flex-col">
-            <span className="text-[10px] text-[#B5B8AF] tracking-wider uppercase font-mono font-medium">
-              Research Papers
-            </span>
-            <span className="text-base sm:text-lg text-[#E9E7DD] font-bold font-mono tracking-tight mt-0.5">
+            <div className="flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#A7B7A1] animate-pulse shadow-[0_0_6px_#A7B7A1]" />
+              <span className="text-[10px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
+                Research Papers
+              </span>
+            </div>
+            <span className="text-base sm:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
               14
             </span>
           </div>
         </div>
 
-        {/* Scroll To Explore Indicator Cue */}
+        {/* Scroll To Explore Indicator Cue: Seamless Frosted Capsule */}
         {/* Padded right to prevent collision with BdxHolographicProjector button */}
-        <div className="flex items-center gap-4 sm:pr-28 md:pr-32">
+        <div className="flex items-center sm:pr-24 md:pr-28">
           <button
             onClick={handleEnter}
-            className="flex items-center gap-2.5 text-xs text-[#B5B8AF] hover:text-[#A7B7A1] transition-colors cursor-pointer font-mono"
+            className="group flex items-center gap-3 px-4 py-2 rounded-full bg-[#121618]/70 backdrop-blur-md border border-white/[0.08] hover:border-[#A7B7A1]/50 hover:bg-[#181E1F]/90 text-xs text-[#B5B8AF] hover:text-[#F2EFE8] transition-all cursor-pointer font-mono shadow-[0_8px_32px_rgba(0,0,0,0.4)] btn-tactile"
           >
-            <span className="tracking-widest uppercase text-[10px] font-medium">
+            <span className="tracking-[0.18em] uppercase text-[10px] font-semibold">
               SCROLL TO EXPLORE
             </span>
-            <div className="w-4 h-7 rounded-full border border-[#343B35] flex items-start justify-center p-1">
-              <span className="w-1 h-1.5 rounded-full bg-[#A7B7A1] animate-bounce" />
+            <div className="w-4 h-7 rounded-full border border-white/20 group-hover:border-[#A7B7A1] flex items-start justify-center p-1 transition-colors">
+              <span className="w-1 h-1.5 rounded-full bg-[#24BFEA] animate-bounce shadow-[0_0_6px_#24BFEA]" />
             </div>
           </button>
         </div>

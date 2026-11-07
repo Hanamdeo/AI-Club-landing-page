@@ -106,7 +106,20 @@ export default function Home() {
         });
       }
 
-      // 2. Observer triggers for Editorial Sections 4 to 9
+      // 2. Dedicated Trigger for entering the Central Editorial Archive
+      // Transitions sceneOpacity smoothly to 0 before DiscussionRoom overlaps
+      const archiveEl = document.getElementById('editorial-archive');
+      if (archiveEl) {
+        ScrollTrigger.create({
+          trigger: archiveEl,
+          start: 'top 85%',
+          end: 'bottom top',
+          onEnter: () => setIsEditorialMode(true),
+          onLeaveBack: () => setIsEditorialMode(false),
+        });
+      }
+
+      // 3. Observer triggers for Editorial Sections 4 to 9
       const editorialSections = [
         { id: 'discussions', navId: 'discussions' },
         { id: 'events', navId: 'events' },
@@ -121,8 +134,8 @@ export default function Home() {
         if (el) {
           ScrollTrigger.create({
             trigger: el,
-            start: 'top 50%',
-            end: 'bottom 50%',
+            start: 'top 45%',
+            end: 'bottom 45%',
             onEnter: () => {
               setActiveSection(id);
               setActiveNavId(navId);
@@ -181,7 +194,7 @@ export default function Home() {
           isIntro={isIntro}
           isProjecting={activeSection === 'chamber'}
           onOpenRackModal={() => setIsRackModalOpen(true)}
-          sceneOpacity={isEditorialMode ? 0.08 : 1.0}
+          sceneOpacity={isEditorialMode ? 0.0 : 1.0}
         />
       )}
 
@@ -262,9 +275,17 @@ export default function Home() {
 
       {/* ============================================================== */}
       {/* EXPERIENCE B: EDITORIAL ARCHIVE WEBSITE (SECTIONS 04 TO 09)    */}
-      {/* High-performance opaque graphite surface (eliminates GPU blur lag) */}
+      {/* 100% Solid Opaque Graphite Surface with Architectural Gate     */}
       {/* ============================================================== */}
-      <div className="relative z-20 w-full bg-[#101415]/98 border-t border-white/[0.08]">
+      <div id="editorial-archive" className="relative z-20 w-full bg-[#0A0D0E]">
+        {/* Seamless Architectural Decompression Gate between 3D & Archive */}
+        <div className="relative w-full py-6 sm:py-8 bg-gradient-to-b from-[#101415] via-[#0A0D0E] to-[#0A0D0E] flex items-center justify-center border-t border-white/[0.08]">
+          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#131718]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)] text-[10px] font-mono tracking-[0.2em] uppercase text-[#A7B7A1]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+            <span>CENTRAL ARCHIVE // INTELLECTUAL COMMONS</span>
+          </div>
+        </div>
+
         {/* SECTION 04: THE DISCUSSION ROOM */}
         <DiscussionRoom />
 

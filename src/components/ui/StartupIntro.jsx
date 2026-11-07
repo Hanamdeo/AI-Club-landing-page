@@ -166,12 +166,12 @@ export default function StartupIntro({ onComplete }) {
           </Canvas>
         </div>
 
-        {/* Title & Tagline with Inter */}
-        <div ref={logoTextRef} className="space-y-1 mb-5">
-          <h1 className="text-3xl sm:text-4xl font-sans font-bold tracking-tight text-ivory">
+        {/* Title & Tagline */}
+        <div ref={logoTextRef} className="space-y-1.5 mb-5">
+          <h1 className="text-4xl sm:text-5xl font-archivo font-black tracking-tight text-gradient-cyber drop-shadow-sm">
             AI CLUB
           </h1>
-          <p className="text-xs sm:text-sm text-sage font-light tracking-wide font-sans">
+          <p className="text-xs sm:text-sm text-[#B6C4B4] font-space font-medium tracking-wide">
             Where Curiosity Meets Intelligence
           </p>
         </div>

@@ -1,4 +1,4 @@
-import { Inter, Archivo, IBM_Plex_Mono } from 'next/font/google';
+import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk } from 'next/font/google';
 import './globals.css';
 
 // Primary Neo-Grotesque Body typography
@@ -14,6 +14,14 @@ const archivo = Archivo({
   display: 'swap',
   variable: '--font-archivo',
   weight: ['400', '600', '700', '800', '900'],
+});
+
+// Space Grotesk for High-Tech / Futuristic Section Titles
+const spaceGrotesk = Space_Grotesk({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-space',
+  weight: ['400', '500', '600', '700'],
 });
 
 // Precision Monospace for Telemetry, HUD, UNIX terminal & Technical Labels
@@ -52,7 +60,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      className={`dark ${inter.variable} ${archivo.variable} ${spaceGrotesk.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
         {children}

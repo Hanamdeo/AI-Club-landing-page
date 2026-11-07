@@ -36,23 +36,23 @@ export default function ThePeople() {
     <section id="team" className="relative w-full py-20 px-6 md:px-12 lg:px-16 border-t border-white/[0.08] font-sans">
       <div className="max-w-6xl mx-auto">
         {/* Section Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 mb-3 rounded-md bg-[#15191A] border border-white/[0.08] text-[11px] font-mono text-sage uppercase tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-sage" />
-              <span>Faculty & Student Cohort</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-md bg-[#131718] border border-white/[0.1] text-[10px] font-mono tracking-widest text-[#A7B7A1] uppercase">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+              <span>SECTOR 08 // RESEARCH COLLECTIVE</span>
             </div>
-            <h2 className="text-3xl sm:text-5xl font-sans font-bold text-ivory tracking-tight">
+            <h2 className="text-4xl sm:text-5xl lg:text-6xl font-archivo font-black tracking-tight text-gradient-cyber leading-[0.98] drop-shadow-sm">
               THE PEOPLE
             </h2>
-            <p className="text-sm sm:text-base text-ivory/70 font-light mt-2 max-w-2xl leading-relaxed">
-              Student researchers, domain architects, and academic mentors driving all community research and computing initiatives.
+            <p className="text-sm sm:text-base text-[#B5B8AF] font-normal mt-3 max-w-2xl leading-relaxed">
+              Student researchers, domain architects, and academic mentors driving community research and computing initiatives.
             </p>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono text-ivory/60 bg-[#141819] px-3.5 py-2 rounded-lg border border-white/[0.08] self-start md:self-auto">
-            <ShieldCheck className="w-3.5 h-3.5 text-sage" />
-            <span>Verified MITS Academic Cohort</span>
+          <div className="flex items-center gap-2 text-xs font-mono text-[#A7B7A1] bg-[#131718] px-4 py-2 rounded-xl border border-white/[0.08] shadow-[0_4px_16px_rgba(0,0,0,0.3)] self-start md:self-auto crosshair-corner">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#24BFEA]" />
+            <span className="tracking-wider uppercase text-[11px] font-semibold">Verified MITS Academic Cohort</span>
           </div>
         </div>
 
