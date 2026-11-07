@@ -15,6 +15,7 @@ const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
 });
 
 import HUDNavbar from '@/components/ui/HUDNavbar';
+import ServerSideNav from '@/components/ui/ServerSideNav';
 import DepthTelemetry from '@/components/ui/DepthTelemetry';
 import ServerBladeModal from '@/components/ui/ServerBladeModal';
 import TerminalCLI from '@/components/ui/TerminalCLI';
@@ -195,17 +196,20 @@ export default function Home() {
           isProjecting={activeSection === 'chamber'}
           onOpenRackModal={() => setIsRackModalOpen(true)}
           sceneOpacity={isEditorialMode ? 0.0 : 1.0}
+          onNavigateToSection={handleNavigateToSection}
+          activeNavId={activeNavId}
         />
       )}
 
-      {/* 2. Minimal HUD Navigation Bar */}
+      {/* 2. Interactive Data Server Facility Navigation Rail (from GsR) */}
       <div
         className={`transition-opacity duration-700 ${
           isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'
         }`}
       >
-        <HUDNavbar
+        <ServerSideNav
           activeNavId={activeNavId}
+          scrollProgressRef={scrollProgressRef}
           onNavigateToSection={handleNavigateToSection}
           onToggleTerminal={() => setIsTerminalOpen((prev) => !prev)}
           isEditorialMode={isEditorialMode}

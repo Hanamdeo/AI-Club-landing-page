@@ -13,15 +13,16 @@ import BdxRobot from './BdxRobot';
 import EntranceGate from './landmarks/EntranceGate';
 import FoundationBay from './landmarks/FoundationBay';
 import ProjectionChamber from './landmarks/ProjectionChamber';
+import ServerRackBadges from './ServerRackBadges';
+import HolographicDataCentreProjection from './HolographicDataCentreProjection';
 
 /**
- * SceneContainer (Refinement V3)
- * High-Clarity Enterprise Autonomous AI Data Centre & Research Facility Canvas:
- * - Balanced architectural lighting hierarchy with cross-aisle rack illumination
- * - Pushed-back atmospheric depth fog (near: 24m, far: 95m) for razor-sharp foreground & midground
- * - Dual linear aisle ceiling downlights revealing server faces, vents, and RAF floor tiles
- * - Upward ceiling wash revealing FiberRunner, cable trays, and chilled water pipes
- * - Crisp, unblurred BDX-01 companion rendering
+ * SceneContainer (High-Performance Cyber Data Centre)
+ * Atmospheric Architectural Lighting & Holographic Infrastructure:
+ * - Holographic cube-matrix projection of server racks before physical form
+ * - In-world 3D Server Node Badges marking key facilities along the corridor
+ * - Deep cinematic contrast lighting with electric cyan rim Grazing & soft bounce
+ * - 60+ FPS optimized GPU pipeline
  */
 export default function SceneContainer({
   scrollProgress = 0,
@@ -31,6 +32,8 @@ export default function SceneContainer({
   onOpenRackModal,
   onToggleProjector,
   sceneOpacity = 1,
+  onNavigateToSection,
+  activeNavId = 'hero',
 }) {
   return (
     <div
@@ -50,65 +53,67 @@ export default function SceneContainer({
           precision: 'mediump',
         }}
       >
-        {/* Controlled Enterprise Atmosphere: Deep Industrial Slate */}
-        {/* Fog starts at distance 24 (Z = -11.5) preserving 100% sharpness in foreground */}
-        <color attach="background" args={['#101415']} />
-        <fog attach="fog" args={['#101415', 24, 90]} />
+        {/* Controlled Enterprise Atmosphere: Deep Midnight Slate */}
+        <color attach="background" args={['#0C1012']} />
+        <fog attach="fog" args={['#0C1012', 20, 85]} />
 
         {/* ============================================================== */}
-        {/* HIGH-PERFORMANCE DATA CENTRE LIGHTING ARCHITECTURE             */}
-        {/* Streamlined from 24 lights down to 5 balanced lights for 60FPS */}
+        {/* CINEMATIC DATA CENTRE LIGHTING ARCHITECTURE                     */}
+        {/* Deep contrast shadows, cool cyan rim grazes, crisp floor bounce */}
         {/* ============================================================== */}
-        {/* 1. Base Ambient: Crisp even baseline across entire corridor */}
-        <ambientLight color="#455254" intensity={1.25} />
+        {/* 1. Deep Midnight Base Ambient: Preserves true obsidian blacks on server faces */}
+        <ambientLight color="#0D171A" intensity={0.65} />
 
-        {/* 2. Key Overhead Downlight: 4500K Neutral White along corridor */}
+        {/* 2. Key Overhead Aisle Downlight: 5000K Clean White along cold aisle */}
         <directionalLight
-          position={[0, 9.0, 5]}
-          color="#FFFDF8"
-          intensity={1.5}
+          position={[0, 9.5, 4.0]}
+          color="#E8F8FA"
+          intensity={1.75}
         />
 
-        {/* Studio-Grade Lighting Suite for NEX-01 Autonomous Companion */}
-        {/* Soft Key Light: Reveals smooth ceramic curves and visor reflections */}
+        {/* 3. Cross-Aisle Rack Grazing Lights (Reveals drive caddies, louvers & mesh) */}
+        {/* Left Rack Wash: Electric Cyan Grazing beam */}
         <directionalLight
-          position={[2.8, 3.8, 11.2]}
-          color="#FFFDF7"
-          intensity={1.15}
-        />
-
-        {/* Cyan Rim Light: Grazes helmet silhouette and ear fins from behind */}
-        <directionalLight
-          position={[1.2, 3.2, 5.0]}
+          position={[4.8, 4.5, -12]}
           color="#00E5FF"
+          intensity={1.25}
+        />
+
+        {/* Right Rack Wash: Neon Sage-Emerald Grazing beam */}
+        <directionalLight
+          position={[-4.8, 4.5, -12]}
+          color="#22C55E"
           intensity={0.95}
         />
 
-        {/* Floor Indirect Bounce Fill: Softens under-chin and thruster shadows */}
+        {/* 4. Midground Cold Aisle Atmospheric Wash */}
+        <directionalLight
+          position={[-2.0, 4.0, -28]}
+          color="#A7B7A1"
+          intensity={1.1}
+        />
+
+        {/* Studio-Grade 3-Point Lighting for NEX-01 Robot Companion */}
+        {/* Key Light: High-clarity white revealing ceramic curvature */}
+        <directionalLight
+          position={[2.8, 3.8, 11.2]}
+          color="#FFFFFF"
+          intensity={1.4}
+        />
+
+        {/* Intense Cyan Rim Light: Iconic luminous Tron/Disney edge silhouette */}
+        <directionalLight
+          position={[1.2, 3.2, 5.0]}
+          color="#00F0FF"
+          intensity={1.35}
+        />
+
+        {/* Floor Indirect Bounce Fill: Softens underside shadows */}
         <pointLight
           position={[1.3, 0.4, 8.5]}
-          color="#E8E2D5"
-          intensity={0.65}
+          color="#8BE9FD"
+          intensity={0.55}
           distance={4.0}
-        />
-
-        {/* 3. Server Rack Face Cross-Wash Lighting (Reveals front panels & caddies) */}
-        <directionalLight
-          position={[-6, 5.0, -15]}
-          color="#E8F2F4"
-          intensity={1.15}
-        />
-        <directionalLight
-          position={[6, 5.0, -15]}
-          color="#E8F2F4"
-          intensity={1.15}
-        />
-
-        {/* 4. Sage Identity Accent Light (Foundation Bay & Midground) */}
-        <directionalLight
-          position={[-2.5, 3.0, -28]}
-          color="#A2B29F"
-          intensity={0.85}
         />
 
         {/* Dynamic Scroll-Controlled Camera along Cold Aisle */}
@@ -127,13 +132,16 @@ export default function SceneContainer({
         {/* 2. Industrial Ceiling & Overhead Cable Trays */}
         <DataCentreCeiling />
 
-        {/* 3. Enterprise Server Rack Lineup (Modular 42U Cabinets, Compute, GPUs, Storage) */}
+        {/* 3. Holographic Cube Projection Structures (Data centres projected before physical form) */}
+        <HolographicDataCentreProjection />
+
+        {/* 4. Enterprise Server Rack Lineup (Modular 42U Cabinets, Compute, GPUs, Storage) */}
         <EnterpriseServerRacks />
 
-        {/* 4. In-Row Precision Cooling Units (CRAH) */}
+        {/* 5. In-Row Precision Cooling Units (CRAH) */}
         <InRowCoolingUnits />
 
-        {/* 5. Suspended Overhead Technical Identity Signage */}
+        {/* 6. Suspended Overhead Technical Identity Signage */}
         <DataCentreSignage />
 
         {/* ============================================================== */}
@@ -148,6 +156,14 @@ export default function SceneContainer({
 
         {/* Section 03: The Projection Chamber Landmark */}
         <ProjectionChamber isProjecting={isProjecting} />
+
+        {/* Interactive In-World Server Rack Badges lining the cold aisle */}
+        <ServerRackBadges
+          scrollProgress={scrollProgress}
+          scrollProgressRef={scrollProgressRef}
+          activeNavId={activeNavId}
+          onNavigateToSection={onNavigateToSection}
+        />
 
         {/* NEX-01 Autonomous Robot Companion */}
         <BdxRobot

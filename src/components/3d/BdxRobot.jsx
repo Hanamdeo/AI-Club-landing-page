@@ -171,8 +171,39 @@ export default function BdxRobot({
       }
     };
 
+    // Draw smiling cyan mouth arc (◡) on the micro-LED visor
+    const drawSmile = (centerX, centerY, outerR, innerR) => {
+      for (let x = centerX - outerR - 15; x <= centerX + outerR + 15; x += dotSpacing) {
+        for (let y = centerY - 15; y <= centerY + outerR + 15; y += dotSpacing) {
+          const dx = x - centerX;
+          const dy = y - centerY;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+
+          if (dist >= innerR && dist <= outerR && dy >= 0) {
+            const angle = Math.atan2(dy, dx);
+            if (angle >= 0.18 * Math.PI && angle <= 0.82 * Math.PI) {
+              const grad = ctx.createRadialGradient(x, y, 0, x, y, dotSize * 2.2);
+              grad.addColorStop(0, '#00F0FF');
+              grad.addColorStop(0.35, 'rgba(0, 210, 255, 0.7)');
+              grad.addColorStop(1, 'rgba(0, 210, 255, 0)');
+              ctx.fillStyle = grad;
+              ctx.beginPath();
+              ctx.arc(x, y, dotSize * 2.2, 0, Math.PI * 2);
+              ctx.fill();
+
+              ctx.fillStyle = '#E6FCFF';
+              ctx.beginPath();
+              ctx.arc(x, y, dotSize * 0.90, 0, Math.PI * 2);
+              ctx.fill();
+            }
+          }
+        }
+      }
+    };
+
     drawArchEye(310, 310, 150, 95);
     drawArchEye(714, 310, 150, 95);
+    drawSmile(512, 350, 95, 68);
 
     const tex = new THREE.CanvasTexture(canvas);
     tex.needsUpdate = true;
@@ -558,6 +589,19 @@ export default function BdxRobot({
               {/* Inner High-Intensity White Core Segment */}
               <mesh position={[0, 0, 0.005]} rotation={[0, 0, Math.PI * 0.15]} renderOrder={11}>
                 <torusGeometry args={[0.078, 0.010, 16, 32, Math.PI * 0.70]} />
+                <meshBasicMaterial color="#E8FFFF" toneMapped={false} />
+              </mesh>
+            </group>
+
+            {/* Expressive Cute Smiling Mouth Arch (◡) */}
+            <group position={[0, -0.092, 0]} renderOrder={10}>
+              <mesh rotation={[0, 0, Math.PI * 1.15]}>
+                <torusGeometry args={[0.052, 0.015, 16, 32, Math.PI * 0.70]} />
+                <meshBasicMaterial color="#00E5FF" toneMapped={false} />
+              </mesh>
+              {/* Inner High-Intensity White Core Segment */}
+              <mesh position={[0, 0, 0.005]} rotation={[0, 0, Math.PI * 1.15]} renderOrder={11}>
+                <torusGeometry args={[0.052, 0.007, 16, 32, Math.PI * 0.68]} />
                 <meshBasicMaterial color="#E8FFFF" toneMapped={false} />
               </mesh>
             </group>
