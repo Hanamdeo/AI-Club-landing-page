@@ -185,17 +185,58 @@ export default function BdxRobot({
     };
   }, []);
 
+  const cycleList = useMemo(
+    () => ['HAPPY', 'LAUGH', 'COOL', 'CRY', 'SKEPTICAL', 'DEADPAN'],
+    []
+  );
+  const emojiCycleIndex = useRef(0);
+
   const handleClick = useCallback(
     (e) => {
       if (e) e.stopPropagation();
       isJumping.current = true;
       jumpTime.current = 0;
-      triggerEmotion('EXCITED', 2.6);
-      audioManager.playChirp();
+      const nextEmotion = cycleList[emojiCycleIndex.current % cycleList.length];
+      emojiCycleIndex.current = (emojiCycleIndex.current + 1) % cycleList.length;
+      triggerEmotion(nextEmotion, 4.0);
+      audioManager.playEmotionSound(nextEmotion);
       if (onToggleProjector) onToggleProjector();
     },
-    [onToggleProjector, triggerEmotion]
+    [cycleList, onToggleProjector, triggerEmotion]
   );
+
+  // Global window event listener for emotion triggers from UI docks or buttons
+  useEffect(() => {
+    const handleEmotionEvent = (e) => {
+      if (e && e.detail) {
+        triggerEmotion(e.detail, 4.0);
+        audioManager.playEmotionSound(e.detail);
+      }
+    };
+    window.addEventListener('bdx-emotion', handleEmotionEvent);
+    return () => window.removeEventListener('bdx-emotion', handleEmotionEvent);
+  }, [triggerEmotion]);
+
+  // Keyboard shortcut listener: Keys 1 to 6 trigger 😊, 😂, 😎, 😢, 🤨, 😑
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      const keyMap = {
+        '1': 'HAPPY',      // 😊
+        '2': 'LAUGH',      // 😂
+        '3': 'COOL',       // 😎
+        '4': 'CRY',        // 😢
+        '5': 'SKEPTICAL',  // 🤨
+        '6': 'DEADPAN',    // 😑
+      };
+      if (keyMap[e.key]) {
+        triggerEmotion(keyMap[e.key], 4.0);
+        audioManager.playEmotionSound(keyMap[e.key]);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [triggerEmotion]);
 
   // Digital Eye Blink Timer
   const blinkTimer = useRef(0);
@@ -417,11 +458,128 @@ export default function BdxRobot({
       });
     };
 
+    // -----------------------------------------------------------------
+    // EXPRESSIONS & EMOJIS (😊, 😂, 😎, 😢, 🤨, 😑)
+    // -----------------------------------------------------------------
     if (emotion === 'HAPPY') {
+      // 😊 Warm blushing smile
       drawArchEye(310, 285, 150, 92, 0.10 * Math.PI, 0.90 * Math.PI);
       drawArchEye(714, 285, 150, 92, 0.10 * Math.PI, 0.90 * Math.PI);
       drawBlush(235, 345);
       drawBlush(789, 345);
+    } else if (emotion === 'LAUGH') {
+      // 😂 Tears of Joy: Squeezed laughing eyes (> <) + streaming animated tears
+      // Left eye ">": vertex pointing inward at (360, 285)
+      for (let step = 0; step <= 8; step++) {
+        const frac = step / 8;
+        const ux1 = 360 - frac * 120;
+        const uy1 = 285 - frac * 45;
+        drawLedDot(ux1, uy1, dotSize * 1.15, '#00F0FF', '#FFFFFF');
+        drawLedDot(ux1, uy1 + 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
+        const lx1 = 360 - frac * 120;
+        const ly1 = 285 + frac * 45;
+        drawLedDot(lx1, ly1, dotSize * 1.15, '#00F0FF', '#FFFFFF');
+        drawLedDot(lx1, ly1 - 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
+      }
+
+      // Right eye "<": vertex pointing inward at (664, 285)
+      for (let step = 0; step <= 8; step++) {
+        const frac = step / 8;
+        const ux2 = 664 + frac * 120;
+        const uy2 = 285 - frac * 45;
+        drawLedDot(ux2, uy2, dotSize * 1.15, '#00F0FF', '#FFFFFF');
+        drawLedDot(ux2, uy2 + 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
+        const lx2 = 664 + frac * 120;
+        const ly2 = 285 + frac * 45;
+        drawLedDot(lx2, ly2, dotSize * 1.15, '#00F0FF', '#FFFFFF');
+        drawLedDot(lx2, ly2 - 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
+      }
+
+      // Animated streaming tears of joy spraying from outer corners
+      const tearPhase = (time * 4.5) % 1.0;
+      for (let i = 0; i < 3; i++) {
+        const p = (tearPhase + i * 0.33) % 1.0;
+        const tx = 220 - p * 80;
+        const ty = 285 + p * 60 + Math.sin(p * Math.PI) * -15;
+        drawLedDot(tx, ty, dotSize * 1.25, '#00D8FF', '#FFFFFF');
+        drawLedDot(tx + 8, ty - 4, dotSize * 0.8, '#00B4FF', '#E6FCFF');
+      }
+      for (let i = 0; i < 3; i++) {
+        const p = (tearPhase + i * 0.33) % 1.0;
+        const tx = 804 + p * 80;
+        const ty = 285 + p * 60 + Math.sin(p * Math.PI) * -15;
+        drawLedDot(tx, ty, dotSize * 1.25, '#00D8FF', '#FFFFFF');
+        drawLedDot(tx - 8, ty - 4, dotSize * 0.8, '#00B4FF', '#E6FCFF');
+      }
+      drawBlush(245, 345);
+      drawBlush(779, 345);
+    } else if (emotion === 'COOL') {
+      // 😎 Cyberpunk matrix sunglasses with neon frame & diagonal glare reflections
+      const drawLens = (x1, x2, y1, y2) => {
+        for (let x = x1; x <= x2; x += dotSpacing) {
+          for (let y = y1; y <= y2; y += dotSpacing) {
+            const isBorder = (x <= x1 + 12 || x >= x2 - 12 || y <= y1 + 12 || y >= y2 - 12);
+            const diag = (x - x1) - (y - y1) * 1.2;
+            const isGlare = (diag >= 20 && diag <= 46) || (diag >= 95 && diag <= 118);
+
+            if (isBorder) {
+              drawLedDot(x, y, dotSize * 1.05, '#00F0FF', '#FFFFFF');
+            } else if (isGlare) {
+              drawLedDot(x, y, dotSize * 0.95, '#00F0FF', '#FFFFFF');
+            } else {
+              drawLedDot(x, y, dotSize * 0.55, '#003B52', '#007A99');
+            }
+          }
+        }
+      };
+
+      drawLens(195, 425, 245, 325);
+      drawLens(599, 829, 245, 325);
+
+      // Connecting Bridge
+      for (let x = 425; x <= 599; x += dotSpacing) {
+        drawLedDot(x, 260, dotSize * 1.1, '#00F0FF', '#FFFFFF');
+        drawLedDot(x, 271, dotSize * 0.9, '#00C8FF', '#E6FCFF');
+      }
+    } else if (emotion === 'CRY') {
+      // 😢 Crying teardrop: sad downturned arches + falling tear
+      drawDownArchEye(310, 295, 142, 95);
+      drawDownArchEye(714, 295, 142, 95);
+
+      // Single animated luminous electric-blue teardrop rolling down left cheek
+      const tearProgress = (time * 1.2) % 1.0;
+      const tearY = 320 + tearProgress * 110;
+      drawLedDot(250, tearY - 8, dotSize * 0.7, '#00B4FF', '#E6FCFF');
+      drawLedDot(246, tearY, dotSize * 1.1, '#00E5FF', '#FFFFFF');
+      drawLedDot(254, tearY, dotSize * 1.1, '#00E5FF', '#FFFFFF');
+      drawLedDot(250, tearY + 7, dotSize * 1.35, '#00F0FF', '#FFFFFF');
+    } else if (emotion === 'SKEPTICAL') {
+      // 🤨 Raised Eyebrow (The Rock look):
+      // Left eye: high arched raised eyebrow + wide alert round eye
+      for (let step = 0; step <= 12; step++) {
+        const frac = step / 12;
+        const bx = 210 + frac * 200;
+        const by = 220 - Math.sin(frac * Math.PI) * 35;
+        drawLedDot(bx, by, dotSize * 1.15, '#00F0FF', '#FFFFFF');
+        drawLedDot(bx, by + 4, dotSize * 0.85, '#00E5FF', '#FFFFFF');
+      }
+      drawRoundEye(310, 290, 0, 0);
+
+      // Right eye: suspicious lowered narrowed squint bar
+      for (let x = 624; x <= 804; x += dotSpacing) {
+        drawLedDot(x, 280, dotSize * 1.05, '#00F0FF', '#FFFFFF');
+        drawLedDot(x, 294, dotSize * 0.85, '#00C8FF', '#E6FCFF');
+      }
+    } else if (emotion === 'DEADPAN') {
+      // 😑 Flat poker face: two completely straight horizontal line bars
+      for (let x = 220; x <= 400; x += dotSpacing) {
+        drawLedDot(x, 286, dotSize * 1.0, '#00F0FF', '#FFFFFF');
+        drawLedDot(x, 298, dotSize * 1.0, '#00F0FF', '#FFFFFF');
+      }
+      for (let x = 624; x <= 804; x += dotSpacing) {
+        drawLedDot(x, 286, dotSize * 1.0, '#00F0FF', '#FFFFFF');
+        drawLedDot(x, 298, dotSize * 1.0, '#00F0FF', '#FFFFFF');
+      }
     } else if (emotion === 'EXCITED') {
       drawCaretEye(310, 235);
       drawCaretEye(714, 235);
@@ -445,8 +603,47 @@ export default function BdxRobot({
 
     ctx.restore();
 
-    // Draw mouth (outside the blink scale squash)
-    if (emotion === 'CURIOUS') {
+    // -----------------------------------------------------------------
+    // MOUTH SHAPES PER EMOJI (OUTSIDE EYE BLINK SQUASH)
+    // -----------------------------------------------------------------
+    if (emotion === 'LAUGH') {
+      // 😂 Wide open laughing mouth (D-shape)
+      for (let x = 445; x <= 579; x += dotSpacing) {
+        drawLedDot(x, 345, dotSize * 1.05, '#00F0FF', '#FFFFFF');
+      }
+      const cx = 512;
+      const cy = 345;
+      for (let step = 0; step <= 12; step++) {
+        const angle = (step / 12) * Math.PI;
+        const mx = cx + Math.cos(angle) * 65;
+        const my = cy + Math.sin(angle) * 60;
+        drawLedDot(mx, my, dotSize * 1.05, '#00F0FF', '#FFFFFF');
+      }
+    } else if (emotion === 'COOL') {
+      // 😎 Confident asymmetrical smirk curling up on the right
+      for (let step = 0; step <= 10; step++) {
+        const frac = step / 10;
+        const mx = 460 + frac * 105;
+        const my = 372 - Math.pow(frac, 2.5) * 22;
+        drawLedDot(mx, my, dotSize * 1.1, '#00F0FF', '#FFFFFF');
+      }
+    } else if (emotion === 'CRY') {
+      // 😢 Trembling downturned sad frown
+      drawFrown(512, 396, 85, 60);
+    } else if (emotion === 'SKEPTICAL') {
+      // 🤨 Asymmetrical skeptical sideways squiggly mouth
+      for (let step = 0; step <= 9; step++) {
+        const frac = step / 9;
+        const mx = 465 + frac * 94;
+        const my = 374 + Math.sin(frac * Math.PI * 1.5) * 8;
+        drawLedDot(mx, my, dotSize * 1.0, '#00F0FF', '#FFFFFF');
+      }
+    } else if (emotion === 'DEADPAN') {
+      // 😑 Completely flat deadpan straight horizontal line
+      for (let x = 464; x <= 560; x += dotSpacing) {
+        drawLedDot(x, 370, dotSize * 1.0, '#00F0FF', '#FFFFFF');
+      }
+    } else if (emotion === 'CURIOUS') {
       const cx = 512;
       const cy = 368;
       for (let x = cx - 36; x <= cx + 36; x += dotSpacing) {
@@ -714,7 +911,34 @@ export default function BdxRobot({
     let targetGestureBounceY = 0;
     let targetArmFlutter = 0;
 
-    if (currentEmotion === 'EXCITED') {
+    if (currentEmotion === 'LAUGH') {
+      // 😂 Energetic joyous laughing wobble & wing flap
+      const laughShake = Math.sin(t * 22);
+      targetGestureBounceY = Math.abs(laughShake) * 0.12 * (1 - emotionProgress);
+      targetGestureTiltZ = Math.sin(t * 14) * 0.08 * (1 - emotionProgress);
+      targetArmFlutter = Math.sin(t * 24) * 0.16 * (1 - emotionProgress);
+      targetGestureNodX = Math.sin(t * 16) * 0.05 * (1 - emotionProgress);
+    } else if (currentEmotion === 'COOL') {
+      // 😎 Smooth confident chin lift & swagger hover
+      targetGestureNodX = -0.09;
+      targetGestureTiltZ = 0.05;
+      targetArmFlutter = -0.04;
+    } else if (currentEmotion === 'CRY') {
+      // 😢 Drooping sad head & subtle sob tremble
+      targetGestureNodX = 0.12;
+      targetGestureBounceY = -0.04 + Math.sin(t * 12) * 0.015;
+      targetArmFlutter = -0.06;
+    } else if (currentEmotion === 'SKEPTICAL') {
+      // 🤨 Quizzical raised head tilt (~9.5 deg) scrutinizing user
+      targetGestureTiltZ = 0.16;
+      targetGestureNodX = -0.04;
+    } else if (currentEmotion === 'DEADPAN') {
+      // 😑 Zero gesture, completely motionless posture
+      targetGestureTiltZ = 0;
+      targetGestureNodX = 0;
+      targetGestureBounceY = 0;
+      targetArmFlutter = 0;
+    } else if (currentEmotion === 'EXCITED') {
       const hopPhase = emotionProgress * Math.PI * 4;
       targetGestureBounceY = Math.max(0, Math.sin(hopPhase)) * 0.15 * (1 - emotionProgress);
       targetArmFlutter = Math.sin(t * 22) * 0.14 * (1 - emotionProgress);
@@ -775,8 +999,8 @@ export default function BdxRobot({
       }
     }
 
-    // Dynamic 3D Mesh Scaling (Arch eyes & mouth active in IDLE and HAPPY, smoothly hidden in other emotions)
-    const targetMeshScale = (currentEmotion === 'IDLE' || currentEmotion === 'HAPPY') ? 1.0 : 0.0;
+    // Dynamic 3D Mesh Scaling (Arch eyes & mouth active in IDLE, smoothly hidden in expressive emojis)
+    const targetMeshScale = (currentEmotion === 'IDLE') ? 1.0 : 0.0;
     meshScaleSmoothed.current += (targetMeshScale - meshScaleSmoothed.current) * (1 - Math.exp(-safeDelta * 14.0));
     const s = meshScaleSmoothed.current;
     const eyeScaleY = (isBlinking.current ? 0.06 : 1.0) * s;
@@ -802,6 +1026,9 @@ export default function BdxRobot({
     }
     if (currentEmotion === 'THINKING' && lastRenderStateRef.current.step !== timeStep) {
       needsRedraw = true;
+    }
+    if (currentEmotion === 'LAUGH' || currentEmotion === 'CRY') {
+      needsRedraw = true; // Actively animate streaming and rolling tears
     }
     if (currentEmotion === 'CURIOUS') {
       if (

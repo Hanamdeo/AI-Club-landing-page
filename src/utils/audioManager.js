@@ -246,6 +246,91 @@ class SoundEngine {
   }
 
   /**
+   * Procedural Audio Synthesis for Specific Emoji Expressions: 😊, 😂, 😎, 😢, 🤨, 😑
+   */
+  playEmotionSound(emotion) {
+    this.init();
+    if (this.isMuted || !this.ctx) return;
+
+    try {
+      const now = this.ctx.currentTime;
+      if (emotion === 'LAUGH') {
+        // 😂 Rapid cheerful staccato chuckles
+        for (let i = 0; i < 4; i++) {
+          const osc = this.ctx.createOscillator();
+          const g = this.ctx.createGain();
+          const t0 = now + i * 0.07;
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(1100 + i * 90, t0);
+          osc.frequency.exponentialRampToValueAtTime(1450, t0 + 0.05);
+          g.gain.setValueAtTime(0.18, t0);
+          g.gain.exponentialRampToValueAtTime(0.001, t0 + 0.06);
+          osc.connect(g);
+          g.connect(this.ctx.destination);
+          osc.start(t0);
+          osc.stop(t0 + 0.065);
+        }
+      } else if (emotion === 'COOL') {
+        // 😎 Futuristic 2-tone cyber synth chime
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(440, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.18);
+        g.gain.setValueAtTime(0.15, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+        osc.connect(g);
+        g.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.36);
+      } else if (emotion === 'CRY') {
+        // 😢 Sad descending whimper glide
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(540, now);
+        osc.frequency.linearRampToValueAtTime(310, now + 0.28);
+        g.gain.setValueAtTime(0.14, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.30);
+        osc.connect(g);
+        g.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.32);
+      } else if (emotion === 'SKEPTICAL') {
+        // 🤨 Quizzical rising pitch question chirp
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(420, now);
+        osc.frequency.exponentialRampToValueAtTime(960, now + 0.16);
+        g.gain.setValueAtTime(0.16, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+        osc.connect(g);
+        g.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.24);
+      } else if (emotion === 'DEADPAN') {
+        // 😑 Low dry flat boop
+        const osc = this.ctx.createOscillator();
+        const g = this.ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.setValueAtTime(160, now);
+        g.gain.setValueAtTime(0.10, now);
+        g.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+        osc.connect(g);
+        g.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } else {
+        // 😊 Melodic sweet chirp
+        this.playChirp();
+      }
+    } catch {
+      // Ignore
+    }
+  }
+
+  /**
    * Mechanical Servo Slide Sound for Server Blade Drawer
    */
   playServo() {
