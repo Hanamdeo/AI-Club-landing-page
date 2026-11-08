@@ -3,6 +3,7 @@
 import React, { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
+import { getZoneTransitionState } from '@/utils/zoneTransition';
 
 /**
  * HolographicDataCentreProjection
@@ -12,13 +13,15 @@ import { useFrame } from '@react-three/fiber';
  * Visual Features:
  * - Glowing electric cyan/sage wireframe cube cages (EIA 42U rack bounds)
  * - Volumetric downward laser projection beams streaming from overhead ceiling trays
- * - Scanning laser plane sweeping vertically through the racks
+ * - Scanning laser plane sweeping vertically through the racks during cluster transitions
  * - Digital voxel grid lattice layers
  * - Smooth materialization transition from pure digital projection to physical solid hardware
  */
 export default function HolographicDataCentreProjection({
   materializeProgress = 1.0, // 0.0 = pure hologram cubes, 1.0 = fully materialized physical racks
   isScanning = false,
+  scrollProgress = 0,
+  scrollProgressRef,
 }) {
   const groupRef = useRef();
   const scanPlaneRef = useRef();
@@ -93,33 +96,35 @@ export default function HolographicDataCentreProjection({
 
   useFrame(({ clock }) => {
     const t = clock.getElapsedTime();
+    const rawP = scrollProgressRef?.current !== undefined ? scrollProgressRef.current : scrollProgress;
+    const { sceneState } = getZoneTransitionState(rawP);
+    const activeScan = isScanning || sceneState === 'transitioning';
 
-    // Calculate dynamic hologram visibility / opacity based on materializeProgress
-    // When materializeProgress is 1.0 (fully formed), keep subtle ambient holographic telemetry glow (or pulse if scanning)
-    const baseHoloAlpha = isScanning ? 0.75 : Math.max(0, 1.0 - materializeProgress);
-    const pulse = 0.5 + Math.sin(t * 3.2) * 0.25;
+    // Calculate dynamic hologram visibility / opacity based on materializeProgress and sceneState
+    const baseHoloAlpha = activeScan ? 0.85 : Math.max(0, 1.0 - materializeProgress);
+    const pulse = 0.5 + Math.sin(t * 3.6) * 0.3;
 
     if (cubeMeshRef.current) {
-      cubeMeshRef.current.material.opacity = (baseHoloAlpha * 0.18 + (isScanning ? pulse * 0.15 : 0.02));
+      cubeMeshRef.current.material.opacity = (baseHoloAlpha * 0.18 + (activeScan ? pulse * 0.16 : 0.02));
       cubeMeshRef.current.visible = cubeMeshRef.current.material.opacity > 0.005;
     }
 
     if (edgeLinesRef.current) {
-      edgeLinesRef.current.material.opacity = (baseHoloAlpha * 0.85 + (isScanning ? pulse * 0.4 : 0.12));
+      edgeLinesRef.current.material.opacity = (baseHoloAlpha * 0.85 + (activeScan ? pulse * 0.45 : 0.12));
       edgeLinesRef.current.visible = edgeLinesRef.current.material.opacity > 0.01;
     }
 
     if (beamLinesRef.current) {
-      beamLinesRef.current.material.opacity = baseHoloAlpha * 0.45;
-      beamLinesRef.current.visible = baseHoloAlpha > 0.05;
+      beamLinesRef.current.material.opacity = (baseHoloAlpha * 0.45 + (activeScan ? 0.35 : 0.0));
+      beamLinesRef.current.visible = beamLinesRef.current.material.opacity > 0.05;
     }
 
-    // Vertical sweep scanning plane
+    // Vertical sweep scanning plane during cluster transit
     if (scanPlaneRef.current) {
-      const scanCycle = (t * 1.4) % 2.0; // 0 to 2
+      const scanCycle = (t * 1.8) % 2.0;
       const scanY = 0.1 + scanCycle * 1.2;
       scanPlaneRef.current.position.y = scanY;
-      scanPlaneRef.current.material.opacity = (baseHoloAlpha > 0.05 || isScanning) ? 0.45 : 0.0;
+      scanPlaneRef.current.material.opacity = (baseHoloAlpha > 0.05 || activeScan) ? 0.55 : 0.0;
     }
   });
 
