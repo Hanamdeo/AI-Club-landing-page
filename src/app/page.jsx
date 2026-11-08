@@ -14,7 +14,8 @@ const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
   ssr: false,
 });
 
-import HUDNavbar from '@/components/ui/HUDNavbar';
+import Link from 'next/link';
+import { ArrowUpRight, Calendar, Users, Cpu, Code, BookOpen, Compass, ShieldCheck, ChevronUp } from 'lucide-react';
 import ServerSideNav from '@/components/ui/ServerSideNav';
 import DepthTelemetry from '@/components/ui/DepthTelemetry';
 import ServerBladeModal from '@/components/ui/ServerBladeModal';
@@ -25,14 +26,6 @@ import BdxHolographicProjector from '@/components/ui/BdxHolographicProjector';
 import Zone1Hero from '@/components/ui/zones/Zone1Hero';
 import Zone2Foundation from '@/components/ui/zones/Zone2Foundation';
 import Section03ProjectionChamber from '@/components/ui/zones/Section03ProjectionChamber';
-
-// EXPERIENCE B: FACILITY TERMINAL & EDITORIAL ARCHIVE (SECTIONS 04 - 09)
-import DiscussionRoom from '@/components/ui/editorial/DiscussionRoom';
-import OperationsBoard from '@/components/ui/editorial/OperationsBoard';
-import AiRadar from '@/components/ui/editorial/AiRadar';
-import ProjectArchive from '@/components/ui/editorial/ProjectArchive';
-import ThePeople from '@/components/ui/editorial/ThePeople';
-import JoinTheNetwork from '@/components/ui/editorial/JoinTheNetwork';
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -326,25 +319,185 @@ export default function Home() {
           </div>
         </div>
 
-        {/* SECTION 04: THE DISCUSSION ROOM (Clean, High-Contrast 2D Layout) */}
-        <DiscussionRoom />
+        {/* CENTRAL FACILITY TERMINAL: DEDICATED SECTOR ACCESS PORTALS */}
+        <div className="max-w-6xl mx-auto py-16 sm:py-20 px-6 sm:px-10">
+          <div className="text-center mb-12">
+            <span className="text-[10px] font-mono text-[#A7B7A1] uppercase tracking-widest block mb-2">
+              SECTORS 04 TO 09 // CENTRAL REPOSITORY DIRECTORY
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-labeouf font-bold text-gradient-cyber mb-4">
+              RESEARCH ARCHIVES & INTEL COMMONS
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-400 font-sans max-w-xl mx-auto leading-relaxed">
+              Explore dedicated departmental hubs. Inspect verified hackathon dispatches, student research implementations, core leadership cadre, and join the network.
+            </p>
+          </div>
 
-        {/* SECTION 05: THE OPERATIONS BOARD (Live Project & Milestone Sprints) */}
-        <OperationsBoard />
+          {/* 6 High-Contrast Sector Portal Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+            {/* 1. Operations & Hackathons */}
+            <Link
+              href="/events"
+              className="group rounded-2xl p-6 bg-[#121617]/90 border border-white/[0.08] hover:border-[#24BFEA]/50 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#A7B7A1] border border-white/[0.08]">
+                    SECTOR 05 // OPERATIONS
+                  </span>
+                  <Calendar className="w-4 h-4 text-[#24BFEA] group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-xl font-labeouf font-bold text-ivory group-hover:text-[#24BFEA] transition-colors mb-2">
+                  Operations Board
+                </h3>
+                <p className="text-xs text-slate-400 font-sans leading-relaxed mb-6">
+                  Annual 36-hour hackathons, low-latency Triton/CUDA acceleration workshops, and competitive code sprints.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-[#24BFEA] font-semibold">
+                <span>VIEW 5 ACTIVE DISPATCHES</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </Link>
 
-        {/* SECTION 06: AI RADAR (Model & Technology Radar Horizon) */}
-        <AiRadar />
+            {/* 2. Research & Discussions */}
+            <Link
+              href="/research"
+              className="group rounded-2xl p-6 bg-[#121617]/90 border border-white/[0.08] hover:border-[#24BFEA]/50 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#A7B7A1] border border-white/[0.08]">
+                    SECTOR 04 // KNOWLEDGE
+                  </span>
+                  <BookOpen className="w-4 h-4 text-signal-green group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-xl font-labeouf font-bold text-ivory group-hover:text-signal-green transition-colors mb-2">
+                  Research Commons
+                </h3>
+                <p className="text-xs text-slate-400 font-sans leading-relaxed mb-6">
+                  Weekly reading circles, sparse attention mechanisms, distributed KV caches, and adversarial paper debates.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-signal-green font-semibold">
+                <span>4 RESEARCH LAB TRACKS</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </Link>
 
-        {/* SECTION 07: PROJECT ARCHIVE (Searchable & Filterable Research Papers & Repos) */}
-        <ProjectArchive />
+            {/* 3. Project Archive */}
+            <Link
+              href="/projects"
+              className="group rounded-2xl p-6 bg-[#121617]/90 border border-white/[0.08] hover:border-[#24BFEA]/50 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#A7B7A1] border border-white/[0.08]">
+                    SECTOR 07 // REPOSITORIES
+                  </span>
+                  <Code className="w-4 h-4 text-[#A7B7A1] group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-xl font-labeouf font-bold text-ivory group-hover:text-[#A7B7A1] transition-colors mb-2">
+                  Project Archive
+                </h3>
+                <p className="text-xs text-slate-400 font-sans leading-relaxed mb-6">
+                  Sub-millisecond distributed KV caches, WebGPU Gaussian splatting renderers, and clinical AI systems.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-[#A7B7A1] font-semibold">
+                <span>INSPECT REPOSITORIES</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </Link>
 
-        {/* SECTION 08: THE PEOPLE (Student Leads & Research Cadre Directory) */}
-        <ThePeople />
+            {/* 4. The People / Team */}
+            <Link
+              href="/team"
+              className="group rounded-2xl p-6 bg-[#121617]/90 border border-white/[0.08] hover:border-[#24BFEA]/50 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#A7B7A1] border border-white/[0.08]">
+                    SECTOR 08 // THE PEOPLE
+                  </span>
+                  <Users className="w-4 h-4 text-slate-300 group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-xl font-labeouf font-bold text-ivory group-hover:text-[#24BFEA] transition-colors mb-2">
+                  The Team
+                </h3>
+                <p className="text-xs text-slate-400 font-sans leading-relaxed mb-6">
+                  Faculty mentors, student club leads, research directors, and engineering domain coordinators across MITS.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-ivory font-semibold">
+                <span>VIEW RESEARCH CADRE</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </Link>
 
-        {/* SECTION 09: JOIN THE NETWORK (Access Clearance Application Terminal) */}
-        <JoinTheNetwork
-          onReturnTop={() => handleNavigateToSection('section-arrival', 'hero')}
-        />
+            {/* 5. About the Collective */}
+            <Link
+              href="/about"
+              className="group rounded-2xl p-6 bg-[#121617]/90 border border-white/[0.08] hover:border-[#24BFEA]/50 transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#A7B7A1] border border-white/[0.08]">
+                    SECTOR 06 // CHARTER
+                  </span>
+                  <Compass className="w-4 h-4 text-[#A7B7A1] group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-xl font-labeouf font-bold text-ivory group-hover:text-[#A7B7A1] transition-colors mb-2">
+                  About AI Club
+                </h3>
+                <p className="text-xs text-slate-400 font-sans leading-relaxed mb-6">
+                  Pioneering machine intelligence philosophy, three innovation pillars, and real-time AI Radar technology horizon.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-[#A7B7A1] font-semibold">
+                <span>READ FOUNDATIONAL CHARTER</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </Link>
+
+            {/* 6. Join the Network */}
+            <Link
+              href="/join"
+              className="group rounded-2xl p-6 bg-gradient-to-br from-[#121617] to-[#141C18] border border-signal-green/30 hover:border-signal-green transition-all duration-300 shadow-[0_4px_24px_rgba(34,197,94,0.15)] flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-signal-green/15 text-signal-green border border-signal-green/30 font-bold">
+                    SECTOR 09 // INTAKE
+                  </span>
+                  <ShieldCheck className="w-4 h-4 text-signal-green group-hover:scale-110 transition-transform" />
+                </div>
+                <h3 className="text-xl font-labeouf font-bold text-ivory group-hover:text-signal-green transition-colors mb-2">
+                  Join The Network
+                </h3>
+                <p className="text-xs text-slate-300 font-sans leading-relaxed mb-6">
+                  Clearance application for student researchers, systems engineers, and operations leads across all cohorts.
+                </p>
+              </div>
+              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between text-xs font-mono text-signal-green font-bold">
+                <span>APPLY FOR CLEARANCE</span>
+                <ArrowUpRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+              </div>
+            </Link>
+          </div>
+
+          {/* Bottom Return to Arrival Button */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-8 border-t border-white/[0.08] text-xs font-mono text-slate-500">
+            <span>MADHAV INSTITUTE OF TECHNOLOGY & SCIENCE • DEPARTMENT OF CSE & AI</span>
+            <button
+              onClick={() => handleNavigateToSection('section-arrival', 'hero')}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-white/[0.08] text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <ChevronUp className="w-3.5 h-3.5" />
+              <span>RETURN TO CORRIDOR THRESHOLD</span>
+            </button>
+          </div>
+        </div>
       </div>
     </main>
   );

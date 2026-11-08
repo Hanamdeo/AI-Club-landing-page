@@ -64,6 +64,19 @@ export function getPastEvents() {
 }
 
 /**
+ * Find event by slug or id
+ */
+export function getEventBySlug(slug) {
+  if (!slug) return null;
+  const all = getAllEvents();
+  return (
+    all.find((ev) => ev.slug === slug || ev.id === slug) ||
+    all.find((ev) => ev.id.toLowerCase() === slug.toLowerCase()) ||
+    null
+  );
+}
+
+/**
  * Get all discussions with dynamic statuses
  */
 export function getAllDiscussions() {

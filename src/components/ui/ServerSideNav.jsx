@@ -1,47 +1,43 @@
 'use client';
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Bot, ChevronRight, Terminal, Menu, X, Sparkles } from 'lucide-react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Bot, ChevronRight, Terminal, Menu, X } from 'lucide-react';
 import AudioToggle from './AudioToggle';
 import { audioManager } from '@/utils/audioManager';
 
 export const SERVER_NODE_ITEMS = [
-  { id: 'hero', code: '01', label: 'Home', targetId: 'section-arrival', zProgress: 0.05 },
-  { id: 'discussions', code: '02', label: 'Discussions', targetId: 'discussions', zProgress: 0.22 },
-  { id: 'events', code: '03', label: 'Events', targetId: 'events', zProgress: 0.38 },
-  { id: 'radar', code: '04', label: 'AI Radar', targetId: 'radar', zProgress: 0.55 },
-  { id: 'projects', code: '05', label: 'Projects', targetId: 'projects', zProgress: 0.70 },
-  { id: 'team', code: '06', label: 'Team', targetId: 'team', zProgress: 0.85 },
-  { id: 'join', code: '07', label: 'Join', targetId: 'join-network', zProgress: 0.96 },
+  { id: 'home', code: '01', label: 'Facility 3D', href: '/', zProgress: 0.05 },
+  { id: 'events', code: '02', label: 'Events', href: '/events', zProgress: 0.22 },
+  { id: 'research', code: '03', label: 'Research', href: '/research', zProgress: 0.38 },
+  { id: 'projects', code: '04', label: 'Projects', href: '/projects', zProgress: 0.55 },
+  { id: 'team', code: '05', label: 'Team', href: '/team', zProgress: 0.70 },
+  { id: 'about', code: '06', label: 'About', href: '/about', zProgress: 0.85 },
+  { id: 'join', code: '07', label: 'Join', href: '/join', zProgress: 0.96 },
 ];
 
 /**
  * ServerSideNav
  * Hover-activated Precision Architectural Navigation Bar docked on the side of the Data Centre.
  * Seamlessly matches the #101415 industrial data facility background aesthetic.
- *
- * Behavior:
- * - Resting state: Slim, non-obtrusive 44px dock on the left with glowing AI badge & rack status dots.
- *   Does NOT block or overlap hero titles or facility view.
- * - Hovered state: Smoothly expands into full interactive menu with section pills, BOT tracker,
- *   CLI launcher, and audio toggle.
- * - Mobile: Controlled via top-left floating toggle button.
+ * Connects directly to dedicated Next.js routes.
  */
 export default function ServerSideNav({
-  activeNavId = 'hero',
   scrollProgress = 0,
   scrollProgressRef,
-  onNavigateToSection,
   onToggleTerminal,
-  isEditorialMode = false,
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [activeRobotNodeId, setActiveRobotNodeId] = useState('hero');
+  const [activeRobotNodeId, setActiveRobotNodeId] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
   const leaveTimerRef = useRef(null);
+  const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
-  // Synchronize robot location along the cold aisle via shared scroll ref
+  // Synchronize robot location along the cold aisle via shared scroll ref on Home
   useEffect(() => {
+    if (!isHomePage) return;
     let animId;
     const checkRobotPos = () => {
       const sp = scrollProgressRef?.current !== undefined ? scrollProgressRef.current : scrollProgress;
@@ -50,15 +46,14 @@ export default function ServerSideNav({
         const closestDiff = Math.abs(sp - SERVER_NODE_ITEMS[closestIdx].zProgress);
         return currentDiff < closestDiff ? idx : closestIdx;
       }, 0);
-      const closestId = SERVER_NODE_ITEMS[activeIdx]?.id || 'hero';
+      const closestId = SERVER_NODE_ITEMS[activeIdx]?.id || 'home';
       setActiveRobotNodeId((prev) => (prev !== closestId ? closestId : prev));
       animId = requestAnimationFrame(checkRobotPos);
     };
     animId = requestAnimationFrame(checkRobotPos);
     return () => cancelAnimationFrame(animId);
-  }, [scrollProgressRef, scrollProgress]);
+  }, [scrollProgressRef, scrollProgress, isHomePage]);
 
-  // Clean debounce for hover exit to prevent accidental flickers
   const handleMouseEnter = useCallback(() => {
     if (leaveTimerRef.current) {
       clearTimeout(leaveTimerRef.current);
@@ -79,19 +74,17 @@ export default function ServerSideNav({
     };
   }, []);
 
-  const handleClick = useCallback(
-    (targetId, navId) => {
+  const handleLinkClick = () => {
+    try {
       audioManager.playClick();
-      setMobileOpen(false);
-      if (onNavigateToSection) {
-        onNavigateToSection(targetId, navId);
-      }
-    },
-    [onNavigateToSection]
-  );
+    } catch {}
+    setMobileOpen(false);
+  };
 
   const handleTerminal = useCallback(() => {
-    audioManager.playClick();
+    try {
+      audioManager.playClick();
+    } catch {}
     if (onToggleTerminal) onToggleTerminal();
   }, [onToggleTerminal]);
 
@@ -99,7 +92,7 @@ export default function ServerSideNav({
 
   return (
     <>
-      {/* Mobile Floating Quick-Toggle Button (Visible on screens < 768px) */}
+      {/* Mobile Floating Quick-Toggle Button */}
       <div className="fixed top-4 left-4 z-50 md:hidden pointer-events-auto">
         <button
           onClick={() => setMobileOpen(!mobileOpen)}
@@ -109,7 +102,7 @@ export default function ServerSideNav({
           <div className="w-5 h-5 rounded bg-[#161B1C] border border-sage/40 flex items-center justify-center font-mono text-[9px] text-sage font-bold">
             AI
           </div>
-          <span className="font-semibold text-[11px] tracking-wide text-ivory">NAVIGATION</span>
+          <span className="font-semibold text-[11px] tracking-wide text-ivory">ROUTER</span>
           {mobileOpen ? <X className="w-3.5 h-3.5 text-sage" /> : <Menu className="w-3.5 h-3.5 text-sage" />}
         </button>
       </div>
@@ -119,9 +112,7 @@ export default function ServerSideNav({
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         className={`fixed left-3 sm:left-4 top-1/2 -translate-y-1/2 z-40 select-none font-sans pointer-events-auto transition-all duration-300 ${
-          mobileOpen
-            ? 'flex flex-col opacity-100'
-            : 'hidden md:flex flex-col'
+          mobileOpen ? 'flex flex-col opacity-100' : 'hidden md:flex flex-col'
         }`}
         aria-label="Facility Data Server Navigation"
       >
@@ -132,8 +123,9 @@ export default function ServerSideNav({
         >
           {/* Header Brand Node */}
           <div className="flex items-center justify-between px-1.5 py-1.5 border-b border-white/[0.06] mb-0.5">
-            <button
-              onClick={() => handleClick('section-arrival', 'hero')}
+            <Link
+              href="/"
+              onClick={handleLinkClick}
               className="flex items-center gap-2 text-left group cursor-pointer w-full overflow-hidden"
             >
               <div className="w-6 h-6 rounded-md bg-[#161B1C] border border-sage/40 flex items-center justify-center font-mono shrink-0 transition-colors group-hover:border-sage shadow-[0_0_10px_rgba(162,178,159,0.2)]">
@@ -145,26 +137,27 @@ export default function ServerSideNav({
                     AI CLUB
                   </span>
                   <span className="text-[8px] font-mono text-sage/80 tracking-tight truncate">
-                    {isEditorialMode ? 'EDITORIAL ARCHIVE' : 'IMMERSIVE 3D'}
+                    {isHomePage ? '3D COLD AISLE' : 'RESEARCH PORTAL'}
                   </span>
                 </div>
               )}
-            </button>
+            </Link>
           </div>
 
           {/* Interactive Navigation Pills (Expanded Mode) */}
           {isExpanded ? (
             <div className="flex flex-col gap-1 py-1 animate-fadeIn">
               {SERVER_NODE_ITEMS.map((item) => {
-                const isActiveSection = activeNavId === item.id;
-                const isRobotHere = !isEditorialMode && activeRobotNodeId === item.id;
+                const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+                const isRobotHere = isHomePage && activeRobotNodeId === item.id;
 
                 return (
-                  <button
+                  <Link
                     key={item.id}
-                    onClick={() => handleClick(item.targetId, item.id)}
+                    href={item.href}
+                    onClick={handleLinkClick}
                     className={`group relative flex items-center justify-between gap-2 px-3 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer ${
-                      isActiveSection
+                      isActive
                         ? 'text-sage bg-[#161B1C] border border-sage/60 shadow-sage-glow font-semibold'
                         : isRobotHere
                         ? 'text-ivory bg-[#141819] border border-sage/35 hover:border-sage/60 font-medium'
@@ -172,13 +165,13 @@ export default function ServerSideNav({
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
-                      {/* Active / Robot Indicator Dot */}
+                      {/* Active Indicator Dot */}
                       <span
                         className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
-                          isActiveSection
+                          isActive
                             ? 'bg-sage shadow-[0_0_8px_#A2B29F]'
                             : isRobotHere
-                            ? 'bg-signal-green animate-pulse'
+                            ? 'bg-signal-green animate-pulse shadow-[0_0_8px_#22C55E]'
                             : 'bg-white/20 group-hover:bg-white/40'
                         }`}
                       />
@@ -197,7 +190,7 @@ export default function ServerSideNav({
                     ) : (
                       <ChevronRight className="w-3 h-3 text-ivory/30 group-hover:text-sage group-hover:translate-x-0.5 transition-all shrink-0" />
                     )}
-                  </button>
+                  </Link>
                 );
               })}
             </div>
@@ -205,8 +198,8 @@ export default function ServerSideNav({
             /* Collapsed Resting State: Minimalist Sleek Server Dots */
             <div className="flex flex-col items-center gap-2.5 py-3.5 my-0.5 cursor-pointer" title="Hover to expand navigation">
               {SERVER_NODE_ITEMS.map((item) => {
-                const isActiveSection = activeNavId === item.id;
-                const isRobotHere = !isEditorialMode && activeRobotNodeId === item.id;
+                const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+                const isRobotHere = isHomePage && activeRobotNodeId === item.id;
 
                 return (
                   <div
@@ -215,7 +208,7 @@ export default function ServerSideNav({
                   >
                     <span
                       className={`rounded-full transition-all duration-300 ${
-                        isActiveSection
+                        isActive
                           ? 'w-2 h-2 bg-sage shadow-[0_0_10px_#A2B29F]'
                           : isRobotHere
                           ? 'w-2 h-2 bg-signal-green animate-pulse shadow-[0_0_8px_#22C55E]'

@@ -18,6 +18,7 @@ export const SERVER_NODES = [
     code: '01',
     label: 'Home',
     subtext: 'Facility Arrival',
+    href: '/',
     targetId: 'section-arrival',
     position: [-2.05, 1.88, 4.5],
     isLeft: true,
@@ -25,8 +26,9 @@ export const SERVER_NODES = [
   {
     id: 'discussions',
     code: '02',
-    label: 'Discussions',
+    label: 'Research',
     subtext: 'Debate & GD Core',
+    href: '/research',
     targetId: 'discussions',
     position: [2.05, 1.88, -2.0],
     isLeft: false,
@@ -36,6 +38,7 @@ export const SERVER_NODES = [
     code: '03',
     label: 'Events',
     subtext: 'Operations & Hackathons',
+    href: '/events',
     targetId: 'events',
     position: [-2.05, 1.88, -8.0],
     isLeft: true,
@@ -43,8 +46,9 @@ export const SERVER_NODES = [
   {
     id: 'radar',
     code: '04',
-    label: 'AI Radar',
+    label: 'About',
     subtext: 'Research & Signals',
+    href: '/about',
     targetId: 'radar',
     position: [2.05, 1.88, -13.5],
     isLeft: false,
@@ -54,6 +58,7 @@ export const SERVER_NODES = [
     code: '05',
     label: 'Projects',
     subtext: 'Deployed Models',
+    href: '/projects',
     targetId: 'projects',
     position: [-2.05, 1.88, -19.5],
     isLeft: true,
@@ -63,6 +68,7 @@ export const SERVER_NODES = [
     code: '06',
     label: 'Team',
     subtext: 'Core Researchers',
+    href: '/team',
     targetId: 'team',
     position: [2.05, 1.88, -26.0],
     isLeft: false,
@@ -72,6 +78,7 @@ export const SERVER_NODES = [
     code: '07',
     label: 'Join',
     subtext: 'Network Access',
+    href: '/join',
     targetId: 'join-network',
     position: [-2.05, 1.88, -32.5],
     isLeft: true,
@@ -111,8 +118,10 @@ export default function ServerRackBadges({
 
   const handleBadgeClick = (node, e) => {
     if (e) e.stopPropagation();
-    audioManager.playClick();
-    if (onNavigateToSection) {
+    try { audioManager.playClick(); } catch {}
+    if (node.href && node.href !== '/' && typeof window !== 'undefined') {
+      window.location.href = node.href;
+    } else if (onNavigateToSection) {
       onNavigateToSection(node.targetId, node.id);
     }
   };

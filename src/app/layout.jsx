@@ -1,6 +1,7 @@
 import localFont from 'next/font/local';
 import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk, Syne } from 'next/font/google';
 import './globals.css';
+import GlobalNavShell from '@/components/ui/GlobalNavShell';
 
 // Futuristic Techno Display Font: LaBeouf
 const labeouf = localFont({
@@ -100,6 +101,7 @@ export default function RootLayout({ children }) {
       className={`dark ${labeouf.variable} ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
+        <GlobalNavShell />
         {children}
       </body>
     </html>

@@ -10,6 +10,7 @@
 export const EVENTS = [
   {
     id: "event-001",
+    slug: "hack-ai-national-hackathon",
     title: "HACK_AI: 36-Hour National Autonomous Hackathon",
     description: "Annual flagship 36-hour hackathon bringing together over 300 builders to prototype autonomous agents, multi-agent frameworks, multimodal systems, and high-impact assistive tools.",
     date: "2026-11-15",
@@ -28,6 +29,7 @@ export const EVENTS = [
   },
   {
     id: "event-002",
+    slug: "cuda-kernel-optimization-workshop",
     title: "CUDA Kernel Optimization & TensorRT Acceleration Workshop",
     description: "Hands-on deep dive into parallel hardware architectures, writing custom Triton and CUDA kernels, memory coalescing, and deploying low-latency model inference on workstation GPUs.",
     date: "2026-11-22",
@@ -45,6 +47,7 @@ export const EVENTS = [
   },
   {
     id: "event-003",
+    slug: "agentic-ai-protocol-symposium",
     title: "Agentic AI & Protocol Systems Symposium",
     description: "Technical symposium exploring Model Context Protocol (MCP), tool-use schemas, recursive self-correction, and sandboxed execution environments with industry practitioners.",
     date: "2026-12-05",
@@ -62,6 +65,7 @@ export const EVENTS = [
   },
   {
     id: "event-004",
+    slug: "tinyml-on-edge-workshop",
     title: "TinyML on Edge: Deploying Quantized Neural Nets on Microcontrollers",
     description: "Practical engineering session on INT8 post-training quantization, pruning, and flashing audio anomaly detectors directly to STM32 and ARM Cortex-M4 microcontrollers.",
     date: "2026-12-18",
@@ -79,6 +83,7 @@ export const EVENTS = [
   },
   {
     id: "event-005",
+    slug: "algorithmic-code-sprint-gnn",
     title: "Algorithmic Code Sprint: Graph Neural Networks & Search",
     description: "A 4-hour competitive programming and ML challenge focusing on GNN representation learning, graph traversal heuristics, and high-throughput ranking systems.",
     date: "2026-10-18",
