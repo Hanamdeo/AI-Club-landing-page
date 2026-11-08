@@ -5,27 +5,42 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { audioManager } from '@/utils/audioManager';
 
-// Facility corridor waypoints across the 3 Immersive Experience A Sections
-const WAYPOINTS_CONFIG = [
-  {
-    progress: 0.0,
-    desktopPos: new THREE.Vector3(1.28, 1.55, 8.2),
-    mobilePos: new THREE.Vector3(0.25, 1.08, 8.0),
-    idleRotY: -0.28, // Welcoming angle facing slightly inward towards the visitor (+Z)
-  },
-  {
-    progress: 0.5,
-    desktopPos: new THREE.Vector3(-0.95, 0.85, -18.5),
-    mobilePos: new THREE.Vector3(-0.45, 0.85, -18.5),
-    idleRotY: 0.35,
-  },
-  {
-    progress: 1.0,
-    desktopPos: new THREE.Vector3(1.10, 0.95, -34.8),
-    mobilePos: new THREE.Vector3(0.35, 0.95, -34.8),
-    idleRotY: 0.12,
-  },
+// Helper: Shortest-arc angle interpolation (prevents 360-degree spinning or snapping at +/- PI)
+function lerpAngle(from, to, t) {
+  const diff = (to - from) % (Math.PI * 2);
+  const shortest = ((diff + Math.PI * 3) % (Math.PI * 2)) - Math.PI;
+  return from + shortest * t;
+}
+
+// Facility corridor spline control points across Experience A (Arrival -> Foundation Bay -> Chamber)
+const DESKTOP_CONTROL_POINTS = [
+  new THREE.Vector3(1.28, 1.50, 8.2),    // p = 0.00: Section 01 Arrival threshold
+  new THREE.Vector3(0.70, 1.30, -3.0),   // p = 0.25: Gentle transition down right aisle
+  new THREE.Vector3(-0.95, 0.95, -18.5), // p = 0.50: Section 02 Foundation Bay
+  new THREE.Vector3(-0.20, 1.05, -26.5), // p = 0.75: Chamber approach
+  new THREE.Vector3(0.85, 1.05, -34.8),  // p = 1.00: Section 03 Projection Chamber pedestal
 ];
+
+const MOBILE_CONTROL_POINTS = [
+  new THREE.Vector3(0.35, 1.15, 8.0),    // p = 0.00
+  new THREE.Vector3(0.15, 1.05, -3.0),   // p = 0.25
+  new THREE.Vector3(-0.40, 0.90, -18.5), // p = 0.50
+  new THREE.Vector3(-0.05, 0.95, -26.5), // p = 0.75
+  new THREE.Vector3(0.35, 0.95, -34.8),  // p = 1.00
+];
+
+// Continuous idle settle orientation across facility sections
+function getIdleAngle(p) {
+  if (p <= 0.5) {
+    const t = p / 0.5;
+    const ease = t * t * (3 - 2 * t);
+    return THREE.MathUtils.lerp(-0.25, 0.35, ease);
+  } else {
+    const t = (p - 0.5) / 0.5;
+    const ease = t * t * (3 - 2 * t);
+    return THREE.MathUtils.lerp(0.35, 0.00, ease);
+  }
+}
 
 /**
  * High-Fidelity NEX-01 Companion Robot
@@ -43,6 +58,7 @@ export default function BdxRobot({
   scale = 0.94,
   isStatic = false,
   hoverMode = false,
+  isIntro = false,
   scrollProgress = 0,
   scrollProgressRef,
   isProjecting = false,
@@ -60,11 +76,24 @@ export default function BdxRobot({
   const projectorBeamRef = useRef();
   const projectorLensRef = useRef();
 
-  // Physical tracking state
-  const currentPos = useRef(new THREE.Vector3(1.28, 1.55, 8.2));
-  const prevPos = useRef(new THREE.Vector3(1.28, 1.55, 8.2));
-  const currentRotY = useRef(-0.28);
-  const tempTargetPos = useRef(new THREE.Vector3());
+  // Smooth continuous 3D Catmull-Rom flight trajectories
+  const desktopCurve = useMemo(
+    () => new THREE.CatmullRomCurve3(DESKTOP_CONTROL_POINTS, false, 'centripetal'),
+    []
+  );
+  const mobileCurve = useMemo(
+    () => new THREE.CatmullRomCurve3(MOBILE_CONTROL_POINTS, false, 'centripetal'),
+    []
+  );
+
+  // Single Source of Truth for Progress & Kinematic Transforms
+  const progressSmoothed = useRef(0);
+  const prevProgress = useRef(0);
+  const smoothedVelocity = useRef(0);
+  const currentPos = useRef(new THREE.Vector3(1.28, 1.50, 8.2));
+  const currentRotY = useRef(-0.25);
+  const currentPitchX = useRef(0);
+  const currentRollZ = useRef(0);
 
   // Interaction State
   const [hovered, setHovered] = useState(false);
@@ -287,68 +316,90 @@ export default function BdxRobot({
         rightArmRef.current.rotation.z = 0.20 - Math.sin(t * 2.0) * 0.025;
       }
     } else if (!isStatic) {
-      // CORRIDOR WAYPOINT TRAVEL
-      const rawP = scrollProgressRef ? scrollProgressRef.current : scrollProgress;
-      const p = Math.max(0, Math.min(1, rawP));
-      let startW = WAYPOINTS_CONFIG[0];
-      let endW = WAYPOINTS_CONFIG[WAYPOINTS_CONFIG.length - 1];
-
-      for (let i = 0; i < WAYPOINTS_CONFIG.length - 1; i++) {
-        if (p >= WAYPOINTS_CONFIG[i].progress && p <= WAYPOINTS_CONFIG[i + 1].progress) {
-          startW = WAYPOINTS_CONFIG[i];
-          endW = WAYPOINTS_CONFIG[i + 1];
-          break;
-        }
-      }
-
-      const span = endW.progress - startW.progress;
-      const localT = span > 0 ? (p - startW.progress) / span : 0;
-      const easeT = localT * localT * (3 - 2 * localT);
-
-      const startPos = isMobileRef.current ? startW.mobilePos : startW.desktopPos;
-      const endPos = isMobileRef.current ? endW.mobilePos : endW.desktopPos;
+      // 1. Single source of truth for normalized scroll progress
+      const rawP = isIntro
+        ? 0
+        : Math.max(0, Math.min(1, scrollProgressRef?.current ?? scrollProgress ?? 0));
 
       const safeDelta = Math.min(delta, 0.05);
 
-      tempTargetPos.current.lerpVectors(startPos, endPos, easeT);
-      const targetIdleRotY = THREE.MathUtils.lerp(startW.idleRotY, endW.idleRotY, easeT);
+      // Frame-rate independent exponential progress damping (eliminates discrete trackpad/wheel jitter)
+      const progressLerpRate = 1 - Math.exp(-safeDelta * 7.5);
+      progressSmoothed.current += (rawP - progressSmoothed.current) * progressLerpRate;
 
-      currentPos.current.lerp(tempTargetPos.current, 1 - Math.exp(-safeDelta * 4.2));
+      const p = progressSmoothed.current;
 
-      const distDelta = currentPos.current.distanceTo(prevPos.current);
-      const speed = distDelta / Math.max(safeDelta, 0.001);
-      prevPos.current.copy(currentPos.current);
+      // 2. Signed velocity tracking with low-pass filter (positive = forward, negative = reverse)
+      const pDelta = p - prevProgress.current;
+      prevProgress.current = p;
+      const rawVelocity = pDelta / Math.max(safeDelta, 0.001);
+      smoothedVelocity.current += (rawVelocity - smoothedVelocity.current) * (1 - Math.exp(-safeDelta * 6.0));
+      const velocity = smoothedVelocity.current;
+      const absVel = Math.abs(velocity);
 
-      const isCruising = speed > 0.15 && p < 0.95;
+      // 3. Smooth continuous 3D Path Sampling (C1 continuous Catmull-Rom spline)
+      const curve = isMobileRef.current ? mobileCurve : desktopCurve;
+      const targetPos = curve.getPoint(p);
+      const tangent = curve.getTangent(p);
 
-      // Realistic floating hover bobbing & organic sway
-      const hoverBob = Math.sin(t * 2.0) * 0.035;
-      const hoverSway = Math.cos(t * 1.4) * 0.02;
-      const cruiseTiltX = isCruising ? 0.09 : 0;
-      const cruiseRollZ = isCruising ? -hoverSway * 1.1 : Math.sin(t * 1.4) * 0.02;
+      // Damped position interpolation (guarantees smooth glide to target)
+      currentPos.current.lerp(targetPos, 1 - Math.exp(-safeDelta * 9.0));
 
-      if (bodyRef.current) {
-        bodyRef.current.rotation.x += (cruiseTiltX - bodyRef.current.rotation.x) * (1 - Math.exp(-safeDelta * 3.5));
+      // 4. Direction of Travel vs Settle Orientation
+      // Idle settle orientation at facility landmark waypoints
+      const settleAngle = getIdleAngle(p);
+
+      // Travel heading:
+      // Forward motion: faces along path tangent (towards -Z corridor)
+      // Reverse motion: faces along -tangent (towards +Z arrival)
+      let travelAngle = settleAngle;
+      if (velocity >= 0.012) {
+        travelAngle = Math.atan2(tangent.x, tangent.z);
+      } else if (velocity <= -0.012) {
+        travelAngle = Math.atan2(-tangent.x, -tangent.z);
       }
 
-      if (isCruising) {
-        const cruiseAngle = -0.28;
-        currentRotY.current += (cruiseAngle - currentRotY.current) * (1 - Math.exp(-safeDelta * 3.0));
-      } else {
-        currentRotY.current += (targetIdleRotY - currentRotY.current) * (1 - Math.exp(-safeDelta * 3.5));
+      // Smoothstep blending between settle angle and travel angle
+      let motionWeight = 0;
+      if (absVel > 0.02) {
+        const norm = Math.min(1, (absVel - 0.02) / 0.08);
+        motionWeight = norm * norm * (3 - 2 * norm);
       }
 
-      // Smooth interactive hop/jump
+      // Shortest-arc angular lerp (prevents 360-deg spins or snapping)
+      const targetYaw = lerpAngle(settleAngle, travelAngle, motionWeight);
+      currentRotY.current = lerpAngle(
+        currentRotY.current,
+        targetYaw,
+        1 - Math.exp(-safeDelta * 4.5)
+      );
+
+      // 5. Natural aerodynamic pitch & lateral banking
+      const targetPitchX = Math.min(0.12, Math.max(-0.12, velocity * 0.18));
+      currentPitchX.current += (targetPitchX - currentPitchX.current) * (1 - Math.exp(-safeDelta * 4.0));
+
+      const targetRollZ = Math.min(0.14, Math.max(-0.14, -tangent.x * velocity * 0.35));
+      currentRollZ.current += (targetRollZ - currentRollZ.current) * (1 - Math.exp(-safeDelta * 4.0));
+
+      // 6. Idle Hover Bobbing (Damped during flight)
+      const hoverFactor = 1 - Math.min(1, absVel * 3.0);
+      const hoverBob = Math.sin(t * 2.0) * (0.028 * hoverFactor + 0.008);
+      const hoverSway = Math.cos(t * 1.4) * (0.018 * hoverFactor);
+
+      // Interactive jump hop
       let jumpOffsetY = 0;
       if (isJumping.current) {
         jumpTime.current += safeDelta * 2.8;
-        const progress = jumpTime.current;
-        if (progress < 1.0) {
-          jumpOffsetY = Math.sin(progress * Math.PI) * 0.22;
+        if (jumpTime.current < 1.0) {
+          jumpOffsetY = Math.sin(jumpTime.current * Math.PI) * 0.22;
         } else {
           isJumping.current = false;
           jumpTime.current = 0;
         }
+      }
+
+      if (bodyRef.current) {
+        bodyRef.current.rotation.x = currentPitchX.current;
       }
 
       if (rootRef.current) {
@@ -358,16 +409,17 @@ export default function BdxRobot({
           currentPos.current.z
         );
         rootRef.current.rotation.y = currentRotY.current;
-        rootRef.current.rotation.z = cruiseRollZ;
+        rootRef.current.rotation.z = currentRollZ.current;
       }
 
-      // Natural downward wing arm stabilization (arms hang naturally along body!)
+      // 7. Natural Wing Arm Stabilization
       if (leftArmRef.current && rightArmRef.current) {
-        const armSway = Math.sin(t * 2.0) * 0.025;
-        leftArmRef.current.rotation.z = -0.20 - armSway + (isCruising ? 0.05 : 0);
-        rightArmRef.current.rotation.z = 0.20 + armSway - (isCruising ? 0.05 : 0);
-        leftArmRef.current.rotation.x = isCruising ? 0.10 : 0.04;
-        rightArmRef.current.rotation.x = isCruising ? 0.10 : 0.04;
+        const armSway = Math.sin(t * 2.0) * 0.02 * hoverFactor;
+        const armFlightOffset = motionWeight * 0.05;
+        leftArmRef.current.rotation.z = -0.20 - armSway + armFlightOffset;
+        rightArmRef.current.rotation.z = 0.20 + armSway - armFlightOffset;
+        leftArmRef.current.rotation.x = currentPitchX.current * 0.6;
+        rightArmRef.current.rotation.x = currentPitchX.current * 0.6;
       }
     }
 
@@ -380,15 +432,16 @@ export default function BdxRobot({
 
     if (headRef.current) {
       const projectorPitch = isProjecting ? -0.06 : 0;
-      // Controlled horizontal yaw and subtle pitch looking toward the visitor
-      const targetRotY = mx * 0.28;
-      const targetRotX = 0.08 - my * 0.14 + projectorPitch;
+      // Head subtly looks forward when flying, and looks at user when slowed/settled
+      const gazeWeight = 1 - Math.min(1, Math.abs(smoothedVelocity.current) * 2.5);
+      const targetRotY = mx * 0.24 * gazeWeight;
+      const targetRotX = (0.06 - my * 0.12) * gazeWeight + projectorPitch;
 
       const safeDelta = Math.min(delta, 0.05);
       const headLerp = 1 - Math.exp(-safeDelta * 5.0);
       headRef.current.rotation.y += (targetRotY - headRef.current.rotation.y) * headLerp;
       headRef.current.rotation.x += (targetRotX - headRef.current.rotation.x) * headLerp;
-      // PERMANENT ROLL LOCK: Keeps the head completely upright - eliminates constant spinning!
+      // Permanent Roll Lock: upright at all times
       headRef.current.rotation.z = 0;
     }
 
