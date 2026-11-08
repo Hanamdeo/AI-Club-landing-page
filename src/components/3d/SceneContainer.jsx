@@ -19,12 +19,14 @@ import { getZoneTransitionState } from '@/utils/zoneTransition';
 
 /**
  * ZoneLightingController
- * Dynamically shifts lighting focus, aisle downlight trajectory, and chamber spotlights
- * in lockstep with the active server rack cluster transition.
+ * Unified, harmonious architectural lighting that seamlessly blends with the facility palette.
+ * Replaces harsh, saturated primary neon colors with elegant, calibrated silver-cyan grazing
+ * and soft ceramic sage atmospheric warmth.
  */
 function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
   const overheadLightRef = useRef();
-  const coreWashRef = useRef();
+  const rackGrazingLeftRef = useRef();
+  const rackGrazingRightRef = useRef();
   const chamberSpotRef = useRef();
 
   useFrame((_, delta) => {
@@ -35,10 +37,6 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
     if (overheadLightRef.current) {
       overheadLightRef.current.position.z += (lighting.lightZ - overheadLightRef.current.position.z) * lerpRate;
       overheadLightRef.current.intensity = lighting.lightIntensity;
-      overheadLightRef.current.color.set(lighting.lightColor);
-    }
-    if (coreWashRef.current) {
-      coreWashRef.current.intensity += (lighting.coreWashIntensity - coreWashRef.current.intensity) * lerpRate;
     }
     if (chamberSpotRef.current) {
       chamberSpotRef.current.intensity += (lighting.chamberSpotIntensity - chamberSpotRef.current.intensity) * lerpRate;
@@ -47,45 +45,48 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
 
   return (
     <>
-      {/* Dynamic Key Overhead Downlight: Follows visitor along cold aisle Z */}
+      {/* 1. Dynamic Key Overhead Downlight: 5200K architectural clean daylight */}
       <directionalLight
         ref={overheadLightRef}
         position={[0, 9.5, 4.0]}
-        color="#E8F8FA"
-        intensity={1.75}
+        color="#F0F6F7"
+        intensity={1.50}
       />
 
-      {/* Cross-Aisle Rack Grazing Lights */}
+      {/* 2. Cohesive Lateral Rack Grazing Lights (Uniform Ice-Silver Cyan for natural metallic speculars) */}
+      {/* Left Row Grazing */}
       <directionalLight
-        ref={coreWashRef}
-        position={[4.8, 4.5, -15]}
-        color="#00E5FF"
-        intensity={1.25}
+        ref={rackGrazingLeftRef}
+        position={[4.6, 4.2, -15]}
+        color="#88D5E8"
+        intensity={0.65}
       />
 
+      {/* Right Row Grazing */}
       <directionalLight
-        position={[-4.8, 4.5, -12]}
-        color="#22C55E"
-        intensity={0.95}
+        ref={rackGrazingRightRef}
+        position={[-4.6, 4.2, -15]}
+        color="#88D5E8"
+        intensity={0.65}
       />
 
-      {/* Midground Atmospheric Wash */}
+      {/* 3. Midground Soft Sage Floor Warmth: Signature AI Club atmospheric tone */}
       <directionalLight
-        position={[-2.0, 4.0, -28]}
-        color="#A7B7A1"
-        intensity={1.1}
+        position={[0, 3.5, -22]}
+        color="#94A891"
+        intensity={0.40}
       />
 
-      {/* Dynamic Chamber Volumetric Pedestal Spotlight */}
+      {/* 4. Dynamic Chamber Pedestal Spot */}
       <spotLight
         ref={chamberSpotRef}
-        position={[0, 8.5, -35.0]}
+        position={[0, 8.0, -35.0]}
         target-position={[0, 1.2, -35.0]}
-        color="#FFFFFF"
-        intensity={0.3}
+        color="#E8F4EC"
+        intensity={0.35}
         angle={0.65}
         penumbra={0.6}
-        distance={30}
+        distance={28}
       />
     </>
   );
@@ -93,12 +94,9 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
 
 /**
  * SceneContainer (High-Performance Cyber Data Centre)
- * Atmospheric Architectural Lighting & Holographic Infrastructure:
- * - Dynamic cluster transitions: server clusters smoothly fade/part outward to reveal next bay
- * - Holographic cube-matrix projection of server racks before physical form
- * - In-world 3D Server Node Badges marking key facilities along the corridor
- * - Deep cinematic contrast lighting with electric cyan rim Grazing & soft bounce
- * - 60+ FPS optimized GPU pipeline
+ * - Harmonious, non-clashing cinematic lighting (obsidian base, silver-cyan grazing, soft sage warmth)
+ * - Zero-lag cluster hardware engine
+ * - Seamless fog-to-background visual blending
  */
 export default function SceneContainer({
   scrollProgress = 0,
@@ -113,7 +111,7 @@ export default function SceneContainer({
 }) {
   return (
     <div
-      className="fixed inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-1000 ease-out"
+      className="fixed inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-700 ease-out"
       style={{ opacity: sceneOpacity }}
     >
       <Canvas
@@ -129,41 +127,40 @@ export default function SceneContainer({
           precision: 'mediump',
         }}
       >
-        {/* Controlled Enterprise Atmosphere: Deep Midnight Slate */}
-        <color attach="background" args={['#0C1012']} />
-        <fog attach="fog" args={['#0C1012', 20, 85]} />
+        {/* Harmonious Obsidian Atmosphere: Blends seamlessly with website background */}
+        <color attach="background" args={['#0A0E10']} />
+        <fog attach="fog" args={['#0A0E10', 16, 78]} />
 
-        {/* ============================================================== */}
-        {/* CINEMATIC DATA CENTRE LIGHTING ARCHITECTURE                     */}
-        {/* Deep contrast shadows, cool cyan rim grazes, crisp floor bounce */}
-        {/* ============================================================== */}
-        {/* 1. Deep Midnight Base Ambient: Preserves true obsidian blacks on server faces */}
-        <ambientLight color="#0D171A" intensity={0.65} />
+        {/* 1. Neutral Deep Shadow Ambient: Preserves rich true blacks */}
+        <ambientLight color="#0F1416" intensity={0.52} />
 
-        {/* Dynamic Zone Lighting Controller: Shifts focus along cold aisle */}
+        {/* 2. Harmonious Zone Lighting Controller */}
         <ZoneLightingController
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
         />
 
-        {/* Studio-Grade 3-Point Lighting for NEX-01 Robot Companion */}
+        {/* 3. Restrained Studio 3-Point Lighting for Companion NEX-01 */}
+        {/* Soft Ceramic Key */}
         <directionalLight
-          position={[2.8, 3.8, 11.2]}
+          position={[2.6, 3.6, 11.0]}
           color="#FFFFFF"
-          intensity={1.4}
+          intensity={1.20}
         />
 
+        {/* Subtle Silver-Cyan Rim (Calibrated, not blinding neon) */}
         <directionalLight
-          position={[1.2, 3.2, 5.0]}
-          color="#00F0FF"
-          intensity={1.35}
+          position={[1.2, 3.0, 5.0]}
+          color="#8ED5E8"
+          intensity={0.60}
         />
 
+        {/* Floor Bounce Fill */}
         <pointLight
           position={[1.3, 0.4, 8.5]}
-          color="#8BE9FD"
-          intensity={0.55}
-          distance={4.0}
+          color="#1B2527"
+          intensity={0.30}
+          distance={3.5}
         />
 
         {/* Dynamic Scroll-Controlled Camera along Cold Aisle */}
@@ -174,46 +171,33 @@ export default function SceneContainer({
         />
 
         {/* ============================================================== */}
-        {/* DATA CENTRE PHYSICAL INFRASTRUCTURE                            */}
+        {/* DATA CENTRE INFRASTRUCTURE                                     */}
         {/* ============================================================== */}
-        {/* 1. Raised Access Floor System */}
         <DataCentreFloor />
-
-        {/* 2. Industrial Ceiling & Overhead Cable Trays */}
         <DataCentreCeiling />
 
-        {/* 3. Holographic Cube Projection Structures (Cluster Transition Pulse) */}
+        {/* Holographic Projection (Synchronized with transitions) */}
         <HolographicDataCentreProjection
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
         />
 
-        {/* 4. Enterprise Server Rack Lineup (Cluster Transition Engine) */}
+        {/* Ultra-Fast Enterprise Server Rack Lineup */}
         <EnterpriseServerRacks
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
         />
 
-        {/* 5. In-Row Precision Cooling Units (CRAH) */}
         <InRowCoolingUnits />
-
-        {/* 6. Suspended Overhead Technical Identity Signage */}
         <DataCentreSignage />
 
-        {/* ============================================================== */}
-        {/* SECTION SPECIFIC ARCHITECTURAL LANDMARKS                       */}
-        {/* ============================================================== */}
-        {/* Section 01: Entrance Airlock Bulkhead */}
+        {/* Section Landmarks */}
         <EntranceGate />
-
-        {/* Section 02: Foundation Bay & Interactive Rack Inspection Node */}
         <FoundationBay />
         <InteractiveServerRack onOpenModal={onOpenRackModal} />
-
-        {/* Section 03: The Projection Chamber Landmark */}
         <ProjectionChamber isProjecting={isProjecting} />
 
-        {/* Interactive In-World Server Rack Badges lining the cold aisle */}
+        {/* Interactive In-World Server Badges (Optimized, zero pointLight shader lag) */}
         <ServerRackBadges
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
@@ -221,7 +205,7 @@ export default function SceneContainer({
           onNavigateToSection={onNavigateToSection}
         />
 
-        {/* NEX-01 Autonomous Robot Companion */}
+        {/* NEX-01 Robot Companion */}
         <BdxRobot
           scale={0.94}
           scrollProgress={scrollProgress}

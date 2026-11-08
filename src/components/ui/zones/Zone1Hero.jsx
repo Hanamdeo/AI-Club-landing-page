@@ -38,13 +38,13 @@ export default function Zone1Hero({ onExploreClick }) {
               {/* Holographic Projection Header Telemetry */}
               <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/[0.08] text-[10px] font-mono">
                 <div className="flex items-center gap-2 text-[#A7B7A1]">
-                  <span className="w-2 h-2 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+                  <span className="w-2 h-2 rounded-full bg-sage animate-pulse shadow-[0_0_8px_rgba(162,178,159,0.5)]" />
                   <span className="font-bold tracking-widest uppercase">
                     SECTOR 01 // HOLOGRAPHIC HUD
                   </span>
                 </div>
                 <div className="hidden sm:flex items-center gap-2 text-slate-400">
-                  <Radio className="w-3 h-3 text-[#24BFEA]" />
+                  <Radio className="w-3 h-3 text-sage" />
                   <span className="tracking-tight text-[9px] uppercase">
                     EMITTER: NEX-01 • SYNC: 120Hz
                   </span>
@@ -97,16 +97,16 @@ export default function Zone1Hero({ onExploreClick }) {
       <div className="relative z-30 w-full pt-8 pb-2 flex flex-col md:flex-row md:items-center justify-between gap-4 pointer-events-auto">
         {/* Mobile Telemetry Sector Badge */}
         <div className="flex items-center gap-2 md:hidden font-mono text-xs text-[#A7B7A1]">
-          <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+          <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse shadow-[0_0_6px_rgba(162,178,159,0.5)]" />
           <span>SECTOR 01: THE ARRIVAL</span>
         </div>
 
         {/* 3 Verified Statistics in Floating Blade Telemetry Dock */}
-        <div className="flex items-center gap-5 sm:gap-7 md:gap-9 px-4 sm:px-6 py-2.5 rounded-xl bg-[#121618]/75 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] corner-reticle md:ml-32 lg:ml-40">
+        <div className="flex items-center gap-5 sm:gap-7 md:gap-9 px-4 sm:px-6 py-2.5 rounded-xl bg-[#101416]/80 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] corner-reticle md:ml-32 lg:ml-40">
           {/* Blade Metric 1 */}
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_6px_#24BFEA]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse shadow-[0_0_6px_rgba(162,178,159,0.5)]" />
               <span className="text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 01 // MEMBERS
               </span>
@@ -121,7 +121,7 @@ export default function Zone1Hero({ onExploreClick }) {
           {/* Blade Metric 2 */}
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse shadow-[0_0_6px_#22C55E]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse shadow-[0_0_6px_rgba(34,197,94,0.4)]" />
               <span className="text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 02 // PROJECTS
               </span>
@@ -136,7 +136,7 @@ export default function Zone1Hero({ onExploreClick }) {
           {/* Blade Metric 3 */}
           <div className="flex flex-col">
             <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#A7B7A1] animate-pulse shadow-[0_0_6px_#A7B7A1]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse shadow-[0_0_6px_rgba(162,178,159,0.5)]" />
               <span className="text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 03 // PAPERS
               </span>

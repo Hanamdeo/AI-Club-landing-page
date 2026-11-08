@@ -282,14 +282,14 @@ export default function Home() {
       {/* ============================================================== */}
       <div
         id="editorial-archive"
-        className="relative z-20 w-full bg-[#0C1012]/90 backdrop-blur-2xl border-t border-white/[0.08] bg-facility-grid"
+        className="relative z-20 w-full bg-[#0A0E10]/92 backdrop-blur-xl border-t border-white/[0.08] bg-facility-grid"
       >
         {/* ARCHITECTURAL TRANSITION GATEWAY: VOLUMETRIC CORRIDOR ➔ ARCHIVE DOCK */}
-        <div className="relative w-full py-10 px-6 sm:px-10 flex flex-col items-center justify-center border-b border-white/[0.08] bg-gradient-to-b from-[#101416]/95 via-[#0C1012]/90 to-[#0C1012]/95">
+        <div className="relative w-full py-10 px-6 sm:px-10 flex flex-col items-center justify-center border-b border-white/[0.08] bg-gradient-to-b from-[#0E1214]/95 via-[#0A0E10]/92 to-[#0A0E10]/95">
           {/* Emitter Conduit Optical Alignment Telemetry */}
           <div className="w-full max-w-4xl flex items-center justify-between gap-4 mb-3.5 text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1.5 text-sage">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse shadow-[0_0_6px_rgba(162,178,159,0.5)]" />
               <span>TERMINAL DOCKING PROTOCOL: ENGAGED</span>
             </span>
             <span className="hidden sm:inline-block text-slate-500">

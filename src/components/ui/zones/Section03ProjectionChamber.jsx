@@ -44,7 +44,7 @@ export default function Section03ProjectionChamber({ onTransitionToEditorial }) 
           {/* Volumetric Emitter Status Header */}
           <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/[0.08] text-[10px] font-mono">
             <div className="inline-flex items-center gap-2 text-sage">
-              <span className="w-2 h-2 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+              <span className="w-2 h-2 rounded-full bg-sage animate-pulse shadow-[0_0_8px_rgba(162,178,159,0.5)]" />
               <span className="font-bold tracking-wider uppercase">VOLUMETRIC ARRAY ONLINE</span>
             </div>
             <span className="text-slate-400 text-[9px] uppercase tracking-wider font-mono">
@@ -64,8 +64,8 @@ export default function Section03ProjectionChamber({ onTransitionToEditorial }) 
           {featuredEvent && (
             <div className="p-4 rounded-xl bg-[#141819]/90 border border-sage/30 shadow-[0_4px_20px_rgba(0,0,0,0.4)] mb-6">
               <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-2">
-                <span className="text-[#24BFEA] font-bold tracking-wider flex items-center gap-1.5">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse" />
+                <span className="text-sage font-bold tracking-wider flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
                   INTERCEPTED BROADCAST
                 </span>
                 <span className="uppercase text-[9px] px-2 py-0.5 rounded bg-white/[0.06] text-[#E6E2D8] font-mono">

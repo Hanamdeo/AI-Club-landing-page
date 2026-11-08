@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import { Bot, ChevronRight, Sparkles } from 'lucide-react';
+import { Bot, ChevronRight } from 'lucide-react';
 import { audioManager } from '@/utils/audioManager';
 
 /**
  * SERVER_NODES
  * 7 Interactive Server Node Badges distributed along the data centre cold aisle.
- * Stationed directly on the server racks lining the corridor where the robot walks.
+ * Affixed to each server rack along the cold aisle where companion BDX walks.
  */
 export const SERVER_NODES = [
   {
@@ -19,9 +19,8 @@ export const SERVER_NODES = [
     label: 'Home',
     subtext: 'Facility Arrival',
     targetId: 'section-arrival',
-    position: [-2.05, 1.88, 4.5], // Left server rack
+    position: [-2.05, 1.88, 4.5],
     isLeft: true,
-    progressCenter: 0.05,
   },
   {
     id: 'discussions',
@@ -29,9 +28,8 @@ export const SERVER_NODES = [
     label: 'Discussions',
     subtext: 'Debate & GD Core',
     targetId: 'discussions',
-    position: [2.05, 1.88, -2.0], // Right server rack
+    position: [2.05, 1.88, -2.0],
     isLeft: false,
-    progressCenter: 0.22,
   },
   {
     id: 'events',
@@ -39,9 +37,8 @@ export const SERVER_NODES = [
     label: 'Events',
     subtext: 'Operations & Hackathons',
     targetId: 'events',
-    position: [-2.05, 1.88, -8.0], // Left server rack
+    position: [-2.05, 1.88, -8.0],
     isLeft: true,
-    progressCenter: 0.38,
   },
   {
     id: 'radar',
@@ -49,9 +46,8 @@ export const SERVER_NODES = [
     label: 'AI Radar',
     subtext: 'Research & Signals',
     targetId: 'radar',
-    position: [2.05, 1.88, -13.5], // Right server rack
+    position: [2.05, 1.88, -13.5],
     isLeft: false,
-    progressCenter: 0.55,
   },
   {
     id: 'projects',
@@ -59,9 +55,8 @@ export const SERVER_NODES = [
     label: 'Projects',
     subtext: 'Deployed Models',
     targetId: 'projects',
-    position: [-2.05, 1.88, -19.5], // Left server rack
+    position: [-2.05, 1.88, -19.5],
     isLeft: true,
-    progressCenter: 0.70,
   },
   {
     id: 'team',
@@ -69,9 +64,8 @@ export const SERVER_NODES = [
     label: 'Team',
     subtext: 'Core Researchers',
     targetId: 'team',
-    position: [2.05, 1.88, -26.0], // Right server rack
+    position: [2.05, 1.88, -26.0],
     isLeft: false,
-    progressCenter: 0.85,
   },
   {
     id: 'join',
@@ -79,17 +73,14 @@ export const SERVER_NODES = [
     label: 'Join',
     subtext: 'Network Access',
     targetId: 'join-network',
-    position: [-2.05, 1.88, -32.5], // Left server rack
+    position: [-2.05, 1.88, -32.5],
     isLeft: true,
-    progressCenter: 0.96,
   },
 ];
 
 /**
  * ServerRackBadges
- * In-world 3D badges affixed to each server rack along the cold aisle.
- * Highlights with a glowing beacon when the BDX robot reaches that server,
- * and smoothly scrolls the entire page to that section upon click.
+ * High-performance 3D rack badges. Zero dynamic pointLights to prevent shader recompilation stutters.
  */
 export default function ServerRackBadges({
   scrollProgress = 0,
@@ -132,8 +123,6 @@ export default function ServerRackBadges({
         const isRobotNear = activeRobotNode === node.id;
         const isActiveNav = activeNavId === node.id;
         const isHighlighted = isRobotNear || isActiveNav;
-
-        // Position slightly outward into aisle from server rack face
         const htmlOffsetX = node.isLeft ? 0.38 : -0.38;
 
         return (
@@ -141,35 +130,25 @@ export default function ServerRackBadges({
             key={node.id}
             position={[node.position[0], node.position[1], node.position[2]]}
           >
-            {/* 1. Physical 3D Metallic Mounting Arm projecting from rack upright */}
+            {/* 1. Physical 3D Mounting Arm */}
             <mesh position={[htmlOffsetX * 0.45, 0, 0]}>
               <boxGeometry args={[0.22, 0.024, 0.024]} />
               <meshStandardMaterial
-                color={isHighlighted ? '#526662' : '#283133'}
-                metalness={0.85}
-                roughness={0.3}
+                color={isHighlighted ? '#4A5856' : '#222829'}
+                metalness={0.8}
+                roughness={0.35}
               />
             </mesh>
 
-            {/* 2. LED Status Diode on Mount */}
+            {/* 2. Emissive Diode Indicator (Zero-cost emissive, no point light recompiles) */}
             <mesh position={[htmlOffsetX * 0.8, 0, 0]}>
-              <sphereGeometry args={[0.022, 12, 12]} />
+              <sphereGeometry args={[0.024, 10, 10]} />
               <meshBasicMaterial
-                color={isHighlighted ? '#A2B29F' : '#4FD1C5'}
+                color={isHighlighted ? '#A2B29F' : '#475558'}
               />
             </mesh>
 
-            {/* Subtle Point Light when robot is near */}
-            {isHighlighted && (
-              <pointLight
-                position={[htmlOffsetX * 0.8, 0, 0]}
-                color="#A2B29F"
-                intensity={0.6}
-                distance={2.5}
-              />
-            )}
-
-            {/* 3. Interactive Floating HTML Badge (matches header pill style) */}
+            {/* 3. Interactive Floating HTML Badge */}
             <Html
               position={[htmlOffsetX, 0, 0]}
               center
@@ -178,14 +157,14 @@ export default function ServerRackBadges({
             >
               <div
                 onClick={(e) => handleBadgeClick(node, e)}
-                className={`group flex items-center gap-2.5 px-3 py-1.5 rounded-full select-none cursor-pointer transition-all duration-300 font-sans whitespace-nowrap shadow-[0_4px_24px_rgba(0,0,0,0.5)] ${
+                className={`group flex items-center gap-2.5 px-3 py-1.5 rounded-full select-none cursor-pointer transition-all duration-200 font-sans whitespace-nowrap shadow-[0_4px_24px_rgba(0,0,0,0.5)] ${
                   isHighlighted
-                    ? 'bg-[#101415]/95 border border-sage text-ivory ring-1 ring-sage/40 shadow-sage-glow scale-105'
-                    : 'bg-[#101415]/80 backdrop-blur-md border border-white/[0.08] text-ivory/80 hover:border-sage/50 hover:text-ivory hover:bg-[#161B1C] hover:scale-102'
+                    ? 'bg-[#101415]/95 border border-sage/80 text-ivory ring-1 ring-sage/30 shadow-sage-glow'
+                    : 'bg-[#101415]/80 backdrop-blur-md border border-white/[0.08] text-ivory/80 hover:border-sage/50 hover:text-ivory hover:bg-[#161B1C]'
                 }`}
                 title={`Server Node ${node.code}: ${node.label} — Click to Scroll`}
               >
-                {/* Active / Proximity Indicator Dot */}
+                {/* Active Indicator Dot */}
                 <span
                   className={`w-1.5 h-1.5 rounded-full transition-all shrink-0 ${
                     isHighlighted
@@ -199,7 +178,7 @@ export default function ServerRackBadges({
                   {node.label}
                 </span>
 
-                {/* Robot Proximity Indicator / Arrow Hint */}
+                {/* Robot Proximity Badge or Chevron */}
                 {isRobotNear ? (
                   <div className="flex items-center gap-1 text-[9px] font-mono text-sage bg-sage/15 px-1.5 py-0.5 rounded-full animate-pulse">
                     <Bot className="w-3 h-3 text-sage" />

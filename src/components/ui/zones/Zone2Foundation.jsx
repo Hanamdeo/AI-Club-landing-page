@@ -30,8 +30,8 @@ export default function Zone2Foundation({ onInspectRack }) {
         {/* ============================================================== */}
         <div className="lg:col-span-7 flex flex-col justify-center pointer-events-auto">
           {/* Section Marker */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-md bg-[#181D1E] border border-white/[0.08] text-[10px] font-mono text-[#A7B7A1] uppercase tracking-widest w-fit">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-md bg-[#131718] border border-white/[0.08] text-[10px] font-mono text-[#A7B7A1] uppercase tracking-widest w-fit">
+            <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse shadow-[0_0_8px_rgba(162,178,159,0.5)]" />
             <span>SECTOR 02 // INTELLIGENCE CORE • RACK 42U-A</span>
           </div>
 

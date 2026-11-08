@@ -44,12 +44,12 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
   let c3Slide = maxSlide;
   let c3Opacity = 0.18;
 
-  // 2. Dynamic Lighting Targets
+  // 2. Dynamic Lighting Targets (Harmonious 5200K Architectural Spectrum)
   let lightZ = 4.0;
-  let lightIntensity = 1.75;
-  let lightColor = '#E8F8FA';
-  let coreWashIntensity = 0.4;
-  let chamberSpotIntensity = 0.2;
+  let lightIntensity = 1.55;
+  let lightColor = '#F0F6F7';
+  let coreWashIntensity = 0.5;
+  let chamberSpotIntensity = 0.25;
 
   // ZONE 1: ARRIVAL
   if (p < ZONE_THRESHOLDS.ZONE_1_END) {
@@ -62,8 +62,8 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
     c3Slide = maxSlide;
     c3Opacity = 0.18;
     lightZ = 4.0;
-    lightIntensity = 1.75;
-    lightColor = '#E8F8FA';
+    lightIntensity = 1.55;
+    lightColor = '#F0F6F7';
     statusMessage = 'BAY 01 // ARRIVAL CLUSTER: NOMINAL';
   }
   // APPROACHING ZONE 2
@@ -76,8 +76,8 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
     c2Slide = maxSlide;
     c2Opacity = 0.18 + t * 0.15;
     lightZ = 4.0 - t * 4.0;
-    lightIntensity = 1.75 + t * 0.2;
-    coreWashIntensity = 0.4 + t * 0.4;
+    lightIntensity = 1.55 + t * 0.15;
+    coreWashIntensity = 0.5 + t * 0.3;
     statusMessage = 'APPROACHING COMPUTE CORE // INITIATING CLUSTER TRANSIT';
   }
   // TRANSITIONING ZONE 1 -> ZONE 2
@@ -98,9 +98,9 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
 
     // Lighting focus moves along cold aisle to Z = -15
     lightZ = 0.0 - ease * 15.0;
-    lightIntensity = 1.95;
-    lightColor = ease > 0.5 ? '#7DE3F4' : '#E8F8FA';
-    coreWashIntensity = 0.8 + ease * 0.7;
+    lightIntensity = 1.65;
+    lightColor = '#F0F6F7';
+    coreWashIntensity = 0.7 + ease * 0.4;
     statusMessage = 'RECONFIGURING AISLE // BAY 01 PARTING ➔ BAY 02 ENGAGING';
   }
   // REVEALED IN ZONE 2
@@ -114,9 +114,9 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
     c3Slide = maxSlide;
     c3Opacity = 0.18;
     lightZ = -15.0;
-    lightIntensity = 2.0;
-    lightColor = '#7DE3F4';
-    coreWashIntensity = 1.5;
+    lightIntensity = 1.65;
+    lightColor = '#F0F6F7';
+    coreWashIntensity = 1.1;
     statusMessage = 'BAY 02 // COMPUTE CORE DOCKED & READY';
   }
   // SETTLED IN ZONE 2 (INTELLIGENCE CORE)
@@ -130,9 +130,9 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
     c3Slide = maxSlide;
     c3Opacity = 0.18;
     lightZ = -15.0;
-    lightIntensity = 1.9;
-    lightColor = '#7DE3F4';
-    coreWashIntensity = 1.4;
+    lightIntensity = 1.55;
+    lightColor = '#F0F6F7';
+    coreWashIntensity = 1.0;
     statusMessage = 'BAY 02 // INTELLIGENCE CORE: NOMINAL';
   }
   // APPROACHING ZONE 3
@@ -145,7 +145,7 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
     c3Slide = maxSlide;
     c3Opacity = 0.18 + t * 0.2;
     lightZ = -15.0 - t * 6.0;
-    chamberSpotIntensity = 0.2 + t * 0.6;
+    chamberSpotIntensity = 0.25 + t * 0.4;
     statusMessage = 'APPROACHING PROJECTION PEDESTAL // VOLUMETRIC ALIGNMENT';
   }
   // TRANSITIONING ZONE 2 -> ZONE 3
@@ -164,9 +164,9 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
     c3Opacity = 0.18 + ease * 0.82;
 
     lightZ = -21.0 - ease * 14.0;
-    lightIntensity = 1.9;
-    lightColor = '#E8F8FA';
-    chamberSpotIntensity = 0.8 + ease * 1.2;
+    lightIntensity = 1.6;
+    lightColor = '#F0F6F7';
+    chamberSpotIntensity = 0.6 + ease * 0.8;
     statusMessage = 'RECONFIGURING AISLE // BAY 02 PARTING ➔ CHAMBER EMITTER ACTIVE';
   }
   // REVEALED IN ZONE 3

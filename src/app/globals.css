@@ -10,12 +10,12 @@
   /* ============================================================== */
 
   /* Master Color Palette - Preserved Base + Elevated Surfaces */
-  --bg-primary: #171B1C;
-  --bg-void: #0D1011;
-  --surface-secondary: #222828;
-  --surface-carbon: #15191A;
-  --surface-elevated: #1D2223;
-  --struct-element: #343D3C;
+  --bg-primary: #0A0E10;
+  --bg-void: #07090A;
+  --surface-secondary: #141A1C;
+  --surface-carbon: #101517;
+  --surface-elevated: #182023;
+  --struct-element: #2A3638;
 
   /* Accent Signatures */
   --accent-sage: #A2B29F;
@@ -308,14 +308,14 @@ code, pre, .terminal-mono, .font-mono {
 /* Floating Volumetric Holographic Information Terminal */
 .holographic-panel {
   position: relative;
-  background: rgba(18, 23, 25, 0.82);
+  background: rgba(13, 17, 19, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 
     0 16px 48px -8px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08),
-    0 0 24px -4px rgba(36, 191, 234, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 0 24px -4px rgba(142, 213, 232, 0.05);
 }
 
 .holographic-panel::before {
@@ -325,17 +325,17 @@ code, pre, .terminal-mono, .font-mono {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(36, 191, 234, 0.6) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(142, 213, 232, 0.4) 50%, transparent 100%);
   pointer-events: none;
 }
 
 /* Server Rack-Mounted Display Bezel */
 .server-rack-console {
   position: relative;
-  background: rgba(16, 20, 22, 0.88);
+  background: rgba(13, 17, 19, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   box-shadow: 
     0 12px 36px rgba(0, 0, 0, 0.55),
     inset 0 0 0 1px rgba(255, 255, 255, 0.03);
@@ -344,13 +344,13 @@ code, pre, .terminal-mono, .font-mono {
 /* Volumetric Emitter Screen with Optical Corner Brackets */
 .volumetric-screen {
   position: relative;
-  background: rgba(14, 18, 20, 0.85);
+  background: rgba(12, 16, 18, 0.85);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(167, 183, 161, 0.25);
+  border: 1px solid rgba(162, 178, 159, 0.22);
   box-shadow: 
     0 20px 50px rgba(0, 0, 0, 0.7),
-    0 0 30px rgba(167, 183, 161, 0.12);
+    0 0 30px rgba(162, 178, 159, 0.08);
 }
 
 /* Optical Corner Reticles */
@@ -368,14 +368,14 @@ code, pre, .terminal-mono, .font-mono {
 .corner-reticle::before {
   top: -2px;
   left: -2px;
-  border-top: 1.5px solid rgba(36, 191, 234, 0.6);
-  border-left: 1.5px solid rgba(36, 191, 234, 0.6);
+  border-top: 1.5px solid rgba(162, 178, 159, 0.45);
+  border-left: 1.5px solid rgba(162, 178, 159, 0.45);
 }
 .corner-reticle::after {
   bottom: -2px;
   right: -2px;
-  border-bottom: 1.5px solid rgba(167, 183, 161, 0.6);
-  border-right: 1.5px solid rgba(167, 183, 161, 0.6);
+  border-bottom: 1.5px solid rgba(142, 213, 232, 0.35);
+  border-right: 1.5px solid rgba(142, 213, 232, 0.35);
 }
 
 /* Hide scrollbars while allowing scroll */
