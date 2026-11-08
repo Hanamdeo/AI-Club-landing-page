@@ -540,6 +540,7 @@ export default function BdxRobot({
   // Frame animation loop
   useFrame(({ clock }, delta) => {
     const t = clock.getElapsedTime();
+    const safeDelta = Math.min(delta, 0.05);
 
     if (hoverMode) {
       // DOCKED COMPANION CANVAS HOVER
@@ -563,8 +564,6 @@ export default function BdxRobot({
       const rawP = isIntro
         ? 0
         : Math.max(0, Math.min(1, scrollProgressRef?.current ?? scrollProgress ?? 0));
-
-      const safeDelta = Math.min(delta, 0.05);
 
       // Frame-rate independent exponential progress damping (eliminates discrete trackpad/wheel jitter)
       const progressLerpRate = 1 - Math.exp(-safeDelta * 7.5);
@@ -760,7 +759,6 @@ export default function BdxRobot({
       const targetRotY = mx * 0.24 * gazeWeight;
       const targetRotX = (0.06 - my * 0.12) * gazeWeight + projectorPitch;
 
-      const safeDelta = Math.min(delta, 0.05);
       const headLerp = 1 - Math.exp(-safeDelta * 5.0);
       headRef.current.rotation.y += (targetRotY - headRef.current.rotation.y) * headLerp;
       headRef.current.rotation.x += (targetRotX + gestureNodX.current - headRef.current.rotation.x) * headLerp;
@@ -768,7 +766,6 @@ export default function BdxRobot({
     }
 
     // Digital Eye Blinking Animation
-    const safeDelta = Math.min(delta, 0.05);
     blinkTimer.current += safeDelta;
     if (blinkTimer.current > 3.8) {
       isBlinking.current = true;
