@@ -1,7 +1,36 @@
+import localFont from 'next/font/local';
 import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk, Syne } from 'next/font/google';
 import './globals.css';
 
-// Futuristic Neo-Grotesque Space typography for interface & body
+// Futuristic Techno Display Font: LaBeouf
+const labeouf = localFont({
+  src: [
+    {
+      path: '../../public/fonts/labeouf/labeouf-regular.ttf',
+      weight: '400',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/labeouf/labeouf-bold.ttf',
+      weight: '700',
+      style: 'normal',
+    },
+    {
+      path: '../../public/fonts/labeouf/labeouf-italic.ttf',
+      weight: '400',
+      style: 'italic',
+    },
+    {
+      path: '../../public/fonts/labeouf/labeouf-bold-italic.ttf',
+      weight: '700',
+      style: 'italic',
+    },
+  ],
+  variable: '--font-labeouf',
+  display: 'swap',
+});
+
+// Futuristic Neo-Grotesque Space typography for interface & body fallback
 const spaceGrotesk = Space_Grotesk({
   subsets: ['latin'],
   display: 'swap',
@@ -68,7 +97,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      className={`dark ${labeouf.variable} ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
     >
       <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
         {children}

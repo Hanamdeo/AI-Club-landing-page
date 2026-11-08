@@ -52,11 +52,12 @@ module.exports = {
         },
       },
       fontFamily: {
-        sans: ['var(--font-space)', 'var(--font-inter)', 'Space Grotesk', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
-        display: ['var(--font-syne)', 'var(--font-space)', 'var(--font-archivo)', 'Syne', 'Space Grotesk', 'Archivo', 'sans-serif'],
-        syne: ['var(--font-syne)', 'Syne', 'sans-serif'],
-        space: ['var(--font-space)', 'Space Grotesk', 'sans-serif'],
-        archivo: ['var(--font-syne)', 'var(--font-archivo)', 'Syne', 'Archivo', 'sans-serif'],
+        sans: ['var(--font-labeouf)', 'var(--font-space)', 'var(--font-inter)', 'Space Grotesk', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'sans-serif'],
+        display: ['var(--font-labeouf)', 'var(--font-syne)', 'var(--font-space)', 'var(--font-archivo)', 'Syne', 'Space Grotesk', 'Archivo', 'sans-serif'],
+        labeouf: ['var(--font-labeouf)', 'sans-serif'],
+        syne: ['var(--font-labeouf)', 'var(--font-syne)', 'Syne', 'sans-serif'],
+        space: ['var(--font-labeouf)', 'var(--font-space)', 'Space Grotesk', 'sans-serif'],
+        archivo: ['var(--font-labeouf)', 'var(--font-archivo)', 'Syne', 'Archivo', 'sans-serif'],
         mono: ['var(--font-mono)', 'IBM Plex Mono', 'JetBrains Mono', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'monospace'],
       },
       letterSpacing: {

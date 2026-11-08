@@ -1,5 +1,40 @@
 @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700;800;900&display=swap');
 
+/* ============================================================== */
+/* LOCAL FONT FACES: LaBeouf Techno Display Family               */
+/* ============================================================== */
+@font-face {
+  font-family: 'LaBeouf';
+  src: url('/fonts/labeouf/labeouf-regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LaBeouf';
+  src: url('/fonts/labeouf/labeouf-bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LaBeouf';
+  src: url('/fonts/labeouf/labeouf-italic.ttf') format('truetype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'LaBeouf';
+  src: url('/fonts/labeouf/labeouf-bold-italic.ttf') format('truetype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -51,7 +86,8 @@
   --space-16: 64px;
 
   /* Typography Variables */
-  --font-syne: 'Syne', sans-serif;
+  --font-labeouf: 'LaBeouf', sans-serif;
+  --font-syne: 'LaBeouf', 'Syne', sans-serif;
   --font-space: 'Space Grotesk', sans-serif;
   --font-geist: 'Geist', sans-serif;
   --font-inter-fallback: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -71,7 +107,7 @@ textarea {
   padding: 0;
   background-color: var(--bg-primary);
   color: var(--accent-ivory);
-  font-family: var(--font-space), var(--font-inter), var(--font-geist), var(--font-inter-fallback);
+  font-family: var(--font-labeouf), var(--font-space), var(--font-inter), var(--font-geist), var(--font-inter-fallback);
   overflow-x: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -79,40 +115,45 @@ textarea {
 }
 
 /* ============================================================== */
-/* UNIFIED TYPOGRAPHY SYSTEM (Syne, Space Grotesk, Inter, Mono)   */
+/* UNIFIED TYPOGRAPHY SYSTEM (LaBeouf, Syne, Space, Inter, Mono)   */
 /* ============================================================== */
 
 /* High-Impact Display Headings */
 h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-syne), var(--font-space), var(--font-archivo), sans-serif;
+  font-family: var(--font-labeouf), var(--font-syne), var(--font-space), var(--font-archivo), sans-serif;
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: 0.02em;
 }
 
 .font-display {
-  font-family: var(--font-syne), var(--font-space), sans-serif;
-  letter-spacing: -0.025em;
+  font-family: var(--font-labeouf), var(--font-syne), var(--font-space), sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.font-labeouf {
+  font-family: var(--font-labeouf), sans-serif;
+  letter-spacing: 0.02em;
 }
 
 .font-syne {
-  font-family: var(--font-syne), sans-serif;
-  letter-spacing: -0.02em;
+  font-family: var(--font-labeouf), var(--font-syne), sans-serif;
+  letter-spacing: 0.01em;
 }
 
 .font-space {
   font-family: var(--font-space), sans-serif;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
 }
 
 .font-archivo {
-  font-family: var(--font-archivo), sans-serif;
-  letter-spacing: -0.025em;
+  font-family: var(--font-labeouf), var(--font-archivo), sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* Precision Body Copy */
 p, span, a, button, input, select, textarea, label {
-  font-family: var(--font-space), var(--font-inter), sans-serif;
-  letter-spacing: -0.01em;
+  font-family: var(--font-labeouf), var(--font-space), var(--font-inter), sans-serif;
+  letter-spacing: 0.01em;
 }
 
 /* Futuristic Cyber Text Gradients */
