@@ -293,6 +293,91 @@ code, pre, .terminal-mono, .font-mono {
   animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+/* ============================================================== */
+/* DATA-CENTRE FACILITY ENVIRONMENTAL STYLING (In-World Displays) */
+/* ============================================================== */
+
+/* Technical Cybernetic Facility Grid */
+.bg-facility-grid {
+  background-size: 36px 36px;
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+}
+
+/* Floating Volumetric Holographic Information Terminal */
+.holographic-panel {
+  position: relative;
+  background: rgba(18, 23, 25, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 16px 48px -8px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 24px -4px rgba(36, 191, 234, 0.08);
+}
+
+.holographic-panel::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(36, 191, 234, 0.6) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+/* Server Rack-Mounted Display Bezel */
+.server-rack-console {
+  position: relative;
+  background: rgba(16, 20, 22, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  box-shadow: 
+    0 12px 36px rgba(0, 0, 0, 0.55),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.03);
+}
+
+/* Volumetric Emitter Screen with Optical Corner Brackets */
+.volumetric-screen {
+  position: relative;
+  background: rgba(14, 18, 20, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(167, 183, 161, 0.25);
+  box-shadow: 
+    0 20px 50px rgba(0, 0, 0, 0.7),
+    0 0 30px rgba(167, 183, 161, 0.12);
+}
+
+/* Optical Corner Reticles */
+.corner-reticle {
+  position: relative;
+}
+.corner-reticle::before,
+.corner-reticle::after {
+  content: '';
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  pointer-events: none;
+}
+.corner-reticle::before {
+  top: -2px;
+  left: -2px;
+  border-top: 1.5px solid rgba(36, 191, 234, 0.6);
+  border-left: 1.5px solid rgba(36, 191, 234, 0.6);
+}
+.corner-reticle::after {
+  bottom: -2px;
+  right: -2px;
+  border-bottom: 1.5px solid rgba(167, 183, 161, 0.6);
+  border-right: 1.5px solid rgba(167, 183, 161, 0.6);
+}
+
 /* Hide scrollbars while allowing scroll */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

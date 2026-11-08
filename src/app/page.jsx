@@ -26,7 +26,7 @@ import Zone1Hero from '@/components/ui/zones/Zone1Hero';
 import Zone2Foundation from '@/components/ui/zones/Zone2Foundation';
 import Section03ProjectionChamber from '@/components/ui/zones/Section03ProjectionChamber';
 
-// EXPERIENCE B: EDITORIAL ARCHIVE (SECTIONS 04 - 09)
+// EXPERIENCE B: FACILITY TERMINAL & EDITORIAL ARCHIVE (SECTIONS 04 - 09)
 import DiscussionRoom from '@/components/ui/editorial/DiscussionRoom';
 import OperationsBoard from '@/components/ui/editorial/OperationsBoard';
 import AiRadar from '@/components/ui/editorial/AiRadar';
@@ -77,7 +77,6 @@ export default function Home() {
     lenis.on('scroll', ScrollTrigger.update);
 
     // 1. ScrollTrigger dedicated to Experience A (Sections 1 to 3)
-    // Snappy scrub: 0.2 and zero-overhead direct ref updates
     const ctx = gsap.context(() => {
       if (immersiveContainerRef.current) {
         ScrollTrigger.create({
@@ -108,7 +107,6 @@ export default function Home() {
       }
 
       // 2. Dedicated Trigger for entering the Central Editorial Archive
-      // Transitions sceneOpacity smoothly to 0 before DiscussionRoom overlaps
       const archiveEl = document.getElementById('editorial-archive');
       if (archiveEl) {
         ScrollTrigger.create({
@@ -188,14 +186,14 @@ export default function Home() {
       {/* Cinematic Architectural Startup Animation */}
       {mounted && isIntro && <StartupIntro onComplete={() => setIsIntro(false)} />}
 
-      {/* 1. Master WebGL 3D Data Centre Canvas (Experience A: Sections 01 - 03) */}
+      {/* 1. Master WebGL 3D Data Centre Canvas: Remains Visually Connected Across the Whole Journey */}
       {mounted && (
         <SceneContainer
           scrollProgressRef={scrollProgressRef}
           isIntro={isIntro}
           isProjecting={activeSection === 'chamber'}
           onOpenRackModal={() => setIsRackModalOpen(true)}
-          sceneOpacity={isEditorialMode ? 0.0 : 1.0}
+          sceneOpacity={isEditorialMode ? 0.35 : 1.0}
           onNavigateToSection={handleNavigateToSection}
           activeNavId={activeNavId}
         />
@@ -255,21 +253,22 @@ export default function Home() {
 
       {/* ============================================================== */}
       {/* EXPERIENCE A: IMMERSIVE 3D FACILITY (SECTIONS 01 TO 03)        */}
+      {/* In-environment floating holographic screens & server displays  */}
       {/* ============================================================== */}
       <div ref={immersiveContainerRef} className="relative z-10 w-full pointer-events-none">
-        {/* SECTION 01: THE ARRIVAL */}
+        {/* SECTION 01: THE ARRIVAL (Holographic Information Terminal) */}
         <div id="section-arrival" className="w-full">
           <Zone1Hero
             onExploreClick={() => handleNavigateToSection('intelligence-core', 'hero')}
           />
         </div>
 
-        {/* SECTION 02: THE INTELLIGENCE CORE */}
+        {/* SECTION 02: THE INTELLIGENCE CORE (Rack-Mounted Server Consoles) */}
         <div id="intelligence-core" className="w-full">
           <Zone2Foundation onInspectRack={() => setIsRackModalOpen(true)} />
         </div>
 
-        {/* SECTION 03: THE PROJECTION CHAMBER */}
+        {/* SECTION 03: THE PROJECTION CHAMBER (Volumetric Emitter Screen) */}
         <div id="section-chamber" className="w-full">
           <Section03ProjectionChamber
             onTransitionToEditorial={() => handleNavigateToSection('discussions', 'discussions')}
@@ -278,34 +277,71 @@ export default function Home() {
       </div>
 
       {/* ============================================================== */}
-      {/* EXPERIENCE B: EDITORIAL ARCHIVE WEBSITE (SECTIONS 04 TO 09)    */}
-      {/* 100% Solid Opaque Graphite Surface with Architectural Gate     */}
+      {/* EXPERIENCE B: CENTRAL FACILITY TERMINAL & ARCHIVE (04 TO 09)   */}
+      {/* Coherent environmental backdrop with atmospheric depth         */}
       {/* ============================================================== */}
-      <div id="editorial-archive" className="relative z-20 w-full bg-[#0A0D0E]">
-        {/* Seamless Architectural Decompression Gate between 3D & Archive */}
-        <div className="relative w-full py-6 sm:py-8 bg-gradient-to-b from-[#101415] via-[#0A0D0E] to-[#0A0D0E] flex items-center justify-center border-t border-white/[0.08]">
-          <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-[#131718]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)] text-[10px] font-mono tracking-[0.2em] uppercase text-[#A7B7A1]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
-            <span>CENTRAL ARCHIVE // INTELLECTUAL COMMONS</span>
+      <div
+        id="editorial-archive"
+        className="relative z-20 w-full bg-[#0C1012]/90 backdrop-blur-2xl border-t border-white/[0.08] bg-facility-grid"
+      >
+        {/* ARCHITECTURAL TRANSITION GATEWAY: VOLUMETRIC CORRIDOR ➔ ARCHIVE DOCK */}
+        <div className="relative w-full py-10 px-6 sm:px-10 flex flex-col items-center justify-center border-b border-white/[0.08] bg-gradient-to-b from-[#101416]/95 via-[#0C1012]/90 to-[#0C1012]/95">
+          {/* Emitter Conduit Optical Alignment Telemetry */}
+          <div className="w-full max-w-4xl flex items-center justify-between gap-4 mb-3.5 text-[10px] font-mono text-slate-400">
+            <span className="flex items-center gap-1.5 text-sage">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse" />
+              <span>TERMINAL DOCKING PROTOCOL: ENGAGED</span>
+            </span>
+            <span className="hidden sm:inline-block text-slate-500">
+              OPTICAL DATA BUS // LATENCY: 0.8ms
+            </span>
+            <span className="text-sage font-semibold">6 REPOSITORIES ONLINE</span>
+          </div>
+
+          {/* Central Decompression Status Badge */}
+          <div className="inline-flex flex-wrap items-center justify-center gap-3 px-5 py-2 rounded-xl bg-[#141819]/90 border border-white/[0.1] shadow-[0_8px_32px_rgba(0,0,0,0.5)] corner-reticle text-xs font-mono text-[#A7B7A1]">
+            <span className="w-2 h-2 rounded-full bg-signal-green animate-pulse shadow-[0_0_8px_#22C55E]" />
+            <span className="font-bold tracking-widest uppercase text-ivory">
+              CENTRAL FACILITY TERMINAL
+            </span>
+            <span className="text-white/20">|</span>
+            <span className="tracking-wider uppercase text-[11px] text-sage">
+              RESEARCH ARCHIVES & INTEL COMMONS
+            </span>
+          </div>
+
+          {/* Sector Breadcrumb Navigation Bar */}
+          <div className="mt-3.5 flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-[10px] font-mono text-slate-400">
+            <span className="text-slate-500">SECTOR TRAJECTORY:</span>
+            <span className="text-slate-400">01 ARRIVAL</span>
+            <span className="text-white/20">➔</span>
+            <span className="text-slate-400">02 CORE</span>
+            <span className="text-white/20">➔</span>
+            <span className="text-slate-400">03 CHAMBER</span>
+            <span className="text-white/20">➔</span>
+            <span className="text-sage font-bold flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse" />
+              04-09 ARCHIVAL COMMONS
+            </span>
           </div>
         </div>
 
-        {/* SECTION 04: THE DISCUSSION ROOM */}
+        {/* SECTION 04: THE DISCUSSION ROOM (Clean, High-Contrast 2D Layout) */}
         <DiscussionRoom />
 
-        {/* SECTION 05: THE OPERATIONS BOARD */}
+        {/* SECTION 05: THE OPERATIONS BOARD (Live Project & Milestone Sprints) */}
         <OperationsBoard />
 
-        {/* SECTION 06: AI RADAR */}
+        {/* SECTION 06: AI RADAR (Model & Technology Radar Horizon) */}
         <AiRadar />
 
-        {/* SECTION 07: PROJECT ARCHIVE */}
+        {/* SECTION 07: PROJECT ARCHIVE (Searchable & Filterable Research Papers & Repos) */}
         <ProjectArchive />
 
-        {/* SECTION 08: THE PEOPLE */}
+        {/* SECTION 08: THE PEOPLE (Student Leads & Research Cadre Directory) */}
         <ThePeople />
 
-        {/* SECTION 09: JOIN THE NETWORK */}
+        {/* SECTION 09: JOIN THE NETWORK (Access Clearance Application Terminal) */}
         <JoinTheNetwork
           onReturnTop={() => handleNavigateToSection('section-arrival', 'hero')}
         />

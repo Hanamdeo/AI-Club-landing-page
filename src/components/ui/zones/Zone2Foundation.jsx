@@ -1,18 +1,16 @@
 'use client';
 
 import React, { useCallback } from 'react';
-import { Target, Compass, Cpu, Activity, Server, ExternalLink } from 'lucide-react';
+import { Target, Compass, Cpu, Server, Activity, ArrowRight } from 'lucide-react';
 import { CLUB_INFO } from '@/data/clubInfo';
 import { RESEARCH_TRACKS } from '@/data/research';
 import { audioManager } from '@/utils/audioManager';
 
 /**
- * Section 02: The Intelligence Core
- * Architectural computing core at Z = -15 in the corridor.
- * Redesigned into an open, asymmetric dual-bay layout:
- * - Left Bay: Clean, high-contrast mission, research tracks, and verified statistics.
- * - Right Bay: Clear negative space framing the interactive 3D server rack node
- *   with an attached hardware telemetry inspection dossier.
+ * Section 02: The Intelligence Core (In-Environment Server Rack Displays)
+ * Presented as rack-mounted hardware displays and blade telemetry docked into the computing aisle:
+ * - Left Bay: Chassis 01 & Chassis 02 Server Display Consoles (Mission, Vision, Modular AI Blades).
+ * - Right Bay: Hardware Diagnostics Console framing the physical 3D compute blade.
  */
 export default function Zone2Foundation({ onInspectRack }) {
   const handleInspect = useCallback(() => {
@@ -28,16 +26,16 @@ export default function Zone2Foundation({ onInspectRack }) {
     >
       <div className="w-full max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
         {/* ============================================================== */}
-        {/* LEFT BAY: Clean Editorial Dossier (Cols 1-7)                   */}
+        {/* LEFT BAY: RACK-MOUNTED SERVER CONSOLES (Cols 1-7)              */}
         {/* ============================================================== */}
         <div className="lg:col-span-7 flex flex-col justify-center pointer-events-auto">
           {/* Section Marker */}
           <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-md bg-[#181D1E] border border-white/[0.08] text-[10px] font-mono text-[#A7B7A1] uppercase tracking-widest w-fit">
             <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
-            <span>SECTOR 02 // INTELLIGENCE CORE</span>
+            <span>SECTOR 02 // INTELLIGENCE CORE • RACK 42U-A</span>
           </div>
 
-          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-archivo font-black text-gradient-cyber tracking-tight mb-2 leading-[1.05]">
+          <h2 className="text-3xl sm:text-5xl lg:text-6xl font-display font-black text-gradient-cyber tracking-tight mb-2 leading-[1.05]">
             THE INTELLIGENCE CORE
           </h2>
 
@@ -45,56 +43,71 @@ export default function Zone2Foundation({ onInspectRack }) {
             Foundational Machine Learning, Novel Architectures & Distributed Systems
           </p>
 
-          {/* Mission & Vision: Slim Architectural Panels with Hairline Borders */}
+          {/* Mission & Vision: Rack-Mounted Server Display Bezels */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-            <div className="p-4 sm:p-5 rounded-xl bg-[#15191A]/85 backdrop-blur-md border border-white/[0.08] crosshair-corner">
-              <div className="flex items-center gap-2 mb-2 text-sage">
-                <Target className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-mono font-semibold tracking-wider uppercase">
-                  Mission Statement
+            {/* Chassis 01: Mission */}
+            <div className="server-rack-console corner-reticle p-4 sm:p-5 rounded-xl">
+              <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/[0.06] text-[9px] font-mono">
+                <span className="flex items-center gap-1.5 text-sage font-bold uppercase tracking-wider">
+                  <Target className="w-3.5 h-3.5" />
+                  CHASSIS 01 // MISSION
+                </span>
+                <span className="text-[#22C55E] flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#22C55E] animate-pulse" />
+                  ACTIVE
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-ivory/80 leading-relaxed font-normal">
+              <p className="text-xs sm:text-sm text-ivory/85 leading-relaxed font-normal">
                 {CLUB_INFO.mission}
               </p>
             </div>
 
-            <div className="p-4 sm:p-5 rounded-xl bg-[#15191A]/85 backdrop-blur-md border border-white/[0.08] crosshair-corner">
-              <div className="flex items-center gap-2 mb-2 text-sage">
-                <Compass className="w-3.5 h-3.5" />
-                <span className="text-[10px] font-mono font-semibold tracking-wider uppercase">
-                  Long-Horizon Vision
+            {/* Chassis 02: Vision */}
+            <div className="server-rack-console corner-reticle p-4 sm:p-5 rounded-xl">
+              <div className="flex items-center justify-between pb-2 mb-2.5 border-b border-white/[0.06] text-[9px] font-mono">
+                <span className="flex items-center gap-1.5 text-sage font-bold uppercase tracking-wider">
+                  <Compass className="w-3.5 h-3.5" />
+                  CHASSIS 02 // VISION
+                </span>
+                <span className="text-[#24BFEA] flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA]" />
+                  SYNCED
                 </span>
               </div>
-              <p className="text-xs sm:text-sm text-ivory/80 leading-relaxed font-normal">
+              <p className="text-xs sm:text-sm text-ivory/85 leading-relaxed font-normal">
                 {CLUB_INFO.vision}
               </p>
             </div>
           </div>
 
-          {/* Core Research Domains: 4-Column Technical Tags */}
+          {/* Core Research Domains: Modular Server Blades (Hot-Swappable AI Trays) */}
           <div className="mb-6">
-            <div className="text-[10px] font-mono uppercase text-slate-400 tracking-wider mb-2 font-semibold">
-              ACTIVE RESEARCH DOMAINS
+            <div className="flex items-center justify-between text-[10px] font-mono uppercase text-slate-400 tracking-wider mb-2 font-semibold">
+              <span>ACTIVE RESEARCH BLADES</span>
+              <span className="text-sage text-[9px]">4/4 BAYS OCCUPIED</span>
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
-              {RESEARCH_TRACKS.slice(0, 4).map((track) => (
+              {RESEARCH_TRACKS.slice(0, 4).map((track, i) => (
                 <div
                   key={track.id}
-                  className="p-3 rounded-lg bg-[#15191A]/70 border border-white/[0.06] hover:border-white/[0.14] transition-colors"
+                  className="p-3 rounded-lg bg-[#141819]/80 border border-white/[0.08] hover:border-sage/40 transition-all card-lift cursor-default"
                 >
-                  <div className="text-[9px] font-mono text-sage uppercase font-semibold mb-0.5">
-                    {track.clusterAllocation}
+                  <div className="flex items-center justify-between text-[8px] font-mono text-sage uppercase font-bold mb-1">
+                    <span>BAY 0{i + 1}</span>
+                    <span className="w-1 h-1 rounded-full bg-signal-green" />
                   </div>
-                  <h4 className="text-xs font-bold text-ivory tracking-tight line-clamp-1">
+                  <h4 className="text-xs font-bold text-ivory tracking-tight line-clamp-1 mb-0.5">
                     {track.title}
                   </h4>
+                  <div className="text-[9px] font-mono text-slate-400 truncate">
+                    {track.clusterAllocation}
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Verified Membership & Cluster Metrics */}
+          {/* Verified Membership & Cluster Metrics in Floor-Docked Bar */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-white/[0.08]">
             {CLUB_INFO.metrics.map((stat, idx) => (
               <div key={idx} className="flex flex-col">
@@ -113,43 +126,43 @@ export default function Zone2Foundation({ onInspectRack }) {
         </div>
 
         {/* ============================================================== */}
-        {/* RIGHT BAY: Open Viewport framing 3D Node + Hardware Dossier     */}
+        {/* RIGHT BAY: Hardware Diagnostics Console Framing 3D Server Node */}
         {/* ============================================================== */}
         <div className="lg:col-span-5 flex flex-col items-start lg:items-end justify-center pointer-events-auto">
-          {/* Hardware Diagnostic Node Card (Frames 3D Server Node) */}
-          <div className="w-full max-w-sm p-5 rounded-xl bg-[#0D1011]/80 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_30px_rgba(0,0,0,0.5)] crosshair-corner">
+          <div className="w-full max-w-sm p-5 rounded-xl server-rack-console corner-reticle shadow-[0_12px_40px_rgba(0,0,0,0.6)]">
             {/* Top Node Status Bar */}
             <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 pb-3 border-b border-white/[0.06]">
-              <span className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-signal-green" />
-                <span>COMPUTE CLUSTER ACTIVE</span>
+              <span className="flex items-center gap-1.5 text-ivory">
+                <span className="w-2 h-2 rounded-full bg-signal-green animate-pulse" />
+                <span className="font-bold">COMPUTE NODE 42U</span>
               </span>
-              <span className="text-sage font-semibold">LAB SYSTEMS</span>
+              <span className="text-sage text-[9px] uppercase font-semibold">NODE_STATUS: NOMINAL</span>
             </div>
 
             {/* Diagnostic Details */}
             <div className="py-3.5 space-y-2 font-mono text-xs">
               <div className="flex justify-between items-baseline">
-                <span className="text-slate-500 text-[11px]">ARCHITECTURE</span>
-                <span className="text-ivory font-semibold text-[11px]">DISTRIBUTED GPU NODES</span>
+                <span className="text-slate-400 text-[11px]">ARCHITECTURE</span>
+                <span className="text-ivory font-semibold text-[11px]">DISTRIBUTED GPU FABRIC</span>
               </div>
               <div className="flex justify-between items-baseline">
-                <span className="text-slate-500 text-[11px]">COOLING LOOP</span>
-                <span className="text-sage text-[11px]">CHILLED AIR PLENUM</span>
+                <span className="text-slate-400 text-[11px]">COOLING PLENUM</span>
+                <span className="text-sage text-[11px]">IN-ROW PRECISION CRAH</span>
               </div>
               <div className="flex justify-between items-baseline">
-                <span className="text-slate-500 text-[11px]">INTERCONNECT</span>
-                <span className="text-ivory text-[11px]">HIGH-SPEED FABRIC</span>
+                <span className="text-slate-400 text-[11px]">CLUSTER BANDWIDTH</span>
+                <span className="text-ivory text-[11px]">800 Gb/s RDMA RoCEv2</span>
               </div>
             </div>
 
             {/* Interactive Server Blade Inspection Trigger */}
             <button
               onClick={handleInspect}
-              className="w-full mt-2 flex items-center justify-center gap-2.5 py-3 px-4 rounded-lg bg-[#15191A] hover:bg-white/[0.06] border border-white/[0.12] hover:border-sage/50 text-xs font-mono font-semibold text-sage transition-all cursor-pointer btn-tactile"
+              className="w-full mt-2 flex items-center justify-center gap-2.5 py-3 px-4 rounded-lg bg-[#15191A] hover:bg-white/[0.06] border border-white/[0.12] hover:border-sage/50 text-xs font-mono font-semibold text-sage transition-all cursor-pointer btn-tactile group"
             >
-              <Cpu className="w-3.5 h-3.5 text-sage" />
-              <span>INSPECT COMPUTE NODE</span>
+              <Cpu className="w-3.5 h-3.5 text-sage group-hover:scale-110 transition-transform" />
+              <span>INSPECT HARDWARE BLADE</span>
+              <ArrowRight className="w-3 h-3 text-sage group-hover:translate-x-0.5 transition-transform" />
             </button>
           </div>
         </div>
