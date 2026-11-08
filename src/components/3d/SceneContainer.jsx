@@ -213,6 +213,7 @@ export default function SceneContainer({
           isIntro={isIntro}
           isProjecting={isProjecting}
           onToggleProjector={onToggleProjector}
+          activeNavId={activeNavId}
         />
       </Canvas>
     </div>

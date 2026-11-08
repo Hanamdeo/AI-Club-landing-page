@@ -63,6 +63,7 @@ export default function BdxRobot({
   scrollProgressRef,
   isProjecting = false,
   onToggleProjector,
+  activeNavId = 'hero',
 }) {
   const rootRef = useRef();
   const hoverGroupRef = useRef();
@@ -71,10 +72,57 @@ export default function BdxRobot({
   const eyeDisplayRef = useRef();
   const leftEyeMeshRef = useRef();
   const rightEyeMeshRef = useRef();
+  const mouthMeshRef = useRef();
   const leftArmRef = useRef();
   const rightArmRef = useRef();
   const projectorBeamRef = useRef();
   const projectorLensRef = useRef();
+
+  // Procedural Visor Dynamic Face Canvas & Texture
+  const faceCanvasRef = useRef(null);
+  const faceTextureRef = useRef(null);
+  const lastRenderStateRef = useRef({
+    emotion: '',
+    blink: 1,
+    gazeX: 0,
+    gazeY: 0,
+    step: 0,
+  });
+
+  const { canvas: visorCanvas, texture: visorTexture } = useMemo(() => {
+    if (typeof document === 'undefined') return { canvas: null, texture: null };
+    const c = document.createElement('canvas');
+    c.width = 1024;
+    c.height = 512;
+    const t = new THREE.CanvasTexture(c);
+    t.needsUpdate = true;
+    return { canvas: c, texture: t };
+  }, []);
+
+  faceCanvasRef.current = visorCanvas;
+  faceTextureRef.current = visorTexture;
+
+  // Emotion State Machine & Gestures
+  const currentEmotionRef = useRef('IDLE');
+  const emotionTimerRef = useRef(0);
+  const emotionDurationRef = useRef(0);
+  const zoneCooldownRef = useRef(0);
+  const lastZoneRef = useRef(-1);
+  const welcomeTriggeredRef = useRef(false);
+  const idleTimeRef = useRef(0);
+
+  // Additive Gesture Offsets (decoupled from spline flight)
+  const gestureTiltZ = useRef(0);
+  const gestureNodX = useRef(0);
+  const gestureBounceY = useRef(0);
+  const gestureArmFlutter = useRef(0);
+  const meshScaleSmoothed = useRef(1.0);
+
+  const triggerEmotion = useCallback((emotion, duration = 2.4) => {
+    currentEmotionRef.current = emotion;
+    emotionTimerRef.current = 0;
+    emotionDurationRef.current = duration;
+  }, []);
 
   // Smooth continuous 3D Catmull-Rom flight trajectories
   const desktopCurve = useMemo(
@@ -142,102 +190,297 @@ export default function BdxRobot({
       if (e) e.stopPropagation();
       isJumping.current = true;
       jumpTime.current = 0;
+      triggerEmotion('EXCITED', 2.6);
       audioManager.playChirp();
       if (onToggleProjector) onToggleProjector();
     },
-    [onToggleProjector]
+    [onToggleProjector, triggerEmotion]
   );
 
   // Digital Eye Blink Timer
   const blinkTimer = useRef(0);
   const isBlinking = useRef(false);
 
-  // =========================================================================
-  // 1. PROCEDURAL DIGITAL MICRO-LED MATRIX CANVAS TEXTURE (ARCH EYES ◠ ◠)
-  // =========================================================================
-  const ledEyeTexture = useMemo(() => {
-    if (typeof document === 'undefined') return null;
-    const canvas = document.createElement('canvas');
-    canvas.width = 1024;
-    canvas.height = 512;
-    const ctx = canvas.getContext('2d');
+  // Welcome Visitor on First Scene Entry
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!welcomeTriggeredRef.current) {
+        welcomeTriggeredRef.current = true;
+        triggerEmotion('EXCITED', 2.8);
+        audioManager.playChirp();
+      }
+    }, 850);
+    return () => clearTimeout(timer);
+  }, [triggerEmotion]);
 
-    // Deep midnight visor screen background
+  // Reactive response when projecting starts or active nav changes
+  useEffect(() => {
+    if (isProjecting) {
+      triggerEmotion('EXCITED', 2.8);
+      audioManager.playChirp();
+    }
+  }, [isProjecting, triggerEmotion]);
+
+  useEffect(() => {
+    if (activeNavId === 'events') {
+      triggerEmotion('HAPPY', 2.4);
+    } else if (activeNavId === 'discussions' || activeNavId === 'radar') {
+      triggerEmotion('THINKING', 2.4);
+    } else if (activeNavId === 'projects') {
+      triggerEmotion('CURIOUS', 2.4);
+    }
+  }, [activeNavId, triggerEmotion]);
+
+  // =========================================================================
+  // 1. PROCEDURAL VISOR EMOTION FACE DRAWER (MICRO-LED MATRIX)
+  // =========================================================================
+  const drawVisorFace = useCallback((ctx, emotion, blinkScale, gazeX, gazeY, time) => {
+    if (!ctx) return;
+    const w = 1024;
+    const h = 512;
+
+    // 1. Deep Midnight Obsidian Screen Background
     ctx.fillStyle = '#060B14';
-    ctx.fillRect(0, 0, 1024, 512);
+    ctx.fillRect(0, 0, w, h);
 
     const dotSpacing = 11;
     const dotSize = 4.4;
 
-    const drawArchEye = (centerX, centerY, outerR, innerR) => {
-      for (let x = centerX - outerR - 15; x <= centerX + outerR + 15; x += dotSpacing) {
-        for (let y = centerY - outerR - 15; y <= centerY + 15; y += dotSpacing) {
-          const dx = x - centerX;
-          const dy = y - centerY;
-          const dist = Math.sqrt(dx * dx + dy * dy);
+    const drawLedDot = (x, y, size = dotSize, color = '#00F0FF', core = '#E6FCFF') => {
+      const grad = ctx.createRadialGradient(x, y, 0, x, y, size * 2.3);
+      grad.addColorStop(0, color);
+      grad.addColorStop(0.35, 'rgba(0, 210, 255, 0.65)');
+      grad.addColorStop(1, 'rgba(0, 210, 255, 0)');
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(x, y, size * 2.3, 0, Math.PI * 2);
+      ctx.fill();
 
-          if (dist >= innerR && dist <= outerR && dy <= 0) {
-            const angle = Math.atan2(-dy, dx);
-            if (angle >= 0.14 * Math.PI && angle <= 0.86 * Math.PI) {
-              // Cyan bloom aura
-              const grad = ctx.createRadialGradient(x, y, 0, x, y, dotSize * 2.4);
-              grad.addColorStop(0, '#00F0FF');
-              grad.addColorStop(0.35, 'rgba(0, 210, 255, 0.7)');
-              grad.addColorStop(1, 'rgba(0, 210, 255, 0)');
-              ctx.fillStyle = grad;
-              ctx.beginPath();
-              ctx.arc(x, y, dotSize * 2.4, 0, Math.PI * 2);
-              ctx.fill();
+      ctx.fillStyle = core;
+      ctx.beginPath();
+      ctx.arc(x, y, size * 0.92, 0, Math.PI * 2);
+      ctx.fill();
+    };
 
-              // High-intensity white-cyan micro-LED dot
-              ctx.fillStyle = '#E6FCFF';
-              ctx.beginPath();
-              ctx.arc(x, y, dotSize * 0.95, 0, Math.PI * 2);
-              ctx.fill();
-            }
-          }
+    const drawBlush = (cx, cy) => {
+      for (let dx = -20; dx <= 20; dx += 11) {
+        for (let dy = -6; dy <= 6; dy += 11) {
+          drawLedDot(cx + dx, cy + dy, 3.4, '#FF4D82', '#FFEBF1');
         }
       }
     };
 
-    // Draw smiling cyan mouth arc (◡) on the micro-LED visor
-    const drawSmile = (centerX, centerY, outerR, innerR) => {
-      for (let x = centerX - outerR - 15; x <= centerX + outerR + 15; x += dotSpacing) {
-        for (let y = centerY - 15; y <= centerY + outerR + 15; y += dotSpacing) {
-          const dx = x - centerX;
-          const dy = y - centerY;
+    const drawSmile = (cx, cy, outerR, innerR, startAngle = 0.18 * Math.PI, endAngle = 0.82 * Math.PI) => {
+      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
+        for (let y = cy - 15; y <= cy + outerR + 15; y += dotSpacing) {
+          const dx = x - cx;
+          const dy = y - cy;
           const dist = Math.sqrt(dx * dx + dy * dy);
-
           if (dist >= innerR && dist <= outerR && dy >= 0) {
             const angle = Math.atan2(dy, dx);
-            if (angle >= 0.18 * Math.PI && angle <= 0.82 * Math.PI) {
-              const grad = ctx.createRadialGradient(x, y, 0, x, y, dotSize * 2.2);
-              grad.addColorStop(0, '#00F0FF');
-              grad.addColorStop(0.35, 'rgba(0, 210, 255, 0.7)');
-              grad.addColorStop(1, 'rgba(0, 210, 255, 0)');
-              ctx.fillStyle = grad;
-              ctx.beginPath();
-              ctx.arc(x, y, dotSize * 2.2, 0, Math.PI * 2);
-              ctx.fill();
-
-              ctx.fillStyle = '#E6FCFF';
-              ctx.beginPath();
-              ctx.arc(x, y, dotSize * 0.90, 0, Math.PI * 2);
-              ctx.fill();
+            if (angle >= startAngle && angle <= endAngle) {
+              drawLedDot(x, y, dotSize * 0.95);
             }
           }
         }
       }
     };
 
-    drawArchEye(310, 310, 150, 95);
-    drawArchEye(714, 310, 150, 95);
-    drawSmile(512, 350, 95, 68);
+    const drawFrown = (cx, cy, outerR, innerR, startAngle = 0.18 * Math.PI, endAngle = 0.82 * Math.PI) => {
+      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
+        for (let y = cy - outerR - 15; y <= cy + 15; y += dotSpacing) {
+          const dx = x - cx;
+          const dy = y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist >= innerR && dist <= outerR && dy <= 0) {
+            const angle = Math.atan2(-dy, dx);
+            if (angle >= startAngle && angle <= endAngle) {
+              drawLedDot(x, y, dotSize * 0.95);
+            }
+          }
+        }
+      }
+    };
 
-    const tex = new THREE.CanvasTexture(canvas);
-    tex.needsUpdate = true;
-    return tex;
+    // Blinking check: if eyes are closed, draw micro-scanlines
+    if (blinkScale < 0.18) {
+      for (let x = 210; x <= 410; x += dotSpacing) {
+        drawLedDot(x, 290, dotSize * 0.85);
+      }
+      for (let x = 614; x <= 814; x += dotSpacing) {
+        drawLedDot(x, 290, dotSize * 0.85);
+      }
+      drawSmile(512, 355, 80, 58);
+      return;
+    }
+
+    // Draw eyes with vertical blink squash transform
+    ctx.save();
+    ctx.translate(0, 290);
+    ctx.scale(1, Math.max(0.18, blinkScale));
+    ctx.translate(0, -290);
+
+    const drawArchEye = (cx, cy, outerR, innerR, startA = 0.14 * Math.PI, endA = 0.86 * Math.PI) => {
+      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
+        for (let y = cy - outerR - 15; y <= cy + 15; y += dotSpacing) {
+          const dx = x - cx;
+          const dy = y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist >= innerR && dist <= outerR && dy <= 0) {
+            const angle = Math.atan2(-dy, dx);
+            if (angle >= startA && angle <= endA) {
+              drawLedDot(x, y);
+            }
+          }
+        }
+      }
+    };
+
+    const drawDownArchEye = (cx, cy, outerR, innerR, startA = 0.15 * Math.PI, endA = 0.85 * Math.PI) => {
+      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
+        for (let y = cy - 15; y <= cy + outerR + 15; y += dotSpacing) {
+          const dx = x - cx;
+          const dy = y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist >= innerR && dist <= outerR && dy >= 0) {
+            const angle = Math.atan2(dy, dx);
+            if (angle >= startA && angle <= endA) {
+              drawLedDot(x, y);
+            }
+          }
+        }
+      }
+    };
+
+    const drawCaretEye = (apexX, apexY, width = 80, height = 75) => {
+      for (let step = 0; step <= 8; step++) {
+        const frac = step / 8;
+        // Left leg
+        const lx = apexX - frac * width;
+        const ly = apexY + frac * height;
+        drawLedDot(lx, ly, dotSize * 1.05);
+        drawLedDot(lx + 4, ly, dotSize * 0.8);
+        // Right leg
+        const rx = apexX + frac * width;
+        const ry = apexY + frac * height;
+        drawLedDot(rx, ry, dotSize * 1.05);
+        drawLedDot(rx - 4, ry, dotSize * 0.8);
+      }
+    };
+
+    const drawRoundEye = (cx, cy, gazePxX, gazePxY) => {
+      const outerR = 115;
+      const innerR = 80;
+      for (let x = cx - outerR - 10; x <= cx + outerR + 10; x += dotSpacing) {
+        for (let y = cy - outerR - 10; y <= cy + outerR + 10; y += dotSpacing) {
+          const dx = x - cx;
+          const dy = y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist >= innerR && dist <= outerR) {
+            drawLedDot(x, y, dotSize * 0.95);
+          }
+        }
+      }
+      const px = cx + gazePxX;
+      const py = cy + gazePxY;
+      for (let x = px - 36; x <= px + 36; x += dotSpacing) {
+        for (let y = py - 36; y <= py + 36; y += dotSpacing) {
+          const dx = x - px;
+          const dy = y - py;
+          if (dx * dx + dy * dy <= 34 * 34) {
+            drawLedDot(x, y, dotSize * 1.05, '#00F0FF', '#FFFFFF');
+          }
+        }
+      }
+    };
+
+    const drawThinkingBars = () => {
+      for (let x = 220; x <= 400; x += dotSpacing) {
+        drawLedDot(x, 276, dotSize * 1.0);
+        drawLedDot(x, 302, dotSize * 1.0);
+      }
+      for (let x = 624; x <= 804; x += dotSpacing) {
+        drawLedDot(x, 276, dotSize * 1.0);
+        drawLedDot(x, 302, dotSize * 1.0);
+      }
+      const pulseIndex = Math.floor((time * 4) % 3);
+      const dots = [476, 512, 548];
+      dots.forEach((x, idx) => {
+        const isActive = idx === pulseIndex;
+        drawLedDot(
+          x,
+          289,
+          isActive ? dotSize * 1.2 : dotSize * 0.7,
+          isActive ? '#00FFAA' : '#007A99',
+          isActive ? '#FFFFFF' : '#66D9FF'
+        );
+      });
+    };
+
+    if (emotion === 'HAPPY') {
+      drawArchEye(310, 285, 150, 92, 0.10 * Math.PI, 0.90 * Math.PI);
+      drawArchEye(714, 285, 150, 92, 0.10 * Math.PI, 0.90 * Math.PI);
+      drawBlush(235, 345);
+      drawBlush(789, 345);
+    } else if (emotion === 'EXCITED') {
+      drawCaretEye(310, 235);
+      drawCaretEye(714, 235);
+      drawBlush(235, 345);
+      drawBlush(789, 345);
+    } else if (emotion === 'CURIOUS') {
+      const pxX = Math.max(-28, Math.min(28, gazeX * 26));
+      const pxY = Math.max(-18, Math.min(18, -gazeY * 18));
+      drawRoundEye(310, 285, pxX, pxY);
+      drawRoundEye(714, 285, pxX, pxY);
+    } else if (emotion === 'THINKING') {
+      drawThinkingBars();
+    } else if (emotion === 'SAD') {
+      drawDownArchEye(310, 295, 142, 95);
+      drawDownArchEye(714, 295, 142, 95);
+    } else {
+      // Default IDLE
+      drawArchEye(310, 290, 145, 95);
+      drawArchEye(714, 290, 145, 95);
+    }
+
+    ctx.restore();
+
+    // Draw mouth (outside the blink scale squash)
+    if (emotion === 'CURIOUS') {
+      const cx = 512;
+      const cy = 368;
+      for (let x = cx - 36; x <= cx + 36; x += dotSpacing) {
+        for (let y = cy - 36; y <= cy + 36; y += dotSpacing) {
+          const dx = x - cx;
+          const dy = y - cy;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist >= 18 && dist <= 36) {
+            drawLedDot(x, y, dotSize * 0.9);
+          }
+        }
+      }
+    } else if (emotion === 'THINKING') {
+      for (let x = 468; x <= 556; x += dotSpacing) {
+        drawLedDot(x, 370, dotSize * 0.95);
+      }
+    } else if (emotion === 'SAD') {
+      drawFrown(512, 395, 82, 58);
+    } else if (emotion === 'EXCITED') {
+      drawSmile(512, 350, 115, 68, 0.14 * Math.PI, 0.86 * Math.PI);
+    } else if (emotion === 'HAPPY') {
+      drawSmile(512, 352, 105, 72, 0.16 * Math.PI, 0.84 * Math.PI);
+    } else {
+      drawSmile(512, 355, 95, 68);
+    }
   }, []);
+
+  // Initial Face Render
+  useEffect(() => {
+    if (visorCanvas) {
+      drawVisorFace(visorCanvas.getContext('2d'), 'IDLE', 1.0, 0, 0, 0);
+      if (visorTexture) visorTexture.needsUpdate = true;
+    }
+  }, [visorCanvas, visorTexture, drawVisorFace]);
 
   // =========================================================================
   // 2. PROCEDURAL CHEST ARC REACTOR TEXTURE (12 SEGMENTED CYAN BARS)
@@ -412,15 +655,95 @@ export default function BdxRobot({
         rootRef.current.rotation.z = currentRollZ.current;
       }
 
-      // 7. Natural Wing Arm Stabilization
+      // 7. Natural Wing Arm Stabilization + Expression Flutter
       if (leftArmRef.current && rightArmRef.current) {
         const armSway = Math.sin(t * 2.0) * 0.02 * hoverFactor;
         const armFlightOffset = motionWeight * 0.05;
-        leftArmRef.current.rotation.z = -0.20 - armSway + armFlightOffset;
-        rightArmRef.current.rotation.z = 0.20 + armSway - armFlightOffset;
+        leftArmRef.current.rotation.z = -0.20 - armSway + armFlightOffset - gestureArmFlutter.current;
+        rightArmRef.current.rotation.z = 0.20 + armSway - armFlightOffset + gestureArmFlutter.current;
         leftArmRef.current.rotation.x = currentPitchX.current * 0.6;
         rightArmRef.current.rotation.x = currentPitchX.current * 0.6;
       }
+
+      // 8. Emotion State Machine & Meaningful Zone Triggers
+      zoneCooldownRef.current += safeDelta;
+      let currentZone = 0;
+      if (p >= 0.85) currentZone = 3;
+      else if (p >= 0.60) currentZone = 2;
+      else if (p >= 0.28) currentZone = 1;
+
+      if (currentZone !== lastZoneRef.current && zoneCooldownRef.current > 4.5) {
+        lastZoneRef.current = currentZone;
+        zoneCooldownRef.current = 0;
+        if (currentZone === 1) {
+          // Foundation Bay: Robot inspects the high-density computing clusters
+          triggerEmotion('CURIOUS', 2.8);
+        } else if (currentZone === 2) {
+          // Event Horizon / Interactive Server: Robot evaluates data streams
+          triggerEmotion('THINKING', 2.8);
+        } else if (currentZone === 3) {
+          // Projection Chamber: Robot celebrates arrival at terminal
+          triggerEmotion('EXCITED', 2.8);
+          audioManager.playChirp();
+        }
+      }
+
+      // Idle Curiosity: When visitor pauses, robot glances and observes
+      if (absVel < 0.005) {
+        idleTimeRef.current += safeDelta;
+        if (idleTimeRef.current > 5.5 && currentEmotionRef.current === 'IDLE') {
+          triggerEmotion(Math.random() > 0.4 ? 'CURIOUS' : 'HAPPY', 2.2);
+          idleTimeRef.current = 0;
+        }
+      } else {
+        idleTimeRef.current = 0;
+      }
+    }
+
+    // Emotion Countdown
+    emotionTimerRef.current += safeDelta;
+    if (currentEmotionRef.current !== 'IDLE' && emotionTimerRef.current >= emotionDurationRef.current) {
+      currentEmotionRef.current = 'IDLE';
+    }
+
+    const currentEmotion = currentEmotionRef.current;
+    const emotionProgress = Math.min(1, emotionTimerRef.current / Math.max(emotionDurationRef.current, 0.001));
+
+    // Dynamic Additive Gesture Offsets
+    let targetGestureTiltZ = 0;
+    let targetGestureNodX = 0;
+    let targetGestureBounceY = 0;
+    let targetArmFlutter = 0;
+
+    if (currentEmotion === 'EXCITED') {
+      const hopPhase = emotionProgress * Math.PI * 4;
+      targetGestureBounceY = Math.max(0, Math.sin(hopPhase)) * 0.15 * (1 - emotionProgress);
+      targetArmFlutter = Math.sin(t * 22) * 0.14 * (1 - emotionProgress);
+      targetGestureTiltZ = Math.sin(t * 8) * 0.06 * (1 - emotionProgress);
+    } else if (currentEmotion === 'HAPPY') {
+      const bouncePhase = emotionProgress * Math.PI * 2;
+      targetGestureBounceY = Math.max(0, Math.sin(bouncePhase)) * 0.08 * (1 - emotionProgress);
+      targetGestureNodX = Math.sin(bouncePhase) * 0.04;
+    } else if (currentEmotion === 'CURIOUS') {
+      targetGestureTiltZ = 0.14; // ~8 deg playful inquisitiveness tilt
+      targetGestureNodX = -0.05;
+    } else if (currentEmotion === 'THINKING') {
+      targetGestureNodX = -0.08;
+      targetGestureTiltZ = -0.04;
+    } else if (currentEmotion === 'SAD') {
+      targetGestureNodX = 0.09;
+      targetGestureBounceY = -0.03;
+    }
+
+    const gestureLerp = 1 - Math.exp(-safeDelta * 6.0);
+    gestureTiltZ.current += (targetGestureTiltZ - gestureTiltZ.current) * gestureLerp;
+    gestureNodX.current += (targetGestureNodX - gestureNodX.current) * gestureLerp;
+    gestureBounceY.current += (targetGestureBounceY - gestureBounceY.current) * (1 - Math.exp(-safeDelta * 10.0));
+    gestureArmFlutter.current += (targetArmFlutter - gestureArmFlutter.current) * gestureLerp;
+
+    // Apply Root Additive Bounce
+    if (rootRef.current && !isStatic && !hoverMode) {
+      rootRef.current.position.y += gestureBounceY.current;
     }
 
     // Inquisitive Cursor Gaze Tracking (Grounded & Stable)
@@ -440,12 +763,11 @@ export default function BdxRobot({
       const safeDelta = Math.min(delta, 0.05);
       const headLerp = 1 - Math.exp(-safeDelta * 5.0);
       headRef.current.rotation.y += (targetRotY - headRef.current.rotation.y) * headLerp;
-      headRef.current.rotation.x += (targetRotX - headRef.current.rotation.x) * headLerp;
-      // Permanent Roll Lock: upright at all times
-      headRef.current.rotation.z = 0;
+      headRef.current.rotation.x += (targetRotX + gestureNodX.current - headRef.current.rotation.x) * headLerp;
+      headRef.current.rotation.z += (gestureTiltZ.current - headRef.current.rotation.z) * headLerp;
     }
 
-    // Digital Eye Blinking Animation (Squashes into sharp horizontal scanlines)
+    // Digital Eye Blinking Animation
     const safeDelta = Math.min(delta, 0.05);
     blinkTimer.current += safeDelta;
     if (blinkTimer.current > 3.8) {
@@ -456,14 +778,60 @@ export default function BdxRobot({
       }
     }
 
-    const eyeScaleY = isBlinking.current ? 0.06 : 1.0;
-    const eyeLerp = 1 - Math.exp(-safeDelta * 14.0);
-    if (eyeDisplayRef.current) {
-      eyeDisplayRef.current.scale.y += (eyeScaleY - eyeDisplayRef.current.scale.y) * eyeLerp;
-    }
+    // Dynamic 3D Mesh Scaling (Arch eyes & mouth active in IDLE and HAPPY, smoothly hidden in other emotions)
+    const targetMeshScale = (currentEmotion === 'IDLE' || currentEmotion === 'HAPPY') ? 1.0 : 0.0;
+    meshScaleSmoothed.current += (targetMeshScale - meshScaleSmoothed.current) * (1 - Math.exp(-safeDelta * 14.0));
+    const s = meshScaleSmoothed.current;
+    const eyeScaleY = (isBlinking.current ? 0.06 : 1.0) * s;
+
     if (leftEyeMeshRef.current && rightEyeMeshRef.current) {
-      leftEyeMeshRef.current.scale.y += (eyeScaleY - leftEyeMeshRef.current.scale.y) * eyeLerp;
-      rightEyeMeshRef.current.scale.y += (eyeScaleY - rightEyeMeshRef.current.scale.y) * eyeLerp;
+      leftEyeMeshRef.current.scale.set(s, eyeScaleY, s);
+      rightEyeMeshRef.current.scale.set(s, eyeScaleY, s);
+    }
+    if (mouthMeshRef.current) {
+      mouthMeshRef.current.scale.set(s, s, s);
+    }
+
+    // High-Performance Dynamic Face Canvas Redraw (Zero overhead when idle/flying)
+    let needsRedraw = false;
+    const currentBlink = isBlinking.current ? 0.06 : 1.0;
+    const timeStep = Math.floor(t * 4);
+
+    if (lastRenderStateRef.current.emotion !== currentEmotion) {
+      needsRedraw = true;
+    }
+    if (Math.abs(lastRenderStateRef.current.blink - currentBlink) > 0.05) {
+      needsRedraw = true;
+    }
+    if (currentEmotion === 'THINKING' && lastRenderStateRef.current.step !== timeStep) {
+      needsRedraw = true;
+    }
+    if (currentEmotion === 'CURIOUS') {
+      if (
+        Math.abs(lastRenderStateRef.current.gazeX - mx) > 0.06 ||
+        Math.abs(lastRenderStateRef.current.gazeY - my) > 0.06
+      ) {
+        needsRedraw = true;
+      }
+    }
+
+    if (needsRedraw && faceCanvasRef.current && faceTextureRef.current) {
+      lastRenderStateRef.current = {
+        emotion: currentEmotion,
+        blink: currentBlink,
+        gazeX: mx,
+        gazeY: my,
+        step: timeStep,
+      };
+      drawVisorFace(
+        faceCanvasRef.current.getContext('2d'),
+        currentEmotion,
+        currentBlink,
+        mx,
+        my,
+        t
+      );
+      faceTextureRef.current.needsUpdate = true;
     }
 
     if (projectorLensRef.current) {
@@ -568,6 +936,9 @@ export default function BdxRobot({
         e.stopPropagation();
         setHovered(true);
         if (typeof document !== 'undefined') document.body.style.cursor = 'pointer';
+        if (currentEmotionRef.current === 'IDLE') {
+          triggerEmotion('HAPPY', 1.8);
+        }
       }}
       onPointerOut={() => {
         setHovered(false);
@@ -603,12 +974,13 @@ export default function BdxRobot({
           {/* ============================================================ */}
           {/* DIGITAL MICRO-LED MATRIX DISPLAY SCREEN (VISOR FACE)         */}
           {/* ============================================================ */}
-          {ledEyeTexture && (
+          {/* DIGITAL MICRO-LED MATRIX DISPLAY SCREEN (VISOR FACE) */}
+          {visorTexture && (
             <group ref={eyeDisplayRef} position={[0, 0.04, 0.575]} renderOrder={9}>
               <mesh>
                 <planeGeometry args={[0.54, 0.28]} />
                 <meshBasicMaterial
-                  map={ledEyeTexture}
+                  map={visorTexture}
                   transparent
                   opacity={0.96}
                   blending={THREE.AdditiveBlending}
@@ -647,7 +1019,7 @@ export default function BdxRobot({
             </group>
 
             {/* Expressive Cute Smiling Mouth Arch (◡) */}
-            <group position={[0, -0.092, 0]} renderOrder={10}>
+            <group ref={mouthMeshRef} position={[0, -0.092, 0]} renderOrder={10}>
               <mesh rotation={[0, 0, Math.PI * 1.15]}>
                 <torusGeometry args={[0.052, 0.015, 16, 32, Math.PI * 0.70]} />
                 <meshBasicMaterial color="#00E5FF" toneMapped={false} />
