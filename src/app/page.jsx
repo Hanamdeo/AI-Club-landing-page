@@ -244,40 +244,6 @@ export default function Home() {
         onNavigateToSection={handleNavigateToSection}
       />
 
-      {/* 5. Interactive BDX-01 Emoji Expression Dock (😊 😂 😎 😢 🤨 😑) */}
-      <div
-        className={`fixed bottom-6 right-6 z-40 transition-opacity duration-700 ${
-          isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'
-        }`}
-      >
-        <div className="flex items-center gap-1 bg-[#0A0E12]/85 backdrop-blur-md border border-cyan-500/25 px-2.5 py-1.5 rounded-full shadow-2xl hover:border-cyan-400/50 transition-colors">
-          <span className="text-[10px] font-mono tracking-wider text-cyan-400 font-semibold px-1.5 uppercase hidden sm:inline">
-            BDX Mood:
-          </span>
-          {[
-            { id: 'HAPPY', emoji: '😊', label: 'Warm Blush' },
-            { id: 'LAUGH', emoji: '😂', label: 'Tears of Joy' },
-            { id: 'COOL', emoji: '😎', label: 'Cyber Shades' },
-            { id: 'CRY', emoji: '😢', label: 'Crying Tear' },
-            { id: 'SKEPTICAL', emoji: '🤨', label: 'Raised Eyebrow' },
-            { id: 'DEADPAN', emoji: '😑', label: 'Deadpan' },
-          ].map(({ id, emoji, label }, idx) => (
-            <button
-              key={id}
-              onClick={() => {
-                if (typeof window !== 'undefined') {
-                  window.dispatchEvent(new CustomEvent('bdx-emotion', { detail: id }));
-                }
-              }}
-              className="w-8 h-8 flex items-center justify-center text-lg rounded-full hover:bg-cyan-500/20 active:scale-90 transition-all cursor-pointer"
-              title={`${label} (${emoji}) - Shortcut: Press '${idx + 1}'`}
-            >
-              {emoji}
-            </button>
-          ))}
-        </div>
-      </div>
-
       {/* ============================================================== */}
       {/* EXPERIENCE A: IMMERSIVE 3D FACILITY (SECTIONS 01 TO 03)        */}
       {/* In-environment floating holographic screens & server displays  */}

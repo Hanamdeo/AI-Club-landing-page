@@ -200,9 +200,8 @@ export default function BdxRobot({
       emojiCycleIndex.current = (emojiCycleIndex.current + 1) % cycleList.length;
       triggerEmotion(nextEmotion, 4.0);
       audioManager.playEmotionSound(nextEmotion);
-      if (onToggleProjector) onToggleProjector();
     },
-    [cycleList, onToggleProjector, triggerEmotion]
+    [cycleList, triggerEmotion]
   );
 
   // Global window event listener for emotion triggers from UI docks or buttons
@@ -275,399 +274,296 @@ export default function BdxRobot({
   // =========================================================================
   // 1. PROCEDURAL VISOR EMOTION FACE DRAWER (MICRO-LED MATRIX)
   // =========================================================================
+  // =========================================================================
+  // 1. PROCEDURAL VISOR EMOTION FACE DRAWER (HIGH-RES OLED DISPLAY)
+  // Accurate, highly visible emojis (😊, 😂, 😎, 😢, 🤨, 😑) with bold outlines,
+  // pitch-black sunglasses with white reflection glares, and prominent visible mouths.
+  // =========================================================================
   const drawVisorFace = useCallback((ctx, emotion, blinkScale, gazeX, gazeY, time) => {
     if (!ctx) return;
     const w = 1024;
     const h = 512;
 
-    // 1. Deep Midnight Obsidian Screen Background
-    ctx.fillStyle = '#060B14';
+    // 1. Deep Obsidian Midnight Visor Screen Background
+    ctx.fillStyle = '#050912';
     ctx.fillRect(0, 0, w, h);
 
-    const dotSpacing = 11;
-    const dotSize = 4.4;
+    // Glowing Neon Stroke Helper
+    const drawGlowStroke = (drawFn, color = '#00F0FF', coreColor = '#FFFFFF', lineWidth = 20, glowWidth = 34) => {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 240, 255, 0.28)';
+      ctx.lineWidth = glowWidth;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      drawFn();
+      ctx.stroke();
 
-    const drawLedDot = (x, y, size = dotSize, color = '#00F0FF', core = '#E6FCFF') => {
-      const grad = ctx.createRadialGradient(x, y, 0, x, y, size * 2.3);
-      grad.addColorStop(0, color);
-      grad.addColorStop(0.35, 'rgba(0, 210, 255, 0.65)');
-      grad.addColorStop(1, 'rgba(0, 210, 255, 0)');
+      ctx.strokeStyle = color;
+      ctx.lineWidth = lineWidth;
+      drawFn();
+      ctx.stroke();
+
+      if (coreColor) {
+        ctx.strokeStyle = coreColor;
+        ctx.lineWidth = Math.max(5, lineWidth * 0.44);
+        drawFn();
+        ctx.stroke();
+      }
+      ctx.restore();
+    };
+
+    // Cheerful smiling arch eye ◠
+    const drawArchEye = (cx, cy, radius = 76, startA = Math.PI * 0.12, endA = Math.PI * 0.88) => {
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, Math.PI + startA, Math.PI + endA, false);
+      }, '#00F0FF', '#FFFFFF', 20, 34);
+    };
+
+    // Sad downturned arch eye ◡
+    const drawDownArchEye = (cx, cy, radius = 76, startA = Math.PI * 0.12, endA = Math.PI * 0.88) => {
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, startA, endA, false);
+      }, '#00F0FF', '#FFFFFF', 20, 34);
+    };
+
+    // Straight horizontal bar for eyes or mouth
+    const drawFlatBar = (x1, y1, x2, y2, width = 20, color = '#00F0FF', core = '#FFFFFF') => {
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+      }, color, core, width, width + 14);
+    };
+
+    // Happy smiling mouth curve ◡
+    const drawSmileMouth = (cx = 512, cy = 300, radius = 76, startA = Math.PI * 0.15, endA = Math.PI * 0.85) => {
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, startA, endA, false);
+      }, '#00F0FF', '#FFFFFF', 18, 30);
+    };
+
+    // Sad frown mouth curve ◠
+    const drawFrownMouth = (cx = 512, cy = 390, radius = 76, startA = Math.PI * 0.15, endA = Math.PI * 0.85) => {
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, Math.PI + startA, Math.PI + endA, false);
+      }, '#00F0FF', '#FFFFFF', 18, 30);
+    };
+
+    // Glowing rosy pink cheeks
+    const drawBlush = (cx, cy, rx = 44, ry = 24) => {
+      ctx.save();
+      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx);
+      grad.addColorStop(0, 'rgba(255, 60, 140, 0.75)');
+      grad.addColorStop(0.55, 'rgba(255, 30, 110, 0.35)');
+      grad.addColorStop(1, 'rgba(255, 0, 80, 0)');
       ctx.fillStyle = grad;
       ctx.beginPath();
-      ctx.arc(x, y, size * 2.3, 0, Math.PI * 2);
+      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
       ctx.fill();
-
-      ctx.fillStyle = core;
-      ctx.beginPath();
-      ctx.arc(x, y, size * 0.92, 0, Math.PI * 2);
-      ctx.fill();
+      ctx.restore();
     };
 
-    const drawBlush = (cx, cy) => {
-      for (let dx = -20; dx <= 20; dx += 11) {
-        for (let dy = -6; dy <= 6; dy += 11) {
-          drawLedDot(cx + dx, cy + dy, 3.4, '#FF4D82', '#FFEBF1');
-        }
+    // Blinking eye squash: if blinking and emotion is not closed-eye emoji
+    const isClosedEye = emotion === 'LAUGH' || emotion === 'COOL' || emotion === 'DEADPAN';
+    if (blinkScale < 0.2 && !isClosedEye) {
+      drawFlatBar(220, 225, 400, 225, 14, '#00F0FF', '#FFFFFF');
+      drawFlatBar(624, 225, 804, 225, 14, '#00F0FF', '#FFFFFF');
+      if (emotion === 'CRY') {
+        drawFrownMouth(512, 390, 76);
+      } else {
+        drawSmileMouth(512, 300, 76);
       }
-    };
-
-    const drawSmile = (cx, cy, outerR, innerR, startAngle = 0.18 * Math.PI, endAngle = 0.82 * Math.PI) => {
-      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
-        for (let y = cy - 15; y <= cy + outerR + 15; y += dotSpacing) {
-          const dx = x - cx;
-          const dy = y - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist >= innerR && dist <= outerR && dy >= 0) {
-            const angle = Math.atan2(dy, dx);
-            if (angle >= startAngle && angle <= endAngle) {
-              drawLedDot(x, y, dotSize * 0.95);
-            }
-          }
-        }
-      }
-    };
-
-    const drawFrown = (cx, cy, outerR, innerR, startAngle = 0.18 * Math.PI, endAngle = 0.82 * Math.PI) => {
-      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
-        for (let y = cy - outerR - 15; y <= cy + 15; y += dotSpacing) {
-          const dx = x - cx;
-          const dy = y - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist >= innerR && dist <= outerR && dy <= 0) {
-            const angle = Math.atan2(-dy, dx);
-            if (angle >= startAngle && angle <= endAngle) {
-              drawLedDot(x, y, dotSize * 0.95);
-            }
-          }
-        }
-      }
-    };
-
-    // Blinking check: if eyes are closed, draw micro-scanlines
-    if (blinkScale < 0.18) {
-      for (let x = 210; x <= 410; x += dotSpacing) {
-        drawLedDot(x, 290, dotSize * 0.85);
-      }
-      for (let x = 614; x <= 814; x += dotSpacing) {
-        drawLedDot(x, 290, dotSize * 0.85);
-      }
-      drawSmile(512, 355, 80, 58);
       return;
     }
 
-    // Draw eyes with vertical blink squash transform
-    ctx.save();
-    ctx.translate(0, 290);
-    ctx.scale(1, Math.max(0.18, blinkScale));
-    ctx.translate(0, -290);
-
-    const drawArchEye = (cx, cy, outerR, innerR, startA = 0.14 * Math.PI, endA = 0.86 * Math.PI) => {
-      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
-        for (let y = cy - outerR - 15; y <= cy + 15; y += dotSpacing) {
-          const dx = x - cx;
-          const dy = y - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist >= innerR && dist <= outerR && dy <= 0) {
-            const angle = Math.atan2(-dy, dx);
-            if (angle >= startA && angle <= endA) {
-              drawLedDot(x, y);
-            }
-          }
-        }
-      }
-    };
-
-    const drawDownArchEye = (cx, cy, outerR, innerR, startA = 0.15 * Math.PI, endA = 0.85 * Math.PI) => {
-      for (let x = cx - outerR - 15; x <= cx + outerR + 15; x += dotSpacing) {
-        for (let y = cy - 15; y <= cy + outerR + 15; y += dotSpacing) {
-          const dx = x - cx;
-          const dy = y - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist >= innerR && dist <= outerR && dy >= 0) {
-            const angle = Math.atan2(dy, dx);
-            if (angle >= startA && angle <= endA) {
-              drawLedDot(x, y);
-            }
-          }
-        }
-      }
-    };
-
-    const drawCaretEye = (apexX, apexY, width = 80, height = 75) => {
-      for (let step = 0; step <= 8; step++) {
-        const frac = step / 8;
-        // Left leg
-        const lx = apexX - frac * width;
-        const ly = apexY + frac * height;
-        drawLedDot(lx, ly, dotSize * 1.05);
-        drawLedDot(lx + 4, ly, dotSize * 0.8);
-        // Right leg
-        const rx = apexX + frac * width;
-        const ry = apexY + frac * height;
-        drawLedDot(rx, ry, dotSize * 1.05);
-        drawLedDot(rx - 4, ry, dotSize * 0.8);
-      }
-    };
-
-    const drawRoundEye = (cx, cy, gazePxX, gazePxY) => {
-      const outerR = 115;
-      const innerR = 80;
-      for (let x = cx - outerR - 10; x <= cx + outerR + 10; x += dotSpacing) {
-        for (let y = cy - outerR - 10; y <= cy + outerR + 10; y += dotSpacing) {
-          const dx = x - cx;
-          const dy = y - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist >= innerR && dist <= outerR) {
-            drawLedDot(x, y, dotSize * 0.95);
-          }
-        }
-      }
-      const px = cx + gazePxX;
-      const py = cy + gazePxY;
-      for (let x = px - 36; x <= px + 36; x += dotSpacing) {
-        for (let y = py - 36; y <= py + 36; y += dotSpacing) {
-          const dx = x - px;
-          const dy = y - py;
-          if (dx * dx + dy * dy <= 34 * 34) {
-            drawLedDot(x, y, dotSize * 1.05, '#00F0FF', '#FFFFFF');
-          }
-        }
-      }
-    };
-
-    const drawThinkingBars = () => {
-      for (let x = 220; x <= 400; x += dotSpacing) {
-        drawLedDot(x, 276, dotSize * 1.0);
-        drawLedDot(x, 302, dotSize * 1.0);
-      }
-      for (let x = 624; x <= 804; x += dotSpacing) {
-        drawLedDot(x, 276, dotSize * 1.0);
-        drawLedDot(x, 302, dotSize * 1.0);
-      }
-      const pulseIndex = Math.floor((time * 4) % 3);
-      const dots = [476, 512, 548];
-      dots.forEach((x, idx) => {
-        const isActive = idx === pulseIndex;
-        drawLedDot(
-          x,
-          289,
-          isActive ? dotSize * 1.2 : dotSize * 0.7,
-          isActive ? '#00FFAA' : '#007A99',
-          isActive ? '#FFFFFF' : '#66D9FF'
-        );
-      });
-    };
-
-    // -----------------------------------------------------------------
-    // EXPRESSIONS & EMOJIS (😊, 😂, 😎, 😢, 🤨, 😑)
-    // -----------------------------------------------------------------
+    // 1. 😊 HAPPY
     if (emotion === 'HAPPY') {
-      // 😊 Warm blushing smile
-      drawArchEye(310, 285, 150, 92, 0.10 * Math.PI, 0.90 * Math.PI);
-      drawArchEye(714, 285, 150, 92, 0.10 * Math.PI, 0.90 * Math.PI);
-      drawBlush(235, 345);
-      drawBlush(789, 345);
-    } else if (emotion === 'LAUGH') {
-      // 😂 Tears of Joy: Squeezed laughing eyes (> <) + streaming animated tears
-      // Left eye ">": vertex pointing inward at (360, 285)
-      for (let step = 0; step <= 8; step++) {
-        const frac = step / 8;
-        const ux1 = 360 - frac * 120;
-        const uy1 = 285 - frac * 45;
-        drawLedDot(ux1, uy1, dotSize * 1.15, '#00F0FF', '#FFFFFF');
-        drawLedDot(ux1, uy1 + 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
-        const lx1 = 360 - frac * 120;
-        const ly1 = 285 + frac * 45;
-        drawLedDot(lx1, ly1, dotSize * 1.15, '#00F0FF', '#FFFFFF');
-        drawLedDot(lx1, ly1 - 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
-      }
+      drawArchEye(310, 240, 76);
+      drawArchEye(714, 240, 76);
+      drawBlush(220, 255);
+      drawBlush(804, 255);
+      drawSmileMouth(512, 300, 78);
+    }
+    // 2. 😂 LAUGH
+    else if (emotion === 'LAUGH') {
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.moveTo(250, 175);
+        ctx.lineTo(360, 215);
+        ctx.lineTo(250, 255);
+      }, '#00F0FF', '#FFFFFF', 22, 36);
 
-      // Right eye "<": vertex pointing inward at (664, 285)
-      for (let step = 0; step <= 8; step++) {
-        const frac = step / 8;
-        const ux2 = 664 + frac * 120;
-        const uy2 = 285 - frac * 45;
-        drawLedDot(ux2, uy2, dotSize * 1.15, '#00F0FF', '#FFFFFF');
-        drawLedDot(ux2, uy2 + 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
-        const lx2 = 664 + frac * 120;
-        const ly2 = 285 + frac * 45;
-        drawLedDot(lx2, ly2, dotSize * 1.15, '#00F0FF', '#FFFFFF');
-        drawLedDot(lx2, ly2 - 4, dotSize * 0.85, '#00F0FF', '#FFFFFF');
-      }
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.moveTo(774, 175);
+        ctx.lineTo(664, 215);
+        ctx.lineTo(774, 255);
+      }, '#00F0FF', '#FFFFFF', 22, 36);
 
-      // Animated streaming tears of joy spraying from outer corners
-      const tearPhase = (time * 4.5) % 1.0;
-      for (let i = 0; i < 3; i++) {
-        const p = (tearPhase + i * 0.33) % 1.0;
-        const tx = 220 - p * 80;
-        const ty = 285 + p * 60 + Math.sin(p * Math.PI) * -15;
-        drawLedDot(tx, ty, dotSize * 1.25, '#00D8FF', '#FFFFFF');
-        drawLedDot(tx + 8, ty - 4, dotSize * 0.8, '#00B4FF', '#E6FCFF');
-      }
-      for (let i = 0; i < 3; i++) {
-        const p = (tearPhase + i * 0.33) % 1.0;
-        const tx = 804 + p * 80;
-        const ty = 285 + p * 60 + Math.sin(p * Math.PI) * -15;
-        drawLedDot(tx, ty, dotSize * 1.25, '#00D8FF', '#FFFFFF');
-        drawLedDot(tx - 8, ty - 4, dotSize * 0.8, '#00B4FF', '#E6FCFF');
-      }
-      drawBlush(245, 345);
-      drawBlush(779, 345);
-    } else if (emotion === 'COOL') {
-      // 😎 Cyberpunk matrix sunglasses with neon frame & diagonal glare reflections
-      const drawLens = (x1, x2, y1, y2) => {
-        for (let x = x1; x <= x2; x += dotSpacing) {
-          for (let y = y1; y <= y2; y += dotSpacing) {
-            const isBorder = (x <= x1 + 12 || x >= x2 - 12 || y <= y1 + 12 || y >= y2 - 12);
-            const diag = (x - x1) - (y - y1) * 1.2;
-            const isGlare = (diag >= 20 && diag <= 46) || (diag >= 95 && diag <= 118);
+      const tCycle = (time * 2.8) % 1.0;
+      const tearDist = tCycle * 85;
+      const tearAlpha = 1.0 - tCycle * 0.8;
+      ctx.save();
+      ctx.fillStyle = `rgba(0, 240, 255, ${tearAlpha})`;
+      ctx.beginPath();
+      ctx.arc(220 - tearDist, 215 + tearDist * 0.3, 16 * (1 - tCycle * 0.4), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(804 + tearDist, 215 + tearDist * 0.3, 16 * (1 - tCycle * 0.4), 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
 
-            if (isBorder) {
-              drawLedDot(x, y, dotSize * 1.05, '#00F0FF', '#FFFFFF');
-            } else if (isGlare) {
-              drawLedDot(x, y, dotSize * 0.95, '#00F0FF', '#FFFFFF');
-            } else {
-              drawLedDot(x, y, dotSize * 0.55, '#003B52', '#007A99');
-            }
-          }
-        }
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(420, 315);
+      ctx.lineTo(604, 315);
+      ctx.bezierCurveTo(604, 400, 420, 400, 420, 315);
+      ctx.closePath();
+      ctx.fillStyle = '#060B14';
+      ctx.fill();
+
+      ctx.save();
+      ctx.clip();
+      ctx.beginPath();
+      ctx.arc(512, 390, 46, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF3377';
+      ctx.fill();
+      ctx.restore();
+
+      ctx.strokeStyle = '#00F0FF';
+      ctx.lineWidth = 14;
+      ctx.stroke();
+      ctx.restore();
+    }
+    // 3. 😎 COOL
+    else if (emotion === 'COOL') {
+      ctx.save();
+      const drawLens = (tlX, tlY, trX, trY, brX, brY, blX, blY) => {
+        ctx.beginPath();
+        ctx.moveTo(tlX, tlY);
+        ctx.lineTo(trX, trY);
+        ctx.lineTo(brX, brY);
+        ctx.lineTo(blX, blY);
+        ctx.closePath();
+        ctx.fillStyle = '#000206';
+        ctx.fill();
+        ctx.strokeStyle = '#00F0FF';
+        ctx.lineWidth = 14;
+        ctx.lineJoin = 'round';
+        ctx.stroke();
+        ctx.strokeStyle = '#A6FBFF';
+        ctx.lineWidth = 3.5;
+        ctx.stroke();
       };
 
-      drawLens(195, 425, 245, 325);
-      drawLens(599, 829, 245, 325);
+      drawLens(195, 165, 465, 165, 435, 260, 225, 260);
+      drawLens(559, 165, 829, 165, 799, 260, 589, 260);
 
-      // Connecting Bridge
-      for (let x = 425; x <= 599; x += dotSpacing) {
-        drawLedDot(x, 260, dotSize * 1.1, '#00F0FF', '#FFFFFF');
-        drawLedDot(x, 271, dotSize * 0.9, '#00C8FF', '#E6FCFF');
-      }
-    } else if (emotion === 'CRY') {
-      // 😢 Crying teardrop: sad downturned arches + falling tear
-      drawDownArchEye(310, 295, 142, 95);
-      drawDownArchEye(714, 295, 142, 95);
+      ctx.beginPath();
+      ctx.moveTo(460, 185);
+      ctx.lineTo(564, 185);
+      ctx.strokeStyle = '#00F0FF';
+      ctx.lineWidth = 14;
+      ctx.lineCap = 'round';
+      ctx.stroke();
 
-      // Single animated luminous electric-blue teardrop rolling down left cheek
-      const tearProgress = (time * 1.2) % 1.0;
-      const tearY = 320 + tearProgress * 110;
-      drawLedDot(250, tearY - 8, dotSize * 0.7, '#00B4FF', '#E6FCFF');
-      drawLedDot(246, tearY, dotSize * 1.1, '#00E5FF', '#FFFFFF');
-      drawLedDot(254, tearY, dotSize * 1.1, '#00E5FF', '#FFFFFF');
-      drawLedDot(250, tearY + 7, dotSize * 1.35, '#00F0FF', '#FFFFFF');
-    } else if (emotion === 'SKEPTICAL') {
-      // 🤨 Raised Eyebrow (The Rock look):
-      // Left eye: high arched raised eyebrow + wide alert round eye
-      for (let step = 0; step <= 12; step++) {
-        const frac = step / 12;
-        const bx = 210 + frac * 200;
-        const by = 220 - Math.sin(frac * Math.PI) * 35;
-        drawLedDot(bx, by, dotSize * 1.15, '#00F0FF', '#FFFFFF');
-        drawLedDot(bx, by + 4, dotSize * 0.85, '#00E5FF', '#FFFFFF');
-      }
-      drawRoundEye(310, 290, 0, 0);
+      const drawGlares = (xOff) => {
+        ctx.beginPath();
+        ctx.moveTo(xOff + 75, 180);
+        ctx.lineTo(xOff + 35, 245);
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 12;
+        ctx.lineCap = 'round';
+        ctx.stroke();
 
-      // Right eye: suspicious lowered narrowed squint bar
-      for (let x = 624; x <= 804; x += dotSpacing) {
-        drawLedDot(x, 280, dotSize * 1.05, '#00F0FF', '#FFFFFF');
-        drawLedDot(x, 294, dotSize * 0.85, '#00C8FF', '#E6FCFF');
-      }
-    } else if (emotion === 'DEADPAN') {
-      // 😑 Flat poker face: two completely straight horizontal line bars
-      for (let x = 220; x <= 400; x += dotSpacing) {
-        drawLedDot(x, 286, dotSize * 1.0, '#00F0FF', '#FFFFFF');
-        drawLedDot(x, 298, dotSize * 1.0, '#00F0FF', '#FFFFFF');
-      }
-      for (let x = 624; x <= 804; x += dotSpacing) {
-        drawLedDot(x, 286, dotSize * 1.0, '#00F0FF', '#FFFFFF');
-        drawLedDot(x, 298, dotSize * 1.0, '#00F0FF', '#FFFFFF');
-      }
-    } else if (emotion === 'EXCITED') {
-      drawCaretEye(310, 235);
-      drawCaretEye(714, 235);
-      drawBlush(235, 345);
-      drawBlush(789, 345);
-    } else if (emotion === 'CURIOUS') {
-      const pxX = Math.max(-28, Math.min(28, gazeX * 26));
-      const pxY = Math.max(-18, Math.min(18, -gazeY * 18));
-      drawRoundEye(310, 285, pxX, pxY);
-      drawRoundEye(714, 285, pxX, pxY);
-    } else if (emotion === 'THINKING') {
-      drawThinkingBars();
-    } else if (emotion === 'SAD') {
-      drawDownArchEye(310, 295, 142, 95);
-      drawDownArchEye(714, 295, 142, 95);
-    } else {
-      // Default IDLE
-      drawArchEye(310, 290, 145, 95);
-      drawArchEye(714, 290, 145, 95);
+        ctx.beginPath();
+        ctx.moveTo(xOff + 110, 180);
+        ctx.lineTo(xOff + 70, 245);
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.90)';
+        ctx.lineWidth = 6;
+        ctx.lineCap = 'round';
+        ctx.stroke();
+      };
+      drawGlares(235);
+      drawGlares(600);
+      ctx.restore();
+
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.moveTo(440, 345);
+        ctx.quadraticCurveTo(515, 355, 590, 318);
+      }, '#00F0FF', '#FFFFFF', 18, 30);
     }
+    // 4. 😢 CRY
+    else if (emotion === 'CRY') {
+      drawDownArchEye(310, 180, 76);
+      drawDownArchEye(714, 180, 76);
 
-    ctx.restore();
+      const tCycle = (time * 1.6) % 1.0;
+      const tearY = 240 + tCycle * 105;
+      const drawTeardrop = (tx) => {
+        ctx.save();
+        ctx.beginPath();
+        ctx.moveTo(tx, tearY - 18);
+        ctx.bezierCurveTo(tx + 14, tearY - 2, tx + 14, tearY + 14, tx, tearY + 16);
+        ctx.bezierCurveTo(tx - 14, tearY + 14, tx - 14, tearY - 2, tx, tearY - 18);
+        ctx.closePath();
+        ctx.fillStyle = '#00F0FF';
+        ctx.fill();
+        ctx.strokeStyle = '#FFFFFF';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        ctx.restore();
+      };
+      drawTeardrop(265);
+      drawTeardrop(759);
 
-    // -----------------------------------------------------------------
-    // MOUTH SHAPES PER EMOJI (OUTSIDE EYE BLINK SQUASH)
-    // -----------------------------------------------------------------
-    if (emotion === 'LAUGH') {
-      // 😂 Wide open laughing mouth (D-shape)
-      for (let x = 445; x <= 579; x += dotSpacing) {
-        drawLedDot(x, 345, dotSize * 1.05, '#00F0FF', '#FFFFFF');
-      }
-      const cx = 512;
-      const cy = 345;
-      for (let step = 0; step <= 12; step++) {
-        const angle = (step / 12) * Math.PI;
-        const mx = cx + Math.cos(angle) * 65;
-        const my = cy + Math.sin(angle) * 60;
-        drawLedDot(mx, my, dotSize * 1.05, '#00F0FF', '#FFFFFF');
-      }
-    } else if (emotion === 'COOL') {
-      // 😎 Confident asymmetrical smirk curling up on the right
-      for (let step = 0; step <= 10; step++) {
-        const frac = step / 10;
-        const mx = 460 + frac * 105;
-        const my = 372 - Math.pow(frac, 2.5) * 22;
-        drawLedDot(mx, my, dotSize * 1.1, '#00F0FF', '#FFFFFF');
-      }
-    } else if (emotion === 'CRY') {
-      // 😢 Trembling downturned sad frown
-      drawFrown(512, 396, 85, 60);
-    } else if (emotion === 'SKEPTICAL') {
-      // 🤨 Asymmetrical skeptical sideways squiggly mouth
-      for (let step = 0; step <= 9; step++) {
-        const frac = step / 9;
-        const mx = 465 + frac * 94;
-        const my = 374 + Math.sin(frac * Math.PI * 1.5) * 8;
-        drawLedDot(mx, my, dotSize * 1.0, '#00F0FF', '#FFFFFF');
-      }
-    } else if (emotion === 'DEADPAN') {
-      // 😑 Completely flat deadpan straight horizontal line
-      for (let x = 464; x <= 560; x += dotSpacing) {
-        drawLedDot(x, 370, dotSize * 1.0, '#00F0FF', '#FFFFFF');
-      }
-    } else if (emotion === 'CURIOUS') {
-      const cx = 512;
-      const cy = 368;
-      for (let x = cx - 36; x <= cx + 36; x += dotSpacing) {
-        for (let y = cy - 36; y <= cy + 36; y += dotSpacing) {
-          const dx = x - cx;
-          const dy = y - cy;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist >= 18 && dist <= 36) {
-            drawLedDot(x, y, dotSize * 0.9);
-          }
-        }
-      }
-    } else if (emotion === 'THINKING') {
-      for (let x = 468; x <= 556; x += dotSpacing) {
-        drawLedDot(x, 370, dotSize * 0.95);
-      }
-    } else if (emotion === 'SAD') {
-      drawFrown(512, 395, 82, 58);
-    } else if (emotion === 'EXCITED') {
-      drawSmile(512, 350, 115, 68, 0.14 * Math.PI, 0.86 * Math.PI);
-    } else if (emotion === 'HAPPY') {
-      drawSmile(512, 352, 105, 72, 0.16 * Math.PI, 0.84 * Math.PI);
-    } else {
-      drawSmile(512, 355, 95, 68);
+      drawFrownMouth(512, 395, 78);
+    }
+    // 5. 🤨 SKEPTICAL
+    else if (emotion === 'SKEPTICAL') {
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.moveTo(195, 140);
+        ctx.quadraticCurveTo(310, 95, 425, 145);
+      }, '#00F0FF', '#FFFFFF', 18, 30);
+
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.arc(310, 215, 50, 0, Math.PI * 2);
+      }, '#00F0FF', null, 14, 26);
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(310, 215, 20, 0, Math.PI * 2);
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fill();
+      ctx.restore();
+
+      drawFlatBar(610, 185, 825, 185, 18, '#00F0FF', '#FFFFFF');
+      drawFlatBar(630, 225, 805, 225, 14, '#00E5FF', '#FFFFFF');
+
+      drawGlowStroke(() => {
+        ctx.beginPath();
+        ctx.moveTo(435, 345);
+        ctx.quadraticCurveTo(500, 340, 535, 350);
+        ctx.quadraticCurveTo(565, 355, 590, 335);
+      }, '#00F0FF', '#FFFFFF', 18, 30);
+    }
+    // 6. 😑 DEADPAN
+    else if (emotion === 'DEADPAN') {
+      drawFlatBar(215, 215, 405, 215, 22, '#00F0FF', '#FFFFFF');
+      drawFlatBar(619, 215, 809, 215, 22, '#00F0FF', '#FFFFFF');
+      drawFlatBar(440, 345, 584, 345, 18, '#00F0FF', '#FFFFFF');
+    }
+    // 7. DEFAULT / IDLE
+    else {
+      drawArchEye(310, 245, 76);
+      drawArchEye(714, 245, 76);
+      drawSmileMouth(512, 300, 76);
     }
   }, []);
 
@@ -855,8 +751,8 @@ export default function BdxRobot({
       if (leftArmRef.current && rightArmRef.current) {
         const armSway = Math.sin(t * 2.0) * 0.02 * hoverFactor;
         const armFlightOffset = motionWeight * 0.05;
-        leftArmRef.current.rotation.z = -0.20 - armSway + armFlightOffset - gestureArmFlutter.current;
-        rightArmRef.current.rotation.z = 0.20 + armSway - armFlightOffset + gestureArmFlutter.current;
+        leftArmRef.current.rotation.z = -0.20 - armSway + armFlightOffset;
+        rightArmRef.current.rotation.z = 0.20 + armSway - armFlightOffset;
         leftArmRef.current.rotation.x = currentPitchX.current * 0.6;
         rightArmRef.current.rotation.x = currentPitchX.current * 0.6;
       }
@@ -905,70 +801,6 @@ export default function BdxRobot({
     const currentEmotion = currentEmotionRef.current;
     const emotionProgress = Math.min(1, emotionTimerRef.current / Math.max(emotionDurationRef.current, 0.001));
 
-    // Dynamic Additive Gesture Offsets
-    let targetGestureTiltZ = 0;
-    let targetGestureNodX = 0;
-    let targetGestureBounceY = 0;
-    let targetArmFlutter = 0;
-
-    if (currentEmotion === 'LAUGH') {
-      // 😂 Energetic joyous laughing wobble & wing flap
-      const laughShake = Math.sin(t * 22);
-      targetGestureBounceY = Math.abs(laughShake) * 0.12 * (1 - emotionProgress);
-      targetGestureTiltZ = Math.sin(t * 14) * 0.08 * (1 - emotionProgress);
-      targetArmFlutter = Math.sin(t * 24) * 0.16 * (1 - emotionProgress);
-      targetGestureNodX = Math.sin(t * 16) * 0.05 * (1 - emotionProgress);
-    } else if (currentEmotion === 'COOL') {
-      // 😎 Smooth confident chin lift & swagger hover
-      targetGestureNodX = -0.09;
-      targetGestureTiltZ = 0.05;
-      targetArmFlutter = -0.04;
-    } else if (currentEmotion === 'CRY') {
-      // 😢 Drooping sad head & subtle sob tremble
-      targetGestureNodX = 0.12;
-      targetGestureBounceY = -0.04 + Math.sin(t * 12) * 0.015;
-      targetArmFlutter = -0.06;
-    } else if (currentEmotion === 'SKEPTICAL') {
-      // 🤨 Quizzical raised head tilt (~9.5 deg) scrutinizing user
-      targetGestureTiltZ = 0.16;
-      targetGestureNodX = -0.04;
-    } else if (currentEmotion === 'DEADPAN') {
-      // 😑 Zero gesture, completely motionless posture
-      targetGestureTiltZ = 0;
-      targetGestureNodX = 0;
-      targetGestureBounceY = 0;
-      targetArmFlutter = 0;
-    } else if (currentEmotion === 'EXCITED') {
-      const hopPhase = emotionProgress * Math.PI * 4;
-      targetGestureBounceY = Math.max(0, Math.sin(hopPhase)) * 0.15 * (1 - emotionProgress);
-      targetArmFlutter = Math.sin(t * 22) * 0.14 * (1 - emotionProgress);
-      targetGestureTiltZ = Math.sin(t * 8) * 0.06 * (1 - emotionProgress);
-    } else if (currentEmotion === 'HAPPY') {
-      const bouncePhase = emotionProgress * Math.PI * 2;
-      targetGestureBounceY = Math.max(0, Math.sin(bouncePhase)) * 0.08 * (1 - emotionProgress);
-      targetGestureNodX = Math.sin(bouncePhase) * 0.04;
-    } else if (currentEmotion === 'CURIOUS') {
-      targetGestureTiltZ = 0.14; // ~8 deg playful inquisitiveness tilt
-      targetGestureNodX = -0.05;
-    } else if (currentEmotion === 'THINKING') {
-      targetGestureNodX = -0.08;
-      targetGestureTiltZ = -0.04;
-    } else if (currentEmotion === 'SAD') {
-      targetGestureNodX = 0.09;
-      targetGestureBounceY = -0.03;
-    }
-
-    const gestureLerp = 1 - Math.exp(-safeDelta * 6.0);
-    gestureTiltZ.current += (targetGestureTiltZ - gestureTiltZ.current) * gestureLerp;
-    gestureNodX.current += (targetGestureNodX - gestureNodX.current) * gestureLerp;
-    gestureBounceY.current += (targetGestureBounceY - gestureBounceY.current) * (1 - Math.exp(-safeDelta * 10.0));
-    gestureArmFlutter.current += (targetArmFlutter - gestureArmFlutter.current) * gestureLerp;
-
-    // Apply Root Additive Bounce
-    if (rootRef.current && !isStatic && !hoverMode) {
-      rootRef.current.position.y += gestureBounceY.current;
-    }
-
     // Inquisitive Cursor Gaze Tracking (Grounded & Stable)
     smoothedCursor.current.x += (cursorRef.current.x - smoothedCursor.current.x) * 0.10;
     smoothedCursor.current.y += (cursorRef.current.y - smoothedCursor.current.y) * 0.10;
@@ -985,8 +817,8 @@ export default function BdxRobot({
 
       const headLerp = 1 - Math.exp(-safeDelta * 5.0);
       headRef.current.rotation.y += (targetRotY - headRef.current.rotation.y) * headLerp;
-      headRef.current.rotation.x += (targetRotX + gestureNodX.current - headRef.current.rotation.x) * headLerp;
-      headRef.current.rotation.z += (gestureTiltZ.current - headRef.current.rotation.z) * headLerp;
+      headRef.current.rotation.x += (targetRotX - headRef.current.rotation.x) * headLerp;
+      headRef.current.rotation.z = 0; // Rigid upright lock: zero neck roll/deformation
     }
 
     // Digital Eye Blinking Animation
@@ -997,20 +829,6 @@ export default function BdxRobot({
         blinkTimer.current = Math.random() * 0.8;
         isBlinking.current = false;
       }
-    }
-
-    // Dynamic 3D Mesh Scaling (Arch eyes & mouth active in IDLE, smoothly hidden in expressive emojis)
-    const targetMeshScale = (currentEmotion === 'IDLE') ? 1.0 : 0.0;
-    meshScaleSmoothed.current += (targetMeshScale - meshScaleSmoothed.current) * (1 - Math.exp(-safeDelta * 14.0));
-    const s = meshScaleSmoothed.current;
-    const eyeScaleY = (isBlinking.current ? 0.06 : 1.0) * s;
-
-    if (leftEyeMeshRef.current && rightEyeMeshRef.current) {
-      leftEyeMeshRef.current.scale.set(s, eyeScaleY, s);
-      rightEyeMeshRef.current.scale.set(s, eyeScaleY, s);
-    }
-    if (mouthMeshRef.current) {
-      mouthMeshRef.current.scale.set(s, s, s);
     }
 
     // High-Performance Dynamic Face Canvas Redraw (Zero overhead when idle/flying)
@@ -1160,9 +978,7 @@ export default function BdxRobot({
         e.stopPropagation();
         setHovered(true);
         if (typeof document !== 'undefined') document.body.style.cursor = 'pointer';
-        if (currentEmotionRef.current === 'IDLE') {
-          triggerEmotion('HAPPY', 1.8);
-        }
+
       }}
       onPointerOut={() => {
         setHovered(false);
@@ -1196,65 +1012,19 @@ export default function BdxRobot({
           </mesh>
 
           {/* ============================================================ */}
-          {/* DIGITAL MICRO-LED MATRIX DISPLAY SCREEN (VISOR FACE)         */}
-          {/* ============================================================ */}
-          {/* DIGITAL MICRO-LED MATRIX DISPLAY SCREEN (VISOR FACE) */}
+          {/* DIGITAL HIGH-RES OLED VISOR DISPLAY SCREEN */}
           {visorTexture && (
-            <group ref={eyeDisplayRef} position={[0, 0.04, 0.575]} renderOrder={9}>
-              <mesh>
-                <planeGeometry args={[0.54, 0.28]} />
-                <meshBasicMaterial
-                  map={visorTexture}
-                  transparent
-                  opacity={0.96}
-                  blending={THREE.AdditiveBlending}
-                  depthWrite={false}
-                />
-              </mesh>
-            </group>
+            <mesh ref={eyeDisplayRef} position={[0, 0.015, 0.582]} renderOrder={10}>
+              <planeGeometry args={[0.58, 0.38]} />
+              <meshBasicMaterial
+                map={visorTexture}
+                transparent
+                opacity={0.99}
+                blending={THREE.NormalBlending}
+                depthWrite={false}
+              />
+            </mesh>
           )}
-
-          {/* High-Definition 3D Luminous Arch Meshes for Expressive Smiling Eyes (◠ ◠) at Z = 0.585 */}
-          <group position={[0, 0.04, 0.585]}>
-            {/* Left Eye Glowing Cyan Arch (◠) */}
-            <group ref={leftEyeMeshRef} position={[-0.145, 0, 0]} renderOrder={10}>
-              <mesh rotation={[0, 0, Math.PI * 0.14]}>
-                <torusGeometry args={[0.078, 0.024, 20, 36, Math.PI * 0.72]} />
-                <meshBasicMaterial color="#00E5FF" toneMapped={false} />
-              </mesh>
-              {/* Inner High-Intensity White Core Segment */}
-              <mesh position={[0, 0, 0.005]} rotation={[0, 0, Math.PI * 0.15]} renderOrder={11}>
-                <torusGeometry args={[0.078, 0.010, 16, 32, Math.PI * 0.70]} />
-                <meshBasicMaterial color="#E8FFFF" toneMapped={false} />
-              </mesh>
-            </group>
-
-            {/* Right Eye Glowing Cyan Arch (◠) */}
-            <group ref={rightEyeMeshRef} position={[0.145, 0, 0]} renderOrder={10}>
-              <mesh rotation={[0, 0, Math.PI * 0.14]}>
-                <torusGeometry args={[0.078, 0.024, 20, 36, Math.PI * 0.72]} />
-                <meshBasicMaterial color="#00E5FF" toneMapped={false} />
-              </mesh>
-              {/* Inner High-Intensity White Core Segment */}
-              <mesh position={[0, 0, 0.005]} rotation={[0, 0, Math.PI * 0.15]} renderOrder={11}>
-                <torusGeometry args={[0.078, 0.010, 16, 32, Math.PI * 0.70]} />
-                <meshBasicMaterial color="#E8FFFF" toneMapped={false} />
-              </mesh>
-            </group>
-
-            {/* Expressive Cute Smiling Mouth Arch (◡) */}
-            <group ref={mouthMeshRef} position={[0, -0.092, 0]} renderOrder={10}>
-              <mesh rotation={[0, 0, Math.PI * 1.15]}>
-                <torusGeometry args={[0.052, 0.015, 16, 32, Math.PI * 0.70]} />
-                <meshBasicMaterial color="#00E5FF" toneMapped={false} />
-              </mesh>
-              {/* Inner High-Intensity White Core Segment */}
-              <mesh position={[0, 0, 0.005]} rotation={[0, 0, Math.PI * 1.15]} renderOrder={11}>
-                <torusGeometry args={[0.052, 0.007, 16, 32, Math.PI * 0.68]} />
-                <meshBasicMaterial color="#E8FFFF" toneMapped={false} />
-              </mesh>
-            </group>
-          </group>
 
           {/* Forward Soft Eye Glow Projection */}
           <pointLight position={[0, 0.04, 0.75]} color="#00E5FF" intensity={1.2} distance={2.5} decay={2} />
