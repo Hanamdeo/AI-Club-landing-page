@@ -91,9 +91,17 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
   );
 }
 
+function FrameMonitor({ onReportFrame }) {
+  useFrame(() => {
+    onReportFrame?.();
+  });
+  return null;
+}
+
 /**
  * SceneContainer (High-Performance Cyber Data Centre)
  * - Harmonious, non-clashing cinematic lighting (obsidian base, silver-cyan grazing, soft sage warmth)
+ * - Adaptive multi-tier device performance calibration
  * - Zero-lag cluster hardware engine
  * - Seamless fog-to-background visual blending
  */
@@ -107,6 +115,8 @@ export default function SceneContainer({
   sceneOpacity = 1,
   onNavigateToSection,
   activeNavId = 'hero',
+  perfConfig,
+  onReportFrame,
 }) {
   return (
     <div
@@ -117,15 +127,18 @@ export default function SceneContainer({
         className="pointer-events-auto"
         style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
         camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.1, far: 110 }}
-        dpr={[1, 1.25]}
+        dpr={perfConfig?.dpr || [0.85, 1.15]}
         gl={{
-          antialias: true,
+          antialias: perfConfig?.antialias ?? true,
           powerPreference: 'high-performance',
           stencil: false,
           depth: true,
           precision: 'mediump',
         }}
       >
+        {/* Runtime Performance & Frame Monitor */}
+        {onReportFrame && <FrameMonitor onReportFrame={onReportFrame} />}
+
         {/* Harmonious Obsidian Atmosphere: Blends seamlessly with website background */}
         <color attach="background" args={['#0A0E10']} />
         <fog attach="fog" args={['#0A0E10', 16, 78]} />
@@ -144,14 +157,14 @@ export default function SceneContainer({
         <directionalLight
           position={[2.6, 3.6, 11.0]}
           color="#FFFFFF"
-          intensity={1.20}
+          intensity={1.20 * (perfConfig?.lightingIntensity ?? 1.0)}
         />
 
         {/* Subtle Silver-Cyan Rim (Calibrated, not blinding neon) */}
         <directionalLight
           position={[1.2, 3.0, 5.0]}
           color="#8ED5E8"
-          intensity={0.60}
+          intensity={0.60 * (perfConfig?.lightingIntensity ?? 1.0)}
         />
 
         {/* Floor Bounce Fill */}
@@ -172,19 +185,21 @@ export default function SceneContainer({
         {/* ============================================================== */}
         {/* DATA CENTRE INFRASTRUCTURE                                     */}
         {/* ============================================================== */}
-        <DataCentreFloor />
-        <DataCentreCeiling />
+        <DataCentreFloor perfConfig={perfConfig} />
+        <DataCentreCeiling perfConfig={perfConfig} />
 
         {/* Holographic Projection (Synchronized with transitions) */}
         <HolographicDataCentreProjection
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
+          perfConfig={perfConfig}
         />
 
         {/* Ultra-Fast Enterprise Server Rack Lineup */}
         <EnterpriseServerRacks
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
+          perfConfig={perfConfig}
         />
 
         <InRowCoolingUnits />

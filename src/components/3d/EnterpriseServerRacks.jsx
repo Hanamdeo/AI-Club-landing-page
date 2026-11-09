@@ -271,6 +271,7 @@ function ClusterWing({ transforms, materialsRef }) {
 export default function EnterpriseServerRacks({
   scrollProgress = 0,
   scrollProgressRef,
+  perfConfig,
 }) {
   const isReducedMotion = useRef(false);
 
@@ -280,10 +281,12 @@ export default function EnterpriseServerRacks({
       window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }, []);
 
+  const c3End = perfConfig?.rackZEnd || -56.0;
+
   // Compute instance matrices for 3 discrete cluster cohorts
   const c1Data = useMemo(() => generateClusterHardware(12, -5.5), []);
   const c2Data = useMemo(() => generateClusterHardware(-6.5, -25.5), []);
-  const c3Data = useMemo(() => generateClusterHardware(-26.5, -56.0), []);
+  const c3Data = useMemo(() => generateClusterHardware(-26.5, c3End), [c3End]);
 
   // Material direct references for 0-overhead opacity updates
   const c1Materials = useRef([]);

@@ -27,6 +27,7 @@ import Zone3Community from '@/components/ui/zones/Zone3Community';
 import Zone4Research from '@/components/ui/zones/Zone4Research';
 import Zone5Projects from '@/components/ui/zones/Zone5Projects';
 import Zone6Discovery from '@/components/ui/zones/Zone6Discovery';
+import { useDevicePerformanceTier } from '@/utils/deviceTier';
 
 const ZONE_DEFINITIONS = [
   { id: 'entry', index: 0, label: '01 Entry', center: 0.08, zProgress: 0.00 },
@@ -42,6 +43,15 @@ export default function Home() {
   const [isIntro, setIsIntro] = useState(true);
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('entry');
+
+  // Intelligent Device Hardware Tier & Performance Profiler
+  const {
+    tier: perfTier,
+    config: perfConfig,
+    fps,
+    reportFrame,
+    cycleTier,
+  } = useDevicePerformanceTier();
 
   // Performance-optimized shared refs: zero React re-render thrashing during scroll
   const scrollProgressRef = useRef(0);
@@ -171,6 +181,8 @@ export default function Home() {
           sceneOpacity={1.0}
           onNavigateToSection={handleNavigateToSection}
           activeNavId={activeSection}
+          perfConfig={perfConfig}
+          onReportFrame={reportFrame}
         />
       )}
 
@@ -188,7 +200,7 @@ export default function Home() {
         />
       </div>
 
-      {/* 3. Spatial Telemetry & Depth Meter (Progressive corridor depth) */}
+      {/* 3. Spatial Telemetry & Depth Meter (Progressive corridor depth & hardware profiling) */}
       <div
         className={`transition-opacity duration-700 ${
           isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'
@@ -197,6 +209,10 @@ export default function Home() {
         <DepthTelemetry
           coordRef={depthCoordRef}
           activeZoneIndex={activeZoneIndex}
+          perfTier={perfTier}
+          perfConfig={perfConfig}
+          fps={fps}
+          onCycleTier={cycleTier}
         />
       </div>
 

@@ -22,6 +22,7 @@ export default function HolographicDataCentreProjection({
   isScanning = false,
   scrollProgress = 0,
   scrollProgressRef,
+  perfConfig,
 }) {
   const groupRef = useRef();
   const scanPlaneRef = useRef();
@@ -173,25 +174,27 @@ export default function HolographicDataCentreProjection({
         />
       </instancedMesh>
 
-      {/* 3. Downward Ceiling Emitter Laser Projection Lines */}
-      <instancedMesh
-        ref={(mesh) => {
-          beamLinesRef.current = mesh;
-          if (mesh) {
-            beamInstanceTransforms.forEach((mat, i) => mesh.setMatrixAt(i, mat));
-            mesh.instanceMatrix.needsUpdate = true;
-          }
-        }}
-        args={[cubeGeom, null, beamInstanceTransforms.length]}
-      >
-        <meshBasicMaterial
-          color="#24BFEA"
-          transparent
-          opacity={0.35}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </instancedMesh>
+      {/* 3. Downward Ceiling Emitter Laser Projection Lines (High-tier only) */}
+      {(perfConfig?.enableVolumetrics ?? true) && (
+        <instancedMesh
+          ref={(mesh) => {
+            beamLinesRef.current = mesh;
+            if (mesh) {
+              beamInstanceTransforms.forEach((mat, i) => mesh.setMatrixAt(i, mat));
+              mesh.instanceMatrix.needsUpdate = true;
+            }
+          }}
+          args={[cubeGeom, null, beamInstanceTransforms.length]}
+        >
+          <meshBasicMaterial
+            color="#24BFEA"
+            transparent
+            opacity={0.35}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+          />
+        </instancedMesh>
+      )}
 
       {/* 4. Sweeping Horizontal Holographic Scanner Plane */}
       <mesh

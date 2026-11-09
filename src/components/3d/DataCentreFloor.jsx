@@ -11,9 +11,12 @@ import * as THREE from 'three';
  * - Brushed steel tile joint seams and recessed perimeter cable trench covers
  * - Controlled sage-tinted cold aisle demarcation lines and underfloor plenum lighting
  */
-export default function DataCentreFloor() {
+export default function DataCentreFloor({ perfConfig }) {
   const perfTilesRef = useRef();
   const trenchCoversRef = useRef();
+
+  const maxZ = perfConfig?.maxDepthZ || -62;
+  const gridDivs = perfConfig?.floorGridDivisions || 110;
 
   // Compute transform matrices for perforated cold-air tiles and side trench covers
   const { perfTilesMatrices, trenchMatrices } = useMemo(() => {
@@ -22,7 +25,7 @@ export default function DataCentreFloor() {
     const dummy = new THREE.Object3D();
 
     // 1. Cold air perforated floor tiles placed right along rack intakes (X = -2.05 and X = 2.05)
-    for (let z = 14; z >= -62; z -= 1.10) {
+    for (let z = 14; z >= maxZ; z -= 1.10) {
       // Left side perforated tiles (X = -2.05)
       dummy.position.set(-2.05, 0.008, z);
       dummy.rotation.set(-Math.PI / 2, 0, 0);
@@ -39,7 +42,7 @@ export default function DataCentreFloor() {
     }
 
     // 2. Side perimeter cable trench covers (X = -4.2 and X = 4.2)
-    for (let z = 14; z >= -62; z -= 2.8) {
+    for (let z = 14; z >= maxZ; z -= 2.8) {
       dummy.position.set(-4.2, 0.006, z);
       dummy.rotation.set(-Math.PI / 2, 0, 0);
       dummy.scale.set(0.75, 2.7, 1);
@@ -57,7 +60,7 @@ export default function DataCentreFloor() {
       perfTilesMatrices: pMats,
       trenchMatrices: tMats,
     };
-  }, []);
+  }, [maxZ]);
 
   // Apply matrix buffers
   useEffect(() => {
@@ -91,7 +94,7 @@ export default function DataCentreFloor() {
 
       {/* 2. Raised Floor 600mm Tile Grid Seams (Clear metallic joints) */}
       <gridHelper
-        args={[95, 158, '#323E40', '#222B2D']}
+        args={[95, gridDivs, '#323E40', '#222B2D']}
         position={[0, 0.003, -25]}
       />
 

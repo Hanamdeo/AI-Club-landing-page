@@ -13,20 +13,23 @@ import * as THREE from 'three';
  * - Cold Aisle Containment (CAC) crystal-clear polycarbonate ceiling baffles (no blur)
  * - Increased ceiling clearance (Y = 4.5m) for majestic enterprise scale
  */
-export default function DataCentreCeiling() {
+export default function DataCentreCeiling({ perfConfig }) {
+  const maxZ = perfConfig?.maxDepthZ || -62;
+  const gridDivs = perfConfig?.ceilingGridDivisions || 72;
+
   const { trapezePositions, pipeJointPositions } = useMemo(() => {
     const trapezes = [];
     const pipeJoints = [];
 
-    for (let z = 14; z >= -62; z -= 3.8) {
+    for (let z = 14; z >= maxZ; z -= 3.8) {
       trapezes.push(z);
     }
-    for (let z = 14; z >= -62; z -= 5.5) {
+    for (let z = 14; z >= maxZ; z -= 5.5) {
       pipeJoints.push(z);
     }
 
     return { trapezePositions: trapezes, pipeJointPositions: pipeJoints };
-  }, []);
+  }, [maxZ]);
 
   return (
     <group position={[0, 0, 0]}>
@@ -42,7 +45,7 @@ export default function DataCentreCeiling() {
 
       {/* Ceiling Structural Grid Rails */}
       <gridHelper
-        args={[95, 80, '#2D3536', '#1E2425']}
+        args={[95, gridDivs, '#2D3536', '#1E2425']}
         position={[0, 4.49, -25]}
       />
 
