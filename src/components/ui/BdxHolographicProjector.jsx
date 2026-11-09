@@ -9,9 +9,11 @@ import {
   X,
   Minimize2,
   Sparkles,
+  Bot,
 } from 'lucide-react';
 import { getBdxProjectionPayload } from '@/lib/contentSelectors';
 import { audioManager } from '@/utils/audioManager';
+import { usePerformanceTier } from '@/utils/ResponsivePerformanceManager';
 
 // Dynamic import of Canvas for the floating companion robot
 const CompanionCanvas = dynamic(() => import('./BdxCompanionCanvas'), {
@@ -47,6 +49,8 @@ export default function BdxHolographicProjector({
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMinimized, setIsMinimized] = useState(false);
+  const tierState = usePerformanceTier();
+  const isLowTier = tierState.tier === 'low';
 
   // Sync mode with active website section
   useEffect(() => {
@@ -303,7 +307,14 @@ export default function BdxHolographicProjector({
             className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0D1011] border border-white/[0.14] overflow-hidden cursor-pointer hover:border-sage transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
             title="BDX-01 Companion (Click to interact & chirp)"
           >
-            <CompanionCanvas isProjecting={isOpen && !isMinimized} />
+            {isLowTier ? (
+              <div className="flex flex-col items-center justify-center text-sage">
+                <Bot className="w-6 h-6 animate-pulse" />
+                <span className="text-[8px] font-mono font-bold tracking-widest text-sage/80 mt-0.5">BDX</span>
+              </div>
+            ) : (
+              <CompanionCanvas isProjecting={isOpen && !isMinimized} />
+            )}
           </div>
         </div>
       </div>

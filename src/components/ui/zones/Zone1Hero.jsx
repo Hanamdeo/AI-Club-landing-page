@@ -33,7 +33,7 @@ export default function Zone1Hero({ onExploreClick }) {
           {/* ========================================================== */}
           {/* LEFT SIDE: IN-WORLD FLOATING HOLOGRAPHIC HUD TEXT          */}
           {/* ========================================================== */}
-          <div className="w-full lg:w-[54%] max-w-[580px] xl:max-w-[640px] pointer-events-auto">
+          <div className="w-full lg:w-[54%] max-w-[580px] xl:max-w-[640px] pointer-events-auto safe-viewport-card custom-scrollbar">
             <div className="relative py-2 sm:py-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
               {/* Holographic Projection Header Telemetry */}
               <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/[0.12] text-[10px] font-mono">
@@ -52,7 +52,7 @@ export default function Zone1Hero({ onExploreClick }) {
               </div>
 
               {/* Master Display Heading */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-gradient-cyber mb-2 leading-[0.94] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+              <h1 className="text-fluid-hero font-display font-black tracking-tight text-gradient-cyber mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
                 {CLUB_INFO.name}
               </h1>
 

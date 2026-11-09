@@ -70,12 +70,13 @@ export default function Home() {
     });
     lenisRef.current = lenis;
 
-    function raf(time) {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    }
-    const rafId = requestAnimationFrame(raf);
     lenis.on('scroll', ScrollTrigger.update);
+
+    const tickerUpdate = (time) => {
+      lenis.raf(time * 1000);
+    };
+    gsap.ticker.add(tickerUpdate);
+    gsap.ticker.lagSmoothing(0);
 
     // Progressive Depth ScrollTrigger driving the entire 3D data centre journey
     const ctx = gsap.context(() => {
@@ -125,7 +126,7 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('keydown', handleGlobalKey);
-      cancelAnimationFrame(rafId);
+      gsap.ticker.remove(tickerUpdate);
       lenis.destroy();
       ctx.revert();
       ScrollTrigger.getAll().forEach((t) => t.kill());

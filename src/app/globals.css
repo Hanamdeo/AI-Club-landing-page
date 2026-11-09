@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Geist:wght@300;400;500;600;700;800;900&display=swap');
-
 /* ============================================================== */
 /* LOCAL FONT FACES: LaBeouf Techno Display Family               */
 /* ============================================================== */
@@ -426,4 +424,47 @@ code, pre, .terminal-mono, .font-mono {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* ============================================================== */
+/* UNIVERSAL RESPONSIVE FLUID TYPOGRAPHY & VIEWPORT SCALES        */
+/* ============================================================== */
+.text-fluid-hero {
+  font-size: clamp(2.1rem, 1.4rem + 3.8vw, 4.5rem);
+  line-height: 0.94;
+}
+
+.text-fluid-h2 {
+  font-size: clamp(1.4rem, 1.0rem + 2.2vw, 2.75rem);
+  line-height: 1.15;
+}
+
+.text-fluid-body {
+  font-size: clamp(0.75rem, 0.8vw + 0.45rem, 0.9375rem);
+  line-height: 1.6;
+}
+
+.safe-viewport-card {
+  max-height: min(84svh, 840px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.touch-target-min {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.02);
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(162, 178, 159, 0.3);
+  border-radius: 4px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(162, 178, 159, 0.6);
 }
