@@ -57,6 +57,14 @@ export default function Home() {
 
   // Initialize GSAP & Lenis smooth scroll
   useEffect(() => {
+    const isMobile =
+      window.innerWidth < 768 ||
+      window.matchMedia('(max-width: 767px)').matches ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      setIsIntro(false);
+    }
     setMounted(true);
     gsap.registerPlugin(ScrollTrigger);
 

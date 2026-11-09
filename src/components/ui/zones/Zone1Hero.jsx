@@ -102,7 +102,7 @@ export default function Zone1Hero({ onExploreClick }) {
         </div>
 
         {/* 3 Verified Statistics in Floating Blade Telemetry Dock */}
-        <div className="flex items-center gap-3 sm:gap-7 md:gap-9 px-3 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-[#101416]/80 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] corner-reticle md:ml-32 lg:ml-40 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-3 sm:gap-7 md:gap-9 px-3 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-[#101416]/80 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] corner-reticle md:ml-12 lg:ml-16 overflow-x-auto no-scrollbar">
           {/* Blade Metric 1 */}
           <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5">
@@ -147,8 +147,8 @@ export default function Zone1Hero({ onExploreClick }) {
           </div>
         </div>
 
-        {/* Scroll To Explore Indicator Cue: Seamless Frosted Capsule */}
-        <div className="flex items-center sm:pr-24 md:pr-28">
+        {/* Scroll To Explore Indicator Cue: Centered Frosted Capsule (Never collides with bottom-right BDX) */}
+        <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 bottom-2.5 lg:bottom-3 pointer-events-auto">
           <button
             onClick={handleEnter}
             className="group flex items-center gap-3 px-4 py-2 rounded-full bg-[#121618]/70 backdrop-blur-md border border-white/[0.08] hover:border-[#A7B7A1]/50 hover:bg-[#181E1F]/90 text-xs text-[#B5B8AF] hover:text-[#F2EFE8] transition-all cursor-pointer font-mono shadow-[0_8px_32px_rgba(0,0,0,0.4)] btn-tactile"
@@ -161,6 +161,9 @@ export default function Zone1Hero({ onExploreClick }) {
             </div>
           </button>
         </div>
+
+        {/* Safe Right Spacer: Reserving clearance for bottom-right fixed BDX-01 companion pod */}
+        <div className="hidden md:block w-36 lg:w-56 pointer-events-none" />
       </div>
     </section>
   );

@@ -278,7 +278,7 @@ export default function BdxHolographicProjector({
           {/* Hologram Launch Button / Status Pill */}
           <button
             onClick={toggleOpen}
-            className={`group flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0D1011]/90 backdrop-blur-md border transition-all cursor-pointer btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)] ${
+            className={`group hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0D1011]/90 backdrop-blur-md border transition-all cursor-pointer btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)] ${
               isOpen && !isMinimized
                 ? 'border-sage/50 text-sage'
                 : 'border-white/[0.12] text-ivory/80 hover:border-sage/40 hover:text-ivory'
