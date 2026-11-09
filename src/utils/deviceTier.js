@@ -90,6 +90,11 @@ export function detectHardwareTier() {
           gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) || ''
         ).toLowerCase();
       }
+      // Properly release temporary context
+      const loseContext = gl.getExtension('WEBGL_lose_context');
+      if (loseContext) {
+        loseContext.loseContext();
+      }
     }
 
     // High-performance indicators
@@ -121,6 +126,7 @@ export function detectHardwareTier() {
  * Custom React Hook: useDevicePerformanceTier
  * Provides reactive performance tier, adaptive DPR, live configuration,
  * and automatic runtime FPS downgrade when frame-drops occur.
+ * Performance optimized: throttled state updates to prevent re-render thrashing.
  */
 export function useDevicePerformanceTier() {
   const [tier, setTier] = useState('medium');
@@ -129,15 +135,16 @@ export function useDevicePerformanceTier() {
 
   const frameTimesRef = useRef([]);
   const lastTimeRef = useRef(typeof performance !== 'undefined' ? performance.now() : 0);
+  const lastFpsUpdateRef = useRef(0);
   const consecutiveLowFpsCount = useRef(0);
 
-  // Initial detection on mount
+  // Initial detection on mount (runs once)
   useEffect(() => {
     const detected = detectHardwareTier();
     setTier(detected);
   }, []);
 
-  // Frame monitoring callback to detect sustained lag
+  // Frame monitoring callback to detect sustained lag without React re-render thrashing
   const reportFrame = useCallback(() => {
     if (!isAuto) return;
     const now = performance.now();
@@ -151,8 +158,9 @@ export function useDevicePerformanceTier() {
         frameTimesRef.current.shift();
       }
 
-      // Check average FPS over 45 frames
-      if (frameTimesRef.current.length >= 45) {
+      // Check average FPS and throttle state updates to at most once every 1.5 seconds
+      if (now - lastFpsUpdateRef.current > 1500 && frameTimesRef.current.length >= 20) {
+        lastFpsUpdateRef.current = now;
         const sum = frameTimesRef.current.reduce((a, b) => a + b, 0);
         const avgFps = sum / frameTimesRef.current.length;
         setFps(Math.round(avgFps));
@@ -160,7 +168,7 @@ export function useDevicePerformanceTier() {
         // If sustained framerate is below 35 FPS, step down tier
         if (avgFps < 35) {
           consecutiveLowFpsCount.current += 1;
-          if (consecutiveLowFpsCount.current > 3) {
+          if (consecutiveLowFpsCount.current >= 2) {
             setTier((prev) => {
               if (prev === 'high') return 'medium';
               if (prev === 'medium') return 'low';

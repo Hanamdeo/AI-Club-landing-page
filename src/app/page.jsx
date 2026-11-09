@@ -157,18 +157,18 @@ export default function Home() {
     lenisRef.current.scrollTo(targetP * maxScroll, { duration: 1.4 });
   }, []);
 
+  const handleIntroComplete = useCallback(() => {
+    setIsIntro(false);
+    setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 100);
+  }, []);
+
   return (
     <main className="relative bg-graphite text-ivory selection:bg-sage selection:text-graphite min-h-screen">
       {/* Cinematic Architectural Startup Animation */}
       {mounted && isIntro && (
-        <StartupIntro
-          onComplete={() => {
-            setIsIntro(false);
-            setTimeout(() => {
-              ScrollTrigger.refresh();
-            }, 100);
-          }}
-        />
+        <StartupIntro onComplete={handleIntroComplete} />
       )}
 
       {/* 1. Master WebGL 3D Data Centre Canvas: Remains Visually Connected Across the Whole Journey */}
@@ -182,7 +182,7 @@ export default function Home() {
           onNavigateToSection={handleNavigateToSection}
           activeNavId={activeSection}
           perfConfig={perfConfig}
-          onReportFrame={reportFrame}
+          onReportFrame={!isIntro ? reportFrame : undefined}
         />
       )}
 

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useCallback } from 'react';
 import gsap from 'gsap';
 import { audioManager } from '@/utils/audioManager';
 
@@ -101,12 +101,28 @@ export default function StartupIntro({ onComplete }) {
   // Direct DOM references for synaptic paths and node elements
   const connectionRefs = useRef([]);
   const nodeHaloRefs = useRef({});
-  const nodeCoreRefs = useRef({});
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
+  const isCompletedRef = useRef(false);
+
+  const triggerComplete = useCallback(() => {
+    if (isCompletedRef.current) return;
+    isCompletedRef.current = true;
+    if (onCompleteRef.current) {
+      onCompleteRef.current();
+    }
+  }, []);
 
   useEffect(() => {
+    // Failsafe timer: intro can NEVER hang or freeze for more than 4.2 seconds
+    const failsafe = setTimeout(() => {
+      triggerComplete();
+    }, 4200);
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
-        if (onComplete) onComplete();
+        clearTimeout(failsafe);
+        triggerComplete();
       }
     };
     window.addEventListener('keydown', handleKeyDown);
@@ -114,7 +130,8 @@ export default function StartupIntro({ onComplete }) {
     const ctx = gsap.context(() => {
       const tl = gsap.timeline({
         onComplete: () => {
-          if (onComplete) onComplete();
+          clearTimeout(failsafe);
+          triggerComplete();
         },
       });
 
@@ -287,10 +304,11 @@ export default function StartupIntro({ onComplete }) {
     });
 
     return () => {
+      clearTimeout(failsafe);
       window.removeEventListener('keydown', handleKeyDown);
       ctx.revert();
     };
-  }, [onComplete]);
+  }, [triggerComplete]);
 
   return (
     <div
@@ -308,7 +326,7 @@ export default function StartupIntro({ onComplete }) {
         </div>
 
         <button
-          onClick={() => onComplete && onComplete()}
+          onClick={triggerComplete}
           className="text-xs font-mono text-[#E6E2D8]/50 hover:text-[#A7B7A1] transition-colors cursor-pointer tracking-wider uppercase px-3 py-1 rounded bg-white/[0.04] border border-white/[0.06] hover:border-white/[0.15]"
         >
           [SKIP INTRO ↵]
@@ -487,6 +505,17 @@ export default function StartupIntro({ onComplete }) {
             >
               0%
             </span>
+          </div>
+
+          {/* User Skip Action */}
+          <div className="flex justify-center pt-2">
+            <button
+              type="button"
+              onClick={triggerComplete}
+              className="text-[10px] font-mono tracking-widest text-slate-400 hover:text-white transition-colors py-1 px-3 border border-white/10 hover:border-white/30 rounded bg-white/[0.03] cursor-pointer"
+            >
+              [ SKIP INTRO ↵ ]
+            </button>
           </div>
         </div>
       </div>

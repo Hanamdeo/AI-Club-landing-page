@@ -105,6 +105,14 @@ function FrameMonitor({ onReportFrame }) {
  * - Zero-lag cluster hardware engine
  * - Seamless fog-to-background visual blending
  */
+const GL_CONFIG = {
+  antialias: true,
+  powerPreference: 'high-performance',
+  stencil: false,
+  depth: true,
+  precision: 'mediump',
+};
+
 export default function SceneContainer({
   scrollProgress = 0,
   scrollProgressRef,
@@ -128,13 +136,7 @@ export default function SceneContainer({
         style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
         camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.1, far: 110 }}
         dpr={perfConfig?.dpr || [0.85, 1.15]}
-        gl={{
-          antialias: perfConfig?.antialias ?? true,
-          powerPreference: 'high-performance',
-          stencil: false,
-          depth: true,
-          precision: 'mediump',
-        }}
+        gl={GL_CONFIG}
       >
         {/* Runtime Performance & Frame Monitor */}
         {onReportFrame && <FrameMonitor onReportFrame={onReportFrame} />}
