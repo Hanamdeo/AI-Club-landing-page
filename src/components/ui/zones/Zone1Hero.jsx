@@ -31,14 +31,14 @@ export default function Zone1Hero({ onExploreClick }) {
       <div className="w-full my-auto py-2 sm:py-4 pointer-events-none">
         <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
           {/* ========================================================== */}
-          {/* LEFT SIDE: IN-WORLD FLOATING HOLOGRAPHIC TERMINAL PANEL     */}
+          {/* LEFT SIDE: IN-WORLD FLOATING HOLOGRAPHIC HUD TEXT          */}
           {/* ========================================================== */}
           <div className="w-full lg:w-[54%] max-w-[580px] xl:max-w-[640px] pointer-events-auto">
-            <div className="holographic-panel corner-reticle p-6 sm:p-8 rounded-2xl relative overflow-hidden">
+            <div className="relative py-2 sm:py-4 drop-shadow-[0_4px_24px_rgba(0,0,0,0.9)]">
               {/* Holographic Projection Header Telemetry */}
-              <div className="flex items-center justify-between pb-3 mb-4 border-b border-white/[0.08] text-[10px] font-mono">
+              <div className="flex items-center justify-between pb-2 mb-3 border-b border-white/[0.12] text-[10px] font-mono">
                 <div className="flex items-center gap-2 text-[#A7B7A1]">
-                  <span className="w-2 h-2 rounded-full bg-sage animate-pulse shadow-[0_0_8px_rgba(162,178,159,0.5)]" />
+                  <span className="w-2 h-2 rounded-full bg-sage animate-pulse shadow-[0_0_8px_rgba(162,178,159,0.7)]" />
                   <span className="font-bold tracking-widest uppercase">
                     SECTOR 01 // HOLOGRAPHIC HUD
                   </span>
@@ -52,17 +52,17 @@ export default function Zone1Hero({ onExploreClick }) {
               </div>
 
               {/* Master Display Heading */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-gradient-cyber mb-2 leading-[0.94] drop-shadow-sm">
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-gradient-cyber mb-2 leading-[0.94] drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
                 {CLUB_INFO.name}
               </h1>
 
               {/* Tagline with Space Grotesk */}
-              <p className="text-lg sm:text-xl lg:text-2xl font-space font-medium text-[#B6C4B4] mb-4 tracking-tight">
+              <p className="text-lg sm:text-xl lg:text-2xl font-space font-medium text-[#B6C4B4] mb-3 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
                 {CLUB_INFO.tagline}
               </p>
 
               {/* Controlled-Width Description Prose */}
-              <p className="text-xs sm:text-sm text-[#B5B8AF] max-w-[480px] leading-relaxed mb-6 font-normal">
+              <p className="text-xs sm:text-sm text-[#D1D5DB] max-w-[480px] leading-relaxed mb-6 font-normal drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
                 An autonomous collegiate research collective advancing machine intelligence, foundation models, and high-performance computing infrastructure at Madhav Institute of Technology & Science.
               </p>
 
@@ -76,7 +76,7 @@ export default function Zone1Hero({ onExploreClick }) {
                   <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5 text-[#141819]" />
                 </button>
 
-                <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-[#A7B7A1]/80 uppercase tracking-wider">
+                <div className="hidden sm:flex items-center gap-2 font-mono text-[11px] text-[#A7B7A1] uppercase tracking-wider drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
                   <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse" />
                   <span>[PRESS ↓ OR SCROLL TO NAVIGATE]</span>
                 </div>

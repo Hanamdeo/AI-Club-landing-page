@@ -13,7 +13,6 @@ import BdxRobot from './BdxRobot';
 import EntranceGate from './landmarks/EntranceGate';
 import FoundationBay from './landmarks/FoundationBay';
 import ProjectionChamber from './landmarks/ProjectionChamber';
-import ServerRackBadges from './ServerRackBadges';
 import HolographicDataCentreProjection from './HolographicDataCentreProjection';
 import { getZoneTransitionState } from '@/utils/zoneTransition';
 
@@ -196,14 +195,6 @@ export default function SceneContainer({
         <FoundationBay />
         <InteractiveServerRack onOpenModal={onOpenRackModal} />
         <ProjectionChamber isProjecting={isProjecting} />
-
-        {/* Interactive In-World Server Badges (Optimized, zero pointLight shader lag) */}
-        <ServerRackBadges
-          scrollProgress={scrollProgress}
-          scrollProgressRef={scrollProgressRef}
-          activeNavId={activeNavId}
-          onNavigateToSection={onNavigateToSection}
-        />
 
         {/* NEX-01 Robot Companion */}
         <BdxRobot
