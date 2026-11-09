@@ -8,24 +8,24 @@ import AudioToggle from './AudioToggle';
 import { audioManager } from '@/utils/audioManager';
 
 export const SERVER_NODE_ITEMS = [
-  { id: 'home', code: '01', label: 'Facility 3D', href: '/', zProgress: 0.05 },
-  { id: 'events', code: '02', label: 'Events', href: '/events', zProgress: 0.22 },
-  { id: 'research', code: '03', label: 'Research', href: '/research', zProgress: 0.38 },
-  { id: 'projects', code: '04', label: 'Projects', href: '/projects', zProgress: 0.55 },
-  { id: 'team', code: '05', label: 'Team', href: '/team', zProgress: 0.70 },
-  { id: 'about', code: '06', label: 'About', href: '/about', zProgress: 0.85 },
-  { id: 'join', code: '07', label: 'Join', href: '/join', zProgress: 0.96 },
+  { id: 'entry', code: '01', label: '01 Entry', href: '/', zProgress: 0.05, zoneIndex: 0 },
+  { id: 'featured', code: '02', label: '02 Featured', href: '/events', zProgress: 0.22, zoneIndex: 1 },
+  { id: 'community', code: '03', label: '03 Community', href: '/team', zProgress: 0.40, zoneIndex: 2 },
+  { id: 'research', code: '04', label: '04 Research', href: '/research', zProgress: 0.58, zoneIndex: 3 },
+  { id: 'projects', code: '05', label: '05 Projects', href: '/projects', zProgress: 0.76, zoneIndex: 4 },
+  { id: 'discovery', code: '06', label: '06 Discovery', href: '/join', zProgress: 0.94, zoneIndex: 5 },
 ];
 
 /**
  * ServerSideNav
  * Hover-activated Precision Architectural Navigation Bar docked on the side of the Data Centre.
  * Seamlessly matches the #101415 industrial data facility background aesthetic.
- * Connects directly to dedicated Next.js routes.
+ * Connects directly to dedicated Next.js routes and glides between 3D zones.
  */
 export default function ServerSideNav({
   scrollProgress = 0,
   scrollProgressRef,
+  onNavigateToSection,
   onToggleTerminal,
 }) {
   const [isHovered, setIsHovered] = useState(false);
@@ -79,6 +79,17 @@ export default function ServerSideNav({
       audioManager.playClick();
     } catch {}
     setMobileOpen(false);
+  };
+
+  const handleItemClick = (e, item) => {
+    try {
+      audioManager.playClick();
+    } catch {}
+    setMobileOpen(false);
+    if (isHomePage && onNavigateToSection) {
+      e.preventDefault();
+      onNavigateToSection(item.id, item.zProgress);
+    }
   };
 
   const handleTerminal = useCallback(() => {
@@ -155,7 +166,7 @@ export default function ServerSideNav({
                   <Link
                     key={item.id}
                     href={item.href}
-                    onClick={handleLinkClick}
+                    onClick={(e) => handleItemClick(e, item)}
                     className={`group relative flex items-center justify-between gap-2 px-3 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer ${
                       isActive
                         ? 'text-sage bg-[#161B1C] border border-sage/60 shadow-sage-glow font-semibold'

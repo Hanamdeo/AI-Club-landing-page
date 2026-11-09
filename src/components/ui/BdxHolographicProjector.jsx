@@ -51,10 +51,12 @@ export default function BdxHolographicProjector({
   // Sync mode with active website section
   useEffect(() => {
     switch (activeSection) {
+      case 'community':
       case 'discussions':
         setCurrentMode('GD_SCHEDULE');
         setCurrentIndex(0);
         break;
+      case 'featured':
       case 'events':
       case 'operations':
         setCurrentMode('EVENTS');
@@ -73,12 +75,15 @@ export default function BdxHolographicProjector({
         setCurrentMode('RESEARCH_UPDATES');
         setCurrentIndex(0);
         break;
+      case 'discovery':
       case 'join':
         setCurrentMode('RECRUITMENT');
         setCurrentIndex(0);
         break;
       case 'chamber':
-        setCurrentMode('EVENTS');
+      case 'entry':
+      case 'hero':
+        setCurrentMode('ANNOUNCEMENTS');
         setCurrentIndex(0);
         break;
       default:

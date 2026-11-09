@@ -1,25 +1,24 @@
 /**
- * Zone Transition State Machine
+ * Zone Transition State Machine (6-Zone Progressive Depth Architecture)
  * Coordinates 3D server rack cluster transitions, lighting focus, and content synchronization.
  *
- * Explicit Scene States:
- * - 'idle': Active cluster is fully docked, settled, and interactive.
- * - 'approach': Visitor is nearing a zone boundary; subtle anticipation lighting initiates.
- * - 'transitioning': Current cluster parts outward and dims; incoming cluster slides into place and illuminates.
- * - 'revealed': Incoming cluster has docked; environment is ready and content settles in.
+ * 6 Connected Data Centre Zones:
+ * 1. Entry zone (p: 0.00 - 0.16): Welcome / Introduction & primary actions
+ * 2. Featured zone (p: 0.17 - 0.33): Highlighted server area & upcoming activities
+ * 3. Community zone (p: 0.34 - 0.50): Server aisle, reading circles & club culture
+ * 4. Research zone (p: 0.51 - 0.67): Intelligence Core, research tracks & preprints
+ * 5. Projects zone (p: 0.68 - 0.84): Project showcase displays & hardware builds
+ * 6. Discovery/exit zone (p: 0.85 - 1.00): Final landmark projection chamber & navigation hub
  */
 
-// Zone Scroll Thresholds
-export const ZONE_THRESHOLDS = {
-  ZONE_1_END: 0.22,
-  TRANS_1_START: 0.26,
-  TRANS_1_END: 0.38,
-  ZONE_2_SETTLED: 0.44,
-  ZONE_2_END: 0.60,
-  TRANS_2_START: 0.64,
-  TRANS_2_END: 0.76,
-  ZONE_3_SETTLED: 0.82,
-};
+export const FACILITY_6_ZONES = [
+  { id: 'entry', index: 0, code: '01', name: 'Entry Threshold', range: [0.0, 0.16], center: 0.08 },
+  { id: 'featured', index: 1, code: '02', name: 'Featured Cluster', range: [0.17, 0.33], center: 0.25 },
+  { id: 'community', index: 2, code: '03', name: 'Community Aisle', range: [0.34, 0.50], center: 0.42 },
+  { id: 'research', index: 3, code: '04', name: 'Research Core', range: [0.51, 0.67], center: 0.59 },
+  { id: 'projects', index: 4, code: '05', name: 'Project Archive', range: [0.68, 0.84], center: 0.76 },
+  { id: 'discovery', index: 5, code: '06', name: 'Discovery Hub', range: [0.85, 1.00], center: 0.93 },
+];
 
 /**
  * Calculates continuous cluster transforms, lighting parameters, and scene state.
@@ -30,179 +29,75 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
   const p = Math.max(0, Math.min(1, rawP));
   const maxSlide = isReducedMotion ? 0 : 0.44; // Lateral rack movement (meters)
 
-  let activeZone = 'hero';
-  let sceneState = 'idle';
-  let statusMessage = 'CLUSTER_01: DOCKED [NOMINAL]';
+  let activeZone = 'entry';
+  let zoneIndex = 0;
+  let statusMessage = 'SECTOR 01 // ENTRY THRESHOLD: NOMINAL';
+
+  if (p >= 0.85) {
+    activeZone = 'discovery';
+    zoneIndex = 5;
+    statusMessage = 'CHAMBER 06 // DISCOVERY & INTAKE HUB ONLINE';
+  } else if (p >= 0.68) {
+    activeZone = 'projects';
+    zoneIndex = 4;
+    statusMessage = 'BAY 05 // PROJECT ARCHIVES DOCKED';
+  } else if (p >= 0.51) {
+    activeZone = 'research';
+    zoneIndex = 3;
+    statusMessage = 'BAY 04 // RESEARCH INTELLIGENCE CORE ACTIVE';
+  } else if (p >= 0.34) {
+    activeZone = 'community';
+    zoneIndex = 2;
+    statusMessage = 'AISLE 03 // COMMUNITY COLLABORATIVE LOUNGE';
+  } else if (p >= 0.17) {
+    activeZone = 'featured';
+    zoneIndex = 1;
+    statusMessage = 'BAY 02 // FEATURED DEPLOYMENTS & EVENTS';
+  } else {
+    activeZone = 'entry';
+    zoneIndex = 0;
+    statusMessage = 'BAY 01 // ENTRY THRESHOLD: WELCOME';
+  }
 
   // 1. Cluster Transforms (Slide X and Opacity)
-  let c1Slide = 0;
-  let c1Opacity = 1.0;
+  // Cluster 1: Active in Zones 1 & 2 (p: 0.0 to 0.30)
+  const c1Slide = Math.min(maxSlide, Math.max(0, (p - 0.20) * 3.0 * maxSlide));
+  const c1Opacity = Math.max(0.18, 1.0 - Math.max(0, (p - 0.20) * 2.5));
 
-  let c2Slide = maxSlide;
-  let c2Opacity = 0.18;
+  // Cluster 2: Active in Zones 2, 3, & 4 (p: 0.25 to 0.65)
+  let c2Slide = 0;
+  let c2Opacity = 1.0;
+  if (p < 0.25) {
+    const t = (0.25 - p) / 0.25;
+    c2Slide = t * maxSlide;
+    c2Opacity = 0.18 + (1 - t) * 0.82;
+  } else if (p > 0.65) {
+    const t = Math.min(1, (p - 0.65) / 0.20);
+    c2Slide = t * maxSlide;
+    c2Opacity = 1.0 - t * 0.82;
+  }
 
-  let c3Slide = maxSlide;
-  let c3Opacity = 0.18;
+  // Cluster 3: Active in Zones 4, 5, & 6 (p: 0.60 to 1.0)
+  let c3Slide = 0;
+  let c3Opacity = 1.0;
+  if (p < 0.65) {
+    const t = Math.min(1, (0.65 - p) / 0.25);
+    c3Slide = t * maxSlide;
+    c3Opacity = 0.18 + (1 - t) * 0.82;
+  }
 
   // 2. Dynamic Lighting Targets (Harmonious 5200K Architectural Spectrum)
-  let lightZ = 4.0;
-  let lightIntensity = 1.55;
-  let lightColor = '#F0F6F7';
-  let coreWashIntensity = 0.5;
-  let chamberSpotIntensity = 0.25;
-
-  // ZONE 1: ARRIVAL
-  if (p < ZONE_THRESHOLDS.ZONE_1_END) {
-    activeZone = 'hero';
-    sceneState = 'idle';
-    c1Slide = 0;
-    c1Opacity = 1.0;
-    c2Slide = maxSlide;
-    c2Opacity = 0.18;
-    c3Slide = maxSlide;
-    c3Opacity = 0.18;
-    lightZ = 4.0;
-    lightIntensity = 1.55;
-    lightColor = '#F0F6F7';
-    statusMessage = 'BAY 01 // ARRIVAL CLUSTER: NOMINAL';
-  }
-  // APPROACHING ZONE 2
-  else if (p < ZONE_THRESHOLDS.TRANS_1_START) {
-    activeZone = 'hero';
-    sceneState = 'approach';
-    const t = (p - ZONE_THRESHOLDS.ZONE_1_END) / (ZONE_THRESHOLDS.TRANS_1_START - ZONE_THRESHOLDS.ZONE_1_END);
-    c1Slide = 0;
-    c1Opacity = 1.0;
-    c2Slide = maxSlide;
-    c2Opacity = 0.18 + t * 0.15;
-    lightZ = 4.0 - t * 4.0;
-    lightIntensity = 1.55 + t * 0.15;
-    coreWashIntensity = 0.5 + t * 0.3;
-    statusMessage = 'APPROACHING COMPUTE CORE // INITIATING CLUSTER TRANSIT';
-  }
-  // TRANSITIONING ZONE 1 -> ZONE 2
-  else if (p < ZONE_THRESHOLDS.TRANS_1_END) {
-    activeZone = p > 0.32 ? 'about' : 'hero';
-    sceneState = 'transitioning';
-    const rawT = (p - ZONE_THRESHOLDS.TRANS_1_START) / (ZONE_THRESHOLDS.TRANS_1_END - ZONE_THRESHOLDS.TRANS_1_START);
-    // Smooth cubic easing
-    const ease = rawT * rawT * (3 - 2 * rawT);
-
-    // Cluster 1 parts outward and dims
-    c1Slide = ease * maxSlide;
-    c1Opacity = 1.0 - ease * 0.82;
-
-    // Cluster 2 slides smoothly inward and illuminates
-    c2Slide = (1 - ease) * maxSlide;
-    c2Opacity = 0.18 + ease * 0.82;
-
-    // Lighting focus moves along cold aisle to Z = -15
-    lightZ = 0.0 - ease * 15.0;
-    lightIntensity = 1.65;
-    lightColor = '#F0F6F7';
-    coreWashIntensity = 0.7 + ease * 0.4;
-    statusMessage = 'RECONFIGURING AISLE // BAY 01 PARTING ➔ BAY 02 ENGAGING';
-  }
-  // REVEALED IN ZONE 2
-  else if (p < ZONE_THRESHOLDS.ZONE_2_SETTLED) {
-    activeZone = 'about';
-    sceneState = 'revealed';
-    c1Slide = maxSlide;
-    c1Opacity = 0.18;
-    c2Slide = 0;
-    c2Opacity = 1.0;
-    c3Slide = maxSlide;
-    c3Opacity = 0.18;
-    lightZ = -15.0;
-    lightIntensity = 1.65;
-    lightColor = '#F0F6F7';
-    coreWashIntensity = 1.1;
-    statusMessage = 'BAY 02 // COMPUTE CORE DOCKED & READY';
-  }
-  // SETTLED IN ZONE 2 (INTELLIGENCE CORE)
-  else if (p < ZONE_THRESHOLDS.ZONE_2_END) {
-    activeZone = 'about';
-    sceneState = 'idle';
-    c1Slide = maxSlide;
-    c1Opacity = 0.18;
-    c2Slide = 0;
-    c2Opacity = 1.0;
-    c3Slide = maxSlide;
-    c3Opacity = 0.18;
-    lightZ = -15.0;
-    lightIntensity = 1.55;
-    lightColor = '#F0F6F7';
-    coreWashIntensity = 1.0;
-    statusMessage = 'BAY 02 // INTELLIGENCE CORE: NOMINAL';
-  }
-  // APPROACHING ZONE 3
-  else if (p < ZONE_THRESHOLDS.TRANS_2_START) {
-    activeZone = 'about';
-    sceneState = 'approach';
-    const t = (p - ZONE_THRESHOLDS.ZONE_2_END) / (ZONE_THRESHOLDS.TRANS_2_START - ZONE_THRESHOLDS.ZONE_2_END);
-    c2Slide = 0;
-    c2Opacity = 1.0;
-    c3Slide = maxSlide;
-    c3Opacity = 0.18 + t * 0.2;
-    lightZ = -15.0 - t * 6.0;
-    chamberSpotIntensity = 0.25 + t * 0.4;
-    statusMessage = 'APPROACHING PROJECTION PEDESTAL // VOLUMETRIC ALIGNMENT';
-  }
-  // TRANSITIONING ZONE 2 -> ZONE 3
-  else if (p < ZONE_THRESHOLDS.TRANS_2_END) {
-    activeZone = p > 0.70 ? 'chamber' : 'about';
-    sceneState = 'transitioning';
-    const rawT = (p - ZONE_THRESHOLDS.TRANS_2_START) / (ZONE_THRESHOLDS.TRANS_2_END - ZONE_THRESHOLDS.TRANS_2_START);
-    const ease = rawT * rawT * (3 - 2 * rawT);
-
-    // Cluster 2 parts outward and dims
-    c2Slide = ease * maxSlide;
-    c2Opacity = 1.0 - ease * 0.82;
-
-    // Cluster 3 slides into position and locks in
-    c3Slide = (1 - ease) * maxSlide;
-    c3Opacity = 0.18 + ease * 0.82;
-
-    lightZ = -21.0 - ease * 14.0;
-    lightIntensity = 1.6;
-    lightColor = '#F0F6F7';
-    chamberSpotIntensity = 0.6 + ease * 0.8;
-    statusMessage = 'RECONFIGURING AISLE // BAY 02 PARTING ➔ CHAMBER EMITTER ACTIVE';
-  }
-  // REVEALED IN ZONE 3
-  else if (p < ZONE_THRESHOLDS.ZONE_3_SETTLED) {
-    activeZone = 'chamber';
-    sceneState = 'revealed';
-    c1Slide = maxSlide;
-    c1Opacity = 0.18;
-    c2Slide = maxSlide;
-    c2Opacity = 0.18;
-    c3Slide = 0;
-    c3Opacity = 1.0;
-    lightZ = -35.0;
-    lightIntensity = 1.8;
-    chamberSpotIntensity = 2.0;
-    statusMessage = 'CHAMBER 03 // VOLUMETRIC ARRAY ONLINE';
-  }
-  // SETTLED IN ZONE 3 (PROJECTION CHAMBER)
-  else {
-    activeZone = 'chamber';
-    sceneState = 'idle';
-    c1Slide = maxSlide;
-    c1Opacity = 0.18;
-    c2Slide = maxSlide;
-    c2Opacity = 0.18;
-    c3Slide = 0;
-    c3Opacity = 1.0;
-    lightZ = -35.0;
-    lightIntensity = 1.8;
-    chamberSpotIntensity = 2.0;
-    statusMessage = 'CHAMBER 03 // BDX-01 PEDESTAL DOCKED';
-  }
+  // Light position glides smoothly along the corridor from Z = +4 to Z = -45
+  const lightZ = 4.0 - p * 49.0;
+  const lightIntensity = 1.50 + Math.sin(p * Math.PI) * 0.25;
+  const lightColor = '#F0F6F7';
+  const coreWashIntensity = 0.5 + (p >= 0.45 && p <= 0.75 ? 0.6 : 0.2);
+  const chamberSpotIntensity = 0.25 + (p > 0.75 ? ((p - 0.75) / 0.25) * 1.85 : 0);
 
   return {
     activeZone,
-    sceneState,
+    zoneIndex,
+    sceneState: 'idle',
     statusMessage,
     clusters: {
       c1: { slide: c1Slide, opacity: c1Opacity },

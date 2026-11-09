@@ -32,7 +32,7 @@ export default function CameraController({
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // 3 Key Architectural Waypoints for Experience A
+  // 6 Progressive Architectural Depth Waypoints along the Data Centre Corridor
   const waypoints = useMemo(
     () => [
       {
@@ -41,14 +41,29 @@ export default function CameraController({
         target: new THREE.Vector3(0, 1.6, 0),
       },
       {
-        progress: 0.5,
-        pos: new THREE.Vector3(0.55, 1.8, -13.5),
-        target: new THREE.Vector3(-0.8, 1.55, -18.5),
+        progress: 0.2,
+        pos: new THREE.Vector3(0.55, 1.8, 0.5),
+        target: new THREE.Vector3(1.3, 1.55, -5.0),
+      },
+      {
+        progress: 0.4,
+        pos: new THREE.Vector3(-0.55, 1.8, -11.5),
+        target: new THREE.Vector3(-1.3, 1.55, -17.0),
+      },
+      {
+        progress: 0.6,
+        pos: new THREE.Vector3(0.50, 1.8, -22.5),
+        target: new THREE.Vector3(1.3, 1.55, -28.5),
+      },
+      {
+        progress: 0.8,
+        pos: new THREE.Vector3(-0.45, 1.8, -33.5),
+        target: new THREE.Vector3(-1.1, 1.55, -39.0),
       },
       {
         progress: 1.0,
-        pos: new THREE.Vector3(-0.4, 1.85, -31.2),
-        target: new THREE.Vector3(0.85, 1.45, -35.0),
+        pos: new THREE.Vector3(0, 1.85, -44.0),
+        target: new THREE.Vector3(0, 1.50, -49.5),
       },
     ],
     []

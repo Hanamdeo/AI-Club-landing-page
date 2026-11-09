@@ -12,34 +12,33 @@ function lerpAngle(from, to, t) {
   return from + shortest * t;
 }
 
-// Facility corridor spline control points across Experience A (Arrival -> Foundation Bay -> Chamber)
+// Facility corridor spline control points across 6 Progressive Depth Zones
 const DESKTOP_CONTROL_POINTS = [
-  new THREE.Vector3(1.28, 1.50, 8.2),    // p = 0.00: Section 01 Arrival threshold
-  new THREE.Vector3(0.70, 1.30, -3.0),   // p = 0.25: Gentle transition down right aisle
-  new THREE.Vector3(-0.95, 0.95, -18.5), // p = 0.50: Section 02 Foundation Bay
-  new THREE.Vector3(-0.20, 1.05, -26.5), // p = 0.75: Chamber approach
-  new THREE.Vector3(0.85, 1.05, -34.8),  // p = 1.00: Section 03 Projection Chamber pedestal
+  new THREE.Vector3(1.28, 1.50, 8.2),    // p = 0.00: Zone 01 Entry threshold
+  new THREE.Vector3(0.85, 1.35, -1.0),   // p = 0.20: Zone 02 Featured display
+  new THREE.Vector3(-0.80, 1.25, -13.0), // p = 0.40: Zone 03 Community collaborative aisle
+  new THREE.Vector3(0.80, 1.15, -24.0),  // p = 0.60: Zone 04 Research intelligence core
+  new THREE.Vector3(-0.65, 1.10, -35.0), // p = 0.80: Zone 05 Projects hardware archive
+  new THREE.Vector3(0.65, 1.05, -45.0),  // p = 1.00: Zone 06 Discovery final landmark hub
 ];
 
 const MOBILE_CONTROL_POINTS = [
   new THREE.Vector3(0.35, 1.15, 8.0),    // p = 0.00
-  new THREE.Vector3(0.15, 1.05, -3.0),   // p = 0.25
-  new THREE.Vector3(-0.40, 0.90, -18.5), // p = 0.50
-  new THREE.Vector3(-0.05, 0.95, -26.5), // p = 0.75
-  new THREE.Vector3(0.35, 0.95, -34.8),  // p = 1.00
+  new THREE.Vector3(0.20, 1.05, -1.0),   // p = 0.20
+  new THREE.Vector3(-0.25, 1.00, -13.0), // p = 0.40
+  new THREE.Vector3(0.25, 0.95, -24.0),  // p = 0.60
+  new THREE.Vector3(-0.20, 0.95, -35.0), // p = 0.80
+  new THREE.Vector3(0.20, 0.95, -45.0),  // p = 1.00
 ];
 
-// Continuous idle settle orientation across facility sections
+// Continuous idle settle orientation across the 6 facility zones
 function getIdleAngle(p) {
-  if (p <= 0.5) {
-    const t = p / 0.5;
-    const ease = t * t * (3 - 2 * t);
-    return THREE.MathUtils.lerp(-0.25, 0.35, ease);
-  } else {
-    const t = (p - 0.5) / 0.5;
-    const ease = t * t * (3 - 2 * t);
-    return THREE.MathUtils.lerp(0.35, 0.00, ease);
-  }
+  const zoneIndex = Math.min(5, Math.floor(p * 6));
+  const angles = [-0.25, 0.30, -0.28, 0.25, -0.20, 0.00];
+  const nextIdx = Math.min(5, zoneIndex + 1);
+  const localT = (p * 6) - zoneIndex;
+  const ease = localT * localT * (3 - 2 * localT);
+  return THREE.MathUtils.lerp(angles[zoneIndex], angles[nextIdx], ease);
 }
 
 /**
@@ -757,25 +756,34 @@ export default function BdxRobot({
         rightArmRef.current.rotation.x = currentPitchX.current * 0.6;
       }
 
-      // 8. Emotion State Machine & Meaningful Zone Triggers
+      // 8. Emotion State Machine & Meaningful 6-Zone Depth Triggers
       zoneCooldownRef.current += safeDelta;
       let currentZone = 0;
-      if (p >= 0.85) currentZone = 3;
-      else if (p >= 0.60) currentZone = 2;
-      else if (p >= 0.28) currentZone = 1;
+      if (p >= 0.85) currentZone = 5;      // Zone 6 Discovery
+      else if (p >= 0.68) currentZone = 4; // Zone 5 Projects
+      else if (p >= 0.51) currentZone = 3; // Zone 4 Research
+      else if (p >= 0.34) currentZone = 2; // Zone 3 Community
+      else if (p >= 0.17) currentZone = 1; // Zone 2 Featured
+      else currentZone = 0;                // Zone 1 Entry
 
-      if (currentZone !== lastZoneRef.current && zoneCooldownRef.current > 4.5) {
+      if (currentZone !== lastZoneRef.current && zoneCooldownRef.current > 3.5) {
         lastZoneRef.current = currentZone;
         zoneCooldownRef.current = 0;
         if (currentZone === 1) {
-          // Foundation Bay: Robot inspects the high-density computing clusters
-          triggerEmotion('CURIOUS', 2.8);
+          // Zone 2 Featured: Confident swagger for hackathons and competitions
+          triggerEmotion('COOL', 2.8);
         } else if (currentZone === 2) {
-          // Event Horizon / Interactive Server: Robot evaluates data streams
-          triggerEmotion('THINKING', 2.8);
+          // Zone 3 Community: Friendly smiling welcome to collaborative discussions
+          triggerEmotion('HAPPY', 2.8);
         } else if (currentZone === 3) {
-          // Projection Chamber: Robot celebrates arrival at terminal
-          triggerEmotion('EXCITED', 2.8);
+          // Zone 4 Research: Deep analytical thinking evaluating cognitive architectures
+          triggerEmotion('THINKING', 2.8);
+        } else if (currentZone === 4) {
+          // Zone 5 Projects: Curious inspection of student repositories & builds
+          triggerEmotion('CURIOUS', 2.8);
+        } else if (currentZone === 5) {
+          // Zone 6 Discovery: Celebratory excitation docking at terminal hub
+          triggerEmotion('EXCITED', 3.0);
           audioManager.playChirp();
         }
       }

@@ -3,14 +3,17 @@
 import React, { useMemo } from 'react';
 
 const CORRIDOR_SECTIONS = [
-  { id: 'arrival', label: '01 Arrival', targetZ: 12.5 },
-  { id: 'core', label: '02 Intelligence Core', targetZ: -15.0 },
-  { id: 'chamber', label: '03 Projection Chamber', targetZ: -35.0 },
+  { id: 'entry', label: '01 Entry Threshold', targetZ: 12.5 },
+  { id: 'featured', label: '02 Featured Cluster', targetZ: -2.5 },
+  { id: 'community', label: '03 Community Aisle', targetZ: -15.0 },
+  { id: 'research', label: '04 Research Core', targetZ: -28.0 },
+  { id: 'projects', label: '05 Project Archive', targetZ: -38.0 },
+  { id: 'discovery', label: '06 Discovery Hub', targetZ: -48.0 },
 ];
 
 /**
  * DepthTelemetry
- * Displays real-time corridor depth coordinates and waypoint progress.
+ * Displays real-time corridor depth coordinates and waypoint progress across 6 zones.
  * Built with clinical precision: tabular JetBrains Mono metrics, restrained hairline borders,
  * and zero visual flicker or distracting pings.
  */
@@ -21,7 +24,7 @@ export default function DepthTelemetry({
 }) {
   const currentDepth = useMemo(() => {
     const startZ = 12.5;
-    const endZ = -35.0;
+    const endZ = -48.0;
     const z = startZ + scrollProgress * (endZ - startZ);
     return z.toFixed(1);
   }, [scrollProgress]);
