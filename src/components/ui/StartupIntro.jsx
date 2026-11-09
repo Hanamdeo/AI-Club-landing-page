@@ -101,6 +101,7 @@ export default function StartupIntro({ onComplete }) {
   // Direct DOM references for synaptic paths and node elements
   const connectionRefs = useRef([]);
   const nodeHaloRefs = useRef({});
+  const nodeCoreRefs = useRef({});
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
   const isCompletedRef = useRef(false);
