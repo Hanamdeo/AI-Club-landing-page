@@ -109,6 +109,13 @@ export default function Home() {
               currentZoneIndexRef.current = newZoneIdx;
               setActiveZoneIndex(newZoneIdx);
               setActiveSection(ZONE_DEFINITIONS[newZoneIdx].id);
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(
+                  new CustomEvent('facility-zone-change', {
+                    detail: { zoneIndex: newZoneIdx, id: ZONE_DEFINITIONS[newZoneIdx].id },
+                  })
+                );
+              }
             }
           },
         });
@@ -133,20 +140,60 @@ export default function Home() {
     };
   }, [isRackModalOpen]);
 
-  // Smooth scroll navigation to target depth zone
+  // Smooth, snappy scroll navigation to target depth zone (instant UI response + 0.75s camera glide)
   const handleNavigateToZone = useCallback((zoneIndex) => {
     if (!lenisRef.current) return;
     const targetDef = ZONE_DEFINITIONS[zoneIndex] || ZONE_DEFINITIONS[0];
+    currentZoneIndexRef.current = zoneIndex;
+    setActiveZoneIndex(zoneIndex);
+    setActiveSection(targetDef.id);
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(
+        new CustomEvent('facility-zone-change', {
+          detail: { zoneIndex, id: targetDef.id },
+        })
+      );
+    }
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    lenisRef.current.scrollTo(targetDef.center * maxScroll, { duration: 1.4 });
+    lenisRef.current.scrollTo(targetDef.center * maxScroll, { duration: 0.75 });
   }, []);
 
   const handleNavigateToSection = useCallback((id, zProgress) => {
     if (!lenisRef.current) return;
+    const zoneIdx = ZONE_DEFINITIONS.findIndex((z) => z.id === id);
+    if (zoneIdx !== -1) {
+      currentZoneIndexRef.current = zoneIdx;
+      setActiveZoneIndex(zoneIdx);
+      setActiveSection(id);
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent('facility-zone-change', {
+            detail: { zoneIndex: zoneIdx, id },
+          })
+        );
+      }
+    }
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const targetP = typeof zProgress === 'number' ? zProgress : 0;
-    lenisRef.current.scrollTo(targetP * maxScroll, { duration: 1.4 });
+    lenisRef.current.scrollTo(targetP * maxScroll, { duration: 0.75 });
   }, []);
+
+  // Listen for global navigation events from top HUDNavbar
+  useEffect(() => {
+    const handleFacilityNav = (e) => {
+      const { id, zProgress, zoneIndex } = e.detail || {};
+      if (typeof zoneIndex === 'number') {
+        handleNavigateToZone(zoneIndex);
+      } else if (id) {
+        const found = ZONE_DEFINITIONS.find((z) => z.id === id);
+        if (found) {
+          handleNavigateToSection(found.id, found.center);
+        }
+      }
+    };
+    window.addEventListener('facility-navigate', handleFacilityNav);
+    return () => window.removeEventListener('facility-navigate', handleFacilityNav);
+  }, [handleNavigateToZone, handleNavigateToSection]);
 
   return (
     <main className="relative bg-graphite text-ivory selection:bg-sage selection:text-graphite min-h-screen">

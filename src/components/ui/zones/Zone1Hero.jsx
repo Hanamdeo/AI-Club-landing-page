@@ -23,7 +23,7 @@ export default function Zone1Hero({ onExploreClick }) {
   return (
     <section
       id="section-arrival"
-      className="relative w-full min-h-[100svh] flex flex-col justify-between px-6 sm:px-10 md:px-12 lg:px-16 pt-24 sm:pt-28 pb-6 sm:pb-8 select-none font-sans"
+      className="relative w-full min-h-[100svh] flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-16 pt-20 sm:pt-28 pb-4 sm:pb-8 select-none font-sans"
     >
       {/* ============================================================== */}
       {/* MASTER TWO-COLUMN HERO COMPOSITION                              */}
@@ -102,16 +102,16 @@ export default function Zone1Hero({ onExploreClick }) {
         </div>
 
         {/* 3 Verified Statistics in Floating Blade Telemetry Dock */}
-        <div className="flex items-center gap-5 sm:gap-7 md:gap-9 px-4 sm:px-6 py-2.5 rounded-xl bg-[#101416]/80 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] corner-reticle md:ml-32 lg:ml-40">
+        <div className="flex items-center gap-3 sm:gap-7 md:gap-9 px-3 sm:px-6 py-2 sm:py-2.5 rounded-xl bg-[#101416]/80 backdrop-blur-md border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] corner-reticle md:ml-32 lg:ml-40 overflow-x-auto no-scrollbar">
           {/* Blade Metric 1 */}
-          <div className="flex flex-col">
+          <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse shadow-[0_0_6px_rgba(162,178,159,0.5)]" />
-              <span className="text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
+              <span className="text-[8px] sm:text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 01 // MEMBERS
               </span>
             </div>
-            <span className="text-base sm:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
+            <span className="text-sm sm:text-base md:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
               450+
             </span>
           </div>
@@ -119,14 +119,14 @@ export default function Zone1Hero({ onExploreClick }) {
           <div className="w-[1px] h-7 bg-white/[0.08] hidden sm:block" />
 
           {/* Blade Metric 2 */}
-          <div className="flex flex-col">
+          <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-signal-green animate-pulse shadow-[0_0_6px_rgba(34,197,94,0.4)]" />
-              <span className="text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
+              <span className="text-[8px] sm:text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 02 // PROJECTS
               </span>
             </div>
-            <span className="text-base sm:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
+            <span className="text-sm sm:text-base md:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
               32
             </span>
           </div>
@@ -134,14 +134,14 @@ export default function Zone1Hero({ onExploreClick }) {
           <div className="w-[1px] h-7 bg-white/[0.08] hidden sm:block" />
 
           {/* Blade Metric 3 */}
-          <div className="flex flex-col">
+          <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-sage animate-pulse shadow-[0_0_6px_rgba(162,178,159,0.5)]" />
-              <span className="text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
+              <span className="text-[8px] sm:text-[9px] text-[#A7B7A1] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 03 // PAPERS
               </span>
             </div>
-            <span className="text-base sm:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
+            <span className="text-sm sm:text-base md:text-lg text-[#F2EFE8] font-bold font-mono tracking-tight tnum mt-0.5">
               14
             </span>
           </div>

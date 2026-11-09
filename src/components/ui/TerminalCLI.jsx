@@ -267,7 +267,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-graphite/80 backdrop-blur-md animate-fade-in pointer-events-auto font-mono text-xs text-ivory/90">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-3xl h-[80vh] max-h-[640px] rounded-2xl bg-[#121617]/95 border border-slate-struct/70 shadow-2xl flex flex-col overflow-hidden select-text"
+        className="w-full max-w-3xl h-[85svh] max-h-[640px] rounded-2xl bg-[#121617]/95 border border-slate-struct/70 shadow-2xl flex flex-col overflow-hidden select-text"
       >
         {/* Terminal Header Bar */}
         <div className="flex items-center justify-between px-4 py-2.5 bg-[#171B1C] border-b border-slate-struct/50 select-none shrink-0">

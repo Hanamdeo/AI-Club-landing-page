@@ -131,9 +131,9 @@ export default function BdxHolographicProjector({
         {/* 1. HOLOGRAPHIC PROJECTION INTERFACE SURFACE                     */}
         {/* ============================================================== */}
         {isOpen && !isMinimized && (
-          <div className="relative mb-3 w-[calc(100vw-2.5rem)] sm:w-[390px] max-w-[420px] rounded-xl bg-[#0D1011]/95 backdrop-blur-md border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden animate-fade-in text-ivory crosshair-corner">
+          <div className="relative mb-3 w-[calc(100vw-2.5rem)] sm:w-[390px] max-w-[420px] max-h-[calc(100svh-5.5rem)] flex flex-col rounded-xl bg-[#0D1011]/95 backdrop-blur-md border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden animate-fade-in text-ivory crosshair-corner">
             {/* Top Hologram Header Bar */}
-            <div className="relative flex items-center justify-between px-3.5 py-2.5 bg-[#15191A] border-b border-white/[0.08]">
+            <div className="relative flex-shrink-0 flex items-center justify-between px-3.5 py-2.5 bg-[#15191A] border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-sage ring-2 ring-sage/20" />
                 <span className="text-[10px] font-mono tracking-widest text-sage uppercase font-bold">
@@ -162,7 +162,7 @@ export default function BdxHolographicProjector({
             </div>
 
             {/* Mode Selector Pill Scroller */}
-            <div className="relative flex items-center gap-1 px-3 py-1.5 bg-[#0D1011] border-b border-white/[0.06] overflow-x-auto no-scrollbar">
+            <div className="relative flex-shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#0D1011] border-b border-white/[0.06] overflow-x-auto no-scrollbar">
               {PROJECTION_MODES.map((m) => {
                 const isActive = currentMode === m.key;
                 return (
@@ -182,7 +182,7 @@ export default function BdxHolographicProjector({
             </div>
 
             {/* Projected Card Content Viewport */}
-            <div className="relative p-4">
+            <div className="relative p-4 overflow-y-auto custom-scrollbar flex-1">
               {currentItem ? (
                 <div>
                   {/* Badge & Item Counter */}

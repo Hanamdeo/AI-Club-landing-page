@@ -164,7 +164,7 @@ export default function Zone6Discovery({ onReturnTop }) {
           </div>
 
           {/* Right Column: Complete Navigation Hub Directory */}
-          <div className="lg:col-span-6 border-l-2 border-white/[0.12] pl-6 py-1 flex flex-col justify-between">
+          <div className="lg:col-span-6 border-t border-white/[0.12] lg:border-t-0 lg:border-l-2 pt-6 lg:pt-0 pl-0 lg:pl-6 py-1 flex flex-col justify-between">
             <div>
               <div className="text-[10px] font-mono text-slate-300 uppercase tracking-widest flex items-center gap-2 mb-3">
                 <Compass className="w-3.5 h-3.5 text-[#24BFEA]" />

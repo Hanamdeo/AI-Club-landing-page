@@ -23,10 +23,10 @@ export default function ServerBladeModal({ isOpen, onClose }) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 bg-graphite/80 backdrop-blur-md animate-fade-in pointer-events-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-graphite/80 backdrop-blur-md animate-fade-in pointer-events-auto">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl rounded-xl bg-[#141819] border border-white/[0.12] shadow-2xl p-6 sm:p-7 text-ivory font-sans"
+        className="w-full max-w-2xl max-h-[calc(100svh-2rem)] overflow-y-auto custom-scrollbar rounded-xl bg-[#141819] border border-white/[0.12] shadow-2xl p-4 sm:p-7 text-ivory font-sans"
       >
         {/* Header */}
         <div className="flex items-start justify-between pb-4 border-b border-white/[0.08] mb-5">

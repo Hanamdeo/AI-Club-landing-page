@@ -90,7 +90,7 @@ export default function Zone4Research({ onNextZone }) {
           </div>
 
           {/* Right Detailed Laboratory Dossier */}
-          <div className="lg:col-span-7 border-l-2 border-white/[0.12] pl-6 py-1 flex flex-col justify-between">
+          <div className="lg:col-span-7 border-t border-white/[0.12] lg:border-t-0 lg:border-l-2 pt-4 lg:pt-0 pl-0 lg:pl-6 py-1 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between pb-2 border-b border-white/[0.1] mb-3">
                 <span className="text-xs font-mono font-semibold text-sage uppercase tracking-wider">

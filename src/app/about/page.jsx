@@ -21,7 +21,7 @@ export default function AboutPage() {
   const news = getCuratedNews();
 
   return (
-    <main className="relative min-h-screen bg-[#0A0E10] text-[#E6E2D8] font-sans pt-28 pb-24 px-6 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#0A0E10] text-[#E6E2D8] font-sans pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Architectural Grid */}
       <div className="absolute inset-0 bg-facility-grid opacity-25 pointer-events-none" />
       <div className="absolute top-0 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -43,7 +43,7 @@ export default function AboutPage() {
               <span className="w-2 h-2 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
               <span>FACILITY PHILOSOPHY & CHARTER</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-labeouf font-bold tracking-wider text-gradient-cyber leading-none">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-labeouf font-bold tracking-wider text-gradient-cyber leading-tight sm:leading-none">
               ABOUT AI CLUB
             </h1>
             <p className="text-sm sm:text-base text-[#B5B8AF] font-normal mt-3 max-w-2xl leading-relaxed">
@@ -51,11 +51,11 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-right">
+          <div className="p-4 px-6 rounded-2xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               CAMPUS AFFILIATION
             </span>
-            <span className="text-lg font-bold font-labeouf text-ivory tracking-wide">
+            <span className="text-base sm:text-lg font-bold font-labeouf text-ivory tracking-wide">
               {CLUB_INFO.institution}
             </span>
           </div>
@@ -63,7 +63,7 @@ export default function AboutPage() {
 
         {/* Mission & Vision Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="p-8 rounded-3xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
             <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#24BFEA] uppercase tracking-wider font-semibold">
               <Target className="w-4 h-4" />
               <span>OUR MISSION</span>
@@ -73,7 +73,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <div className="p-8 rounded-3xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+          <div className="p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
             <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#A7B7A1] uppercase tracking-wider font-semibold">
               <Compass className="w-4 h-4" />
               <span>OUR VISION</span>

@@ -25,13 +25,61 @@ export const NAV_LINKS = [
  */
 export default function HUDNavbar({ onToggleTerminal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeHomeSection, setActiveHomeSection] = useState('entry');
   const pathname = usePathname();
+  const isHomePage = pathname === '/';
 
-  const handleLinkClick = () => {
+  // Synchronize active indicator with 3D facility zone on Home
+  React.useEffect(() => {
+    const handleZoneChange = (e) => {
+      if (e.detail?.id) {
+        setActiveHomeSection(e.detail.id);
+      }
+    };
+    window.addEventListener('facility-zone-change', handleZoneChange);
+    return () => window.removeEventListener('facility-zone-change', handleZoneChange);
+  }, []);
+
+  const handleLinkClick = (e, link) => {
     try {
       audioManager.playClick();
     } catch {}
     setMobileMenuOpen(false);
+
+    // On the 3D home page, smoothly glide the 3D camera rather than unmounting the scene
+    if (isHomePage) {
+      const zoneMap = {
+        home: { id: 'entry', zoneIndex: 0 },
+        events: { id: 'featured', zoneIndex: 1 },
+        team: { id: 'community', zoneIndex: 2 },
+        research: { id: 'research', zoneIndex: 3 },
+        projects: { id: 'projects', zoneIndex: 4 },
+        join: { id: 'discovery', zoneIndex: 5 },
+      };
+
+      if (zoneMap[link.id]) {
+        if (e) e.preventDefault();
+        setActiveHomeSection(zoneMap[link.id].id);
+        window.dispatchEvent(
+          new CustomEvent('facility-navigate', {
+            detail: zoneMap[link.id],
+          })
+        );
+      }
+    }
+  };
+
+  const getIsActive = (link) => {
+    if (isHomePage) {
+      if (link.id === 'home') return activeHomeSection === 'entry';
+      if (link.id === 'events') return activeHomeSection === 'featured';
+      if (link.id === 'team') return activeHomeSection === 'community';
+      if (link.id === 'research') return activeHomeSection === 'research';
+      if (link.id === 'projects') return activeHomeSection === 'projects';
+      if (link.id === 'join') return activeHomeSection === 'discovery';
+      return false;
+    }
+    return link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
   };
 
   const handleTerminalClick = () => {
@@ -47,7 +95,7 @@ export default function HUDNavbar({ onToggleTerminal }) {
         {/* Brand Node: Architectural Identification Pill */}
         <Link
           href="/"
-          onClick={handleLinkClick}
+          onClick={(e) => handleLinkClick(e, { id: 'home', href: '/' })}
           className="flex items-center gap-2.5 text-xs text-ivory hover:text-sage transition-colors cursor-pointer shrink-0 group btn-tactile"
           aria-label="AI Club Facility Root"
         >
@@ -70,13 +118,13 @@ export default function HUDNavbar({ onToggleTerminal }) {
         {/* Desktop Technical Navigation Links */}
         <div className="hidden lg:flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
           {NAV_LINKS.map((link) => {
-            const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+            const isActive = getIsActive(link);
 
             return (
               <Link
                 key={link.id}
                 href={link.href}
-                onClick={handleLinkClick}
+                onClick={(e) => handleLinkClick(e, link)}
                 className={`relative px-3 py-1 text-xs rounded-md transition-all cursor-pointer font-medium whitespace-nowrap btn-tactile ${
                   isActive
                     ? 'text-sage bg-white/[0.06] border border-sage/40 font-semibold shadow-sage-glow'
@@ -127,12 +175,12 @@ export default function HUDNavbar({ onToggleTerminal }) {
             <span className="text-sage font-bold">ROUTES</span>
           </div>
           {NAV_LINKS.map((link) => {
-            const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+            const isActive = getIsActive(link);
             return (
               <Link
                 key={link.id}
                 href={link.href}
-                onClick={handleLinkClick}
+                onClick={(e) => handleLinkClick(e, link)}
                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium text-left transition-all btn-tactile ${
                   isActive
                     ? 'bg-white/[0.06] border border-sage/40 text-sage font-semibold shadow-sage-glow'
