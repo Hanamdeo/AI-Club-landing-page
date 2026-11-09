@@ -29,12 +29,12 @@ import Zone5Projects from '@/components/ui/zones/Zone5Projects';
 import Zone6Discovery from '@/components/ui/zones/Zone6Discovery';
 
 const ZONE_DEFINITIONS = [
-  { id: 'entry', index: 0, label: '01 Entry', center: 0.04, zProgress: 0.00 },
-  { id: 'featured', index: 1, label: '02 Featured', center: 0.20, zProgress: 0.20 },
-  { id: 'community', index: 2, label: '03 Community', center: 0.40, zProgress: 0.40 },
-  { id: 'research', index: 3, label: '04 Research', center: 0.60, zProgress: 0.60 },
-  { id: 'projects', index: 4, label: '05 Projects', center: 0.80, zProgress: 0.80 },
-  { id: 'discovery', index: 5, label: '06 Discovery', center: 0.96, zProgress: 1.00 },
+  { id: 'entry', index: 0, label: '01 Entry', center: 0.08, zProgress: 0.00 },
+  { id: 'featured', index: 1, label: '02 Featured', center: 0.25, zProgress: 0.20 },
+  { id: 'community', index: 2, label: '03 Community', center: 0.42, zProgress: 0.40 },
+  { id: 'research', index: 3, label: '04 Research', center: 0.59, zProgress: 0.60 },
+  { id: 'projects', index: 4, label: '05 Projects', center: 0.76, zProgress: 0.80 },
+  { id: 'discovery', index: 5, label: '06 Discovery', center: 0.93, zProgress: 1.00 },
 ];
 
 export default function Home() {
@@ -47,7 +47,6 @@ export default function Home() {
   const scrollProgressRef = useRef(0);
   const currentZoneIndexRef = useRef(0);
   const depthCoordRef = useRef(null);
-  const zoneElsRef = useRef([]);
 
   // Modal & Terminal States
   const [isRackModalOpen, setIsRackModalOpen] = useState(false);
@@ -98,11 +97,11 @@ export default function Home() {
 
             // Determine active zone index (0 to 5) for telemetry & navigation state
             let newZoneIdx = 0;
-            if (p >= 0.88) newZoneIdx = 5;
-            else if (p >= 0.70) newZoneIdx = 4;
-            else if (p >= 0.50) newZoneIdx = 3;
-            else if (p >= 0.30) newZoneIdx = 2;
-            else if (p >= 0.10) newZoneIdx = 1;
+            if (p >= 0.85) newZoneIdx = 5;
+            else if (p >= 0.68) newZoneIdx = 4;
+            else if (p >= 0.51) newZoneIdx = 3;
+            else if (p >= 0.34) newZoneIdx = 2;
+            else if (p >= 0.17) newZoneIdx = 1;
             else newZoneIdx = 0;
 
             if (currentZoneIndexRef.current !== newZoneIdx) {
@@ -110,69 +109,6 @@ export default function Home() {
               setActiveZoneIndex(newZoneIdx);
               setActiveSection(ZONE_DEFINITIONS[newZoneIdx].id);
             }
-
-            // Continuous scroll-linked fade-in & smooth vertical glide for all 6 zones
-            const zoneConfigs = [
-              { start: 0.00, center: 0.04, end: 0.12 },
-              { start: 0.10, center: 0.20, end: 0.30 },
-              { start: 0.30, center: 0.40, end: 0.50 },
-              { start: 0.50, center: 0.60, end: 0.70 },
-              { start: 0.70, center: 0.80, end: 0.90 },
-              { start: 0.88, center: 0.96, end: 1.00 },
-            ];
-
-            zoneConfigs.forEach((cfg, idx) => {
-              const el = zoneElsRef.current[idx];
-              if (!el) return;
-
-              let opacity = 0;
-              let translateY = 0;
-
-              if (idx === 0) {
-                if (p <= cfg.center) {
-                  opacity = 1;
-                  translateY = 0;
-                } else if (p < cfg.end) {
-                  const t = 1 - (p - cfg.center) / (cfg.end - cfg.center);
-                  opacity = t * t * (3 - 2 * t);
-                  translateY = (p - cfg.center) * -120;
-                } else {
-                  opacity = 0;
-                }
-              } else if (idx === 5) {
-                if (p >= cfg.center) {
-                  opacity = 1;
-                  translateY = 0;
-                } else if (p > cfg.start) {
-                  const t = (p - cfg.start) / (cfg.center - cfg.start);
-                  opacity = t * t * (3 - 2 * t);
-                  translateY = (cfg.center - p) * 120;
-                } else {
-                  opacity = 0;
-                }
-              } else {
-                if (p >= cfg.start && p <= cfg.end) {
-                  const half = (cfg.end - cfg.start) / 2;
-                  const dist = Math.abs(p - cfg.center);
-                  const t = Math.max(0, 1 - dist / half);
-                  opacity = t * t * (3 - 2 * t);
-                  translateY = (p - cfg.center) * -120;
-                } else {
-                  opacity = 0;
-                }
-              }
-
-              if (opacity <= 0.005) {
-                el.style.opacity = '0';
-                el.style.visibility = 'hidden';
-                el.style.pointerEvents = 'none';
-              } else {
-                el.style.visibility = 'visible';
-                el.style.opacity = opacity.toFixed(3);
-                el.style.transform = `translate3d(0, ${translateY.toFixed(1)}px, 0)`;
-                el.style.pointerEvents = opacity > 0.45 ? 'auto' : 'none';
-              }
-            });
           },
         });
       }
@@ -214,7 +150,16 @@ export default function Home() {
   return (
     <main className="relative bg-graphite text-ivory selection:bg-sage selection:text-graphite min-h-screen">
       {/* Cinematic Architectural Startup Animation */}
-      {mounted && isIntro && <StartupIntro onComplete={() => setIsIntro(false)} />}
+      {mounted && isIntro && (
+        <StartupIntro
+          onComplete={() => {
+            setIsIntro(false);
+            setTimeout(() => {
+              ScrollTrigger.refresh();
+            }, 100);
+          }}
+        />
+      )}
 
       {/* 1. Master WebGL 3D Data Centre Canvas: Remains Visually Connected Across the Whole Journey */}
       {mounted && (
@@ -287,54 +232,66 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none z-10 flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden">
         {/* ZONE 01: ENTRY ZONE (Welcome, AI Club Intro, Primary Actions) */}
         <div
-          ref={(el) => (zoneElsRef.current[0] = el)}
-          className="w-full max-w-6xl absolute transition-none"
-          style={{ opacity: 1, visibility: 'visible', pointerEvents: 'auto' }}
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+            activeZoneIndex === 0
+              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+          }`}
         >
           <Zone1Hero onExploreClick={() => handleNavigateToZone(1)} />
         </div>
 
         {/* ZONE 02: FEATURED ZONE (Highlighted server cluster & upcoming activities) */}
         <div
-          ref={(el) => (zoneElsRef.current[1] = el)}
-          className="w-full max-w-6xl absolute transition-none"
-          style={{ opacity: 0, visibility: 'hidden', pointerEvents: 'none' }}
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+            activeZoneIndex === 1
+              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+          }`}
         >
           <Zone2Featured onNextZone={() => handleNavigateToZone(2)} />
         </div>
 
         {/* ZONE 03: COMMUNITY ZONE (Discussions, reading circles & student culture) */}
         <div
-          ref={(el) => (zoneElsRef.current[2] = el)}
-          className="w-full max-w-6xl absolute transition-none"
-          style={{ opacity: 0, visibility: 'hidden', pointerEvents: 'none' }}
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+            activeZoneIndex === 2
+              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+          }`}
         >
           <Zone3Community onNextZone={() => handleNavigateToZone(3)} />
         </div>
 
         {/* ZONE 04: RESEARCH ZONE (Intelligence Core, research tracks & preprints) */}
         <div
-          ref={(el) => (zoneElsRef.current[3] = el)}
-          className="w-full max-w-6xl absolute transition-none"
-          style={{ opacity: 0, visibility: 'hidden', pointerEvents: 'none' }}
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+            activeZoneIndex === 3
+              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+          }`}
         >
           <Zone4Research onNextZone={() => handleNavigateToZone(4)} />
         </div>
 
         {/* ZONE 05: PROJECTS ZONE (Project showcase displays & hardware builds) */}
         <div
-          ref={(el) => (zoneElsRef.current[4] = el)}
-          className="w-full max-w-6xl absolute transition-none"
-          style={{ opacity: 0, visibility: 'hidden', pointerEvents: 'none' }}
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+            activeZoneIndex === 4
+              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+          }`}
         >
           <Zone5Projects onNextZone={() => handleNavigateToZone(5)} />
         </div>
 
         {/* ZONE 06: DISCOVERY / EXIT ZONE (Final landmark & navigation hub) */}
         <div
-          ref={(el) => (zoneElsRef.current[5] = el)}
-          className="w-full max-w-6xl absolute transition-none"
-          style={{ opacity: 0, visibility: 'hidden', pointerEvents: 'none' }}
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+            activeZoneIndex === 5
+              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
+              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+          }`}
         >
           <Zone6Discovery onReturnTop={() => handleNavigateToZone(0)} />
         </div>
