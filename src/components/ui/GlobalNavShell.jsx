@@ -72,25 +72,6 @@ export default function GlobalNavShell() {
   const router = useRouter();
   const pathname = usePathname();
 
-  // CSS Integrity Guardian: Prevents unstyled raw HTML drops during client navigation
-  useEffect(() => {
-    const verifyCssIntegrity = () => {
-      if (typeof window === 'undefined') return;
-      const testVal = getComputedStyle(document.documentElement).getPropertyValue('--accent-sage')?.trim();
-      if (!testVal) {
-        const lastRecovery = sessionStorage.getItem('last_css_recovery');
-        const now = Date.now();
-        if (!lastRecovery || now - Number(lastRecovery) > 4000) {
-          sessionStorage.setItem('last_css_recovery', String(now));
-          window.location.reload();
-        }
-      }
-    };
-
-    const timer = setTimeout(verifyCssIntegrity, 100);
-    return () => clearTimeout(timer);
-  }, [pathname]);
-
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === '`' || e.key === '~') {
