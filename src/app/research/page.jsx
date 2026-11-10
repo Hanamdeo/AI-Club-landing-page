@@ -61,7 +61,7 @@ export default function ResearchPage() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
       <div className="absolute top-1/4 right-1/3 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -71,10 +71,10 @@ export default function ResearchPage() {
      
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
           <div>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
               RESEARCH & GD ARCHIVE
             </h1>
             <p className="text-sm sm:text-base text-slate-300 font-manrope mt-3 max-w-2xl leading-relaxed">
@@ -83,13 +83,13 @@ export default function ResearchPage() {
           </div>
 
           {/* Navigation Toggle Pills */}
-          <div className="flex items-center gap-2 p-1.5 rounded-2xl bg-[#0C1014] border border-[rgba(85,223,255,0.22)] self-start md:self-auto">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 p-1.5 rounded-2xl bg-[#0C1014] border border-[rgba(85,223,255,0.22)] self-stretch sm:self-start md:self-auto w-full sm:w-auto">
             <button
               onClick={() => {
                 try { audioManager.playClick(); } catch {}
                 setActiveTab('gd-archive');
               }}
-              className={`px-4 py-2 text-xs font-mono rounded-xl transition-all cursor-pointer ${
+              className={`px-4 py-2 text-xs font-mono rounded-xl transition-all cursor-pointer text-center ${
                 activeTab === 'gd-archive'
                   ? 'bg-gradient-to-r from-[#55DFFF] to-[#24BFEA] text-black font-bold shadow-[0_0_14px_rgba(85,223,255,0.4)]'
                   : 'text-slate-400 hover:text-white'
@@ -102,7 +102,7 @@ export default function ResearchPage() {
                 try { audioManager.playClick(); } catch {}
                 setActiveTab('tracks');
               }}
-              className={`px-4 py-2 text-xs font-mono rounded-xl transition-all cursor-pointer ${
+              className={`px-4 py-2 text-xs font-mono rounded-xl transition-all cursor-pointer text-center ${
                 activeTab === 'tracks'
                   ? 'bg-gradient-to-r from-[#55DFFF] to-[#24BFEA] text-black font-bold shadow-[0_0_14px_rgba(85,223,255,0.4)]'
                   : 'text-slate-400 hover:text-white'
@@ -130,7 +130,7 @@ export default function ResearchPage() {
                 return (
                   <div
                     key={gd.id}
-                    className="p-6 sm:p-7 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.18)] hover:border-[#55DFFF]/40 transition-colors shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
+                    className="p-5 sm:p-7 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.18)] hover:border-[#55DFFF]/40 transition-colors shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
                       <div>
@@ -142,14 +142,14 @@ export default function ResearchPage() {
                             {gd.date} • {gd.time}
                           </span>
                         </div>
-                        <h3 className="text-2xl sm:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2">
+                        <h3 className="text-xl sm:text-2xl md:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2">
                           {gd.topic}
                         </h3>
                       </div>
 
                       <button
                         onClick={() => toggleGdExpand(gd.id)}
-                        className="px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[rgba(85,223,255,0.2)] border border-[rgba(85,223,255,0.2)] text-xs font-mono text-slate-200 hover:text-white flex items-center gap-1.5 transition-all self-start shrink-0 cursor-pointer"
+                        className="w-full sm:w-auto justify-center px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[rgba(85,223,255,0.2)] border border-[rgba(85,223,255,0.2)] text-xs font-mono text-slate-200 hover:text-white flex items-center gap-1.5 transition-all self-stretch sm:self-start shrink-0 cursor-pointer"
                       >
                         <span>{isExpanded ? 'COLLAPSE' : 'INSPECT DEBATE'}</span>
                         <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isExpanded ? 'rotate-180 text-[#55DFFF]' : ''}`} />

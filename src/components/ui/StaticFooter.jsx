@@ -88,8 +88,8 @@ export default function StaticFooter({ onOpenTerminal }) {
       {/* ============================================================== */}
       {/* 3. MAIN 3-COLUMN EDITORIAL DECK                                */}
       {/* ============================================================== */}
-      <div className="relative max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 pt-10 pb-16">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-0 items-stretch">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 pt-8 sm:pt-10 pb-12 sm:pb-16">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-0 items-stretch">
           
           {/* ------------------------------------------------------------ */}
           {/* COLUMN 1: BRAND IDENTITY & INTERACTIVE CTA                   */}
@@ -108,7 +108,7 @@ export default function StaticFooter({ onOpenTerminal }) {
                   />
                 </div>
                 <div>
-                  <h3 className="font-3d-slade text-3xl sm:text-4xl tracking-wider uppercase leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
+                  <h3 className="font-3d-slade text-2xl sm:text-3xl md:text-4xl tracking-wider uppercase leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">
                     AI CLUB
                   </h3>
                   <div className="flex items-center gap-2 mt-1">
@@ -134,7 +134,7 @@ export default function StaticFooter({ onOpenTerminal }) {
             <div className="pt-2 flex flex-wrap items-center gap-3">
               <Link
                 href="/join"
-                className="font-3d-slade-subtle inline-flex items-center gap-2 px-7 py-3 rounded-md bg-[rgba(85,223,255,0.06)] hover:bg-[#55DFFF] border-2 border-[#55DFFF] text-white hover:text-[#050C12] text-xs tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(85,223,255,0.22)] hover:shadow-[0_0_35px_rgba(85,223,255,0.65)] cursor-pointer active:scale-95"
+                className="font-3d-slade-subtle inline-flex items-center justify-center gap-2 px-6 sm:px-7 py-3 rounded-md bg-[rgba(85,223,255,0.06)] hover:bg-[#55DFFF] border-2 border-[#55DFFF] text-white hover:text-[#050C12] text-xs tracking-widest uppercase transition-all duration-300 shadow-[0_0_20px_rgba(85,223,255,0.22)] hover:shadow-[0_0_35px_rgba(85,223,255,0.65)] cursor-pointer active:scale-95"
               >
                 <span>CONTACT US</span>
                 <ArrowUpRight className="w-3.5 h-3.5" />
@@ -142,7 +142,7 @@ export default function StaticFooter({ onOpenTerminal }) {
               {onOpenTerminal && (
                 <button
                   onClick={onOpenTerminal}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-md border border-[rgba(85,223,255,0.25)] hover:border-[#55DFFF] text-slate-300 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] text-xs font-mono font-semibold tracking-wider uppercase transition-all cursor-pointer shadow-sm"
+                  className="inline-flex items-center justify-center gap-2 px-4 sm:px-5 py-3 rounded-md border border-[rgba(85,223,255,0.25)] hover:border-[#55DFFF] text-slate-300 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] text-xs font-mono font-semibold tracking-wider uppercase transition-all cursor-pointer shadow-sm"
                   title="Open Interactive UNIX Terminal (~)"
                 >
                   <Terminal className="w-3.5 h-3.5 text-[#55DFFF]" />
@@ -155,7 +155,7 @@ export default function StaticFooter({ onOpenTerminal }) {
           {/* ------------------------------------------------------------ */}
           {/* COLUMN 2: CLEAN DIRECTORY LINKS (ABOUT, BLOG, GD, REGISTER)  */}
           {/* ------------------------------------------------------------ */}
-          <div className="md:col-span-3 lg:col-span-3 md:border-l md:border-[rgba(85,223,255,0.20)] md:pl-8 lg:pl-12 flex flex-col justify-center space-y-3 sm:space-y-3.5 my-auto">
+          <div className="md:col-span-3 lg:col-span-3 border-t border-[rgba(85,223,255,0.14)] pt-6 md:border-t-0 md:pt-0 md:border-l md:border-[rgba(85,223,255,0.20)] md:pl-8 lg:pl-12 flex flex-col justify-center space-y-3 sm:space-y-3.5 my-auto">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
@@ -172,8 +172,8 @@ export default function StaticFooter({ onOpenTerminal }) {
           {/* ------------------------------------------------------------ */}
           {/* COLUMN 3: VERTICAL SOCIAL TILES (INSTAGRAM, LINKEDIN)        */}
           {/* ------------------------------------------------------------ */}
-          <div className="md:col-span-3 lg:col-span-4 md:border-l md:border-[rgba(85,223,255,0.20)] md:pl-8 lg:pl-12 flex flex-col justify-center space-y-3 my-auto">
-            <div className="flex flex-col gap-2.5 max-w-xs">
+          <div className="md:col-span-3 lg:col-span-4 border-t border-[rgba(85,223,255,0.14)] pt-6 md:border-t-0 md:pt-0 md:border-l md:border-[rgba(85,223,255,0.20)] md:pl-8 lg:pl-12 flex flex-col justify-center space-y-3 my-auto">
+            <div className="flex flex-col gap-2.5 max-w-xs w-full">
               {socialLinks.map((s, idx) => {
                 const IconComp = s.icon;
                 return (
@@ -208,15 +208,15 @@ export default function StaticFooter({ onOpenTerminal }) {
       {/* 4. SUBTLE BOTTOM COPYRIGHT & TELEMETRY BAR                     */}
       {/* ============================================================== */}
       <div className="relative border-t border-[rgba(85,223,255,0.14)] bg-[#04080D]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-slate-400">
-          <div className="flex items-center gap-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-slate-400 text-center sm:text-left">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <span className="text-white font-medium">© {new Date().getFullYear()} AI CLUB</span>
-            <span className="text-slate-600">•</span>
+            <span className="text-slate-600 hidden sm:inline">•</span>
             <span>MADHAV INSTITUTE OF TECHNOLOGY & SCIENCE</span>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-[10px] text-slate-500 hidden sm:inline">AUTONOMOUS RESEARCH NODE</span>
+            <span className="text-[10px] text-slate-500 hidden md:inline">AUTONOMOUS RESEARCH NODE</span>
             <button
               onClick={scrollToTop}
               className="group flex items-center gap-1.5 text-slate-400 hover:text-[#55DFFF] transition-colors font-bold uppercase tracking-wider text-[10px] cursor-pointer"

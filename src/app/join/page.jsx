@@ -58,7 +58,7 @@ export default function JoinPage() {
   };
 
   return (
-    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[radial-gradient(ellipse_at_top,rgba(85,223,255,0.1)_0%,transparent_70%)] pointer-events-none" />
@@ -67,16 +67,9 @@ export default function JoinPage() {
         
 
         {/* Master Page Header */}
-        <div className="border-b border-[rgba(85,223,255,0.18)] pb-8 mb-10 text-center sm:text-left">
+        <div className="border-b border-[rgba(85,223,255,0.18)] pb-8 mb-8 sm:mb-10 text-center sm:text-left">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3.5">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#0C1014] border border-[rgba(85,223,255,0.3)] text-[10px] font-mono tracking-widest text-[#55DFFF] uppercase">
-              <span className={`w-2 h-2 rounded-full animate-pulse ${
-                recruitmentStatus === 'open' ? 'bg-signal-green shadow-[0_0_8px_#22C55E]' :
-                recruitmentStatus === 'coming-soon' ? 'bg-[#24BFEA] shadow-[0_0_8px_#24BFEA]' :
-                'bg-red-400'
-              }`} />
-              <span>RECRUITMENT STATUS: {recruitmentStatus.toUpperCase().replace('-', ' ')}</span>
-            </div>
+      
 
             {/* Configurable Status Switcher (For Demo & Admin Testing) */}
             <div className="flex items-center gap-1.5 p-1 rounded-xl bg-[#0C1014] border border-white/[0.08] text-[10px] font-mono">
@@ -102,7 +95,7 @@ export default function JoinPage() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
             <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-[#55DFFF]/40 shadow-[0_0_30px_rgba(85,223,255,0.3)] shrink-0 bg-black">
               <Image
                 src="/logo.png"
@@ -114,7 +107,7 @@ export default function JoinPage() {
               />
             </div>
             <div>
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
                 JOIN THE COLLECTIVE
               </h1>
               <p className="text-xs sm:text-sm font-mono text-[#55DFFF] uppercase tracking-wider mt-1">
@@ -278,7 +271,7 @@ export default function JoinPage() {
               </div>
             ) : (
               /* Active Intake Form */
-              <form onSubmit={handleSubmit} className="p-8 sm:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] space-y-6">
+              <form onSubmit={handleSubmit} className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] space-y-6">
                 <div className="flex items-center justify-between pb-4 border-b border-[rgba(85,223,255,0.14)]">
                   <div className="flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-[#55DFFF]" />

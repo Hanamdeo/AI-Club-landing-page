@@ -31,7 +31,7 @@ export default function EventDetailPage({ params }) {
   const isRegistrationOpen = event.registrationStatus === 'open';
 
   return (
-    <main className="relative min-h-screen bg-[#07090A] text-[#F8FAFC] font-events-body pt-28 pb-24 px-6 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#07090A] text-[#F8FAFC] font-events-body pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Architectural Grid & High-Octane Orange/Amber Flare */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
       <div className="absolute top-0 right-1/4 w-[550px] h-[400px] bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.12)_0%,transparent_70%)] pointer-events-none" />
@@ -39,16 +39,16 @@ export default function EventDetailPage({ params }) {
 
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Breadcrumb Navigation: IBM Plex Mono */}
-        <div className="flex items-center gap-2 mb-8 events-mono-meta text-slate-400">
-          <Link href="/" className="hover:text-white transition-colors">
+        <div className="flex items-center gap-2 mb-6 sm:mb-8 events-mono-meta text-slate-400 overflow-x-auto no-scrollbar py-1">
+          <Link href="/" className="hover:text-white transition-colors shrink-0">
             FACILITY
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-600" />
-          <Link href="/events" className="hover:text-white transition-colors">
+          <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
+          <Link href="/events" className="hover:text-white transition-colors shrink-0">
             OPERATIONS
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-600" />
-          <span className="text-[#55DFFF] font-semibold truncate max-w-[200px] sm:max-w-none">
+          <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
+          <span className="text-[#55DFFF] font-semibold truncate max-w-[180px] sm:max-w-none">
             {event.title}
           </span>
         </div>
@@ -56,14 +56,14 @@ export default function EventDetailPage({ params }) {
         {/* Back Button: IBM Plex Mono */}
         <Link
           href="/events"
-          className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[#55DFFF]/15 border border-white/[0.1] hover:border-[#55DFFF]/40 events-mono-btn text-slate-200 hover:text-white transition-all group"
+          className="inline-flex items-center gap-2 mb-6 sm:mb-8 px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[#55DFFF]/15 border border-white/[0.1] hover:border-[#55DFFF]/40 events-mono-btn text-slate-200 hover:text-white transition-all group"
         >
           <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
           <span>RETURN TO OPERATIONS BOARD</span>
         </Link>
 
         {/* Header Hero Card */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#0D1012]/95 border border-white/[0.1] shadow-[0_8px_32px_rgba(0,0,0,0.85)] mb-8">
+        <div className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0D1012]/95 border border-white/[0.1] shadow-[0_8px_32px_rgba(0,0,0,0.85)] mb-8">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
             {/* Category Badge: IBM Plex Mono */}
             <span className="events-mono-meta px-3 py-1 rounded-full bg-[#55DFFF]/15 border border-[#55DFFF]/35 text-[#FFA04D] font-semibold">
@@ -94,7 +94,7 @@ export default function EventDetailPage({ params }) {
           </p>
 
           {/* Quick Info Grid: Obsidian Black & Amber/Orange Accents */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-5 rounded-2xl bg-[#080A0C] border border-white/[0.08] text-xs font-events-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl bg-[#080A0C] border border-white/[0.08] text-xs font-events-mono">
             <div className="flex items-center gap-3">
               <Calendar className="w-4 h-4 text-[#55DFFF] shrink-0" />
               <div>

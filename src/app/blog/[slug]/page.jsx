@@ -38,23 +38,23 @@ export default function BlogDetailPage() {
   const relatedPosts = BLOG_POSTS.filter((p) => p.slug !== slug);
 
   return (
-    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 mb-6 font-mono text-[10px] text-slate-400 tracking-widest uppercase">
-          <Link href="/" className="hover:text-[#55DFFF] transition-colors">
+        <div className="flex items-center gap-2 mb-6 font-mono text-[10px] text-slate-400 tracking-widest uppercase overflow-x-auto no-scrollbar py-1">
+          <Link href="/" className="hover:text-[#55DFFF] transition-colors shrink-0">
             FACILITY 3D
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-600" />
-          <Link href="/blog" className="hover:text-[#55DFFF] transition-colors">
+          <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
+          <Link href="/blog" className="hover:text-[#55DFFF] transition-colors shrink-0">
             BLOG
           </Link>
-          <ChevronRight className="w-3 h-3 text-slate-600" />
-          <span className="text-[#55DFFF] font-semibold truncate max-w-[200px] sm:max-w-none">
+          <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
+          <span className="text-[#55DFFF] font-semibold truncate max-w-[180px] sm:max-w-none">
             {post.title}
           </span>
         </div>
@@ -62,14 +62,14 @@ export default function BlogDetailPage() {
         {/* Return Button */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 mb-8 px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[rgba(85,223,255,0.15)] border border-white/[0.08] hover:border-[#55DFFF]/40 text-xs font-mono text-slate-300 hover:text-white transition-all group"
+          className="inline-flex items-center gap-2 mb-6 sm:mb-8 px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[rgba(85,223,255,0.15)] border border-white/[0.08] hover:border-[#55DFFF]/40 text-xs font-mono text-slate-300 hover:text-white transition-all group"
         >
           <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
           <span>RETURN TO RESEARCH ARTICLES</span>
         </Link>
 
         {/* Article Header Card */}
-        <div className="p-8 sm:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.6)] mb-10">
+        <div className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.6)] mb-8 sm:mb-10">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-[rgba(85,223,255,0.12)] border border-[rgba(85,223,255,0.30)] text-[#55DFFF] font-semibold uppercase">
               {post.category}
@@ -109,7 +109,7 @@ export default function BlogDetailPage() {
         </div>
 
         {/* Article Markdown-style Body */}
-        <article className="p-8 sm:p-10 rounded-3xl bg-[#0C1014]/70 border border-white/[0.08] mb-10 prose prose-invert max-w-none text-slate-200 leading-relaxed font-manrope text-sm sm:text-base space-y-6">
+        <article className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0C1014]/70 border border-white/[0.08] mb-8 sm:mb-10 prose prose-invert max-w-none text-slate-200 leading-relaxed font-manrope text-sm sm:text-base space-y-6">
           {post.body.split('\n\n').map((paragraph, idx) => {
             if (paragraph.startsWith('### ')) {
               return (

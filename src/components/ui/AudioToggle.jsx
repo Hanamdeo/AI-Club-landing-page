@@ -41,16 +41,16 @@ export default function AudioToggle() {
             <span className="w-0.5 h-3 bg-sage rounded-full animate-bounce" />
             <span className="w-0.5 h-1.5 bg-sage rounded-full animate-pulse" />
           </div>
-          <span className="hidden sm:inline text-[11px] tracking-wider uppercase font-semibold">
+          {/* <span className="hidden sm:inline text-[11px] tracking-wider uppercase font-semibold">
             SOUND: ON
-          </span>
+          </span> */}
         </>
       ) : (
         <>
           <VolumeX className="w-3.5 h-3.5" />
-          <span className="hidden sm:inline text-[11px] tracking-wider uppercase">
+          {/* <span className="hidden sm:inline text-[11px] tracking-wider uppercase">
             SOUND: OFF
-          </span>
+          </span> */}
         </>
       )}
     </button>

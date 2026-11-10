@@ -74,7 +74,7 @@ export default function AboutPage() {
   ];
 
   return (
-    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -84,8 +84,8 @@ export default function AboutPage() {
         
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5 text-center sm:text-left">
             <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[#55DFFF]/40 shadow-[0_0_24px_rgba(85,223,255,0.3)] shrink-0 bg-black">
               <Image
                 src="/logo.png"
@@ -97,7 +97,7 @@ export default function AboutPage() {
               />
             </div>
             <div>
-              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
                 ABOUT AI CLUB
               </h1>
               <p className="text-xs sm:text-sm font-mono text-[#55DFFF] uppercase tracking-wider mt-1">
@@ -109,7 +109,7 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right">
+          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-center sm:self-start md:self-auto text-center sm:text-left md:text-right w-full sm:w-auto">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               CAMPUS BASE
             </span>
@@ -121,8 +121,8 @@ export default function AboutPage() {
         </div>
 
         {/* Mission & Vision Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="p-6 sm:p-8 rounded-2xl bg-[#0C1014]/80 border border-[rgba(85,223,255,0.20)] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-10 sm:mb-12">
+          <div className="p-5 sm:p-7 md:p-8 rounded-2xl bg-[#0C1014]/80 border border-[rgba(85,223,255,0.20)] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
             <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#55DFFF] uppercase tracking-wider font-semibold">
               <Target className="w-4 h-4 text-[#55DFFF]" />
               <span>OUR MISSION</span>
@@ -284,7 +284,7 @@ export default function AboutPage() {
         </div>
 
         {/* Bottom Call to Action */}
-        <div className="p-8 rounded-3xl bg-gradient-to-r from-[#0C1014] via-[#141A20] to-[#0C1014] border border-[rgba(85,223,255,0.25)] flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
+        <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-r from-[#0C1014] via-[#141A20] to-[#0C1014] border border-[rgba(85,223,255,0.25)] flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_8px_32px_rgba(0,0,0,0.6)] text-center md:text-left">
           <div>
             <h3 className="text-2xl sm:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2">
               MEET THE STUDENT LEADS & MENTORS
@@ -293,16 +293,16 @@ export default function AboutPage() {
               Discover the student coordinators, technical domain leads, and faculty advisors directing the club operations.
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 w-full md:w-auto">
             <Link
               href="/team"
-              className="px-5 py-2.5 rounded-xl btn-glass-cyan text-xs font-mono font-bold transition-all whitespace-nowrap"
+              className="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl btn-glass-cyan text-xs font-mono font-bold transition-all whitespace-nowrap"
             >
               VIEW TEAM CADRE ➔
             </Link>
             <Link
               href="/join"
-              className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.12] text-xs font-mono text-white transition-all whitespace-nowrap"
+              className="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.12] text-xs font-mono text-white transition-all whitespace-nowrap"
             >
               MEMBERSHIP INTAKE
             </Link>

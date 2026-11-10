@@ -33,7 +33,7 @@ export default function BlogListingPage() {
   });
 
   return (
-    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
       <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -42,10 +42,10 @@ export default function BlogListingPage() {
         
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
           <div>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
+            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
               RESEARCH BLOG
             </h1>
             <p className="text-sm sm:text-base text-slate-300 font-manrope mt-3 max-w-2xl leading-relaxed">
@@ -53,7 +53,7 @@ export default function BlogListingPage() {
             </p>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right">
+          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               DISPATCHED ESSAYS
             </span>
@@ -86,7 +86,7 @@ export default function BlogListingPage() {
           </div>
 
           {/* Search Input */}
-          <div className="relative min-w-[240px]">
+          <div className="relative w-full sm:w-auto sm:min-w-[240px]">
             <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
             <input
               type="text"
@@ -103,7 +103,7 @@ export default function BlogListingPage() {
           {filteredPosts.map((post) => (
             <div
               key={post.id}
-              className="p-7 sm:p-8 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.18)] hover:border-[#55DFFF]/40 transition-colors shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex flex-col justify-between"
+              className="p-5 sm:p-7 md:p-8 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.18)] hover:border-[#55DFFF]/40 transition-colors shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex flex-col justify-between"
             >
               <div>
                 <div className="flex flex-wrap items-center justify-between gap-2 mb-3">

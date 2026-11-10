@@ -106,7 +106,7 @@ export default function EventsPage() {
   }, [viewMode, handleNextSlide, handlePrevSlide]);
 
   return (
-    <main className="relative min-h-screen bg-[#050C12] text-[#F0F6F7] font-events-body pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#050C12] text-[#F0F6F7] font-events-body pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Architectural Grid & 3D Facility Core Blue Flare */}
       <div className="absolute inset-0 bg-facility-grid opacity-25 pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[420px] bg-[radial-gradient(ellipse_at_top,rgba(85,223,255,0.12)_0%,transparent_65%)] pointer-events-none" />
@@ -117,20 +117,20 @@ export default function EventsPage() {
         
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-[rgba(85,223,255,0.15)] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10 border-b border-[rgba(85,223,255,0.15)] pb-6 sm:pb-8">
           <div>
             {/* Hero Heading: CS Slade 3D (White & Cyan with 3D Core Depth) */}
             <h1 className="events-hero-title">
               OPERATIONS BOARD
             </h1>
             {/* Body Description: Manrope 400 (Clean White-Slate) */}
-            <p className="events-body-text text-slate-300 mt-3 max-w-2xl">
+            <p className="events-body-text text-slate-300 mt-3 max-w-2xl text-xs sm:text-sm md:text-base">
               Flagship hackathons, low-level hardware acceleration workshops, and algorithmic code sprints organized by AI Club cohorts.
             </p>
           </div>
 
           {/* Telemetry Counter */}
-          <div className="p-4 px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(85,223,255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] self-start md:self-auto flex items-center gap-6">
+          <div className="p-4 px-5 sm:px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(85,223,255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] self-stretch sm:self-start md:self-auto flex items-center justify-between sm:justify-start gap-4 sm:gap-6">
             <div>
               <span className="block events-mono-meta text-slate-400 mb-1">
                 VERIFIED OPERATIONS
@@ -178,15 +178,15 @@ export default function EventsPage() {
               })}
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
               {/* View Mode Switcher: 3D Slide vs Matrix Grid */}
-              <div className="flex items-center p-1 rounded-xl bg-[#08121A] border border-[rgba(85,223,255,0.2)]">
+              <div className="flex items-center justify-center p-1 rounded-xl bg-[#08121A] border border-[rgba(85,223,255,0.2)]">
                 <button
                   onClick={() => {
                     try { audioManager.playClick(); } catch {}
                     setViewMode('3d-slide');
                   }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer ${
+                  className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer flex-1 sm:flex-initial ${
                     viewMode === '3d-slide'
                       ? 'bg-[#55DFFF]/25 text-white border border-[#55DFFF]/60 shadow-[0_0_12px_rgba(85,223,255,0.3)] font-bold'
                       : 'text-slate-400 hover:text-white'
@@ -201,7 +201,7 @@ export default function EventsPage() {
                     try { audioManager.playClick(); } catch {}
                     setViewMode('grid');
                   }}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer ${
+                  className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer flex-1 sm:flex-initial ${
                     viewMode === 'grid'
                       ? 'bg-[#55DFFF]/25 text-white border border-[#55DFFF]/60 shadow-[0_0_12px_rgba(85,223,255,0.3)] font-bold'
                       : 'text-slate-400 hover:text-white'
@@ -214,7 +214,7 @@ export default function EventsPage() {
               </div>
 
               {/* Search Input: IBM Plex Mono */}
-              <div className="relative min-w-[220px]">
+              <div className="relative w-full sm:min-w-[220px]">
                 <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
@@ -339,10 +339,10 @@ export default function EventsPage() {
                       </div>
 
                       {/* Bottom Actions: IBM Plex Mono Buttons */}
-                      <div className="flex items-center gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
                         <Link
                           href={`/events/${slug}`}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn text-center"
                         >
                           <span>PROTOCOL DETAILS</span>
                           <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#55DFFF] transition-all" />
@@ -353,7 +353,7 @@ export default function EventsPage() {
                             href={ev.registrationUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black"
+                            className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black text-center"
                           >
                             <span>REGISTER</span>
                             <ExternalLink className="w-3.5 h-3.5 text-[#050C12]" />
@@ -474,10 +474,10 @@ export default function EventsPage() {
                   </div>
 
                   {/* Bottom Actions: IBM Plex Mono Buttons */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
                     <Link
                       href={`/events/${slug}`}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn text-center"
                     >
                       <span>PROTOCOL DETAILS</span>
                       <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#55DFFF] transition-all" />
@@ -488,7 +488,7 @@ export default function EventsPage() {
                         href={ev.registrationUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black"
+                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black text-center"
                       >
                         <span>REGISTER</span>
                         <ExternalLink className="w-3.5 h-3.5 text-[#050C12]" />
