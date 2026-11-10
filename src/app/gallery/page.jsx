@@ -147,11 +147,11 @@ export default function GalleryPage() {
             </p>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
+          <div className="p-3.5 sm:p-4 px-4 sm:px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255,255,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               CONFIRMED RECORDS
             </span>
-            <span className="text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
+            <span className="text-2xl sm:text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
               {GALLERY_ITEMS.length} ARCHIVES
             </span>
             <span className="text-[10px] font-mono text-[#E2E8F0]">Approved Visual Logs</span>
@@ -253,11 +253,11 @@ export default function GalleryPage() {
             {/* Backdrop click closer */}
             <div className="absolute inset-0" onClick={closeLightbox} />
 
-            <div className="relative z-10 max-w-4xl w-full bg-[#0C1014] border border-[rgba(255, 255, 255,0.3)] rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(255, 255, 255,0.25)]">
+            <div className="relative z-10 max-w-4xl w-full max-h-[92vh] flex flex-col bg-[#0C1014] border border-[rgba(255,255,255,0.3)] rounded-2xl sm:rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(255,255,255,0.25)]">
               {/* Top Modal Controls */}
-              <div className="flex items-center justify-between p-4 px-6 border-b border-[rgba(255, 255, 255,0.18)] bg-[#07090A]">
+              <div className="flex items-center justify-between p-3.5 sm:p-4 px-4 sm:px-6 border-b border-[rgba(255,255,255,0.18)] bg-[#07090A] shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[rgba(255, 255, 255,0.15)] text-[#FFFFFF] border border-[rgba(255, 255, 255,0.3)] font-semibold">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[rgba(255,255,255,0.15)] text-[#FFFFFF] border border-[rgba(255,255,255,0.3)] font-semibold">
                     {activeItem.category}
                   </span>
                   <span className="text-xs font-mono text-slate-400">
@@ -275,7 +275,7 @@ export default function GalleryPage() {
               </div>
 
               {/* Main Visual Display */}
-              <div className="relative h-64 sm:h-[480px] w-full bg-[#07090A] overflow-hidden flex items-center justify-center">
+              <div className="relative min-h-[220px] h-60 sm:h-[420px] md:h-[480px] w-full bg-[#07090A] overflow-hidden flex items-center justify-center shrink-0">
                 <img
                   src={activeItem.image}
                   alt={activeItem.alt}
@@ -289,25 +289,25 @@ export default function GalleryPage() {
                     e.stopPropagation();
                     handlePrev();
                   }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-[#55DFFF] hover:text-black border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
+                  className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-[#55DFFF] hover:text-black border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
                   aria-label="Previous Image"
                 >
-                  <ChevronLeft className="w-5 h-5" />
+                  <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
                     handleNext();
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-[#55DFFF] hover:text-black border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
+                  className="absolute right-3 sm:right-4 top-1/2 -translate-y-1/2 p-2 sm:p-2.5 rounded-full bg-black/70 hover:bg-[#55DFFF] hover:text-black border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
                   aria-label="Next Image"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
                 </button>
               </div>
 
               {/* Lightbox Footer Info */}
-              <div className="p-6 bg-[#07090A] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="p-4 sm:p-6 bg-[#07090A] flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 overflow-y-auto">
                 <div>
                   <div className="flex items-center gap-2 text-xs font-mono text-[#E2E8F0] mb-1">
                     <Calendar className="w-3.5 h-3.5 text-[#FFFFFF]" />

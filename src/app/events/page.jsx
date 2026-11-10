@@ -131,22 +131,24 @@ export default function EventsPage() {
           </div>
 
           {/* Telemetry Counter */}
-          <div className="p-4 px-5 sm:px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(255, 255, 255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] self-stretch sm:self-start md:self-auto flex items-center justify-between sm:justify-start gap-4 sm:gap-6">
-            <RobotFace variant="neutral" size={50} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)] hidden sm:block" />
-            <div>
-              <span className="block events-mono-meta text-slate-400 mb-1">
-                VERIFIED OPERATIONS
-              </span>
-              <span className="text-3xl sm:text-4xl font-bold font-events-heading bg-gradient-to-r from-[#FFFFFF] via-[#E2E8F0] to-white bg-clip-text text-transparent tracking-wider leading-none">
-                0{events.length}
-              </span>
+          <div className="p-3.5 sm:p-4 px-4 sm:px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(255,255,255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] w-full sm:w-auto flex flex-col sm:flex-row items-stretch sm:items-center justify-between sm:justify-start gap-3 sm:gap-6">
+            <div className="flex items-center gap-3.5">
+              <RobotFace variant="neutral" size={44} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
+              <div>
+                <span className="block events-mono-meta text-slate-400 text-[9px] sm:text-[10px] mb-0.5 sm:mb-1">
+                  VERIFIED OPERATIONS
+                </span>
+                <span className="text-2xl sm:text-4xl font-bold font-events-heading bg-gradient-to-r from-[#FFFFFF] via-[#E2E8F0] to-white bg-clip-text text-transparent tracking-wider leading-none">
+                  0{events.length}
+                </span>
+              </div>
             </div>
-            <div className="h-10 w-[1px] bg-[rgba(255, 255, 255,0.15)]" />
-            <div>
-              <span className="block events-mono-meta text-slate-400 mb-1">
+            <div className="hidden sm:block h-10 w-[1px] bg-[rgba(255,255,255,0.15)]" />
+            <div className="pt-2.5 sm:pt-0 border-t border-white/10 sm:border-t-0 flex items-center justify-between sm:block">
+              <span className="block events-mono-meta text-slate-400 text-[9px] sm:text-[10px] sm:mb-1">
                 REGISTRATION STATUS
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs events-mono-meta font-bold text-[#FFFFFF] mt-1">
+              <span className="inline-flex items-center gap-1.5 text-xs events-mono-meta font-bold text-[#FFFFFF]">
                 <span className="w-2 h-2 rounded-full bg-[#FFFFFF] animate-pulse shadow-[0_0_8px_#FFFFFF]" />
                 ACCEPTING APPS
               </span>

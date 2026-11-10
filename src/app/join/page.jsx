@@ -106,11 +106,11 @@ export default function JoinPage() {
                 priority
               />
             </div>
-            <div>
-              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
+            <div className="min-w-0 flex-1">
+              <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight break-words">
                 JOIN THE COLLECTIVE
               </h1>
-              <p className="text-xs sm:text-sm font-mono text-[#FFFFFF] uppercase tracking-wider mt-1">
+              <p className="text-xs sm:text-sm font-mono text-[#FFFFFF] uppercase tracking-wider mt-1 break-words">
                 PIONEERING THE AI REVOLUTION • MITS-DU GWALIOR
               </p>
               <p className="text-sm sm:text-base text-slate-300 font-manrope mt-2.5 max-w-xl leading-relaxed">
@@ -261,7 +261,7 @@ export default function JoinPage() {
                   Your credentials have been securely stored in the AI Club admissions database. Your unique research tracking ID is:
                 </p>
 
-                <div className="inline-block p-4 px-8 rounded-2xl bg-[#07090A] border border-[rgba(255, 255, 255,0.3)] font-mono text-xl sm:text-2xl font-bold text-[#FFFFFF] tracking-widest mb-8 shadow-inner">
+                <div className="inline-block p-3 sm:p-4 px-5 sm:px-8 rounded-2xl bg-[#07090A] border border-[rgba(255,255,255,0.3)] font-mono text-lg sm:text-2xl font-bold text-[#FFFFFF] tracking-widest mb-8 shadow-inner max-w-full break-all">
                   {clearanceId}
                 </div>
 

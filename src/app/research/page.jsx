@@ -135,15 +135,15 @@ export default function ResearchPage() {
                     className="p-5 sm:p-7 rounded-2xl bg-[#0C1014]/90 border border-white/10 hover:border-white/25 transition-colors shadow-[0_4px_24px_rgba(0,0,0,0.4)]"
                   >
                     <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 mb-3">
-                      <div className="flex items-start gap-3.5 sm:gap-4 flex-1">
+                      <div className="flex items-start gap-3.5 sm:gap-4 flex-1 min-w-0">
                         {/* 2D Signature Robot Face on the LEFT side */}
                         <RobotFace
                           variant={robotVariant}
-                          size={58}
+                          size={46}
                           className="drop-shadow-[0_2px_12px_rgba(0,0,0,0.6)] shrink-0 mt-0.5"
                         />
-                        <div className="flex-1 pr-0 sm:pr-2">
-                          <div className="flex items-center gap-2 mb-2">
+                        <div className="flex-1 min-w-0 pr-0 sm:pr-2">
+                          <div className="flex flex-wrap items-center gap-2 mb-2">
                             <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-white/[0.06] text-white border border-white/10 font-semibold uppercase">
                               {gd.category}
                             </span>
@@ -151,7 +151,7 @@ export default function ResearchPage() {
                               {gd.date} • {gd.time}
                             </span>
                           </div>
-                          <h3 className="text-xl sm:text-2xl md:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2">
+                          <h3 className="text-xl sm:text-2xl md:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2 break-words">
                             {gd.topic}
                           </h3>
                         </div>

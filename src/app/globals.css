@@ -660,3 +660,9 @@ code, pre, .terminal-mono, .font-mono {
   }
 }
 
+/* Global Viewport Overflow Guard for Mobile Responsiveness */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+

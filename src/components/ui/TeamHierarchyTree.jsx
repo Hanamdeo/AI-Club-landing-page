@@ -363,29 +363,29 @@ export default function TeamHierarchyTree() {
       {/* Quick Profile Modal Preview */}
       {selectedMember && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md transition-opacity"
+          className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/85 backdrop-blur-md transition-opacity"
           onClick={() => setSelectedMember(null)}
         >
           <div
-            className="relative w-full max-w-lg p-6 sm:p-8 rounded-2xl bg-[#0C1014] border border-white/25 shadow-[0_16px_48px_rgba(0,0,0,0.8)] text-white"
+            className="relative w-full max-w-lg max-h-[90vh] overflow-y-auto p-5 sm:p-8 rounded-2xl bg-[#0C1014] border border-white/25 shadow-[0_16px_48px_rgba(0,0,0,0.8)] text-white"
             onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setSelectedMember(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
+              className="absolute top-3.5 right-3.5 sm:top-4 sm:right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               ✕
             </button>
 
-            <div className="flex items-center gap-4 mb-5">
-              <div className="w-16 h-16 rounded-2xl bg-[#14181C] border border-white/30 flex items-center justify-center text-2xl font-bold font-barlow-condensed text-white shadow-[0_0_16px_rgba(255,255,255,0.15)]">
+            <div className="flex items-center gap-3.5 sm:gap-4 mb-4 sm:mb-5 pr-8">
+              <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-[#14181C] border border-white/30 flex items-center justify-center text-xl sm:text-2xl font-bold font-barlow-condensed text-white shadow-[0_0_16px_rgba(255,255,255,0.15)] shrink-0">
                 {selectedMember.initials}
               </div>
-              <div>
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-slate-300 uppercase">
+              <div className="min-w-0">
+                <span className="text-[9px] sm:text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/10 border border-white/20 text-slate-300 uppercase block truncate max-w-fit">
                   {selectedMember.level} • {selectedMember.levelTitle}
                 </span>
-                <h3 className="text-2xl font-barlow-condensed font-bold uppercase tracking-tight text-white mt-1">
+                <h3 className="text-xl sm:text-2xl font-barlow-condensed font-bold uppercase tracking-tight text-white mt-1 break-words">
                   {selectedMember.name}
                 </h3>
                 <p className="text-xs font-mono text-slate-300 uppercase">
@@ -394,12 +394,12 @@ export default function TeamHierarchyTree() {
               </div>
             </div>
 
-            <p className="text-sm text-slate-300 font-manrope leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-slate-300 font-manrope leading-relaxed mb-5 sm:mb-6">
               {selectedMember.bio}
             </p>
 
-            <div className="pt-4 border-t border-white/10 flex items-center justify-between text-xs font-mono text-slate-400">
-              <span>{selectedMember.department}</span>
+            <div className="pt-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-xs font-mono text-slate-400">
+              <span className="truncate">{selectedMember.department}</span>
               <div className="flex items-center gap-3">
                 {selectedMember.linkedin && (
                   <a
@@ -484,7 +484,7 @@ function MemberNodeCard({ member, prominent = false, compact = false, onClick })
 
       {/* Name Heading */}
       <strong
-        className={`font-barlow-condensed font-bold uppercase tracking-tight text-white block leading-tight ${
+        className={`font-barlow-condensed font-bold uppercase tracking-tight text-white block leading-tight break-words max-w-full ${
           prominent
             ? 'text-xl sm:text-2xl'
             : compact
@@ -497,7 +497,7 @@ function MemberNodeCard({ member, prominent = false, compact = false, onClick })
 
       {/* Quick Domain Tag */}
       {member.domain && !compact && (
-        <span className="text-[9px] font-mono text-slate-400 mt-2 px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.1]">
+        <span className="text-[9px] font-mono text-slate-400 mt-2 px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.1] truncate max-w-full">
           {member.domain}
         </span>
       )}

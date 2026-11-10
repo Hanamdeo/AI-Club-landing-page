@@ -52,14 +52,14 @@ export default function NewsPage() {
             </p>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto flex items-center gap-4 text-left w-full sm:w-auto">
-            <RobotFace variant="surprised" size={50} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
-            <div>
+          <div className="p-3.5 sm:p-4 px-4 sm:px-6 rounded-2xl bg-[#0C1014]/90 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto flex items-center gap-3.5 sm:gap-4 text-left w-full sm:w-auto">
+            <RobotFace variant="surprised" size={44} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
+            <div className="min-w-0 flex-1">
               <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
                 CURATED DISPATCHES
               </span>
               {/* Place 1: Blue accent on verified counter */}
-              <span className="text-3xl font-barlow-condensed font-bold text-[#55DFFF] tracking-wider block">
+              <span className="text-2xl sm:text-3xl font-barlow-condensed font-bold text-[#55DFFF] tracking-wider block">
                 0{AI_NEWS.length} VERIFIED
               </span>
               <span className="text-[10px] font-mono text-slate-400">No Synthetic Noise</span>

@@ -161,7 +161,7 @@ export default function HUDNavbar({ onToggleTerminal }) {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-x-4 top-20 z-50 p-4 rounded-xl bg-[#050C12]/85 backdrop-blur-[10px] border border-[rgba(255,255,255,0.10)] shadow-2xl pointer-events-auto flex flex-col gap-1.5 animate-fade-in lg:hidden font-sans">
+        <div className="fixed inset-x-4 top-20 z-50 p-4 rounded-xl bg-[#050C12]/90 backdrop-blur-[12px] border border-[rgba(255,255,255,0.15)] shadow-2xl pointer-events-auto flex flex-col gap-1.5 animate-fade-in lg:hidden font-sans max-h-[calc(100vh-6rem)] overflow-y-auto">
           <div className="flex items-center justify-between text-[10px] font-mono uppercase text-[#B8C7D4] px-2 py-1 mb-1 border-b border-[rgba(255,255,255,0.08)]">
             <span>FACILITY DIRECTORY</span>
             <span className="text-[#FFFFFF] font-bold">ROUTES</span>

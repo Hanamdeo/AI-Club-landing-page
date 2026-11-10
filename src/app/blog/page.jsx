@@ -53,11 +53,11 @@ export default function BlogListingPage() {
             </p>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
+          <div className="p-3.5 sm:p-4 px-4 sm:px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255,255,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               DISPATCHED ESSAYS
             </span>
-            <span className="text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
+            <span className="text-2xl sm:text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
               0{BLOG_POSTS.length} ARTICLES
             </span>
             <span className="text-[10px] font-mono text-[#E2E8F0]">Original Student Analysis</span>

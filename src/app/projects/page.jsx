@@ -72,14 +72,14 @@ export default function ProjectsPage() {
           </div>
 
           {/* Quick Counter */}
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto flex items-center gap-4 text-left w-full sm:w-auto">
-            <RobotFace variant="curious" size={50} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
-            <div>
+          <div className="p-3.5 sm:p-4 px-4 sm:px-6 rounded-2xl bg-[#0C1014]/90 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto flex items-center gap-3.5 sm:gap-4 text-left w-full sm:w-auto">
+            <RobotFace variant="curious" size={44} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
+            <div className="min-w-0 flex-1">
               <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
                 SHIPPED REPOSITORIES
               </span>
               {/* Place 1: Blue accent on counter */}
-              <span className="text-3xl font-barlow-condensed font-bold text-[#55DFFF] tracking-wider block">
+              <span className="text-2xl sm:text-3xl font-barlow-condensed font-bold text-[#55DFFF] tracking-wider block">
                 0{projects.length} SYSTEMS
               </span>
               <span className="text-[10px] font-mono text-slate-400">100% Open Access</span>
@@ -170,11 +170,11 @@ export default function ProjectsPage() {
                   </span>
                 </div>
 
-                <div className="flex items-start gap-3.5 mb-2">
+                <div className="flex items-start gap-3.5 mb-2 min-w-0">
                   {idx === 0 && (
                     <RobotFace variant="focused" size={44} className="shrink-0 mt-0.5 drop-shadow-[0_2px_8px_rgba(85,223,255,0.2)]" />
                   )}
-                  <h3 className="text-xl sm:text-2xl font-barlow-condensed font-bold uppercase text-white tracking-tight flex-1">
+                  <h3 className="text-xl sm:text-2xl font-barlow-condensed font-bold uppercase text-white tracking-tight flex-1 min-w-0 break-words">
                     {proj.title}
                   </h3>
                 </div>
@@ -196,13 +196,13 @@ export default function ProjectsPage() {
 
                 {/* Benchmarks Matrix */}
                 {proj.benchmarks && proj.benchmarks.length > 0 && (
-                  <div className="grid grid-cols-3 gap-2 p-3 rounded-xl bg-[#07090A] border border-white/10 mb-5 text-center">
+                  <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-2 sm:p-3 rounded-xl bg-[#07090A] border border-white/10 mb-5 text-center">
                     {proj.benchmarks.map((b, idx) => (
-                      <div key={idx} className="p-1">
-                        <span className="block text-[9px] font-mono text-slate-400 uppercase mb-0.5">
+                      <div key={idx} className="p-1 min-w-0">
+                        <span className="block text-[8px] sm:text-[9px] font-mono text-slate-400 uppercase mb-0.5 truncate">
                           {b.metric}
                         </span>
-                        <span className="text-xs font-mono font-bold text-white">
+                        <span className="text-[11px] sm:text-xs font-mono font-bold text-white break-all">
                           {b.value}
                         </span>
                       </div>
@@ -225,7 +225,7 @@ export default function ProjectsPage() {
 
               {/* Links & Approved Contributors */}
               <div className="pt-4 border-t border-white/10 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                <span className="text-[10px] font-mono text-slate-400 truncate">
+                <span className="text-[10px] font-mono text-slate-400 truncate sm:whitespace-normal break-words">
                   Contributors: <strong className="text-white">{proj.contributors.join(', ')}</strong>
                 </span>
 

@@ -101,16 +101,16 @@ export default function AboutPage() {
             </div>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-center sm:self-start md:self-auto flex items-center gap-4 text-left w-full sm:w-auto">
-            <RobotFace variant="friendly" size={50} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
-            <div>
+          <div className="p-3.5 sm:p-4 px-4 sm:px-6 rounded-2xl bg-[#0C1014]/90 border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-stretch sm:self-start md:self-auto flex items-center gap-3.5 sm:gap-4 text-left w-full sm:w-auto">
+            <RobotFace variant="friendly" size={44} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
+            <div className="min-w-0 flex-1">
               <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
                 CAMPUS BASE
               </span>
-              <span className="text-base sm:text-lg font-barlow-condensed font-bold text-white tracking-wide block uppercase">
+              <span className="text-sm sm:text-base md:text-lg font-barlow-condensed font-bold text-white tracking-wide block uppercase break-words">
                 {CLUB_INFO.institution}
               </span>
-              <span className="text-[10px] font-mono text-slate-400">Department of CSE & AI</span>
+              <span className="text-[10px] font-mono text-slate-400 block truncate">Department of CSE & AI</span>
             </div>
           </div>
         </div>
@@ -280,11 +280,11 @@ export default function AboutPage() {
         </div>
 
         {/* Bottom Call to Action - Place 3: Subtle Blue Accent on the Primary Button */}
-        <div className="p-6 sm:p-8 rounded-3xl bg-[#0C1014] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_8px_32px_rgba(0,0,0,0.6)] text-center md:text-left">
-          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4">
-            <RobotFace variant="analytical" size={56} className="shrink-0 drop-shadow-[0_2px_12px_rgba(85,223,255,0.25)]" />
-            <div>
-              <h3 className="text-2xl sm:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2">
+        <div className="p-4 sm:p-6 md:p-8 rounded-2xl sm:rounded-3xl bg-[#0C1014] border border-white/10 flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_8px_32px_rgba(0,0,0,0.6)] text-center md:text-left">
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 min-w-0">
+            <RobotFace variant="analytical" size={48} className="shrink-0 drop-shadow-[0_2px_12px_rgba(85,223,255,0.25)]" />
+            <div className="min-w-0">
+              <h3 className="text-xl sm:text-2xl md:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2 break-words">
                 MEET THE STUDENT LEADS & MENTORS
               </h3>
               <p className="text-xs sm:text-sm text-slate-300 font-manrope max-w-xl">
@@ -295,13 +295,13 @@ export default function AboutPage() {
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 w-full md:w-auto">
             <Link
               href="/team"
-              className="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#55DFFF] to-[#24BFEA] text-black font-bold text-xs font-mono shadow-[0_0_14px_rgba(85,223,255,0.3)] hover:brightness-110 transition-all whitespace-nowrap"
+              className="flex-1 sm:flex-initial text-center px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#55DFFF] to-[#24BFEA] text-black font-bold text-xs font-mono shadow-[0_0_14px_rgba(85,223,255,0.3)] hover:brightness-110 transition-all whitespace-nowrap"
             >
               VIEW TEAM CADRE ➔
             </Link>
             <Link
               href="/join"
-              className="w-full sm:w-auto text-center px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.12] text-xs font-mono text-white transition-all whitespace-nowrap"
+              className="flex-1 sm:flex-initial text-center px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.12] text-xs font-mono text-white transition-all whitespace-nowrap"
             >
               MEMBERSHIP INTAKE
             </Link>
