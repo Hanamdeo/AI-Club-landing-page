@@ -29,22 +29,27 @@ export default function TeamHierarchyTree() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
+    // Small delay to ensure DOM and fonts have settled before measuring triggers
+    const timer = setTimeout(() => {
+      ScrollTrigger.refresh();
+    }, 150);
+
     const ctx = gsap.context(() => {
-      // Progress bar at top of section
+      // Progress bar scrub at the top
       if (progressBarRef.current && treeRef.current) {
         gsap.to(progressBarRef.current, {
           scaleX: 1,
           ease: 'none',
           scrollTrigger: {
             trigger: treeRef.current,
-            start: 'top 80%',
-            end: 'bottom 80%',
+            start: 'top 85%',
+            end: 'bottom 85%',
             scrub: 0.3,
           },
         });
       }
 
-      // Vertical Spine expansion scrub
+      // Continuous Spine growth scrub
       if (spineRef.current && treeRef.current) {
         gsap.fromTo(
           spineRef.current,
@@ -54,15 +59,15 @@ export default function TeamHierarchyTree() {
             ease: 'none',
             scrollTrigger: {
               trigger: treeRef.current,
-              start: 'top 75%',
+              start: 'top 80%',
               end: 'bottom 85%',
-              scrub: 0.5,
+              scrub: 0.4,
             },
           }
         );
       }
 
-      // Animate each hierarchy level
+      // Animate each hierarchy level safely (always visible fallback, once: true)
       const levelElements = gsap.utils.toArray('.hierarchy-level');
       levelElements.forEach((levelEl) => {
         const depthVal = levelEl.getAttribute('data-depth');
@@ -70,58 +75,72 @@ export default function TeamHierarchyTree() {
         const busLines = levelEl.querySelectorAll('.bus-line');
         const nodeCards = levelEl.querySelectorAll('.member-node');
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: levelEl,
-            start: 'top 82%',
-            toggleActions: 'play none none reverse',
-          },
-        });
-
+        // Reveal tag
         if (tag) {
-          tl.from(tag, {
-            opacity: 0,
-            y: 18,
-            duration: 0.45,
-            ease: 'power2.out',
-          });
+          gsap.fromTo(
+            tag,
+            { opacity: 0, y: 15 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.45,
+              ease: 'power2.out',
+              clearProps: 'opacity,transform',
+              scrollTrigger: {
+                trigger: levelEl,
+                start: 'top 95%',
+                once: true,
+              },
+            }
+          );
         }
 
+        // Expand bus lines horizontally
         if (busLines.length > 0) {
-          tl.from(
+          gsap.fromTo(
             busLines,
+            { scaleX: 0 },
             {
-              scaleX: 0,
+              scaleX: 1,
               duration: 0.5,
               ease: 'power2.out',
               transformOrigin: 'center center',
-            },
-            '-=0.2'
-          );
-        }
-
-        if (nodeCards.length > 0) {
-          tl.from(
-            nodeCards,
-            {
-              opacity: 0,
-              y: 24,
-              duration: 0.55,
-              stagger: {
-                each: 0.06,
-                from: 'center',
+              clearProps: 'transform',
+              scrollTrigger: {
+                trigger: levelEl,
+                start: 'top 95%',
+                once: true,
               },
-              ease: 'power2.out',
-            },
-            '-=0.3'
+            }
           );
         }
 
-        // Depth tracker scroll trigger
+        // Stagger nodes into view without ever hiding them if scroll happens fast
+        if (nodeCards.length > 0) {
+          gsap.fromTo(
+            nodeCards,
+            { opacity: 0, y: 20 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.5,
+              stagger: 0.05,
+              ease: 'power2.out',
+              clearProps: 'opacity,transform',
+              scrollTrigger: {
+                trigger: levelEl,
+                start: 'top 95%',
+                once: true,
+              },
+            }
+          );
+        }
+
+        // Depth tracker trigger
         ScrollTrigger.create({
           trigger: levelEl,
-          start: 'top 55%',
-          end: 'bottom 55%',
+          start: 'top 50%',
+          end: 'bottom 50%',
           onToggle: (self) => {
             if (self.isActive && depthVal) {
               setActiveDepth(depthVal);
@@ -131,13 +150,16 @@ export default function TeamHierarchyTree() {
       });
     }, containerRef);
 
-    return () => ctx.revert();
+    return () => {
+      clearTimeout(timer);
+      ctx.revert();
+    };
   }, []);
 
   return (
-    <div ref={containerRef} className="relative w-full py-8 select-none">
+    <div ref={containerRef} className="relative w-full py-4 select-none">
       {/* Top Section Scroll Progress Bar */}
-      <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-white/10 z-20 overflow-hidden">
+      <div className="sticky top-16 left-0 right-0 h-[2px] bg-white/10 z-30 overflow-hidden mb-6">
         <div
           ref={progressBarRef}
           className="h-full w-full bg-white origin-left scale-x-0 transition-transform shadow-[0_0_8px_#FFFFFF]"
@@ -145,8 +167,8 @@ export default function TeamHierarchyTree() {
       </div>
 
       {/* Floating Depth Telemetry Monitor */}
-      <div className="sticky top-20 z-30 mb-8 flex items-center justify-between pointer-events-none px-2 sm:px-0">
-        <div className="pointer-events-auto inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-[#0C1014]/90 border border-white/20 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.6)]">
+      <div className="sticky top-20 z-20 mb-8 flex items-center justify-between pointer-events-none px-2 sm:px-0">
+        <div className="pointer-events-auto inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-[#0C1014]/95 border border-white/20 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_8px_#FFFFFF]" />
             <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
@@ -158,7 +180,7 @@ export default function TeamHierarchyTree() {
           </span>
         </div>
 
-        <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0C1014]/80 border border-white/10 text-[10px] font-mono text-slate-400">
+        <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0C1014]/85 border border-white/10 text-[10px] font-mono text-slate-400">
           <span>TREE NAVIGATION ACTIVE</span>
         </div>
       </div>
@@ -166,23 +188,23 @@ export default function TeamHierarchyTree() {
       {/* Main Hierarchy Tree Container */}
       <div
         ref={treeRef}
-        className="relative max-w-6xl mx-auto px-2 sm:px-4 md:px-8 pb-20"
+        className="relative max-w-6xl mx-auto px-2 sm:px-4 md:px-6 pb-20"
       >
         {/* Continuous Central Vertical Spine Line */}
         <div
           ref={spineRef}
-          className="absolute left-1/2 -translate-x-1/2 top-4 bottom-24 w-[1.5px] bg-gradient-to-b from-white via-white/40 to-white/15 pointer-events-none z-0"
+          className="absolute left-1/2 -translate-x-1/2 top-4 bottom-16 w-[1.5px] bg-gradient-to-b from-white via-white/40 to-white/15 pointer-events-none z-0"
         />
 
         {/* ================================================================ */}
         {/* LEVEL 1: LEADERSHIP (President & Vice President)                */}
         {/* ================================================================ */}
         <section
-          className="hierarchy-level relative z-10 mb-20"
+          className="hierarchy-level relative z-10 mb-16 sm:mb-20"
           data-depth="L1 // Leadership"
         >
           {/* Level Header Tag */}
-          <div className="level-tag flex justify-center mb-8">
+          <div className="level-tag flex justify-center mb-6 sm:mb-8">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0C1014] border border-white/30 backdrop-blur-md shadow-[0_0_16px_rgba(255,255,255,0.12)]">
               <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_#FFFFFF]" />
               <span className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-white">
@@ -192,7 +214,7 @@ export default function TeamHierarchyTree() {
           </div>
 
           {/* President Card */}
-          <div className="max-w-[360px] mx-auto mb-10">
+          <div className="max-w-[340px] sm:max-w-[360px] mx-auto mb-8 sm:mb-10">
             <MemberNodeCard
               member={TEAM_HIERARCHY_TREE.levels[0].rows[0].members[0]}
               prominent
@@ -201,7 +223,7 @@ export default function TeamHierarchyTree() {
           </div>
 
           {/* Vice President Card */}
-          <div className="max-w-[360px] mx-auto">
+          <div className="max-w-[340px] sm:max-w-[360px] mx-auto">
             <MemberNodeCard
               member={TEAM_HIERARCHY_TREE.levels[0].rows[1].members[0]}
               prominent
@@ -214,11 +236,11 @@ export default function TeamHierarchyTree() {
         {/* LEVEL 2: ADMINISTRATION (Secretary & Treasurer)                  */}
         {/* ================================================================ */}
         <section
-          className="hierarchy-level relative z-10 mb-24"
+          className="hierarchy-level relative z-10 mb-20 sm:mb-24"
           data-depth="L2 // Administration"
         >
           {/* Level Header Tag */}
-          <div className="level-tag flex justify-center mb-10">
+          <div className="level-tag flex justify-center mb-8 sm:mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0C1014] border border-white/25 backdrop-blur-md shadow-[0_0_14px_rgba(255,255,255,0.1)]">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
               <span className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-white">
@@ -228,9 +250,9 @@ export default function TeamHierarchyTree() {
           </div>
 
           {/* 2-Column Pair Grid with Horizontal Bus Connector */}
-          <div className="relative max-w-xl mx-auto">
+          <div className="relative max-w-xl mx-auto pt-6">
             {/* Bus Line joining the 2 nodes */}
-            <div className="bus-line hidden sm:block absolute -top-6 left-[25%] right-[25%] h-[1.5px] bg-white/30" />
+            <div className="bus-line hidden sm:block absolute top-0 left-[25%] right-[25%] h-[1.5px] bg-white/30" />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
               {TEAM_HIERARCHY_TREE.levels[1].rows[0].members.map((member) => (
@@ -251,11 +273,11 @@ export default function TeamHierarchyTree() {
         {/* LEVEL 3: CORE HEADS (6 Domain Leads)                             */}
         {/* ================================================================ */}
         <section
-          className="hierarchy-level relative z-10 mb-24"
+          className="hierarchy-level relative z-10 mb-20 sm:mb-24"
           data-depth="L3 // Core Heads"
         >
           {/* Level Header Tag */}
-          <div className="level-tag flex justify-center mb-10">
+          <div className="level-tag flex justify-center mb-8 sm:mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0C1014] border border-white/25 backdrop-blur-md shadow-[0_0_14px_rgba(255,255,255,0.1)]">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
               <span className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-white">
@@ -265,11 +287,11 @@ export default function TeamHierarchyTree() {
           </div>
 
           {/* 6-Column Grid with Horizontal Bus */}
-          <div className="relative w-full">
+          <div className="relative w-full pt-6">
             {/* Bus Line spanning across columns */}
-            <div className="bus-line hidden lg:block absolute -top-6 left-[8.33%] right-[8.33%] h-[1.5px] bg-white/30" />
+            <div className="bus-line hidden lg:block absolute top-0 left-[8.33%] right-[8.33%] h-[1.5px] bg-white/30" />
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
               {TEAM_HIERARCHY_TREE.levels[2].rows[0].members.map((member) => (
                 <div key={member.id} className="relative">
                   {/* Vertical stem connecting node to bus */}
@@ -293,7 +315,7 @@ export default function TeamHierarchyTree() {
           data-depth="L4 // Sub-Heads & Coordinators"
         >
           {/* Level Header Tag */}
-          <div className="level-tag flex justify-center mb-10">
+          <div className="level-tag flex justify-center mb-8 sm:mb-10">
             <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#0C1014] border border-white/25 backdrop-blur-md shadow-[0_0_14px_rgba(255,255,255,0.1)]">
               <span className="w-1.5 h-1.5 rounded-full bg-slate-300" />
               <span className="text-[11px] font-mono font-bold tracking-[0.2em] uppercase text-white">
@@ -303,9 +325,9 @@ export default function TeamHierarchyTree() {
           </div>
 
           {/* Row 1 of 5 */}
-          <div className="relative w-full mb-8">
-            <div className="bus-line hidden lg:block absolute -top-6 left-[10%] right-[10%] h-[1.5px] bg-white/25" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="relative w-full pt-6 mb-8 sm:mb-10">
+            <div className="bus-line hidden lg:block absolute top-0 left-[10%] right-[10%] h-[1.5px] bg-white/25" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {TEAM_HIERARCHY_TREE.levels[3].rows[0].members.map((member) => (
                 <div key={member.id} className="relative">
                   <div className="hidden lg:block absolute -top-6 left-1/2 -translate-x-1/2 w-[1.5px] h-6 bg-white/25" />
@@ -320,9 +342,9 @@ export default function TeamHierarchyTree() {
           </div>
 
           {/* Row 2 of 5 */}
-          <div className="relative w-full">
-            <div className="bus-line hidden lg:block absolute -top-6 left-[10%] right-[10%] h-[1.5px] bg-white/25" />
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="relative w-full pt-6">
+            <div className="bus-line hidden lg:block absolute top-0 left-[10%] right-[10%] h-[1.5px] bg-white/25" />
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4">
               {TEAM_HIERARCHY_TREE.levels[3].rows[1].members.map((member) => (
                 <div key={member.id} className="relative">
                   <div className="hidden lg:block absolute -top-6 left-1/2 -translate-x-1/2 w-[1.5px] h-6 bg-white/25" />
@@ -350,7 +372,7 @@ export default function TeamHierarchyTree() {
           >
             <button
               onClick={() => setSelectedMember(null)}
-              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-400 hover:text-white transition-colors"
+              className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
             >
               ✕
             </button>
@@ -407,7 +429,8 @@ export default function TeamHierarchyTree() {
 }
 
 /**
- * Individual Node Card representing a member in the hierarchy
+ * Individual Node Card representing a member in the hierarchy.
+ * Opacity is set to 100% by default so it never stays invisible during load.
  */
 function MemberNodeCard({ member, prominent = false, compact = false, onClick }) {
   if (!member) return null;
@@ -415,27 +438,27 @@ function MemberNodeCard({ member, prominent = false, compact = false, onClick })
   return (
     <div
       onClick={onClick}
-      className={`member-node group relative rounded-2xl bg-[#0C1014]/90 border transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center ${
+      className={`member-node group relative rounded-2xl bg-[#0E1215] border transition-all duration-200 cursor-pointer flex flex-col items-center justify-center text-center opacity-100 ${
         prominent
-          ? 'p-6 sm:p-7 border-white/35 hover:border-white shadow-[0_8px_32px_rgba(0,0,0,0.5)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]'
+          ? 'p-6 sm:p-7 border-white/35 hover:border-white shadow-[0_8px_32px_rgba(0,0,0,0.6)] hover:shadow-[0_0_30px_rgba(255,255,255,0.2)]'
           : compact
-          ? 'p-3.5 sm:p-4 border-white/15 hover:border-white/40 shadow-[0_4px_16px_rgba(0,0,0,0.4)] hover:shadow-[0_0_18px_rgba(255,255,255,0.12)]'
-          : 'p-5 sm:p-6 border-white/20 hover:border-white/50 shadow-[0_6px_24px_rgba(0,0,0,0.45)] hover:shadow-[0_0_22px_rgba(255,255,255,0.15)]'
+          ? 'p-3.5 sm:p-4 border-white/20 hover:border-white/50 shadow-[0_4px_16px_rgba(0,0,0,0.5)] hover:shadow-[0_0_18px_rgba(255,255,255,0.15)]'
+          : 'p-5 sm:p-6 border-white/25 hover:border-white/60 shadow-[0_6px_24px_rgba(0,0,0,0.5)] hover:shadow-[0_0_22px_rgba(255,255,255,0.18)]'
       } hover:-translate-y-1`}
     >
       {/* Node Silhouette / Initials Avatar */}
       <div
         className={`rounded-full flex items-center justify-center border transition-all duration-300 ${
           prominent
-            ? 'w-16 h-16 mb-3.5 bg-[#12161A] border-white/30 text-white font-barlow-condensed font-bold text-2xl shadow-[0_0_16px_rgba(255,255,255,0.15)] group-hover:scale-105'
+            ? 'w-16 h-16 mb-3 bg-[#14181C] border-white/30 text-white font-barlow-condensed font-bold text-2xl shadow-[0_0_16px_rgba(255,255,255,0.15)] group-hover:scale-105'
             : compact
-            ? 'w-10 h-10 mb-2.5 bg-[#12161A] border-white/20 text-slate-200 font-barlow-condensed font-bold text-sm shadow-sm group-hover:scale-105'
-            : 'w-12 h-12 mb-3 bg-[#12161A] border-white/25 text-white font-barlow-condensed font-bold text-base shadow-[0_0_12px_rgba(255,255,255,0.1)] group-hover:scale-105'
+            ? 'w-10 h-10 mb-2 bg-[#14181C] border-white/25 text-slate-200 font-barlow-condensed font-bold text-sm shadow-sm group-hover:scale-105'
+            : 'w-12 h-12 mb-2.5 bg-[#14181C] border-white/30 text-white font-barlow-condensed font-bold text-base shadow-[0_0_12px_rgba(255,255,255,0.1)] group-hover:scale-105'
         }`}
       >
         <svg
           viewBox="0 0 212 212"
-          className="w-full h-full p-2.5 opacity-80 group-hover:opacity-100 transition-opacity"
+          className="w-full h-full p-2.5 text-slate-400 group-hover:text-white transition-colors"
           aria-hidden="true"
         >
           <circle cx="106" cy="82" r="38" fill="currentColor" />
@@ -448,11 +471,11 @@ function MemberNodeCard({ member, prominent = false, compact = false, onClick })
 
       {/* Role Monospace Pill */}
       <span
-        className={`font-mono uppercase tracking-wider block font-medium truncate max-w-full ${
+        className={`font-mono uppercase tracking-wider block font-semibold truncate max-w-full ${
           prominent
-            ? 'text-[11px] text-slate-300 mb-1.5'
+            ? 'text-[11px] text-slate-300 mb-1'
             : compact
-            ? 'text-[9px] text-slate-400 mb-1'
+            ? 'text-[9px] text-slate-300 mb-0.5'
             : 'text-[10px] text-slate-300 mb-1'
         }`}
       >
@@ -474,7 +497,7 @@ function MemberNodeCard({ member, prominent = false, compact = false, onClick })
 
       {/* Quick Domain Tag */}
       {member.domain && !compact && (
-        <span className="text-[9px] font-mono text-slate-400 mt-2 px-2 py-0.5 rounded-full bg-white/[0.05] border border-white/[0.08]">
+        <span className="text-[9px] font-mono text-slate-400 mt-2 px-2.5 py-0.5 rounded-full bg-white/[0.06] border border-white/[0.1]">
           {member.domain}
         </span>
       )}
