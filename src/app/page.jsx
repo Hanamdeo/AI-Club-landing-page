@@ -15,7 +15,6 @@ const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
 });
 
 import ServerSideNav from '@/components/ui/ServerSideNav';
-import DepthTelemetry from '@/components/ui/DepthTelemetry';
 import ServerBladeModal from '@/components/ui/ServerBladeModal';
 import TerminalCLI from '@/components/ui/TerminalCLI';
 import BdxHolographicProjector from '@/components/ui/BdxHolographicProjector';
@@ -48,7 +47,6 @@ export default function Home() {
   // Performance-optimized shared refs: zero React re-render thrashing during scroll
   const scrollProgressRef = useRef(0);
   const currentZoneIndexRef = useRef(0);
-  const depthCoordRef = useRef(null);
 
   // Modal & Terminal States
   const [isRackModalOpen, setIsRackModalOpen] = useState(false);
@@ -100,13 +98,7 @@ export default function Home() {
             const p = self.progress;
             scrollProgressRef.current = p;
 
-            // Direct DOM update for DepthTelemetry coordinate (-48.0m to +12.5m)
-            if (depthCoordRef.current) {
-              const currentZ = 12.5 + p * (-48.0 - 12.5);
-              depthCoordRef.current.innerText = currentZ.toFixed(1);
-            }
-
-            // Determine active zone index (0 to 5) for telemetry & navigation state
+            // Determine active zone index (0 to 5) for navigation state
             let newZoneIdx = 0;
             if (p >= 0.85) newZoneIdx = 5;
             else if (p >= 0.68) newZoneIdx = 4;
@@ -247,19 +239,7 @@ export default function Home() {
         />
       </div>
 
-      {/* 3. Spatial Telemetry & Depth Meter (Progressive corridor depth) */}
-      <div
-        className={`transition-opacity duration-700 ${
-          isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'
-        }`}
-      >
-        <DepthTelemetry
-          coordRef={depthCoordRef}
-          activeZoneIndex={activeZoneIndex}
-        />
-      </div>
-
-      {/* 4. Interactive BDX-01 Autonomous Holographic Projector (Persistent) */}
+      {/* 3. Interactive BDX-01 Autonomous Holographic Projector (Persistent) */}
       <div
         className={`transition-opacity duration-700 ${
           isIntro ? 'opacity-0 pointer-events-none' : 'opacity-100'

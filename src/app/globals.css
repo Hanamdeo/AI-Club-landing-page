@@ -62,6 +62,17 @@
   --accent-ivory-dim: #C4C0B6;
   --light-warm: #FFF8EE;
 
+  /* Subtle Glassmorphism & High-Contrast Readability Tokens */
+  --accent-cyan: #55DFFF;
+  --accent-cyan-dim: rgba(85, 223, 255, 0.28);
+  --accent-cyan-glow: rgba(85, 223, 255, 0.15);
+  --text-heading: #FFFFFF;
+  --text-desc: rgba(240, 247, 255, 0.92);
+  --text-secondary: #B8C7D4;
+  --glass-bg: rgba(5, 12, 18, 0.30);
+  --glass-border: rgba(150, 230, 255, 0.16);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+
   /* Operational Telemetry Signals */
   --signal-green: #22C55E;
   --signal-amber: #F59E0B;
@@ -254,23 +265,80 @@ code, pre, .terminal-mono, .font-mono {
 }
 
 /* ============================================================== */
-/* ARCHITECTURAL SURFACES & RESTRAINED HAIRLINES                  */
+/* ARCHITECTURAL SURFACES & SUBTLE GLASSMORPHISM                  */
 /* ============================================================== */
 
-/* Restrained Architectural Panel: Crisp 1px hairline border */
+/* Subtle Glassmorphism Panel (Preserves 3D visibility) */
 .glass-panel {
-  background: rgba(18, 22, 23, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid var(--hairline-border);
-  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.28);
+  background: rgba(5, 12, 18, 0.30);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(150, 230, 255, 0.16);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 .glass-panel-subtle {
-  background: rgba(18, 22, 23, 0.45);
+  background: rgba(5, 12, 18, 0.20);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  border: 1px solid var(--hairline-subtle);
+  border: 1px solid rgba(150, 230, 255, 0.12);
+  border-radius: 10px;
+}
+
+/* Subtle Glass Card (For items, events, projects & discussion cards) */
+.glass-card {
+  background: rgba(5, 12, 18, 0.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid rgba(150, 230, 255, 0.14);
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(8, 18, 26, 0.38);
+  border-color: rgba(85, 223, 255, 0.32);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25), 0 0 16px rgba(85, 223, 255, 0.08);
+  transform: translateY(-1px);
+}
+
+/* Futuristic Subtle Glass Button with Cyan Accent */
+.btn-glass-cyan {
+  background: rgba(85, 223, 255, 0.08);
+  border: 1px solid rgba(85, 223, 255, 0.28);
+  color: #FFFFFF;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-glass-cyan:hover {
+  background: rgba(85, 223, 255, 0.18);
+  border-color: #55DFFF;
+  color: #FFFFFF;
+  box-shadow: 0 0 16px rgba(85, 223, 255, 0.25);
+  transform: translateY(-1px);
+}
+
+/* Typography & Contrast Utilities */
+.text-readability-heading {
+  color: #FFFFFF;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.65);
+}
+
+.text-readability-desc {
+  color: rgba(240, 247, 255, 0.92);
+  line-height: 1.65;
+}
+
+.text-readability-secondary {
+  color: #B8C7D4;
+}
+
+.text-cyan-accent {
+  color: #55DFFF;
 }
 
 .glass-border-sage {

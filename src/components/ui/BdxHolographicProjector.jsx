@@ -131,12 +131,12 @@ export default function BdxHolographicProjector({
         {/* 1. HOLOGRAPHIC PROJECTION INTERFACE SURFACE                     */}
         {/* ============================================================== */}
         {isOpen && !isMinimized && (
-          <div className="relative mb-3 w-[calc(100vw-2.5rem)] sm:w-[390px] max-w-[420px] max-h-[calc(100svh-5.5rem)] flex flex-col rounded-xl bg-[#0D1011]/95 backdrop-blur-md border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden animate-fade-in text-ivory crosshair-corner">
+          <div className="relative mb-3 w-[calc(100vw-2.5rem)] sm:w-[390px] max-w-[420px] max-h-[calc(100svh-5.5rem)] flex flex-col rounded-xl bg-[#050C12]/80 backdrop-blur-[8px] border border-[rgba(150,230,255,0.16)] shadow-[0_8px_32px_rgba(0,0,0,0.4)] overflow-hidden animate-fade-in text-white crosshair-corner">
             {/* Top Hologram Header Bar */}
-            <div className="relative flex-shrink-0 flex items-center justify-between px-3.5 py-2.5 bg-[#15191A] border-b border-white/[0.08]">
+            <div className="relative flex-shrink-0 flex items-center justify-between px-3.5 py-2.5 bg-[#08121A]/70 border-b border-[rgba(150,230,255,0.12)]">
               <div className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-sage ring-2 ring-sage/20" />
-                <span className="text-[10px] font-mono tracking-widest text-sage uppercase font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#55DFFF] ring-2 ring-[#55DFFF]/20" />
+                <span className="text-[10px] font-mono tracking-widest text-[#55DFFF] uppercase font-bold">
                   BDX-01 COMPANION DISPATCH
                 </span>
               </div>
@@ -144,7 +144,7 @@ export default function BdxHolographicProjector({
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setIsMinimized(true)}
-                  className="p-1 rounded text-slate-400 hover:text-ivory hover:bg-white/[0.06] transition-colors btn-tactile"
+                  className="p-1 rounded text-[#B8C7D4] hover:text-white hover:bg-white/[0.06] transition-colors btn-tactile"
                   title="Minimize Projector"
                   aria-label="Minimize"
                 >
@@ -152,7 +152,7 @@ export default function BdxHolographicProjector({
                 </button>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="p-1 rounded text-slate-400 hover:text-ivory hover:bg-white/[0.06] transition-colors btn-tactile"
+                  className="p-1 rounded text-[#B8C7D4] hover:text-white hover:bg-white/[0.06] transition-colors btn-tactile"
                   title="Close Projector"
                   aria-label="Close"
                 >
@@ -162,7 +162,7 @@ export default function BdxHolographicProjector({
             </div>
 
             {/* Mode Selector Pill Scroller */}
-            <div className="relative flex-shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#0D1011] border-b border-white/[0.06] overflow-x-auto no-scrollbar">
+            <div className="relative flex-shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#050C12]/60 border-b border-[rgba(150,230,255,0.12)] overflow-x-auto no-scrollbar">
               {PROJECTION_MODES.map((m) => {
                 const isActive = currentMode === m.key;
                 return (
@@ -171,8 +171,8 @@ export default function BdxHolographicProjector({
                     onClick={() => handleModeChange(m.key)}
                     className={`px-2.5 py-1 rounded-md text-[10px] font-sans font-medium whitespace-nowrap transition-all cursor-pointer btn-tactile ${
                       isActive
-                        ? 'bg-white/[0.08] border border-sage/40 text-sage font-semibold'
-                        : 'bg-transparent border border-transparent text-ivory/60 hover:text-ivory hover:bg-white/[0.03]'
+                        ? 'bg-[rgba(85,223,255,0.10)] border border-[rgba(85,223,255,0.35)] text-[#55DFFF] font-semibold'
+                        : 'bg-transparent border border-transparent text-[#B8C7D4] hover:text-white hover:bg-white/[0.03]'
                     }`}
                   >
                     {m.label}
@@ -187,45 +187,45 @@ export default function BdxHolographicProjector({
                 <div>
                   {/* Badge & Item Counter */}
                   <div className="flex items-center justify-between text-[10px] mb-2 font-mono">
-                    <span className="px-2 py-0.5 rounded bg-[#15191A] border border-white/[0.08] text-sage font-semibold uppercase">
+                    <span className="px-2 py-0.5 rounded bg-[rgba(85,223,255,0.08)] border border-[rgba(150,230,255,0.16)] text-[#55DFFF] font-semibold uppercase">
                       {currentItem.tag || payload.badge}
                     </span>
-                    <span className="text-slate-400 tnum">
+                    <span className="text-[#B8C7D4] tnum">
                       {String(currentIndex + 1).padStart(2, '0')} /{' '}
                       {String(items.length).padStart(2, '0')}
                     </span>
                   </div>
 
                   {/* Title */}
-                  <h4 className="text-sm sm:text-base font-display font-bold text-ivory leading-snug tracking-tight mb-1 line-clamp-2">
+                  <h4 className="text-sm sm:text-base font-display font-bold text-white leading-snug tracking-tight mb-1 line-clamp-2">
                     {currentItem.title}
                   </h4>
 
                   {/* Subtitle / Timestamp */}
-                  <div className="text-[11px] text-sage font-medium mb-2 font-mono tnum">
+                  <div className="text-[11px] text-[#55DFFF] font-medium mb-2 font-mono tnum">
                     {currentItem.subtitle}
                   </div>
 
                   {/* Description */}
-                  <p className="text-xs text-ivory/75 leading-relaxed mb-3 line-clamp-3 font-normal">
+                  <p className="text-xs text-[rgba(240,247,255,0.92)] leading-[1.65] mb-3 line-clamp-3 font-normal">
                     {currentItem.description}
                   </p>
 
                   {/* Detail Metric / Venue / Note */}
                   {currentItem.detail && (
-                    <div className="p-2 rounded-md bg-[#15191A] border border-white/[0.06] text-[11px] text-slate-300 font-mono mb-3">
+                    <div className="p-2 rounded-md bg-[#08121A]/70 border border-[rgba(150,230,255,0.14)] text-[11px] text-[#B8C7D4] font-mono mb-3">
                       {currentItem.detail}
                     </div>
                   )}
 
                   {/* Bottom Actions Bar */}
-                  <div className="flex items-center justify-between pt-2.5 border-t border-white/[0.08] gap-2">
+                  <div className="flex items-center justify-between pt-2.5 border-t border-[rgba(150,230,255,0.14)] gap-2">
                     {/* Navigation Controls */}
                     <div className="flex items-center gap-1">
                       <button
                         onClick={handlePrev}
                         disabled={items.length <= 1}
-                        className="p-1.5 rounded-md bg-[#15191A] border border-white/[0.08] text-ivory hover:border-sage hover:text-sage disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer btn-tactile"
+                        className="p-1.5 rounded-md bg-[#08121A]/70 border border-[rgba(150,230,255,0.16)] text-white hover:border-[#55DFFF] hover:text-[#55DFFF] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer btn-tactile"
                         title="Previous item"
                         aria-label="Previous bulletin"
                       >
@@ -234,7 +234,7 @@ export default function BdxHolographicProjector({
                       <button
                         onClick={handleNext}
                         disabled={items.length <= 1}
-                        className="p-1.5 rounded-md bg-[#15191A] border border-white/[0.08] text-ivory hover:border-sage hover:text-sage disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer btn-tactile"
+                        className="p-1.5 rounded-md bg-[#08121A]/70 border border-[rgba(150,230,255,0.16)] text-white hover:border-[#55DFFF] hover:text-[#55DFFF] disabled:opacity-30 disabled:pointer-events-none transition-all cursor-pointer btn-tactile"
                         title="Next item"
                         aria-label="Next bulletin"
                       >
@@ -248,25 +248,25 @@ export default function BdxHolographicProjector({
                         href={currentItem.actionUrl}
                         target={currentItem.actionUrl.startsWith('http') ? '_blank' : '_self'}
                         rel="noopener noreferrer"
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-sage hover:bg-sage-glow text-graphite font-semibold text-[11px] transition-colors uppercase tracking-wider cursor-pointer btn-tactile shadow-tactile active:shadow-tactile-active"
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-md btn-glass-cyan font-semibold text-[11px] transition-colors uppercase tracking-wider cursor-pointer btn-tactile"
                       >
                         <span>{currentItem.actionLabel || 'Inspect'}</span>
-                        <ExternalLink className="w-3 h-3" />
+                        <ExternalLink className="w-3 h-3 text-[#55DFFF]" />
                       </a>
                     )}
                   </div>
                 </div>
               ) : (
-                <div className="py-6 text-center text-xs text-slate-400 font-mono">
+                <div className="py-6 text-center text-xs text-[#B8C7D4] font-mono">
                   No active bulletins in this stream.
                 </div>
               )}
             </div>
 
             {/* Bottom Telemetry Status Line */}
-            <div className="flex items-center justify-between px-3.5 py-1.5 bg-[#15191A] border-t border-white/[0.06] text-[9px] font-mono text-slate-500">
+            <div className="flex items-center justify-between px-3.5 py-1.5 bg-[#08121A]/70 border-t border-[rgba(150,230,255,0.12)] text-[9px] font-mono text-[#B8C7D4]">
               <span>FEED: LIVE UPDATES</span>
-              <span className="text-sage">STATUS: ACTIVE</span>
+              <span className="text-[#55DFFF]">STATUS: ACTIVE</span>
             </div>
           </div>
         )}
@@ -278,33 +278,33 @@ export default function BdxHolographicProjector({
           {/* Hologram Launch Button / Status Pill */}
           <button
             onClick={toggleOpen}
-            className={`group hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0D1011]/90 backdrop-blur-md border transition-all cursor-pointer btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)] ${
+            className={`group hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-[#050C12]/75 backdrop-blur-[8px] border transition-all cursor-pointer btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.3)] ${
               isOpen && !isMinimized
-                ? 'border-sage/50 text-sage'
-                : 'border-white/[0.12] text-ivory/80 hover:border-sage/40 hover:text-ivory'
+                ? 'border-[#55DFFF]/60 text-[#55DFFF]'
+                : 'border-[rgba(150,230,255,0.16)] text-[#B8C7D4] hover:border-[#55DFFF]/50 hover:text-white'
             }`}
             aria-label="Toggle BDX-01 Hologram"
           >
             <div className="relative flex items-center justify-center">
-              <span className="w-2 h-2 rounded-full bg-sage" />
+              <span className="w-2 h-2 rounded-full bg-[#55DFFF] shadow-[0_0_6px_#55DFFF]" />
             </div>
 
             <div className="flex flex-col text-left">
-              <span className="text-[10px] font-mono tracking-wider font-bold text-sage leading-tight">
+              <span className="text-[10px] font-mono tracking-wider font-bold text-[#55DFFF] leading-tight">
                 BDX-01
               </span>
-              <span className="text-[9px] text-slate-400 font-medium">
+              <span className="text-[9px] text-[#B8C7D4] font-medium">
                 {isOpen && !isMinimized ? 'Hologram Online' : 'Tap to Project'}
               </span>
             </div>
 
-            <Sparkles className="w-3.5 h-3.5 text-sage group-hover:rotate-12 transition-transform" />
+            <Sparkles className="w-3.5 h-3.5 text-[#55DFFF] group-hover:rotate-12 transition-transform" />
           </button>
 
           {/* 3D Mini Robot Model Companion Window */}
           <div
             onClick={toggleOpen}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0D1011] border border-white/[0.14] overflow-hidden cursor-pointer hover:border-sage transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#050C12] border border-[rgba(150,230,255,0.20)] overflow-hidden cursor-pointer hover:border-[#55DFFF] transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.3)]"
             title="BDX-01 Companion (Click to interact & chirp)"
           >
             {isLowTier ? (
