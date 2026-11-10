@@ -37,9 +37,11 @@ const ZONE_DEFINITIONS = [
   { id: 'discovery', index: 5, label: '06 Discovery', center: 0.93, zProgress: 1.00 },
 ];
 
+let hasGlobalIntroPlayed = false;
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const [isIntro, setIsIntro] = useState(true);
+  const [isIntro, setIsIntro] = useState(() => !hasGlobalIntroPlayed);
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('entry');
 
@@ -62,7 +64,7 @@ export default function Home() {
       window.matchMedia('(max-width: 767px)').matches ||
       /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 
-    if (isMobile) {
+    if (isMobile || hasGlobalIntroPlayed) {
       setIsIntro(false);
     }
     setMounted(true);
@@ -209,6 +211,7 @@ export default function Home() {
       {mounted && isIntro && (
         <StartupIntro
           onComplete={() => {
+            hasGlobalIntroPlayed = true;
             setIsIntro(false);
             setTimeout(() => {
               ScrollTrigger.refresh();
@@ -288,7 +291,7 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none z-10 flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden">
         {/* ZONE 01: ENTRY ZONE (Welcome, AI Club Intro, Primary Actions) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 0
               ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
               : 'opacity-0 pointer-events-none translate-y-8 scale-95'
@@ -299,7 +302,7 @@ export default function Home() {
 
         {/* ZONE 02: FEATURED ZONE (Highlighted server cluster & upcoming activities) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 1
               ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
               : 'opacity-0 pointer-events-none translate-y-8 scale-95'
@@ -310,7 +313,7 @@ export default function Home() {
 
         {/* ZONE 03: COMMUNITY ZONE (Discussions, reading circles & student culture) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 2
               ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
               : 'opacity-0 pointer-events-none translate-y-8 scale-95'
@@ -321,7 +324,7 @@ export default function Home() {
 
         {/* ZONE 04: RESEARCH ZONE (Intelligence Core, research tracks & preprints) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 3
               ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
               : 'opacity-0 pointer-events-none translate-y-8 scale-95'
@@ -332,7 +335,7 @@ export default function Home() {
 
         {/* ZONE 05: PROJECTS ZONE (Project showcase displays & hardware builds) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 4
               ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
               : 'opacity-0 pointer-events-none translate-y-8 scale-95'
@@ -343,7 +346,7 @@ export default function Home() {
 
         {/* ZONE 06: DISCOVERY / EXIT ZONE (Final landmark & navigation hub) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 5
               ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
               : 'opacity-0 pointer-events-none translate-y-8 scale-95'
