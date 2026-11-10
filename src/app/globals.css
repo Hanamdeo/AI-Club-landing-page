@@ -673,3 +673,56 @@ html, body {
   max-width: 100%;
 }
 
+/* ============================================================== */
+/* MOBILE PERFORMANCE & LOW-POWER HARDWARE ACCELERATION          */
+/* Targets Mali-G57, Adreno, PowerVR & mobile chipsets for 60 FPS*/
+/* ============================================================== */
+@media (max-width: 768px), (pointer: coarse) {
+  /* 1. Eliminate costly GPU blur convolution passes over WebGL */
+  *,
+  *::before,
+  *::after {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* 2. Fast opaque/semi-opaque surface fills without transparency fillrate penalties */
+  .holographic-panel,
+  .server-rack-console,
+  .volumetric-screen,
+  .glass-card,
+  .glass-panel,
+  .solo-leveling-card,
+  .solo-leveling-card-featured,
+  .btn-glass-cyan,
+  .btn-glass-orange,
+  .btn-glass-mono {
+    background: rgba(12, 16, 20, 0.96) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+
+  /* 3. Simplify deep box-shadows to reduce fragment pipeline pressure */
+  .holographic-panel,
+  .server-rack-console,
+  .volumetric-screen,
+  .solo-leveling-card,
+  .solo-leveling-card-featured {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.65) !important;
+  }
+
+  /* 4. Disable expensive multi-layered text-shadows on mobile */
+  .text-glow-sage,
+  .text-glow-cyan,
+  .text-readability-heading {
+    text-shadow: none !important;
+  }
+
+  /* 5. Smooth native touch momentum */
+  html {
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+

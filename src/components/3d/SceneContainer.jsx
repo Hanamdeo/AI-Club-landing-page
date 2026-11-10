@@ -23,10 +23,8 @@ import { usePerformanceTier } from '@/utils/ResponsivePerformanceManager';
  * Replaces harsh, saturated primary neon colors with elegant, calibrated silver-cyan grazing
  * and soft ceramic sage atmospheric warmth.
  */
-function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
+function ZoneLightingController({ scrollProgress = 0, scrollProgressRef, isLowTier = false }) {
   const overheadLightRef = useRef();
-  const rackGrazingLeftRef = useRef();
-  const rackGrazingRightRef = useRef();
   const chamberSpotRef = useRef();
 
   useFrame((_, delta) => {
@@ -38,7 +36,7 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
       overheadLightRef.current.position.z += (lighting.lightZ - overheadLightRef.current.position.z) * lerpRate;
       overheadLightRef.current.intensity = lighting.lightIntensity;
     }
-    if (chamberSpotRef.current) {
+    if (chamberSpotRef.current && !isLowTier) {
       chamberSpotRef.current.intensity += (lighting.chamberSpotIntensity - chamberSpotRef.current.intensity) * lerpRate;
     }
   });
@@ -53,24 +51,28 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
         intensity={1.50}
       />
 
-      {/* 2. Cohesive Lateral Rack Grazing Light (Uniform Ice-Silver Cyan for natural metallic speculars) */}
-      <directionalLight
-        position={[0, 4.5, -15]}
-        color="#E2E8F0"
-        intensity={0.65}
-      />
+      {/* 2. Cohesive Lateral Rack Grazing Light (Omitted on low tier to preserve mobile fillrate) */}
+      {!isLowTier && (
+        <directionalLight
+          position={[0, 4.5, -15]}
+          color="#E2E8F0"
+          intensity={0.65}
+        />
+      )}
 
-      {/* 3. Dynamic Chamber Pedestal Spot */}
-      <spotLight
-        ref={chamberSpotRef}
-        position={[0, 8.0, -35.0]}
-        target-position={[0, 1.2, -35.0]}
-        color="#F8FAFC"
-        intensity={0.35}
-        angle={0.65}
-        penumbra={0.6}
-        distance={28}
-      />
+      {/* 3. Dynamic Chamber Pedestal Spot (Omitted on low tier to preserve mobile fillrate) */}
+      {!isLowTier && (
+        <spotLight
+          ref={chamberSpotRef}
+          position={[0, 8.0, -35.0]}
+          target-position={[0, 1.2, -35.0]}
+          color="#F8FAFC"
+          intensity={0.35}
+          angle={0.65}
+          penumbra={0.6}
+          distance={28}
+        />
+      )}
     </>
   );
 }
@@ -93,6 +95,7 @@ export default function SceneContainer({
   activeNavId = 'hero',
 }) {
   const tierState = usePerformanceTier();
+  const isLowTier = tierState.tier === 'low';
   const maxLights = tierState.features?.maxLights ?? 5;
 
   return (
@@ -103,14 +106,14 @@ export default function SceneContainer({
       <Canvas
         className="pointer-events-auto"
         style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
-        camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.1, far: 110 }}
-        dpr={[1, Math.min(1.25, tierState.dpr)]}
+        camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.15, far: isLowTier ? 65 : 110 }}
+        dpr={isLowTier ? 1.0 : [1, Math.min(1.25, tierState.dpr)]}
         gl={{
-          antialias: tierState.tier !== 'low',
-          powerPreference: 'high-performance',
+          antialias: !isLowTier,
+          powerPreference: isLowTier ? 'low-power' : 'high-performance',
           stencil: false,
           depth: true,
-          precision: tierState.tier === 'low' ? 'lowp' : 'mediump',
+          precision: isLowTier ? 'lowp' : 'mediump',
         }}
         onCreated={({ gl, scene, camera }) => {
           if (typeof window !== 'undefined') { window.__THREE_SCENE__ = scene; window.__THREE_CAMERA__ = camera; }
@@ -125,7 +128,7 @@ export default function SceneContainer({
       >
         {/* Harmonious Obsidian Atmosphere: Blends seamlessly with website background */}
         <color attach="background" args={['#0A0E10']} />
-        <fog attach="fog" args={['#0A0E10', 16, 78]} />
+        <fog attach="fog" args={['#0A0E10', 16, isLowTier ? 55 : 78]} />
 
         {/* 1. Neutral Deep Shadow Ambient: Preserves rich true blacks */}
         <ambientLight color="#0F1416" intensity={0.52} />
@@ -134,6 +137,7 @@ export default function SceneContainer({
         <ZoneLightingController
           scrollProgress={scrollProgress}
           scrollProgressRef={scrollProgressRef}
+          isLowTier={isLowTier}
         />
 
         {/* 3. Studio Lighting for Centered Companion NEX-01 */}

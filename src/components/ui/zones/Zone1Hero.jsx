@@ -29,17 +29,17 @@ export default function Zone1Hero({ onExploreClick }) {
       {/* MASTER HERO COMPOSITION - STRICTLY LEFT FLANK DOCKED           */}
       {/* Leaves entire screen center and right wide open for the robot  */}
       {/* ============================================================== */}
-      <div className="w-full mt-auto mb-24 sm:my-auto pointer-events-none flex">
+      <div className="w-full mt-auto mb-3 sm:mb-24 sm:my-auto pointer-events-none flex">
         {/* Left-docked Floating Holographic HUD Card - Zero overlap with robot */}
         <div className="w-full sm:max-w-[380px] lg:max-w-[400px] xl:max-w-[420px] mr-auto pointer-events-auto safe-viewport-card custom-scrollbar">
-          <div className="glass-panel p-5 sm:p-6 md:p-7 relative">
+          <div className="glass-panel p-4 sm:p-6 md:p-7 relative">
             {/* Sector Header Tag & Logo */}
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2.5 sm:mb-3">
               <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-slate-400 uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
                 <span>SECTOR 01 // HOLOGRAPHIC HUD</span>
               </div>
-              <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.15)] bg-black shrink-0">
+              <div className="relative w-7 h-7 sm:w-8 sm:h-8 rounded-full overflow-hidden border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.15)] bg-black shrink-0">
                 <Image
                   src="/logo.png"
                   alt="AI Club Logo"
@@ -51,17 +51,17 @@ export default function Zone1Hero({ onExploreClick }) {
             </div>
 
             {/* Master Display Heading */}
-            <h1 className="text-fluid-hero font-display font-black tracking-tight text-white mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+            <h1 className="text-fluid-hero font-display font-black tracking-tight text-white mb-1.5 sm:mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
               {CLUB_INFO.name}
             </h1>
 
             {/* Tagline with Space Grotesk - Monochrome Silver */}
-            <p className="text-base sm:text-lg lg:text-xl font-space font-medium text-white/90 mb-3 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+            <p className="text-sm sm:text-lg lg:text-xl font-space font-medium text-white/90 mb-2.5 sm:mb-3 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
               {CLUB_INFO.tagline}
             </p>
 
             {/* Controlled-Width Description Prose */}
-            <p className="text-xs sm:text-sm text-slate-300 max-w-[360px] leading-[1.65] mb-6 font-normal drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+            <p className="text-xs sm:text-sm text-slate-300 max-w-[360px] leading-[1.6] sm:leading-[1.65] mb-4 sm:mb-6 font-normal drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
               An autonomous collegiate research collective advancing machine intelligence, foundation models, and high-performance computing infrastructure at Madhav Institute of Technology & Science.
             </p>
 

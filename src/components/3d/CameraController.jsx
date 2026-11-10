@@ -63,9 +63,14 @@ export default function CameraController({
     return () => observer.disconnect();
   }, [camera, gl.domElement]);
 
-  // 2. Parallax mouse/pointer listener (respects reduced motion)
+  // 2. Parallax mouse/pointer listener (respects reduced motion, skipped on touch/mobile)
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    const isTouchDevice =
+      window.matchMedia('(pointer: coarse)').matches ||
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+    if (isTouchDevice) return;
 
     const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
     isReducedMotionRef.current = motionQuery.matches;
@@ -172,11 +177,13 @@ export default function CameraController({
       tempTarget.current.lerpVectors(startW.target, endW.target, easeT);
     }
 
-    // Adaptive lateral camera offset on portrait displays: keep aisle centered
+    // Adaptive vertical & lateral camera offset on portrait displays: keep aisle and companion robot framed above mobile cards
     const aspect = containerAspectRef.current;
     if (aspect < 0.85) {
       // Pull camera back slightly in +Z to provide comfortable corridor breathing room
-      tempPos.current.z += (1 - aspect) * 1.2;
+      tempPos.current.z += (1 - aspect) * 1.4;
+      tempPos.current.y += (1 - aspect) * 0.40;
+      tempTarget.current.y += (1 - aspect) * 0.50;
     }
 
     tempPos.current.x += mouseRef.current.x;

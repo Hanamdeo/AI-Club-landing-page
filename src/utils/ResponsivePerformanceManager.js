@@ -59,7 +59,11 @@ class PerformanceCoordinator {
 
     const cores = navigator.hardwareConcurrency || 4;
     const memory = navigator.deviceMemory || 4; // in GB
-    const isMobile = window.innerWidth < 768;
+    const isMobile =
+      (typeof window !== 'undefined' && window.innerWidth < 768) ||
+      (typeof navigator !== 'undefined' &&
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent));
+    this.isMobile = !!isMobile;
 
     // Detect WebGL renderer string
     let isIntegratedOrLowEndGpu = false;
@@ -70,17 +74,14 @@ class PerformanceCoordinator {
         const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
         if (debugInfo) {
           const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL).toLowerCase();
-          // Heuristic checks for low-end mobile/integrated graphics
+          // Comprehensive detection for mobile GPUs (Mali-G57, Adreno, PowerVR, etc.)
           if (
-            renderer.includes('mali-400') ||
-            renderer.includes('mali-t') ||
-            renderer.includes('adreno (tm) 3') ||
-            renderer.includes('adreno (tm) 4') ||
-            renderer.includes('adreno (tm) 505') ||
-            renderer.includes('adreno (tm) 506') ||
+            renderer.includes('mali') ||
+            renderer.includes('adreno') ||
             renderer.includes('powervr') ||
-            renderer.includes('intel hd graphics') ||
-            renderer.includes('intel(r) hd graphics') ||
+            renderer.includes('intel hd') ||
+            renderer.includes('intel(r) hd') ||
+            renderer.includes('uhd graphics') ||
             renderer.includes('llvmpipe') ||
             renderer.includes('swiftshader')
           ) {
@@ -93,14 +94,15 @@ class PerformanceCoordinator {
     }
 
     if (this.isReducedMotion) {
-      return 'medium';
-    }
-
-    if (isIntegratedOrLowEndGpu || cores <= 2 || memory <= 2) {
       return 'low';
     }
 
-    if (isMobile || cores <= 4 || memory <= 4) {
+    // Any mobile phone or low-end GPU runs on 'low' tier to prevent frame drops
+    if (isMobile || isIntegratedOrLowEndGpu || cores <= 4 || memory <= 4) {
+      return 'low';
+    }
+
+    if (cores <= 6 || memory <= 6) {
       return 'medium';
     }
 
@@ -115,15 +117,15 @@ class PerformanceCoordinator {
     switch (this.tier) {
       case 'low':
         this.dpr = 1.0;
-        this.targetFps = 30;
+        this.targetFps = 60;
         break;
       case 'medium':
-        this.dpr = typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.15;
+        this.dpr = this.isMobile ? 1.0 : 1.15;
         this.targetFps = 60;
         break;
       case 'high':
       default:
-        this.dpr = typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.25;
+        this.dpr = this.isMobile ? 1.0 : 1.25;
         this.targetFps = 60;
         break;
     }
@@ -189,7 +191,8 @@ class PerformanceCoordinator {
       }
     }
     // Upgrade condition: Sustained frame time < 17.5ms (~>57 FPS)
-    else if (avgFrameTime < 17.5) {
+    // Never auto-upgrade on mobile/budget devices to avoid sudden stutter when scrolling
+    else if (avgFrameTime < 17.5 && !this.isMobile) {
       this.consecutiveGoodFrames++;
       this.consecutiveLowFrames = 0;
       if (this.consecutiveGoodFrames > 4) {

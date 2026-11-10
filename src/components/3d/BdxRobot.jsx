@@ -23,12 +23,12 @@ const DESKTOP_CONTROL_POINTS = [
 ];
 
 const MOBILE_CONTROL_POINTS = [
-  new THREE.Vector3(0.00, 1.30, 8.0),    // p = 0.00 (centered)
-  new THREE.Vector3(0.00, 1.25, -1.0),   // p = 0.20 (centered)
-  new THREE.Vector3(0.00, 1.20, -13.0),  // p = 0.40 (centered)
-  new THREE.Vector3(0.00, 1.15, -24.0),  // p = 0.60 (centered)
-  new THREE.Vector3(0.00, 1.10, -35.0),  // p = 0.80 (centered)
-  new THREE.Vector3(0.00, 1.05, -45.0),  // p = 1.00 (centered)
+  new THREE.Vector3(0.00, 2.05, 7.8),    // p = 0.00: Floats majestically in unobstructed upper viewport
+  new THREE.Vector3(0.00, 1.45, -1.0),   // p = 0.20 (centered)
+  new THREE.Vector3(0.00, 1.35, -13.0),  // p = 0.40 (centered)
+  new THREE.Vector3(0.00, 1.25, -24.0),  // p = 0.60 (centered)
+  new THREE.Vector3(0.00, 1.20, -35.0),  // p = 0.80 (centered)
+  new THREE.Vector3(0.00, 1.15, -45.0),  // p = 1.00 (centered)
 ];
 
 // Continuous idle settle orientation: Perfectly centered facing forward towards camera

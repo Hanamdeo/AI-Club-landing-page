@@ -86,20 +86,7 @@ export default function ServerSideNav({
 
   return (
     <>
-      {/* Mobile Floating Quick-Toggle Button */}
-      <div className="fixed top-4 left-4 z-50 md:hidden pointer-events-auto">
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#101415]/90 backdrop-blur-xl border border-white/[0.08] text-ivory text-xs font-sans shadow-[0_4px_20px_rgba(0,0,0,0.5)] cursor-pointer"
-          aria-label="Toggle Facility Navigation"
-        >
-          <div className="w-5 h-5 rounded bg-[#161B1C] border border-sage/40 flex items-center justify-center font-mono text-[9px] text-sage font-bold">
-            AI
-          </div>
-          <span className="font-semibold text-[11px] tracking-wide text-ivory">ROUTER</span>
-          {mobileOpen ? <X className="w-3.5 h-3.5 text-sage" /> : <Menu className="w-3.5 h-3.5 text-sage" />}
-        </button>
-      </div>
+      {/* Mobile toggle omitted to prevent collision with top HUDNavbar; HUDNavbar handles mobile menu */}
 
       {/* Main Server Side Navigation Bar (Hover-activated on desktop) */}
       <aside

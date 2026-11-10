@@ -68,23 +68,28 @@ export default function Home() {
     setMounted(true);
     gsap.registerPlugin(ScrollTrigger);
 
-    const lenis = new Lenis({
-      duration: 0.85,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      orientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: 1.0,
-      touchMultiplier: 1.2,
-    });
-    lenisRef.current = lenis;
+    // Only instantiate Lenis on desktop / pointer:fine devices to preserve buttery native hardware touch momentum on mobile
+    let lenis = null;
+    let tickerUpdate = null;
 
-    lenis.on('scroll', ScrollTrigger.update);
+    if (!isMobile) {
+      lenis = new Lenis({
+        duration: 0.85,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        orientation: 'vertical',
+        smoothWheel: true,
+        wheelMultiplier: 1.0,
+      });
+      lenisRef.current = lenis;
 
-    const tickerUpdate = (time) => {
-      lenis.raf(time * 1000);
-    };
-    gsap.ticker.add(tickerUpdate);
-    gsap.ticker.lagSmoothing(500, 33);
+      lenis.on('scroll', ScrollTrigger.update);
+
+      tickerUpdate = (time) => {
+        lenis.raf(time * 1000);
+      };
+      gsap.ticker.add(tickerUpdate);
+      gsap.ticker.lagSmoothing(500, 33);
+    }
 
     // Progressive Depth ScrollTrigger driving the entire 3D data centre journey
     const ctx = gsap.context(() => {
@@ -93,7 +98,7 @@ export default function Home() {
           trigger: scrollTrackRef.current,
           start: 'top top',
           end: 'bottom bottom',
-          scrub: 0.25,
+          scrub: isMobile ? true : 0.25,
           onUpdate: (self) => {
             const p = self.progress;
             scrollProgressRef.current = p;
@@ -135,8 +140,11 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('keydown', handleGlobalKey);
-      gsap.ticker.remove(tickerUpdate);
-      lenis.destroy();
+      if (tickerUpdate) gsap.ticker.remove(tickerUpdate);
+      if (lenis) {
+        lenis.destroy();
+        lenisRef.current = null;
+      }
       ctx.revert();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
@@ -144,7 +152,6 @@ export default function Home() {
 
   // Smooth, snappy scroll navigation to target depth zone (instant UI response + 0.75s camera glide)
   const handleNavigateToZone = useCallback((zoneIndex) => {
-    if (!lenisRef.current) return;
     const targetDef = ZONE_DEFINITIONS[zoneIndex] || ZONE_DEFINITIONS[0];
     currentZoneIndexRef.current = zoneIndex;
     setActiveZoneIndex(zoneIndex);
@@ -157,11 +164,15 @@ export default function Home() {
       );
     }
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    lenisRef.current.scrollTo(targetDef.center * maxScroll, { duration: 0.75 });
+    const targetScroll = targetDef.center * maxScroll;
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(targetScroll, { duration: 0.75 });
+    } else {
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }
   }, []);
 
   const handleNavigateToSection = useCallback((id, zProgress) => {
-    if (!lenisRef.current) return;
     const zoneIdx = ZONE_DEFINITIONS.findIndex((z) => z.id === id);
     if (zoneIdx !== -1) {
       currentZoneIndexRef.current = zoneIdx;
@@ -177,7 +188,12 @@ export default function Home() {
     }
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const targetP = typeof zProgress === 'number' ? zProgress : 0;
-    lenisRef.current.scrollTo(targetP * maxScroll, { duration: 0.75 });
+    const targetScroll = targetP * maxScroll;
+    if (lenisRef.current) {
+      lenisRef.current.scrollTo(targetScroll, { duration: 0.75 });
+    } else {
+      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+    }
   }, []);
 
   // Listen for global navigation events from top HUDNavbar
