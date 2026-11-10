@@ -18,6 +18,7 @@ import {
 import { RESEARCH_TRACKS, COMPUTE_SPECS } from '@/data/research';
 import { getAllDiscussions } from '@/lib/contentSelectors';
 import { audioManager } from '@/utils/audioManager';
+import HolographicCard from '@/components/ui/HolographicCard';
 
 export default function ResearchPage() {
   const [activeTab, setActiveTab] = useState('tracks'); // 'tracks' | 'discussions'
@@ -89,10 +90,11 @@ export default function ResearchPage() {
         {activeTab === 'tracks' && (
           <div className="space-y-8 animate-fadeIn">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {RESEARCH_TRACKS.map((track) => (
-                <div
+              {RESEARCH_TRACKS.map((track, index) => (
+                <HolographicCard
                   key={track.id}
-                  className="rounded-2xl p-7 bg-[#121617]/90 border border-white/[0.08] hover:border-[#24BFEA]/50 transition-all shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+                  index={index}
+                  className="solo-leveling-card p-7"
                 >
                   <div>
                     <div className="flex items-center justify-between gap-2 mb-4">
@@ -135,7 +137,7 @@ export default function ResearchPage() {
                     <span className="text-[10px] text-slate-400">HARDWARE ALLOCATION:</span>
                     <span className="font-semibold text-ivory">{track.clusterAllocation}</span>
                   </div>
-                </div>
+                </HolographicCard>
               ))}
             </div>
           </div>
@@ -144,10 +146,11 @@ export default function ResearchPage() {
         {/* TAB 2: DISCUSSION ROOMS & READING CIRCLES */}
         {activeTab === 'discussions' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fadeIn">
-            {discussions.map((gd) => (
-              <div
+            {discussions.map((gd, index) => (
+              <HolographicCard
                 key={gd.id}
-                className="rounded-2xl p-6 sm:p-7 bg-[#121617]/90 border border-white/[0.08] hover:border-white/[0.2] transition-all shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+                index={index}
+                className="solo-leveling-card p-6 sm:p-7"
               >
                 <div>
                   <div className="flex items-center justify-between gap-2 mb-4">
@@ -186,7 +189,7 @@ export default function ResearchPage() {
                   <span className="text-[10px] text-slate-500 block mb-1">REQUIRED READING:</span>
                   <span className="text-ivory font-medium">{gd.readingMaterial || 'Paper preprint link in Discord channel'}</span>
                 </div>
-              </div>
+              </HolographicCard>
             ))}
           </div>
         )}
