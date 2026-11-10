@@ -25,11 +25,9 @@ export const NAV_LINKS = [
  */
 export default function HUDNavbar({ onToggleTerminal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [activeHomeSection, setActiveHomeSection] = useState('entry');
   const [navigatingId, setNavigatingId] = useState(null);
   const pathname = usePathname();
   const router = useRouter();
-  const isHomePage = pathname === '/';
 
   // Reset routing indicator on route completion
   React.useEffect(() => {
@@ -37,79 +35,27 @@ export default function HUDNavbar({ onToggleTerminal }) {
     setMobileMenuOpen(false);
   }, [pathname]);
 
-  // Aggressive route prefetching in background for instant switching
-  React.useEffect(() => {
-    NAV_LINKS.forEach((link) => {
-      if (link.href && link.href !== pathname) {
-        try {
-          router.prefetch(link.href);
-        } catch {}
-      }
-    });
-  }, [pathname, router]);
-
-  // Synchronize active indicator with 3D facility zone on Home
-  React.useEffect(() => {
-    const handleZoneChange = (e) => {
-      if (e.detail?.id) {
-        setActiveHomeSection(e.detail.id);
-      }
-    };
-    window.addEventListener('facility-zone-change', handleZoneChange);
-    return () => window.removeEventListener('facility-zone-change', handleZoneChange);
-  }, []);
-
   const handleLinkClick = (e, link) => {
     try {
       audioManager.playClick();
     } catch {}
 
-    // On the 3D home page, smoothly glide the 3D camera rather than unmounting the scene
-    if (isHomePage) {
-      const zoneMap = {
-        home: { id: 'entry', zoneIndex: 0 },
-        events: { id: 'featured', zoneIndex: 1 },
-        team: { id: 'community', zoneIndex: 2 },
-        research: { id: 'research', zoneIndex: 3 },
-        projects: { id: 'projects', zoneIndex: 4 },
-        join: { id: 'discovery', zoneIndex: 5 },
-      };
+    // Close mobile drawer immediately with zero artificial delay
+    setMobileMenuOpen(false);
 
-      if (zoneMap[link.id]) {
-        if (e) e.preventDefault();
-        setActiveHomeSection(zoneMap[link.id].id);
-        setMobileMenuOpen(false);
-        window.dispatchEvent(
-          new CustomEvent('facility-navigate', {
-            detail: zoneMap[link.id],
-          })
-        );
-        return;
-      }
+    // If clicking current active route, scroll to top smoothly
+    if (link.href === pathname) {
+      if (e) e.preventDefault();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
     }
 
-    // Navigating across pages: trigger immediate 0ms progress line and tactile feedback
-    if (link.href !== pathname) {
-      setNavigatingId(link.id);
-      window.dispatchEvent(new CustomEvent('route-navigate-start'));
-      setTimeout(() => {
-        setMobileMenuOpen(false);
-      }, 70);
-    } else {
-      setMobileMenuOpen(false);
-    }
+    // Trigger instant top progress bar for 0ms visual tactile feedback
+    setNavigatingId(link.id);
+    window.dispatchEvent(new CustomEvent('route-navigate-start'));
   };
 
   const getIsActive = (link) => {
-    if (isHomePage) {
-      if (link.id === 'home') return activeHomeSection === 'entry';
-      if (link.id === 'events') return activeHomeSection === 'featured';
-      if (link.id === 'team') return activeHomeSection === 'community';
-      if (link.id === 'research') return activeHomeSection === 'research';
-      if (link.id === 'projects') return activeHomeSection === 'projects';
-      if (link.id === 'join') return activeHomeSection === 'discovery';
-      return false;
-    }
     return link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
   };
 
