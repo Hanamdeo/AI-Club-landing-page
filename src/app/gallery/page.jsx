@@ -24,8 +24,8 @@ export const GALLERY_ITEMS = [
     caption: 'Student teams prototyping autonomous multi-agent tool harnesses in the main compute auditorium.',
     eventSlug: 'hack-ai-national-hackathon',
     eventTitle: 'HACK_AI 36-Hour Hackathon',
-    alt: 'Participants working on laptops in a dimly lit auditorium with holographic display boards in the background',
-    gradient: 'from-[#FFFFFF]/40 via-[#E2E8F0]/20 to-[#07090A]',
+    alt: 'Participants working on laptops in a collegiate hackathon code sprint',
+    image: '/images/gallery/hackathon.jpg',
   },
   {
     id: 'gal-002',
@@ -35,8 +35,8 @@ export const GALLERY_ITEMS = [
     caption: 'Hardware-level profiling on workstation GPUs analyzing warp divergence and shared memory bank conflicts.',
     eventSlug: 'cuda-kernel-optimization-workshop',
     eventTitle: 'CUDA Kernel Optimization Workshop',
-    alt: 'Students analyzing GPU profiling waterfall flame charts and Triton code',
-    gradient: 'from-[#E2E8F0]/35 via-[#E2E8F0]/20 to-[#07090A]',
+    alt: 'High-performance GPU cluster server rack infrastructure',
+    image: '/images/gallery/gpu-lab.jpg',
   },
   {
     id: 'gal-003',
@@ -46,8 +46,8 @@ export const GALLERY_ITEMS = [
     caption: 'Deconstructing test-time search algorithms and Monte Carlo Tree Search in seminar room 102.',
     eventSlug: 'hack-ai-national-hackathon',
     eventTitle: 'Weekly Reading Group',
-    alt: 'Whiteboard filled with attention math matrices and step-by-step reasoning diagrams',
-    gradient: 'from-[#38C9E8]/35 via-[#FFFFFF]/20 to-[#07090A]',
+    alt: 'Researchers collaborating in student AI paper reading circle',
+    image: '/images/gallery/reading-group.jpg',
   },
   {
     id: 'gal-004',
@@ -57,8 +57,8 @@ export const GALLERY_ITEMS = [
     caption: 'Testing ROS2 micro-controllers and SLAM depth cameras on student-assembled companion chassis.',
     eventSlug: 'hack-ai-national-hackathon',
     eventTitle: 'Robotics Lab Trials',
-    alt: 'Robotics testing bench with robotic chassis, LIDAR sensor nodes, and telemetry monitors',
-    gradient: 'from-[#E2E8F0]/40 via-[#E2E8F0]/25 to-[#07090A]',
+    alt: 'Advanced robotics testing and autonomous companion trials',
+    image: '/images/gallery/robotics.jpg',
   },
   {
     id: 'gal-005',
@@ -68,8 +68,8 @@ export const GALLERY_ITEMS = [
     caption: 'Live public demonstration of Model Context Protocol (MCP) servers connected to sandboxed execution kernels.',
     eventSlug: 'agentic-ai-protocol-symposium',
     eventTitle: 'Agentic Protocol Symposium',
-    alt: 'Interactive presentation screen showing multi-agent routing graphs and sandbox terminal',
-    gradient: 'from-[#FFFFFF]/30 via-[#FFFFFF]/25 to-[#07090A]',
+    alt: 'Technical symposium presentation on autonomous agentic systems',
+    image: '/images/gallery/agentic.jpg',
   },
   {
     id: 'gal-006',
@@ -79,8 +79,8 @@ export const GALLERY_ITEMS = [
     caption: 'Benchmarking 4-bit AWQ and GPTQ quantized model checkpoints on consumer laptops.',
     eventSlug: 'cuda-kernel-optimization-workshop',
     eventTitle: 'Model Distillation Session',
-    alt: 'Terminal displaying tokens per second benchmarks comparing FP16 vs INT4 performance',
-    gradient: 'from-[#FFFFFF]/30 via-[#E2E8F0]/30 to-[#07090A]',
+    alt: 'Terminal displaying neural network benchmarks and code evaluation metrics',
+    image: '/images/gallery/benchmarks.jpg',
   },
 ];
 

@@ -18,6 +18,7 @@ import { getAllEvents } from '@/lib/contentSelectors';
 import { filterByCategory, getUniqueCategories } from '@/lib/contentHelpers';
 import { audioManager } from '@/utils/audioManager';
 import HolographicCard from '@/components/ui/HolographicCard';
+import RobotFace from '@/components/ui/RobotFace';
 
 export default function EventsPage() {
   const events = getAllEvents();
@@ -131,6 +132,7 @@ export default function EventsPage() {
 
           {/* Telemetry Counter */}
           <div className="p-4 px-5 sm:px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(255, 255, 255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] self-stretch sm:self-start md:self-auto flex items-center justify-between sm:justify-start gap-4 sm:gap-6">
+            <RobotFace variant="neutral" size={50} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)] hidden sm:block" />
             <div>
               <span className="block events-mono-meta text-slate-400 mb-1">
                 VERIFIED OPERATIONS

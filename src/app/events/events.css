@@ -63,22 +63,6 @@
   font-family: var(--font-tech-mono) !important;
 }
 
-/* Projects Page Dedicated: Barlow Body Font & Compact Typography */
-.projects-page {
-  --font-body: var(--font-barlow), 'Barlow', var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
-  font-family: var(--font-body) !important;
-}
-
-.projects-page .font-events-body,
-.projects-page .events-body-text,
-.projects-page p {
-  font-family: var(--font-barlow), 'Barlow', var(--font-barlow-condensed), 'Barlow Condensed', sans-serif !important;
-}
-
-.projects-page .font-barlow-condensed {
-  font-family: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif-condensed, sans-serif !important;
-}
-
 /* =========================================================================
    3D FACILITY CORE CYAN & BLUE TEXT & GLOW EFFECTS
    ========================================================================= */

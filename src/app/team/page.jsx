@@ -15,6 +15,7 @@ import {
 } from 'lucide-react';
 import { TEAM_MEMBERS } from '@/data/team';
 import { audioManager } from '@/utils/audioManager';
+import RobotFace from '@/components/ui/RobotFace';
 
 export default function TeamPage() {
   const [selectedFilter, setSelectedFilter] = useState('all');
@@ -54,14 +55,17 @@ export default function TeamPage() {
           </div>
 
           {/* Quick Counter */}
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
-            <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
-              CONFIRMED MEMBERS
-            </span>
-            <span className="text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
-              {TEAM_MEMBERS.length} RESEARCHERS
-            </span>
-            <span className="text-[10px] font-mono text-[#E2E8F0]">Verified Academic Cadre</span>
+          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto flex items-center gap-4 text-left w-full sm:w-auto">
+            <RobotFace variant="friendly" size={50} className="shrink-0 drop-shadow-[0_2px_10px_rgba(85,223,255,0.25)]" />
+            <div>
+              <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
+                CONFIRMED MEMBERS
+              </span>
+              <span className="text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
+                {TEAM_MEMBERS.length} RESEARCHERS
+              </span>
+              <span className="text-[10px] font-mono text-[#E2E8F0]">Verified Academic Cadre</span>
+            </div>
           </div>
         </div>
 

@@ -10,6 +10,7 @@ import {
   ArrowUpRight,
   Terminal,
 } from 'lucide-react';
+import { CLUB_INFO } from '@/data/clubInfo';
 import { audioManager } from '@/utils/audioManager';
 
 /**
@@ -37,9 +38,21 @@ export default function StaticFooter({ onOpenTerminal }) {
     { label: 'REGISTER', href: '/events' },
   ];
 
+  // Authentic platform branding colors for official identity
   const socialLinks = [
-    { icon: Instagram, href: 'https://instagram.com', label: 'Instagram' },
-    { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
+    {
+      icon: Instagram,
+      href: CLUB_INFO?.socials?.instagram || 'https://instagram.com/aiclub_mits',
+      label: 'Instagram',
+      boxClass:
+        'bg-gradient-to-tr from-[#f09433] via-[#dc2743] to-[#bc1888] text-white shadow-[0_0_12px_rgba(228,64,95,0.4)]',
+    },
+    {
+      icon: Linkedin,
+      href: CLUB_INFO?.socials?.linkedin || 'https://linkedin.com/company/aiclub-mits',
+      label: 'LinkedIn',
+      boxClass: 'bg-[#0A66C2] text-white shadow-[0_0_12px_rgba(10,102,194,0.4)]',
+    },
   ];
 
   return (
@@ -182,19 +195,20 @@ export default function StaticFooter({ onOpenTerminal }) {
                     href={s.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="group flex items-center justify-between p-2.5 rounded-lg bg-[rgba(255, 255, 255,0.03)] hover:bg-[rgba(255, 255, 255,0.08)] border border-[rgba(255, 255, 255,0.15)] hover:border-[#FFFFFF]/50 transition-all shadow-sm"
+                    className="group flex items-center justify-between p-2.5 rounded-lg bg-[rgba(255,255,255,0.03)] border border-white/10 hover:border-[#55DFFF] hover:shadow-[0_0_14px_rgba(90,223,255,0.45)] transition-all duration-200"
                     aria-label={s.label}
                     title={s.label}
                   >
                     <div className="flex items-center gap-2.5">
-                      <div className="w-7 h-7 rounded-md bg-[rgba(255, 255, 255,0.08)] group-hover:bg-[#FFFFFF]/20 border border-[rgba(255, 255, 255,0.2)] group-hover:border-[#FFFFFF] flex items-center justify-center transition-all">
-                        <IconComp className="w-3.5 h-3.5 text-slate-300 group-hover:text-[#FFFFFF] transition-colors" />
+                      {/* Real Brand Icon Badge with authentic gradients & brand colors */}
+                      <div className={`w-7 h-7 rounded-md flex items-center justify-center transition-transform group-hover:scale-105 ${s.boxClass}`}>
+                        <IconComp className="w-3.5 h-3.5 text-white" />
                       </div>
                       <span className="text-xs font-mono font-medium text-slate-200 group-hover:text-white transition-colors">
                         {s.label}
                       </span>
                     </div>
-                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#FFFFFF] transition-colors" />
+                    <ArrowUpRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-white transition-colors" />
                   </a>
                 );
               })}
