@@ -10,8 +10,9 @@ import { audioManager } from '@/utils/audioManager';
 export const NAV_LINKS = [
   { id: 'home', label: 'Facility 3D', href: '/' },
   { id: 'events', label: 'Events', href: '/events' },
-  { id: 'research', label: 'Research', href: '/research' },
   { id: 'projects', label: 'Projects', href: '/projects' },
+  { id: 'research', label: 'Research & GD', href: '/research' },
+  { id: 'gallery', label: 'Gallery', href: '/gallery' },
   { id: 'team', label: 'Team', href: '/team' },
   { id: 'about', label: 'About', href: '/about' },
   { id: 'join', label: 'Join', href: '/join' },

@@ -9,99 +9,156 @@ import {
   Cpu,
   Target,
   Sparkles,
-  MapPin,
-  Mail,
-  Github,
-  Globe,
+  Users,
+  Code2,
+  BookOpen,
+  ArrowRight,
+  CheckCircle2,
+  Layers,
+  Terminal,
 } from 'lucide-react';
 import { CLUB_INFO } from '@/data/clubInfo';
-import { getCuratedNews } from '@/lib/contentSelectors';
 
 export default function AboutPage() {
-  const news = getCuratedNews();
+  const actualTracks = [
+    {
+      title: 'Machine Learning & Mathematical Foundations',
+      tag: 'Core Track',
+      desc: 'Rigorous study of linear algebra, optimization, probabilistic modeling, and classical supervised/unsupervised algorithms from scratch.',
+      activities: ['Weekly math derivations', 'Numpy/PyTorch implementations', 'Paper deconstructions'],
+    },
+    {
+      title: 'Generative AI & LLM Systems',
+      tag: 'Active Track',
+      desc: 'Hands-on exploration of transformer decoders, fine-tuning (LoRA/QLoRA), RAG pipelines, and agentic workflows using MCP and structured outputs.',
+      activities: ['Local LLM deployment (vLLM/Ollama)', 'RAG benchmarks', 'Prompt & evaluation harnesses'],
+    },
+    {
+      title: 'Computer Vision & Multimodal AI',
+      tag: 'Active Track',
+      desc: 'Real-time image classification, object detection (YOLO), segmentation, and multimodal embeddings for edge and server workloads.',
+      activities: ['OpenCV & TensorRT pipelines', 'Spatial perception models', 'Camera sensor integrations'],
+    },
+    {
+      title: 'Systems & Inference Acceleration',
+      tag: 'Engineering Track',
+      desc: 'Profiling low-latency model runtimes, CUDA kernel optimization, quantization (AWQ/GPTQ), and distributed training setups.',
+      activities: ['GPU profiling on Triton & CUDA', 'Model compression', 'Inference latency benchmarking'],
+    },
+    {
+      title: 'Autonomous Systems & Robotics',
+      tag: 'Experimental Track',
+      desc: 'Exploring ROS2 integration, SLAM, kinematics, and embodied agent simulations in physics engines.',
+      activities: ['Sim2Real workflows', 'Edge robotics controllers', 'Path planning prototypes'],
+    },
+  ];
+
+  const participationCriteria = [
+    {
+      label: 'Open to All Collegiate Students',
+      desc: 'Any undergraduate or graduate student enrolled at MITS Gwalior is eligible to attend open sessions and workshops, regardless of branch or year.',
+    },
+    {
+      label: 'Zero Gatekeeping, High Rigor',
+      desc: 'Prior deep learning experience is not mandatory for general tracks; curiosity, consistency, and basic programming interest are what count.',
+    },
+    {
+      label: 'Structured Mentorship Onboarding',
+      desc: 'Beginners receive peer-assisted roadmaps and curated reading resources before moving to project work groups.',
+    },
+    {
+      label: 'Contribute to Open Source',
+      desc: 'All club prototypes, datasets, benchmarks, and reading notes are published publicly under permissive open-source licenses.',
+    },
+  ];
 
   return (
-    <main className="relative min-h-screen bg-[#0A0E10] text-[#E6E2D8] font-sans pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
-      {/* Background Architectural Grid */}
-      <div className="absolute inset-0 bg-facility-grid opacity-25 pointer-events-none" />
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.08)_0%,transparent_70%)] pointer-events-none" />
+    <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+      {/* Background Ambience */}
+      <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-1/3 left-10 w-80 h-80 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.06)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Breadcrumb Navigation */}
         <div className="flex items-center gap-2 mb-6 font-mono text-[10px] text-slate-400 tracking-widest uppercase">
-          <Link href="/" className="hover:text-[#A7B7A1] transition-colors">
-            FACILITY
+          <Link href="/" className="hover:text-[#55DFFF] transition-colors">
+            FACILITY 3D
           </Link>
           <ChevronRight className="w-3 h-3 text-slate-600" />
-          <span className="text-[#A7B7A1] font-semibold">COLLECTIVE // ABOUT</span>
+          <span className="text-[#55DFFF] font-semibold">COLLECTIVE // ABOUT</span>
         </div>
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-white/[0.08] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-full bg-[#131718] border border-white/[0.1] text-[10px] font-mono tracking-widest text-[#A7B7A1] uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
-              <span>FACILITY PHILOSOPHY & CHARTER</span>
+            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-full bg-[#0C1014] border border-[rgba(85,223,255,0.3)] text-[10px] font-mono tracking-widest text-[#55DFFF] uppercase">
+              <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_8px_#55DFFF]" />
+              <span>COLLECTIVE CHARTER & PURPOSE</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-labeouf font-bold tracking-wider text-gradient-cyber leading-tight sm:leading-none">
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
               ABOUT AI CLUB
             </h1>
-            <p className="text-sm sm:text-base text-[#B5B8AF] font-normal mt-3 max-w-2xl leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-300 font-manrope mt-3 max-w-2xl leading-relaxed">
               {CLUB_INFO.motto}
             </p>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right">
+          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
-              CAMPUS AFFILIATION
+              CAMPUS BASE
             </span>
-            <span className="text-base sm:text-lg font-bold font-labeouf text-ivory tracking-wide">
+            <span className="text-base sm:text-lg font-barlow-condensed font-bold text-white tracking-wide block uppercase">
               {CLUB_INFO.institution}
             </span>
+            <span className="text-[10px] font-mono text-[#24BFEA]">Department of CSE & AI</span>
           </div>
         </div>
 
         {/* Mission & Vision Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-          <div className="p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
-            <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#24BFEA] uppercase tracking-wider font-semibold">
-              <Target className="w-4 h-4" />
+          <div className="p-6 sm:p-8 rounded-2xl bg-[#0C1014]/80 border border-[rgba(85,223,255,0.20)] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+            <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#55DFFF] uppercase tracking-wider font-semibold">
+              <Target className="w-4 h-4 text-[#55DFFF]" />
               <span>OUR MISSION</span>
             </div>
-            <p className="text-sm sm:text-base text-slate-200 font-sans leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-200 font-manrope leading-relaxed">
               {CLUB_INFO.mission}
             </p>
           </div>
 
-          <div className="p-5 sm:p-8 rounded-2xl sm:rounded-3xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
-            <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#A7B7A1] uppercase tracking-wider font-semibold">
-              <Compass className="w-4 h-4" />
+          <div className="p-6 sm:p-8 rounded-2xl bg-[#0C1014]/80 border border-[rgba(85,223,255,0.20)] shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+            <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#24BFEA] uppercase tracking-wider font-semibold">
+              <Compass className="w-4 h-4 text-[#24BFEA]" />
               <span>OUR VISION</span>
             </div>
-            <p className="text-sm sm:text-base text-slate-200 font-sans leading-relaxed">
+            <p className="text-sm sm:text-base text-slate-200 font-manrope leading-relaxed">
               {CLUB_INFO.vision}
             </p>
           </div>
         </div>
 
-        {/* 3 Pillars of Innovation */}
+        {/* Core Pillars */}
         <div className="mb-14">
-          <h2 className="text-2xl font-labeouf font-bold text-ivory mb-6">
-            CORE ARCHITECTURAL PILLARS
-          </h2>
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl sm:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight">
+              ARCHITECTURAL FOUNDATIONS
+            </h2>
+            <span className="text-xs font-mono text-[#55DFFF]">3 CORE PILLARS</span>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {CLUB_INFO.pillars.map((pillar) => (
               <div
                 key={pillar.code}
-                className="p-6 rounded-2xl bg-[#121617]/80 border border-white/[0.08] relative overflow-hidden"
+                className="p-6 rounded-2xl bg-[#0C1014]/85 border border-[rgba(85,223,255,0.18)] relative overflow-hidden group hover:border-[#55DFFF]/40 transition-colors"
               >
-                <span className="text-4xl font-labeouf font-bold text-white/[0.06] absolute top-4 right-4">
+                <span className="text-4xl font-barlow-condensed font-bold text-white/[0.08] absolute top-4 right-4">
                   {pillar.code}
                 </span>
-                <h3 className="text-lg font-labeouf font-bold text-ivory mb-2">
+                <h3 className="text-lg font-barlow-condensed font-bold uppercase text-white mb-2 group-hover:text-[#55DFFF] transition-colors">
                   {pillar.title}
                 </h3>
-                <p className="text-xs text-slate-300 font-sans leading-relaxed">
+                <p className="text-xs text-slate-300 font-manrope leading-relaxed">
                   {pillar.desc}
                 </p>
               </div>
@@ -109,73 +166,142 @@ export default function AboutPage() {
           </div>
         </div>
 
-        {/* Verified Telemetry Matrix */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14">
-          {CLUB_INFO.metrics.map((m, idx) => (
-            <div
-              key={idx}
-              className="p-5 rounded-2xl bg-[#121617] border border-white/[0.08] text-center"
-            >
-              <span className="text-3xl sm:text-4xl font-bold font-labeouf text-[#24BFEA] tracking-wider block mb-1">
-                {m.value}
-              </span>
-              <span className="text-xs font-mono font-semibold text-ivory block mb-1">
-                {m.label}
-              </span>
-              <span className="text-[10px] text-slate-500 font-mono block">
-                {m.unit}
-              </span>
+        {/* What We Actually Do (Actual Club Activities & Tracks) */}
+        <div className="mb-14">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+            <div>
+              <h2 className="text-2xl sm:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight">
+                ACTIVE FOCUS TRACKS & WORKING GROUPS
+              </h2>
+              <p className="text-xs font-manrope text-slate-400 mt-1">
+                Specific technical domains currently maintained by active student groups.
+              </p>
             </div>
-          ))}
+            <span className="text-xs font-mono text-[#24BFEA] uppercase">VERIFIED CLUB SCOPE</span>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+            {actualTracks.map((tr, idx) => (
+              <div
+                key={idx}
+                className="p-5 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.16)] flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center justify-between gap-2 mb-3">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[rgba(85,223,255,0.12)] text-[#55DFFF] border border-[rgba(85,223,255,0.25)] uppercase font-semibold">
+                      {tr.tag}
+                    </span>
+                    <Layers className="w-3.5 h-3.5 text-slate-500" />
+                  </div>
+                  <h3 className="text-base font-barlow-condensed font-bold uppercase text-white mb-2 leading-snug">
+                    {tr.title}
+                  </h3>
+                  <p className="text-xs text-slate-300 font-manrope leading-relaxed mb-4">
+                    {tr.desc}
+                  </p>
+                </div>
+                <div className="pt-3 border-t border-[rgba(85,223,255,0.12)]">
+                  <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block mb-1.5">
+                    KEY HANDS-ON ACTIVITIES
+                  </span>
+                  <ul className="space-y-1">
+                    {tr.activities.map((act, aIdx) => (
+                      <li key={aIdx} className="text-[11px] font-manrope text-slate-300 flex items-center gap-1.5">
+                        <span className="w-1 h-1 rounded-full bg-[#55DFFF]" />
+                        <span>{act}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        {/* AI Radar: Industry Horizon & Breakthroughs */}
-        <div className="mb-14">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-labeouf font-bold text-ivory">
-              AI RADAR & INTELLIGENCE HORIZON
-            </h2>
-            <span className="text-xs font-mono text-[#A7B7A1]">CURATED SIGNALS</span>
+        {/* Who Can Participate & Membership Criteria */}
+        <div className="mb-14 p-6 sm:p-8 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.20)]">
+          <div className="flex items-center gap-2 mb-4 text-xs font-mono text-[#55DFFF] uppercase tracking-wider font-semibold">
+            <Users className="w-4 h-4 text-[#55DFFF]" />
+            <span>PARTICIPATION & ELIGIBILITY</span>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {news.slice(0, 4).map((item) => (
-              <div
-                key={item.id}
-                className="p-6 rounded-2xl bg-[#121617]/90 border border-white/[0.08] hover:border-white/[0.2] transition-colors"
-              >
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <span className="text-[9px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] text-[#A7B7A1]">
-                    {item.category}
-                  </span>
-                  <span className="text-[9px] font-mono text-slate-500">{item.date}</span>
+          <h2 className="text-2xl sm:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-4">
+            WHO CAN JOIN & HOW TO PARTICIPATE
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {participationCriteria.map((item, idx) => (
+              <div key={idx} className="p-4 rounded-xl bg-[#07090A]/70 border border-white/[0.06]">
+                <div className="flex items-center gap-2 text-xs font-mono text-[#24BFEA] font-semibold mb-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5 text-signal-green" />
+                  <span>{item.label}</span>
                 </div>
-                <h3 className="text-base font-labeouf font-bold text-ivory mb-2">
-                  {item.title}
-                </h3>
-                <p className="text-xs text-slate-400 font-sans leading-relaxed">
-                  {item.summary}
+                <p className="text-xs text-slate-300 font-manrope leading-relaxed">
+                  {item.desc}
                 </p>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Campus Coordinates & Join Action */}
-        <div className="p-8 rounded-3xl bg-gradient-to-r from-[#121617] via-[#141A1C] to-[#121617] border border-white/[0.1] flex flex-col md:flex-row items-center justify-between gap-6">
+        {/* Verified Telemetry Matrix */}
+        <div className="mb-14">
+          <div className="flex items-center justify-between mb-4">
+            <span className="text-xs font-mono text-slate-400 uppercase tracking-widest">
+              CONFIRMED ACTIVITY METRICS
+            </span>
+            <span className="text-[10px] font-mono text-[#55DFFF]">INTERNAL CLUB LOGS</span>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {CLUB_INFO.metrics.map((m, idx) => (
+              <div
+                key={idx}
+                className="p-5 rounded-2xl bg-[#0C1014] border border-[rgba(85,223,255,0.18)] text-center"
+              >
+                <span className="text-3xl sm:text-4xl font-barlow-condensed font-bold text-[#55DFFF] tracking-wider block mb-1">
+                  {m.value}
+                </span>
+                <span className="text-xs font-mono font-semibold text-white block mb-1">
+                  {m.label}
+                </span>
+                <span className="text-[10px] text-slate-400 font-mono block">
+                  {m.unit}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Transparency & Disclaimer Box (PRD 4.2 Compliance) */}
+        <div className="p-4 sm:p-5 rounded-xl bg-[#0C1014]/60 border border-white/[0.08] text-[11px] font-mono text-slate-400 mb-14 flex items-start gap-3">
+          <ShieldCheck className="w-4 h-4 text-[#24BFEA] shrink-0 mt-0.5" />
+          <p className="leading-relaxed">
+            <strong className="text-white">Student Collective Transparency Notice:</strong> AI Club is a student-founded and student-led academic technical initiative at Madhav Institute of Technology & Science, Gwalior. Club activities, project repositories, and research reading circles reflect peer-led student initiatives. Third-party brand names or model citations (e.g., PyTorch, CUDA, Anthropic, OpenAI) are references to open technology tools and do not imply institutional endorsement.
+          </p>
+        </div>
+
+        {/* Bottom Call to Action */}
+        <div className="p-8 rounded-3xl bg-gradient-to-r from-[#0C1014] via-[#141A20] to-[#0C1014] border border-[rgba(85,223,255,0.25)] flex flex-col md:flex-row items-center justify-between gap-6 shadow-[0_8px_32px_rgba(0,0,0,0.6)]">
           <div>
-            <h3 className="text-2xl font-labeouf font-bold text-ivory mb-2">
-              READY TO BUILD AT THE FRONTIER?
+            <h3 className="text-2xl sm:text-3xl font-barlow-condensed font-bold uppercase text-white tracking-tight mb-2">
+              MEET THE STUDENT LEADS & MENTORS
             </h3>
-            <p className="text-xs sm:text-sm text-slate-300 font-sans max-w-xl">
-              Recruitment is open for researchers, systems engineers, vision researchers, and operations leads across all semesters.
+            <p className="text-xs sm:text-sm text-slate-300 font-manrope max-w-xl">
+              Discover the student coordinators, technical domain leads, and faculty advisors directing the club operations.
             </p>
           </div>
-          <Link
-            href="/join"
-            className="px-6 py-3 rounded-xl bg-[#24BFEA] hover:bg-[#38BDF8] text-[#0A0E10] text-xs font-mono font-bold transition-all shadow-[0_0_20px_rgba(36,191,234,0.4)] whitespace-nowrap shrink-0"
-          >
-            APPLY FOR CLEARANCE ➔
-          </Link>
+          <div className="flex flex-wrap items-center gap-3">
+            <Link
+              href="/team"
+              className="px-5 py-2.5 rounded-xl btn-glass-cyan text-xs font-mono font-bold transition-all whitespace-nowrap"
+            >
+              VIEW TEAM CADRE ➔
+            </Link>
+            <Link
+              href="/join"
+              className="px-5 py-2.5 rounded-xl bg-white/[0.08] hover:bg-white/[0.15] border border-white/[0.12] text-xs font-mono text-white transition-all whitespace-nowrap"
+            >
+              MEMBERSHIP INTAKE
+            </Link>
+          </div>
         </div>
       </div>
     </main>

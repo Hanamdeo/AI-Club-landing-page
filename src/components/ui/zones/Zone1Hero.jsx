@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useCallback } from 'react';
-import { ArrowDown, Radio, Activity, Eye } from 'lucide-react';
+import { ArrowDown, Activity, Eye } from 'lucide-react';
 import { CLUB_INFO } from '@/data/clubInfo';
 import { audioManager } from '@/utils/audioManager';
 
@@ -35,22 +35,6 @@ export default function Zone1Hero({ onExploreClick }) {
           {/* ========================================================== */}
           <div className="w-full lg:w-[54%] max-w-[580px] xl:max-w-[640px] pointer-events-auto safe-viewport-card custom-scrollbar">
             <div className="glass-panel p-6 sm:p-8 md:p-9 relative">
-              {/* Holographic Projection Header Telemetry */}
-              <div className="flex items-center justify-between pb-2.5 mb-4 border-b border-[rgba(150,230,255,0.16)] text-[10px] font-mono">
-                <div className="flex items-center gap-2 text-[#55DFFF]">
-                  <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_8px_rgba(85,223,255,0.7)]" />
-                  <span className="font-bold tracking-widest uppercase">
-                    SECTOR 01 // HOLOGRAPHIC HUD
-                  </span>
-                </div>
-                <div className="hidden sm:flex items-center gap-2 text-[#B8C7D4]">
-                  <Radio className="w-3 h-3 text-[#55DFFF]" />
-                  <span className="tracking-tight text-[9px] uppercase">
-                    EMITTER: NEX-01 • SYNC: 120Hz
-                  </span>
-                </div>
-              </div>
-
               {/* Master Display Heading */}
               <h1 className="text-fluid-hero font-display font-black tracking-tight text-white mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
                 {CLUB_INFO.name}

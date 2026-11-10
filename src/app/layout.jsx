@@ -2,6 +2,7 @@ import localFont from 'next/font/local';
 import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk, Syne } from 'next/font/google';
 import './globals.css';
 import GlobalNavShell from '@/components/ui/GlobalNavShell';
+import GlobalFooterShell from '@/components/ui/GlobalFooterShell';
 
 // Futuristic Techno Display Font: LaBeouf
 const labeouf = localFont({
@@ -107,6 +108,7 @@ export default function RootLayout({ children }) {
       >
         <GlobalNavShell />
         {children}
+        <GlobalFooterShell />
       </body>
     </html>
   );

@@ -229,6 +229,36 @@ p, span, a, button, input, select, textarea, label {
   text-shadow: 0 0 24px rgba(36, 191, 234, 0.45);
 }
 
+/* 3D Slade / Slay Display Font with Stereoscopic Anaglyph Depth */
+@font-face {
+  font-family: 'CS Slade 3D';
+  src: local('CS Slade 3D'), local('CSSlade3D'), local('CS-Slade-3D');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+.font-3d-slade, .font-3d-slay {
+  font-family: 'CS Slade 3D', 'LaBeouf', var(--font-labeouf), var(--font-barlow-condensed), sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-shadow:
+    -2px 0px 0px rgba(255, 30, 86, 0.95),
+    2px 0px 0px rgba(0, 229, 255, 0.95),
+    0 4px 14px rgba(0, 0, 0, 0.85);
+}
+
+.font-3d-slade-subtle, .font-3d-slay-subtle {
+  font-family: 'CS Slade 3D', 'LaBeouf', var(--font-labeouf), var(--font-barlow-condensed), sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #FFFFFF;
+  text-shadow:
+    -1.5px 0px 0px rgba(255, 30, 86, 0.85),
+    1.5px 0px 0px rgba(0, 229, 255, 0.85);
+}
+
 /* Tabular Lining Figures for stats, timers & cluster telemetry */
 .num-normal, .tnum {
   font-family: var(--font-mono), 'IBM Plex Mono', 'JetBrains Mono', monospace !important;
@@ -305,7 +335,8 @@ code, pre, .terminal-mono, .font-mono {
 }
 
 /* Futuristic Subtle Glass Button with Cyan Accent */
-.btn-glass-cyan {
+.btn-glass-cyan,
+.btn-glass-orange {
   background: rgba(85, 223, 255, 0.08);
   border: 1px solid rgba(85, 223, 255, 0.28);
   color: #FFFFFF;
@@ -314,7 +345,8 @@ code, pre, .terminal-mono, .font-mono {
   transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.btn-glass-cyan:hover {
+.btn-glass-cyan:hover,
+.btn-glass-orange:hover {
   background: rgba(85, 223, 255, 0.18);
   border-color: #55DFFF;
   color: #FFFFFF;

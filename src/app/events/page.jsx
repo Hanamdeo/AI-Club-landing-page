@@ -1,19 +1,18 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
 import {
   Calendar,
   Clock,
   MapPin,
-  Users,
   Search,
   ArrowRight,
   ExternalLink,
-  Sparkles,
-  CheckCircle2,
   ChevronRight,
-  Terminal,
+  ChevronLeft,
+  LayoutGrid,
+  Layers,
 } from 'lucide-react';
 import { getAllEvents } from '@/lib/contentSelectors';
 import { filterByCategory, getUniqueCategories } from '@/lib/contentHelpers';
@@ -25,9 +24,33 @@ export default function EventsPage() {
   const categories = getUniqueCategories(events, 'category');
 
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedStatus, setSelectedStatus] = useState('all'); // 'all' | 'open' | 'upcoming' | 'closed' | 'past'
   const [searchQuery, setSearchQuery] = useState('');
+  const [viewMode, setViewMode] = useState('3d-slide'); // '3d-slide' | 'grid'
+  const [activeSlideIndex, setActiveSlideIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const autoPlayTimerRef = useRef(null);
+
+  const statusOptions = [
+    { id: 'all', label: 'All Statuses' },
+    { id: 'open', label: 'Registration Open' },
+    { id: 'upcoming', label: 'Upcoming' },
+    { id: 'closed', label: 'Registration Closed / Full' },
+    { id: 'past', label: 'Past Archives' },
+  ];
 
   const filteredEvents = filterByCategory(events, selectedCategory, 'category').filter((ev) => {
+    // Status filter
+    if (selectedStatus === 'open') {
+      if (ev.registrationStatus !== 'open') return false;
+    } else if (selectedStatus === 'upcoming') {
+      if (ev.status !== 'upcoming') return false;
+    } else if (selectedStatus === 'closed') {
+      if (ev.registrationStatus === 'open') return false;
+    } else if (selectedStatus === 'past') {
+      if (ev.status !== 'past' && ev.status !== 'concluded') return false;
+    }
+
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
@@ -38,187 +61,459 @@ export default function EventsPage() {
     );
   });
 
+  // Clamp activeSlideIndex when filter changes
+  useEffect(() => {
+    if (activeSlideIndex >= filteredEvents.length) {
+      setActiveSlideIndex(Math.max(0, filteredEvents.length - 1));
+    }
+  }, [filteredEvents.length, activeSlideIndex]);
+
+  // Next & Prev slide handlers for CSS 3D Slide
+  const handleNextSlide = useCallback(() => {
+    if (filteredEvents.length === 0) return;
+    try { audioManager.playClick(); } catch {}
+    setActiveSlideIndex((prev) => (prev + 1) % filteredEvents.length);
+  }, [filteredEvents.length]);
+
+  const handlePrevSlide = useCallback(() => {
+    if (filteredEvents.length === 0) return;
+    try { audioManager.playClick(); } catch {}
+    setActiveSlideIndex((prev) => (prev - 1 + filteredEvents.length) % filteredEvents.length);
+  }, [filteredEvents.length]);
+
+  // Auto-play timer for 3D Carousel (pauses on user hover)
+  useEffect(() => {
+    if (viewMode !== '3d-slide' || !isAutoPlaying || filteredEvents.length <= 1) return;
+
+    autoPlayTimerRef.current = setInterval(() => {
+      setActiveSlideIndex((prev) => (prev + 1) % filteredEvents.length);
+    }, 4500);
+
+    return () => {
+      if (autoPlayTimerRef.current) clearInterval(autoPlayTimerRef.current);
+    };
+  }, [viewMode, isAutoPlaying, filteredEvents.length]);
+
+  // Keyboard navigation for 3D carousel
+  useEffect(() => {
+    if (viewMode !== '3d-slide') return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'ArrowRight') handleNextSlide();
+      if (e.key === 'ArrowLeft') handlePrevSlide();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [viewMode, handleNextSlide, handlePrevSlide]);
+
   return (
-    <main className="relative min-h-screen bg-[#0A0E10] text-[#E6E2D8] font-sans pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
-      {/* Background Architectural Grid */}
+    <main className="relative min-h-screen bg-[#050C12] text-[#F0F6F7] font-events-body pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
+      {/* Background Architectural Grid & 3D Facility Core Blue Flare */}
       <div className="absolute inset-0 bg-facility-grid opacity-25 pointer-events-none" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-[radial-gradient(ellipse_at_top,rgba(36,191,234,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[420px] bg-[radial-gradient(ellipse_at_top,rgba(85,223,255,0.12)_0%,transparent_65%)] pointer-events-none" />
+      <div className="absolute top-44 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 mb-6 font-mono text-[10px] text-slate-400 tracking-widest uppercase">
-          <Link href="/" className="hover:text-[#A7B7A1] transition-colors flex items-center gap-1">
+        {/* Breadcrumb Navigation - IBM Plex Mono */}
+        <div className="flex items-center gap-2 mb-6 events-mono-meta text-slate-400">
+          <Link href="/" className="hover:text-[#55DFFF] transition-colors flex items-center gap-1">
             <span>FACILITY</span>
           </Link>
           <ChevronRight className="w-3 h-3 text-slate-600" />
-          <span className="text-[#A7B7A1] font-semibold">OPERATIONS // EVENTS</span>
+          <span className="text-[#55DFFF] font-semibold">OPERATIONS // EVENTS</span>
         </div>
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-white/[0.08] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-[rgba(85,223,255,0.15)] pb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-full bg-[#131718] border border-white/[0.1] text-[10px] font-mono tracking-widest text-[#A7B7A1] uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+            <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-3.5 rounded-full bg-[#08121A] border border-[rgba(85,223,255,0.25)] events-mono-meta text-slate-200">
+              <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_10px_#55DFFF]" />
               <span>ACTIVE DISPATCHES // MITS GWALIOR</span>
             </div>
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-labeouf font-bold tracking-wider text-gradient-cyber leading-tight sm:leading-none">
+            {/* Hero Heading: CS Slade 3D (White & Cyan with 3D Core Depth) */}
+            <h1 className="events-hero-title">
               OPERATIONS BOARD
             </h1>
-            <p className="text-sm sm:text-base text-[#B5B8AF] font-normal mt-3 max-w-2xl leading-relaxed">
+            {/* Body Description: Manrope 400 (Clean White-Slate) */}
+            <p className="events-body-text text-slate-300 mt-3 max-w-2xl">
               Flagship hackathons, low-level hardware acceleration workshops, and algorithmic code sprints organized by AI Club cohorts.
             </p>
           </div>
 
           {/* Telemetry Counter */}
-          <div className="p-4 px-6 rounded-2xl bg-[#121617]/90 border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto flex items-center gap-6">
+          <div className="p-4 px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(85,223,255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] self-start md:self-auto flex items-center gap-6">
             <div>
-              <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
+              <span className="block events-mono-meta text-slate-400 mb-1">
                 VERIFIED OPERATIONS
               </span>
-              <span className="text-3xl font-bold font-labeouf text-[#24BFEA] tracking-wider">
+              <span className="text-3xl sm:text-4xl font-bold font-events-heading bg-gradient-to-r from-[#55DFFF] via-[#24BFEA] to-white bg-clip-text text-transparent tracking-wider leading-none">
                 0{events.length}
               </span>
             </div>
-            <div className="h-10 w-[1px] bg-white/[0.08]" />
+            <div className="h-10 w-[1px] bg-[rgba(85,223,255,0.15)]" />
             <div>
-              <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
+              <span className="block events-mono-meta text-slate-400 mb-1">
                 REGISTRATION STATUS
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs font-mono font-bold text-signal-green mt-1">
-                <span className="w-2 h-2 rounded-full bg-signal-green animate-pulse" />
+              <span className="inline-flex items-center gap-1.5 text-xs events-mono-meta font-bold text-[#55DFFF] mt-1">
+                <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_8px_#55DFFF]" />
                 ACCEPTING APPS
               </span>
             </div>
           </div>
         </div>
 
-        {/* Filter Bar & Live Search */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 mb-8">
-          {/* Category Pills */}
-          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
-            {categories.map((cat) => {
-              const active = selectedCategory === cat;
-              return (
+        {/* Filter Bar, View Mode Switcher & Live Search */}
+        <div className="flex flex-col gap-3 mb-8">
+          <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+            {/* Category Pills: IBM Plex Mono */}
+            <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pb-1">
+              {categories.map((cat) => {
+                const active = selectedCategory === cat;
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => {
+                      try { audioManager.playClick(); } catch {}
+                      setSelectedCategory(cat);
+                    }}
+                    className={`px-3.5 py-1.5 text-xs events-mono-btn rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                      active
+                        ? 'bg-gradient-to-r from-[#55DFFF]/30 to-[#24BFEA]/25 text-white border border-[#55DFFF]/70 shadow-[0_0_16px_rgba(85,223,255,0.35)] font-bold'
+                        : 'bg-[#08121A] text-slate-300 hover:text-white border border-white/[0.08] hover:border-[rgba(85,223,255,0.3)]'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+
+            <div className="flex items-center gap-3">
+              {/* View Mode Switcher: 3D Slide vs Matrix Grid */}
+              <div className="flex items-center p-1 rounded-xl bg-[#08121A] border border-[rgba(85,223,255,0.2)]">
                 <button
-                  key={cat}
                   onClick={() => {
                     try { audioManager.playClick(); } catch {}
-                    setSelectedCategory(cat);
+                    setViewMode('3d-slide');
                   }}
-                  className={`px-3.5 py-1.5 text-xs font-mono rounded-full transition-all cursor-pointer whitespace-nowrap ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer ${
+                    viewMode === '3d-slide'
+                      ? 'bg-[#55DFFF]/25 text-white border border-[#55DFFF]/60 shadow-[0_0_12px_rgba(85,223,255,0.3)] font-bold'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Interactive CSS 3D Slide View"
+                >
+                  <Layers className="w-3.5 h-3.5 text-[#55DFFF]" />
+                  <span>3D SLIDE</span>
+                </button>
+                <button
+                  onClick={() => {
+                    try { audioManager.playClick(); } catch {}
+                    setViewMode('grid');
+                  }}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer ${
+                    viewMode === 'grid'
+                      ? 'bg-[#55DFFF]/25 text-white border border-[#55DFFF]/60 shadow-[0_0_12px_rgba(85,223,255,0.3)] font-bold'
+                      : 'text-slate-400 hover:text-white'
+                  }`}
+                  title="Grid Matrix View"
+                >
+                  <LayoutGrid className="w-3.5 h-3.5 text-[#55DFFF]" />
+                  <span>GRID</span>
+                </button>
+              </div>
+
+              {/* Search Input: IBM Plex Mono */}
+              <div className="relative min-w-[220px]">
+                <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+                <input
+                  type="text"
+                  placeholder="Search operations, topics..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#08121A] border border-[rgba(85,223,255,0.2)] text-xs events-mono-btn text-white placeholder-slate-500 focus:outline-none focus:border-[#55DFFF] transition-colors"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Status Separation Pills (PRD 4.3 Requirement) */}
+          <div className="flex items-center gap-2 overflow-x-auto no-scrollbar pt-2 border-t border-white/[0.06]">
+            <span className="text-[10px] events-mono-meta text-slate-500 uppercase tracking-widest shrink-0 mr-1">
+              STATUS:
+            </span>
+            {statusOptions.map((st) => {
+              const active = selectedStatus === st.id;
+              return (
+                <button
+                  key={st.id}
+                  onClick={() => {
+                    try { audioManager.playClick(); } catch {}
+                    setSelectedStatus(st.id);
+                  }}
+                  className={`px-3 py-1 text-[11px] events-mono-meta rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     active
-                      ? 'bg-[#24BFEA]/20 text-[#24BFEA] border border-[#24BFEA]/50 shadow-[0_0_12px_rgba(36,191,234,0.3)] font-semibold'
-                      : 'bg-[#121617] text-slate-400 hover:text-white border border-white/[0.08]'
+                      ? 'bg-[#55DFFF]/20 text-[#55DFFF] border border-[#55DFFF]/50 font-semibold'
+                      : 'bg-white/[0.03] text-slate-400 hover:text-slate-200 border border-transparent'
                   }`}
                 >
-                  {cat}
+                  {st.label}
                 </button>
               );
             })}
           </div>
-
-          {/* Search Input */}
-          <div className="relative min-w-[240px]">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder="Search operations, topics, tools..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-[#121617] border border-white/[0.08] focus:border-[#24BFEA]/50 rounded-xl pl-10 pr-4 py-2 text-xs font-mono text-ivory placeholder:text-slate-600 focus:outline-none transition-colors"
-            />
-          </div>
         </div>
 
-        {/* Events Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredEvents.map((ev, index) => {
-            const isFeatured = ev.featured;
-            const slug = ev.slug || ev.id;
+        {/* ================================================================= */}
+        {/* CSS 3D SLIDE VIEW                                                 */}
+        {/* ================================================================= */}
+        {viewMode === '3d-slide' && filteredEvents.length > 0 && (
+          <div
+            className="events-3d-stage"
+            onMouseEnter={() => setIsAutoPlaying(false)}
+            onMouseLeave={() => setIsAutoPlaying(true)}
+          >
+            <div className="events-3d-track">
+              {filteredEvents.map((ev, index) => {
+                const total = filteredEvents.length;
+                const offset = (index - activeSlideIndex + total) % total;
+                const isFeatured = ev.featured;
+                const slug = ev.slug || ev.id;
 
-            return (
-              <HolographicCard
-                key={ev.id}
-                index={index}
-                isFeatured={isFeatured}
-                className={`p-6 sm:p-7 ${
-                  isFeatured ? 'solo-leveling-card-featured' : 'solo-leveling-card'
-                }`}
-              >
-                <div>
-                  {/* Top Meta Line */}
-                  <div className="flex items-center justify-between gap-2 mb-4">
-                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-[#A7B7A1]">
-                      {ev.category}
-                    </span>
+                let positionClass = 'slide-hidden';
+                if (offset === 0) positionClass = 'slide-center';
+                else if (offset === 1 || offset === -(total - 1)) positionClass = 'slide-right';
+                else if (offset === total - 1 || offset === -1) positionClass = 'slide-left';
+                else if (offset === 2) positionClass = 'slide-far-right';
+                else if (offset === total - 2) positionClass = 'slide-far-left';
 
-                    <span
-                      className={`text-[9px] font-mono uppercase tracking-wider px-2 py-0.5 rounded-full flex items-center gap-1 ${
-                        ev.registrationStatus === 'open'
-                          ? 'bg-signal-green/15 text-signal-green border border-signal-green/30'
-                          : 'bg-white/[0.05] text-slate-400 border border-white/[0.08]'
-                      }`}
-                    >
-                      <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
-                      {ev.registrationStatus === 'open' ? 'REGISTRATION OPEN' : 'CONCLUDED'}
-                    </span>
-                  </div>
-
-                  {/* Title & Description */}
-                  <h3 className="text-xl sm:text-2xl font-labeouf font-bold text-ivory group-hover:text-[#24BFEA] transition-colors leading-snug mb-3">
-                    {ev.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-slate-400 font-sans leading-relaxed mb-5 line-clamp-3">
-                    {ev.description}
-                  </p>
-
-                  {/* Logistics Badges */}
-                  <div className="grid grid-cols-2 gap-2.5 pt-4 border-t border-white/[0.06] mb-6 text-[11px] font-mono text-slate-300">
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3.5 h-3.5 text-[#24BFEA] shrink-0" />
-                      <span className="truncate">{ev.date}</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Clock className="w-3.5 h-3.5 text-[#A7B7A1] shrink-0" />
-                      <span className="truncate">{ev.time}</span>
-                    </div>
-                    <div className="flex items-center gap-2 col-span-2">
-                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-                      <span className="truncate">{ev.venue}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Bottom Actions: View Detail Page & Register */}
-                <div className="flex items-center gap-3 pt-4 border-t border-white/[0.06]">
-                  <Link
-                    href={`/events/${slug}`}
-                    className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-white/[0.1] border border-white/[0.1] text-xs font-mono font-semibold text-ivory hover:text-white transition-all group/btn"
+                return (
+                  <div
+                    key={ev.id}
+                    className={`events-3d-slide ${positionClass}`}
+                    onClick={() => {
+                      if (offset === -1) handlePrevSlide();
+                      if (offset === 1) handleNextSlide();
+                    }}
                   >
-                    <span>PROTOCOL DETAILS</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
-
-                  {ev.registrationUrl && (
-                    <a
-                      href={ev.registrationUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#24BFEA] hover:bg-[#38BDF8] text-[#0A0E10] text-xs font-mono font-bold transition-all shadow-[0_0_15px_rgba(36,191,234,0.3)] shrink-0"
+                    <HolographicCard
+                      index={index}
+                      isFeatured={isFeatured}
+                      className={`p-7 sm:p-8 bg-[#08121A]/95 ${
+                        isFeatured ? 'solo-leveling-card-featured' : 'solo-leveling-card'
+                      } ${offset === 0 ? 'border-[#55DFFF]/60 ring-1 ring-[#55DFFF]/40 shadow-[0_0_35px_rgba(85,223,255,0.25)]' : ''}`}
                     >
-                      <span>REGISTER</span>
-                      <ExternalLink className="w-3.5 h-3.5" />
-                    </a>
-                  )}
-                </div>
-              </HolographicCard>
-            );
-          })}
-        </div>
+                      <div>
+                        {/* Top Meta Line: IBM Plex Mono */}
+                        <div className="flex items-center justify-between gap-2 mb-4">
+                          <span className="events-mono-meta px-2.5 py-0.5 rounded-full bg-[#55DFFF]/15 border border-[#55DFFF]/35 text-[#55DFFF] font-semibold">
+                            {ev.category}
+                          </span>
+
+                          <span
+                            className={`events-mono-meta px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                              ev.registrationStatus === 'open'
+                                ? 'bg-[#55DFFF]/15 text-[#55DFFF] border border-[#55DFFF]/35 shadow-[0_0_10px_rgba(85,223,255,0.2)]'
+                                : 'bg-white/[0.05] text-slate-400 border border-white/[0.08]'
+                            }`}
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                            {ev.registrationStatus === 'open' ? 'REGISTRATION OPEN' : 'CONCLUDED'}
+                          </span>
+                        </div>
+
+                        {/* Title: Barlow Condensed 600 */}
+                        <h3 className="events-card-title text-white group-hover:text-[#55DFFF] transition-colors mb-3">
+                          {ev.title}
+                        </h3>
+                        {/* Body description: Manrope 400 */}
+                        <p className="events-body-text text-slate-300 mb-6 line-clamp-3">
+                          {ev.description}
+                        </p>
+
+                        {/* Logistics Badges: 3D Facility Blue */}
+                        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)] mb-6 text-xs font-events-mono text-slate-200">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-3.5 h-3.5 text-[#55DFFF] shrink-0" />
+                            <span className="truncate tracking-wide">{ev.date}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-3.5 h-3.5 text-[#24BFEA] shrink-0" />
+                            <span className="truncate tracking-wide">{ev.time}</span>
+                          </div>
+                          <div className="flex items-center gap-2 col-span-2">
+                            <MapPin className="w-3.5 h-3.5 text-[#55DFFF]/80 shrink-0" />
+                            <span className="truncate tracking-wide">{ev.venue}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Bottom Actions: IBM Plex Mono Buttons */}
+                      <div className="flex items-center gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
+                        <Link
+                          href={`/events/${slug}`}
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn"
+                        >
+                          <span>PROTOCOL DETAILS</span>
+                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#55DFFF] transition-all" />
+                        </Link>
+
+                        {ev.registrationUrl && (
+                          <a
+                            href={ev.registrationUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black"
+                          >
+                            <span>REGISTER</span>
+                            <ExternalLink className="w-3.5 h-3.5 text-[#050C12]" />
+                          </a>
+                        )}
+                      </div>
+                    </HolographicCard>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* 3D Slide Carousel Interactive Controls */}
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-4 z-40 bg-[#08121A]/95 px-5 py-2.5 rounded-full border border-[rgba(85,223,255,0.2)] shadow-[0_8px_30px_rgba(0,0,0,0.9)]">
+              <button
+                onClick={handlePrevSlide}
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-[#55DFFF]/25 hover:text-white border border-white/[0.1] transition-all cursor-pointer text-slate-300"
+                aria-label="Previous Slide"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              {/* Slide Dots */}
+              <div className="flex items-center gap-1.5 px-2">
+                {filteredEvents.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      try { audioManager.playClick(); } catch {}
+                      setActiveSlideIndex(idx);
+                    }}
+                    className={`h-2 rounded-full transition-all cursor-pointer ${
+                      activeSlideIndex === idx
+                        ? 'w-7 bg-gradient-to-r from-[#55DFFF] to-[#24BFEA] shadow-[0_0_10px_#55DFFF]'
+                        : 'w-2 bg-white/20 hover:bg-white/40'
+                    }`}
+                    aria-label={`Slide ${idx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button
+                onClick={handleNextSlide}
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-[#55DFFF]/25 hover:text-white border border-white/[0.1] transition-all cursor-pointer text-slate-300"
+                aria-label="Next Slide"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+
+              <span className="events-mono-meta text-slate-400 pl-2 border-l border-white/[0.1]">
+                {String(activeSlideIndex + 1).padStart(2, '0')} // {String(filteredEvents.length).padStart(2, '0')}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* GRID MATRIX VIEW                                                  */}
+        {/* ================================================================= */}
+        {viewMode === 'grid' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {filteredEvents.map((ev, index) => {
+              const isFeatured = ev.featured;
+              const slug = ev.slug || ev.id;
+
+              return (
+                <HolographicCard
+                  key={ev.id}
+                  index={index}
+                  isFeatured={isFeatured}
+                  className={`p-6 sm:p-7 bg-[#08121A]/95 ${
+                    isFeatured ? 'solo-leveling-card-featured border-[#55DFFF]/40' : 'solo-leveling-card'
+                  }`}
+                >
+                  <div>
+                    {/* Top Meta Line: IBM Plex Mono */}
+                    <div className="flex items-center justify-between gap-2 mb-4">
+                      <span className="events-mono-meta px-2.5 py-0.5 rounded-full bg-[#55DFFF]/15 border border-[#55DFFF]/35 text-[#55DFFF] font-semibold">
+                        {ev.category}
+                      </span>
+
+                      <span
+                        className={`events-mono-meta px-2 py-0.5 rounded-full flex items-center gap-1 ${
+                          ev.registrationStatus === 'open'
+                            ? 'bg-[#55DFFF]/15 text-[#55DFFF] border border-[#55DFFF]/35 shadow-[0_0_10px_rgba(85,223,255,0.2)]'
+                            : 'bg-white/[0.05] text-slate-400 border border-white/[0.08]'
+                        }`}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full bg-current animate-pulse" />
+                        {ev.registrationStatus === 'open' ? 'REGISTRATION OPEN' : 'CONCLUDED'}
+                      </span>
+                    </div>
+
+                    {/* Title: Barlow Condensed 600 */}
+                    <h3 className="events-card-title text-white group-hover:text-[#55DFFF] transition-colors mb-3">
+                      {ev.title}
+                    </h3>
+                    {/* Body description: Manrope 400 */}
+                    <p className="events-body-text text-slate-300 mb-5 line-clamp-3">
+                      {ev.description}
+                    </p>
+
+                    {/* Logistics Badges: 3D Facility Blue */}
+                    <div className="grid grid-cols-2 gap-2.5 pt-4 border-t border-[rgba(85,223,255,0.12)] mb-6 text-[11px] font-events-mono text-slate-300">
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-3.5 h-3.5 text-[#55DFFF] shrink-0" />
+                        <span className="truncate tracking-wide">{ev.date}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Clock className="w-3.5 h-3.5 text-[#24BFEA] shrink-0" />
+                        <span className="truncate tracking-wide">{ev.time}</span>
+                      </div>
+                      <div className="flex items-center gap-2 col-span-2">
+                        <MapPin className="w-3.5 h-3.5 text-[#55DFFF]/80 shrink-0" />
+                        <span className="truncate tracking-wide">{ev.venue}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Bottom Actions: IBM Plex Mono Buttons */}
+                  <div className="flex items-center gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
+                    <Link
+                      href={`/events/${slug}`}
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn"
+                    >
+                      <span>PROTOCOL DETAILS</span>
+                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#55DFFF] transition-all" />
+                    </Link>
+
+                    {ev.registrationUrl && (
+                      <a
+                        href={ev.registrationUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black"
+                      >
+                        <span>REGISTER</span>
+                        <ExternalLink className="w-3.5 h-3.5 text-[#050C12]" />
+                      </a>
+                    )}
+                  </div>
+                </HolographicCard>
+              );
+            })}
+          </div>
+        )}
 
         {filteredEvents.length === 0 && (
-          <div className="text-center py-16 p-8 rounded-2xl bg-[#121617]/50 border border-white/[0.06]">
-            <p className="text-sm font-mono text-slate-400">
+          <div className="text-center py-16 p-8 rounded-2xl bg-[#08121A]/80 border border-white/[0.08]">
+            <p className="text-sm font-events-mono text-slate-400 uppercase tracking-wider">
               NO OPERATIONS FOUND MATCHING YOUR CRITERIA
             </p>
           </div>
