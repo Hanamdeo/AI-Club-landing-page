@@ -86,8 +86,8 @@ export default function BdxRobot({
   const { canvas: visorCanvas, texture: visorTexture } = useMemo(() => {
     if (typeof document === 'undefined') return { canvas: null, texture: null };
     const c = document.createElement('canvas');
-    c.width = 512;
-    c.height = 256;
+    c.width = 1024;
+    c.height = 512;
     const t = new THREE.CanvasTexture(c);
     t.needsUpdate = true;
     return { canvas: c, texture: t };
@@ -133,8 +133,6 @@ export default function BdxRobot({
   const prevProgress = useRef(0);
   const smoothedVelocity = useRef(0);
   const currentPos = useRef(new THREE.Vector3(0.00, 1.45, 8.0));
-  const targetPosRef = useRef(new THREE.Vector3());
-  const tangentRef = useRef(new THREE.Vector3());
   const currentRotY = useRef(0.0);
   const currentPitchX = useRef(0);
   const currentRollZ = useRef(0);
@@ -181,95 +179,6 @@ export default function BdxRobot({
     };
   }, []);
 
-  const cycleList = useMemo(
-    () => ['HAPPY', 'LAUGH', 'COOL', 'CRY', 'SKEPTICAL', 'DEADPAN'],
-    []
-  );
-  const emojiCycleIndex = useRef(0);
-
-  const handleClick = useCallback(
-    (e) => {
-      if (e) e.stopPropagation();
-      isJumping.current = true;
-      jumpTime.current = 0;
-      const nextEmotion = cycleList[emojiCycleIndex.current % cycleList.length];
-      emojiCycleIndex.current = (emojiCycleIndex.current + 1) % cycleList.length;
-      triggerEmotion(nextEmotion, 4.0);
-      audioManager.playEmotionSound(nextEmotion);
-    },
-    [cycleList, triggerEmotion]
-  );
-
-  // Global window event listener for emotion triggers from UI docks or buttons
-  useEffect(() => {
-    const handleEmotionEvent = (e) => {
-      if (e && e.detail) {
-        triggerEmotion(e.detail, 4.0);
-        audioManager.playEmotionSound(e.detail);
-      }
-    };
-    window.addEventListener('bdx-emotion', handleEmotionEvent);
-    return () => window.removeEventListener('bdx-emotion', handleEmotionEvent);
-  }, [triggerEmotion]);
-
-  // Keyboard shortcut listener: Keys 1 to 6 trigger 😊, 😂, 😎, 😢, 🤨, 😑
-  useEffect(() => {
-    const handleKey = (e) => {
-      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
-      const keyMap = {
-        '1': 'HAPPY',      // 😊
-        '2': 'LAUGH',      // 😂
-        '3': 'COOL',       // 😎
-        '4': 'CRY',        // 😢
-        '5': 'SKEPTICAL',  // 🤨
-        '6': 'DEADPAN',    // 😑
-      };
-      if (keyMap[e.key]) {
-        triggerEmotion(keyMap[e.key], 4.0);
-        audioManager.playEmotionSound(keyMap[e.key]);
-      }
-    };
-    window.addEventListener('keydown', handleKey);
-    return () => window.removeEventListener('keydown', handleKey);
-  }, [triggerEmotion]);
-
-  // Digital Eye Blink Timer
-  const blinkTimer = useRef(0);
-  const isBlinking = useRef(false);
-
-  // Welcome Visitor on First Scene Entry
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      if (!welcomeTriggeredRef.current) {
-        welcomeTriggeredRef.current = true;
-        triggerEmotion('EXCITED', 2.8);
-        audioManager.playChirp();
-      }
-    }, 850);
-    return () => clearTimeout(timer);
-  }, [triggerEmotion]);
-
-  // Reactive response when projecting starts or active nav changes
-  useEffect(() => {
-    if (isProjecting) {
-      triggerEmotion('EXCITED', 2.8);
-      audioManager.playChirp();
-    }
-  }, [isProjecting, triggerEmotion]);
-
-  useEffect(() => {
-    if (activeNavId === 'events') {
-      triggerEmotion('HAPPY', 2.4);
-    } else if (activeNavId === 'discussions' || activeNavId === 'radar') {
-      triggerEmotion('THINKING', 2.4);
-    } else if (activeNavId === 'projects') {
-      triggerEmotion('CURIOUS', 2.4);
-    }
-  }, [activeNavId, triggerEmotion]);
-
-  // =========================================================================
-  // 1. PROCEDURAL VISOR EMOTION FACE DRAWER (MICRO-LED MATRIX)
-  // =========================================================================
   // =========================================================================
   // 1. PROCEDURAL VISOR EMOTION FACE DRAWER (HIGH-RES OLED DISPLAY)
   // Accurate, highly visible emojis (😊, 😂, 😎, 😢, 🤨, 😑) with bold outlines,
@@ -277,20 +186,16 @@ export default function BdxRobot({
   // =========================================================================
   const drawVisorFace = useCallback((ctx, emotion, blinkScale, gazeX, gazeY, time) => {
     if (!ctx) return;
-    const w = 512;
-    const h = 256;
+    const w = 1024;
+    const h = 512;
 
-    // 1. Deep Obsidian Midnight Visor Screen Background
-    ctx.fillStyle = '#050912';
-    ctx.fillRect(0, 0, w, h);
+    // 1. Transparent Visor Canvas Background (seamlessly displays curved obsidian visor glass without rectangular box)
+    ctx.clearRect(0, 0, w, h);
 
-    ctx.save();
-    ctx.scale(0.5, 0.5);
-
-    // Glowing Neon Stroke Helper
-    const drawGlowStroke = (drawFn, color = '#00F0FF', coreColor = '#FFFFFF', lineWidth = 20, glowWidth = 34) => {
+    // Glowing Monochrome White Stroke Helper
+    const drawGlowStroke = (drawFn, color = '#FFFFFF', coreColor = '#FFFFFF', lineWidth = 20, glowWidth = 34) => {
       ctx.save();
-      ctx.strokeStyle = 'rgba(0, 240, 255, 0.28)';
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
       ctx.lineWidth = glowWidth;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
@@ -316,7 +221,7 @@ export default function BdxRobot({
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.arc(cx, cy, radius, Math.PI + startA, Math.PI + endA, false);
-      }, '#00F0FF', '#FFFFFF', 20, 34);
+      }, '#FFFFFF', '#FFFFFF', 20, 34);
     };
 
     // Sad downturned arch eye ◡
@@ -324,11 +229,11 @@ export default function BdxRobot({
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.arc(cx, cy, radius, startA, endA, false);
-      }, '#00F0FF', '#FFFFFF', 20, 34);
+      }, '#FFFFFF', '#FFFFFF', 20, 34);
     };
 
     // Straight horizontal bar for eyes or mouth
-    const drawFlatBar = (x1, y1, x2, y2, width = 20, color = '#00F0FF', core = '#FFFFFF') => {
+    const drawFlatBar = (x1, y1, x2, y2, width = 20, color = '#FFFFFF', core = '#FFFFFF') => {
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.moveTo(x1, y1);
@@ -341,7 +246,7 @@ export default function BdxRobot({
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.arc(cx, cy, radius, startA, endA, false);
-      }, '#00F0FF', '#FFFFFF', 18, 30);
+      }, '#FFFFFF', '#FFFFFF', 18, 30);
     };
 
     // Sad frown mouth curve ◠
@@ -349,34 +254,19 @@ export default function BdxRobot({
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.arc(cx, cy, radius, Math.PI + startA, Math.PI + endA, false);
-      }, '#00F0FF', '#FFFFFF', 18, 30);
-    };
-
-    // Glowing rosy pink cheeks
-    const drawBlush = (cx, cy, rx = 44, ry = 24) => {
-      ctx.save();
-      const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, rx);
-      grad.addColorStop(0, 'rgba(255, 60, 140, 0.75)');
-      grad.addColorStop(0.55, 'rgba(255, 30, 110, 0.35)');
-      grad.addColorStop(1, 'rgba(255, 0, 80, 0)');
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
+      }, '#FFFFFF', '#FFFFFF', 18, 30);
     };
 
     // Blinking eye squash: if blinking and emotion is not closed-eye emoji
     const isClosedEye = emotion === 'LAUGH' || emotion === 'COOL' || emotion === 'DEADPAN';
     if (blinkScale < 0.2 && !isClosedEye) {
-      drawFlatBar(220, 225, 400, 225, 14, '#00F0FF', '#FFFFFF');
-      drawFlatBar(624, 225, 804, 225, 14, '#00F0FF', '#FFFFFF');
+      drawFlatBar(220, 225, 400, 225, 14, '#FFFFFF', '#FFFFFF');
+      drawFlatBar(624, 225, 804, 225, 14, '#FFFFFF', '#FFFFFF');
       if (emotion === 'CRY') {
         drawFrownMouth(512, 390, 76);
       } else {
         drawSmileMouth(512, 300, 76);
       }
-      ctx.restore();
       return;
     }
 
@@ -384,8 +274,6 @@ export default function BdxRobot({
     if (emotion === 'HAPPY') {
       drawArchEye(310, 240, 76);
       drawArchEye(714, 240, 76);
-      drawBlush(220, 255);
-      drawBlush(804, 255);
       drawSmileMouth(512, 300, 78);
     }
     // 2. 😂 LAUGH
@@ -395,20 +283,20 @@ export default function BdxRobot({
         ctx.moveTo(250, 175);
         ctx.lineTo(360, 215);
         ctx.lineTo(250, 255);
-      }, '#00F0FF', '#FFFFFF', 22, 36);
+      }, '#FFFFFF', '#FFFFFF', 22, 36);
 
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.moveTo(774, 175);
         ctx.lineTo(664, 215);
         ctx.lineTo(774, 255);
-      }, '#00F0FF', '#FFFFFF', 22, 36);
+      }, '#FFFFFF', '#FFFFFF', 22, 36);
 
       const tCycle = (time * 2.8) % 1.0;
       const tearDist = tCycle * 85;
       const tearAlpha = 1.0 - tCycle * 0.8;
       ctx.save();
-      ctx.fillStyle = `rgba(0, 240, 255, ${tearAlpha})`;
+      ctx.fillStyle = 'rgba(255, 255, 255, ' + tearAlpha + ')';
       ctx.beginPath();
       ctx.arc(220 - tearDist, 215 + tearDist * 0.3, 16 * (1 - tCycle * 0.4), 0, Math.PI * 2);
       ctx.fill();
@@ -430,11 +318,11 @@ export default function BdxRobot({
       ctx.clip();
       ctx.beginPath();
       ctx.arc(512, 390, 46, 0, Math.PI * 2);
-      ctx.fillStyle = '#FF3377';
+      ctx.fillStyle = '#CBD5E1';
       ctx.fill();
       ctx.restore();
 
-      ctx.strokeStyle = '#00F0FF';
+      ctx.strokeStyle = '#FFFFFF';
       ctx.lineWidth = 14;
       ctx.stroke();
       ctx.restore();
@@ -451,11 +339,11 @@ export default function BdxRobot({
         ctx.closePath();
         ctx.fillStyle = '#000206';
         ctx.fill();
-        ctx.strokeStyle = '#00F0FF';
+        ctx.strokeStyle = '#FFFFFF';
         ctx.lineWidth = 14;
         ctx.lineJoin = 'round';
         ctx.stroke();
-        ctx.strokeStyle = '#A6FBFF';
+        ctx.strokeStyle = '#E2E8F0';
         ctx.lineWidth = 3.5;
         ctx.stroke();
       };
@@ -466,7 +354,7 @@ export default function BdxRobot({
       ctx.beginPath();
       ctx.moveTo(460, 185);
       ctx.lineTo(564, 185);
-      ctx.strokeStyle = '#00F0FF';
+      ctx.strokeStyle = '#FFFFFF';
       ctx.lineWidth = 14;
       ctx.lineCap = 'round';
       ctx.stroke();
@@ -496,7 +384,7 @@ export default function BdxRobot({
         ctx.beginPath();
         ctx.moveTo(440, 345);
         ctx.quadraticCurveTo(515, 355, 590, 318);
-      }, '#00F0FF', '#FFFFFF', 18, 30);
+      }, '#FFFFFF', '#FFFFFF', 18, 30);
     }
     // 4. 😢 CRY
     else if (emotion === 'CRY') {
@@ -512,9 +400,9 @@ export default function BdxRobot({
         ctx.bezierCurveTo(tx + 14, tearY - 2, tx + 14, tearY + 14, tx, tearY + 16);
         ctx.bezierCurveTo(tx - 14, tearY + 14, tx - 14, tearY - 2, tx, tearY - 18);
         ctx.closePath();
-        ctx.fillStyle = '#00F0FF';
+        ctx.fillStyle = '#FFFFFF';
         ctx.fill();
-        ctx.strokeStyle = '#FFFFFF';
+        ctx.strokeStyle = '#E2E8F0';
         ctx.lineWidth = 3;
         ctx.stroke();
         ctx.restore();
@@ -530,12 +418,12 @@ export default function BdxRobot({
         ctx.beginPath();
         ctx.moveTo(195, 140);
         ctx.quadraticCurveTo(310, 95, 425, 145);
-      }, '#00F0FF', '#FFFFFF', 18, 30);
+      }, '#FFFFFF', '#FFFFFF', 18, 30);
 
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.arc(310, 215, 50, 0, Math.PI * 2);
-      }, '#00F0FF', null, 14, 26);
+      }, '#FFFFFF', null, 14, 26);
       ctx.save();
       ctx.beginPath();
       ctx.arc(310, 215, 20, 0, Math.PI * 2);
@@ -543,21 +431,21 @@ export default function BdxRobot({
       ctx.fill();
       ctx.restore();
 
-      drawFlatBar(610, 185, 825, 185, 18, '#00F0FF', '#FFFFFF');
-      drawFlatBar(630, 225, 805, 225, 14, '#00E5FF', '#FFFFFF');
+      drawFlatBar(610, 185, 825, 185, 18, '#FFFFFF', '#FFFFFF');
+      drawFlatBar(630, 225, 805, 225, 14, '#FFFFFF', '#FFFFFF');
 
       drawGlowStroke(() => {
         ctx.beginPath();
         ctx.moveTo(435, 345);
         ctx.quadraticCurveTo(500, 340, 535, 350);
         ctx.quadraticCurveTo(565, 355, 590, 335);
-      }, '#00F0FF', '#FFFFFF', 18, 30);
+      }, '#FFFFFF', '#FFFFFF', 18, 30);
     }
     // 6. 😑 DEADPAN
     else if (emotion === 'DEADPAN') {
-      drawFlatBar(215, 215, 405, 215, 22, '#00F0FF', '#FFFFFF');
-      drawFlatBar(619, 215, 809, 215, 22, '#00F0FF', '#FFFFFF');
-      drawFlatBar(440, 345, 584, 345, 18, '#00F0FF', '#FFFFFF');
+      drawFlatBar(215, 215, 405, 215, 22, '#FFFFFF', '#FFFFFF');
+      drawFlatBar(619, 215, 809, 215, 22, '#FFFFFF', '#FFFFFF');
+      drawFlatBar(440, 345, 584, 345, 18, '#FFFFFF', '#FFFFFF');
     }
     // 7. DEFAULT / IDLE
     else {
@@ -565,9 +453,152 @@ export default function BdxRobot({
       drawArchEye(714, 245, 76);
       drawSmileMouth(512, 300, 76);
     }
-    ctx.restore();
   }, []);
 
+  const cycleList = useMemo(
+    () => ['HAPPY', 'LAUGH', 'COOL', 'CRY', 'SKEPTICAL', 'DEADPAN'],
+    []
+  );
+  const emojiCycleIndex = useRef(0);
+
+  const handleClick = useCallback(
+    (e) => {
+      if (e && e.stopPropagation) e.stopPropagation();
+      isJumping.current = true;
+      jumpTime.current = 0;
+      const nextEmotion = cycleList[emojiCycleIndex.current % cycleList.length];
+      emojiCycleIndex.current = (emojiCycleIndex.current + 1) % cycleList.length;
+      triggerEmotion(nextEmotion, 4.0);
+
+      // Force immediate synchronous redraw on the canvas texture
+      if (faceCanvasRef.current && faceTextureRef.current) {
+        lastRenderStateRef.current.emotion = nextEmotion;
+        drawVisorFace(
+          faceCanvasRef.current.getContext('2d'),
+          nextEmotion,
+          1.0,
+          0,
+          0,
+          0
+        );
+        faceTextureRef.current.needsUpdate = true;
+      }
+
+      audioManager.playEmotionSound(nextEmotion);
+
+      // Broadcast globally so docked companion and scene robot both react synchronously
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(new CustomEvent('bdx-emotion', { detail: nextEmotion }));
+      }
+    },
+    [cycleList, triggerEmotion, drawVisorFace]
+  );
+
+  // Global window event listener to cycle emotions on external tap/click
+  useEffect(() => {
+    const handleCycle = () => {
+      handleClick();
+    };
+    window.addEventListener('bdx-emotion-cycle', handleCycle);
+    return () => window.removeEventListener('bdx-emotion-cycle', handleCycle);
+  }, [handleClick]);
+
+  // Global window event listener for emotion triggers from UI docks or buttons
+  useEffect(() => {
+    const handleEmotionEvent = (e) => {
+      if (e && e.detail) {
+        triggerEmotion(e.detail, 4.0);
+        if (faceCanvasRef.current && faceTextureRef.current) {
+          lastRenderStateRef.current.emotion = e.detail;
+          drawVisorFace(
+            faceCanvasRef.current.getContext('2d'),
+            e.detail,
+            1.0,
+            0,
+            0,
+            0
+          );
+          faceTextureRef.current.needsUpdate = true;
+        }
+        audioManager.playEmotionSound(e.detail);
+      }
+    };
+    window.addEventListener('bdx-emotion', handleEmotionEvent);
+    return () => window.removeEventListener('bdx-emotion', handleEmotionEvent);
+  }, [triggerEmotion, drawVisorFace]);
+
+  // Keyboard shortcut listener: Keys 1 to 6 trigger 😊, 😂, 😎, 😢, 🤨, 😑
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+      const keyMap = {
+        '1': 'HAPPY',      // 😊
+        '2': 'LAUGH',      // 😂
+        '3': 'COOL',       // 😎
+        '4': 'CRY',        // 😢
+        '5': 'SKEPTICAL',  // 🤨
+        '6': 'DEADPAN',    // 😑
+      };
+      if (keyMap[e.key]) {
+        triggerEmotion(keyMap[e.key], 4.0);
+        audioManager.playEmotionSound(keyMap[e.key]);
+      }
+    };
+    window.addEventListener('keydown', handleKey);
+    return () => window.removeEventListener('keydown', handleKey);
+  }, [triggerEmotion]);
+
+  // Digital Eye Blink Timer
+  const blinkTimer = useRef(0);
+  const isBlinking = useRef(false);
+
+  // Welcome Visitor on First Scene Entry & Immediate Face Render
+  useEffect(() => {
+    // Immediately paint initial smiling face on the canvas texture (zero delay)
+    if (faceCanvasRef.current && faceTextureRef.current) {
+      lastRenderStateRef.current.emotion = 'HAPPY';
+      drawVisorFace(
+        faceCanvasRef.current.getContext('2d'),
+        'HAPPY',
+        1.0,
+        0,
+        0,
+        0
+      );
+      faceTextureRef.current.needsUpdate = true;
+    }
+
+    const timer = setTimeout(() => {
+      if (!welcomeTriggeredRef.current) {
+        welcomeTriggeredRef.current = true;
+        triggerEmotion('EXCITED', 2.8);
+        audioManager.playChirp();
+      }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [triggerEmotion, drawVisorFace]);
+
+  // Reactive response when projecting starts or active nav changes
+  useEffect(() => {
+    if (isProjecting) {
+      triggerEmotion('EXCITED', 2.8);
+      audioManager.playChirp();
+    }
+  }, [isProjecting, triggerEmotion]);
+
+  useEffect(() => {
+    if (activeNavId === 'events') {
+      triggerEmotion('HAPPY', 2.4);
+    } else if (activeNavId === 'discussions' || activeNavId === 'radar') {
+      triggerEmotion('THINKING', 2.4);
+    } else if (activeNavId === 'projects') {
+      triggerEmotion('CURIOUS', 2.4);
+    }
+  }, [activeNavId, triggerEmotion]);
+
+  // =========================================================================
+  // 1. PROCEDURAL VISOR EMOTION FACE DRAWER (MICRO-LED MATRIX)
+  // =========================================================================
   // Initial Face Render
   useEffect(() => {
     if (visorCanvas) {
@@ -582,10 +613,9 @@ export default function BdxRobot({
   const chestReactorTexture = useMemo(() => {
     if (typeof document === 'undefined') return null;
     const canvas = document.createElement('canvas');
-    canvas.width = 256;
-    canvas.height = 256;
+    canvas.width = 512;
+    canvas.height = 512;
     const ctx = canvas.getContext('2d');
-    ctx.scale(0.5, 0.5);
 
     ctx.fillStyle = '#0f141d';
     ctx.fillRect(0, 0, 512, 512);
@@ -600,14 +630,14 @@ export default function BdxRobot({
       const startA = (i / numSegments) * Math.PI * 2 - Math.PI / 2 + 0.05;
       const endA = ((i + 0.82) / numSegments) * Math.PI * 2 - Math.PI / 2;
 
-      ctx.strokeStyle = '#00E5FF';
+            ctx.strokeStyle = '#FFFFFF';
       ctx.lineWidth = segThickness;
       ctx.lineCap = 'round';
       ctx.beginPath();
       ctx.arc(cx, cy, segRadius, startA, endA);
       ctx.stroke();
 
-      ctx.strokeStyle = '#E6FCFF';
+      ctx.strokeStyle = '#E2E8F0';
       ctx.lineWidth = segThickness * 0.42;
       ctx.stroke();
     }
@@ -619,9 +649,9 @@ export default function BdxRobot({
 
     const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 66);
     coreGrad.addColorStop(0, '#FFFFFF');
-    coreGrad.addColorStop(0.3, '#00F0FF');
-    coreGrad.addColorStop(0.8, '#0090C4');
-    coreGrad.addColorStop(1, '#004A6B');
+    coreGrad.addColorStop(0.35, '#E2E8F0');
+    coreGrad.addColorStop(0.75, '#64748B');
+    coreGrad.addColorStop(1, '#0F172A');
     ctx.fillStyle = coreGrad;
     ctx.beginPath();
     ctx.arc(cx, cy, 66, 0, Math.PI * 2);
@@ -676,10 +706,8 @@ export default function BdxRobot({
 
       // 3. Smooth continuous 3D Path Sampling (C1 continuous Catmull-Rom spline)
       const curve = isMobileRef.current ? mobileCurve : desktopCurve;
-      curve.getPoint(p, targetPosRef.current);
-      curve.getTangent(p, tangentRef.current);
-      const targetPos = targetPosRef.current;
-      const tangent = tangentRef.current;
+      const targetPos = curve.getPoint(p);
+      const tangent = curve.getTangent(p);
 
       // Damped position interpolation (guarantees smooth glide to target)
       currentPos.current.lerp(targetPos, 1 - Math.exp(-safeDelta * 9.0));
@@ -871,12 +899,13 @@ export default function BdxRobot({
     }
 
     if (needsRedraw && faceCanvasRef.current && faceTextureRef.current) {
-      const state = lastRenderStateRef.current;
-      state.emotion = currentEmotion;
-      state.blink = currentBlink;
-      state.gazeX = mx;
-      state.gazeY = my;
-      state.step = timeStep;
+      lastRenderStateRef.current = {
+        emotion: currentEmotion,
+        blink: currentBlink,
+        gazeX: mx,
+        gazeY: my,
+        step: timeStep,
+      };
       drawVisorFace(
         faceCanvasRef.current.getContext('2d'),
         currentEmotion,
@@ -927,9 +956,9 @@ export default function BdxRobot({
   const cobaltThrusterMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: '#152A4A', // Exact deep cobalt-navy from reference thruster base
-        roughness: 0.24,
-        metalness: 0.65,
+        color: '#181C22', // Deep monochrome graphite
+        roughness: 0.28,
+        metalness: 0.70,
         clearcoat: 0.6,
         clearcoatRoughness: 0.15,
       }),
@@ -959,7 +988,7 @@ export default function BdxRobot({
   const cyanEmissiveMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
-        color: '#00E5FF',
+        color: '#FFFFFF',
       }),
     []
   );
@@ -967,12 +996,12 @@ export default function BdxRobot({
   const cyanGlassMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: '#00D8F6',
-        emissive: '#0090B8',
-        emissiveIntensity: 0.50,
+        color: '#E0E6ED',
+        emissive: '#A0AEC0',
+        emissiveIntensity: 0.25,
         roughness: 0.12,
-        metalness: 0.25,
-        transmission: 0.75,
+        metalness: 0.35,
+        transmission: 0.85,
         transparent: true,
         opacity: 0.90,
         ior: 1.45,
@@ -1002,44 +1031,77 @@ export default function BdxRobot({
         {/* 1. HEAD ASSEMBLY (CUTE ROUND HELMET + CURVED VISOR FACE)       */}
         {/* ============================================================== */}
         <group ref={headRef} position={[0, 0.42, 0]}>
-          {/* Main Lacquered White Rear Helmet Shell (Recessed to Z = -0.08) */}
-          <mesh position={[0, 0, -0.08]} castShadow receiveShadow material={pearlCeramicMat} scale={[1.10, 0.98, 1.0]}>
+          {/* Main Lacquered White Rear Helmet Shell */}
+          <mesh
+            position={[0, 0, -0.08]}
+            castShadow
+            receiveShadow
+            material={pearlCeramicMat}
+            scale={[1.10, 0.98, 1.0]}
+            onPointerDown={handleClick}
+            onClick={handleClick}
+          >
             <sphereGeometry args={[0.48, 48, 40]} />
           </mesh>
 
-          {/* Smooth Visor Outer Lip Bezel Frame (Encircles the curved visor at Z = 0.34) */}
-          <mesh position={[0, 0.02, 0.34]} scale={[1.06, 0.86, 0.9]} material={pearlCeramicMat} castShadow>
+          {/* Smooth Visor Outer Lip Bezel Frame */}
+          <mesh
+            position={[0, 0.02, 0.34]}
+            scale={[1.06, 0.86, 0.9]}
+            material={pearlCeramicMat}
+            castShadow
+            onPointerDown={handleClick}
+            onClick={handleClick}
+          >
             <torusGeometry args={[0.42, 0.045, 24, 52]} />
           </mesh>
 
-          {/* Curved Obsidian Visor Glass Screen (Sits proudly forward at Z = 0.22, reaches Z = 0.58) */}
+          {/* Curved Obsidian Visor Glass Screen (Recessed to Z = 0.18, front apex reaches Z = 0.54) */}
           <mesh
-            position={[0, 0.02, 0.22]}
+            position={[0, 0.02, 0.18]}
             rotation={[Math.PI / 2, 0, 0]}
-            scale={[1.04, 0.84, 0.84]}
+            scale={[1.02, 0.82, 0.82]}
             material={visorGlassMat}
             castShadow
+            onPointerDown={handleClick}
+            onClick={handleClick}
           >
             <sphereGeometry args={[0.44, 48, 36, 0, Math.PI * 2, 0, Math.PI * 0.48]} />
           </mesh>
 
           {/* ============================================================ */}
-          {/* DIGITAL HIGH-RES OLED VISOR DISPLAY SCREEN */}
+          {/* DIGITAL HIGH-RES OLED VISOR DISPLAY SCREEN (Placed safely at Z = 0.585) */}
+          {/* Sits cleanly in front of the curved glass apex (0.54) with zero clipping and zero box */}
           {visorTexture && (
-            <mesh ref={eyeDisplayRef} position={[0, 0.015, 0.582]} renderOrder={10}>
-              <planeGeometry args={[0.58, 0.38]} />
+            <mesh
+              ref={eyeDisplayRef}
+              position={[0, 0.015, 0.585]}
+              renderOrder={10}
+              onPointerDown={handleClick}
+              onClick={handleClick}
+            >
+              <planeGeometry args={[0.54, 0.34]} />
               <meshBasicMaterial
                 map={visorTexture}
                 transparent
                 opacity={0.99}
-                blending={THREE.NormalBlending}
                 depthWrite={false}
               />
             </mesh>
           )}
 
-          {/* Forward Soft Eye Glow Projection */}
-          <pointLight position={[0, 0.04, 0.75]} color="#00E5FF" intensity={1.2} distance={2.5} decay={2} />
+          {/* Forward Soft Eye Glow Projection - Pure White */}
+          <pointLight position={[0, 0.04, 0.75]} color="#FFFFFF" intensity={1.2} distance={2.5} decay={2} />
+
+          {/* Broad Transparent Click Target Sphere over the Face & Helmet */}
+          <mesh
+            position={[0, 0.05, 0.35]}
+            onPointerDown={handleClick}
+            onClick={handleClick}
+          >
+            <sphereGeometry args={[0.55, 16, 16]} />
+            <meshBasicMaterial transparent opacity={0} depthWrite={false} />
+          </mesh>
 
           {/* ============================================================ */}
           {/* PROMINENT HEADPHONE EAR CUPS + REAR CYAN AERODYNAMIC FINS    */}
@@ -1123,6 +1185,8 @@ export default function BdxRobot({
             material={pearlCeramicMat}
             castShadow
             receiveShadow
+            onPointerDown={handleClick}
+            onClick={handleClick}
           >
             <sphereGeometry args={[0.45, 40, 36]} />
           </mesh>
@@ -1160,16 +1224,16 @@ export default function BdxRobot({
             </mesh>
 
             {/* Soft Controlled Chest Glow */}
-            <pointLight position={[0, 0, 0.08]} color="#00E5FF" intensity={0.9} distance={1.4} decay={2} />
+            <pointLight position={[0, 0, 0.08]} color="#FFFFFF" intensity={0.9} distance={1.4} decay={2} />
 
             {/* Volumetric Hologram Cone (Activates during Section 3 Projection) */}
             <group position={[0, 0, 0.06]} rotation={[Math.PI / 2, 0, 0]}>
               <mesh ref={projectorBeamRef} position={[0, 1.4, 0]} visible={isProjecting}>
                 <coneGeometry args={[1.2, 2.8, 32, 1, true]} />
                 <meshBasicMaterial
-                  color="#00E5FF"
+                  color="#FFFFFF"
                   transparent
-                  opacity={0.35}
+                  opacity={0.25}
                   side={THREE.DoubleSide}
                   blending={THREE.AdditiveBlending}
                   depthWrite={false}
@@ -1198,7 +1262,7 @@ export default function BdxRobot({
             </mesh>
 
             {/* Soft Downward Propulsion Light */}
-            <pointLight position={[0, -0.22, 0]} color="#00E5FF" intensity={1.5} distance={2.4} decay={2} />
+            <pointLight position={[0, -0.22, 0]} color="#E2E8F0" intensity={1.2} distance={2.4} decay={2} />
           </group>
 
           {/* ============================================================ */}

@@ -14,12 +14,12 @@ export default function BdxCompanionCanvas({ isProjecting = false }) {
     <Canvas
       camera={{ position: [0, 0.4, 2.5], fov: 42 }}
       dpr={1}
-      frameloop={isProjecting ? 'always' : 'demand'}
+      frameloop="always"
       gl={{ antialias: false, alpha: true, powerPreference: 'low-power' }}
       style={{ width: '100%', height: '100%' }}
     >
-      <ambientLight color="#526060" intensity={1.3} />
-      <directionalLight position={[2, 3, 4]} color="#FFF8EE" intensity={1.4} />
+      <ambientLight color="#404040" intensity={1.5} />
+      <directionalLight position={[2, 3, 4]} color="#FFFFFF" intensity={1.8} />
 
       <BdxRobot
         scale={0.95}

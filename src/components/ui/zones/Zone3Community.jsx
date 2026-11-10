@@ -39,17 +39,17 @@ export default function Zone3Community({ onNextZone }) {
 
   return (
     <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans safe-viewport-card custom-scrollbar">
-      <div className="glass-panel p-6 sm:p-8 rounded-xl relative">
+      <div className="glass-panel p-6 sm:p-8 rounded-2xl relative shadow-[0_16px_48px_rgba(0,0,0,0.65)]">
         {/* Top Telemetry Header */}
-        <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-5 border-b border-[rgba(150,230,255,0.16)] text-[10px] font-mono">
-          <div className="flex items-center gap-2 text-[#55DFFF]">
-            <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_8px_rgba(85,223,255,0.7)]" />
+        <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-5 border-b border-white/[0.12] text-[10px] font-mono">
+          <div className="flex items-center gap-2 text-white">
+            <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.8)]" />
             <span className="font-bold tracking-widest uppercase">
               ZONE 03 // COMMUNITY AISLE & COLLABORATIVE COMMONS
             </span>
           </div>
-          <div className="flex items-center gap-2 text-[#B8C7D4]">
-            <Users className="w-3.5 h-3.5 text-[#55DFFF]" />
+          <div className="flex items-center gap-2 text-slate-300">
+            <Users className="w-3.5 h-3.5 text-white" />
             <span className="tracking-tight uppercase">
               450+ ACTIVE STUDENT MEMBERS • 6 WORKING GROUPS
             </span>
@@ -58,20 +58,20 @@ export default function Zone3Community({ onNextZone }) {
 
         {/* Section Heading */}
         <div className="mb-6">
-          <h2 className="text-fluid-h2 font-display font-bold text-white tracking-tight mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
             Discussions, Workshops & Culture
           </h2>
-          <p className="text-xs sm:text-sm text-[rgba(240,247,255,0.92)] font-sans max-w-2xl leading-[1.65] drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
+          <p className="text-xs sm:text-sm text-slate-200 font-sans max-w-2xl leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
             Where research preprints meet practical deployment. Peer-to-peer reading circles, architectural debates, and open-source contributions.
           </p>
         </div>
 
         {/* Discussions & Community Open Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 mb-6">
           {/* Left Column: Weekly Reading Circles & Discussions */}
-          <div className="lg:col-span-7 flex flex-col gap-4">
-            <div className="text-[10px] font-mono text-[#B8C7D4] uppercase tracking-widest flex items-center gap-2 mb-0.5">
-              <MessageSquare className="w-3.5 h-3.5 text-[#55DFFF]" />
+          <div className="lg:col-span-7 flex flex-col gap-3">
+            <div className="text-[10px] font-mono text-slate-300 uppercase tracking-widest flex items-center gap-2 mb-1 font-semibold">
+              <MessageSquare className="w-3.5 h-3.5 text-white" />
               <span>WEEKLY DISCUSSIONS & WORKING GROUPS</span>
             </div>
 
@@ -79,22 +79,22 @@ export default function Zone3Community({ onNextZone }) {
               {discussions.map((d, i) => (
                 <div
                   key={i}
-                  className="glass-card p-3.5 sm:p-4 border-l-2 border-l-[#55DFFF] hover:border-l-[#55DFFF]"
+                  className="rounded-xl p-4 glass-card transition-all duration-200"
                 >
                   <div className="flex items-center justify-between gap-2 mb-1.5">
-                    <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[rgba(85,223,255,0.10)] text-[#55DFFF] border border-[rgba(85,223,255,0.25)] font-semibold">
+                    <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.10] text-slate-200 border border-white/20 font-semibold">
                       {d.badge}
                     </span>
-                    <span className="text-[11px] font-mono text-[#B8C7D4]">
+                    <span className="text-[11px] font-mono text-slate-400 font-medium">
                       {d.time}
                     </span>
                   </div>
-                  <h4 className="text-sm font-display font-bold text-white mb-1.5 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
+                  <h4 className="text-sm font-display font-bold text-white mb-1.5 drop-shadow-sm">
                     {d.topic}
                   </h4>
-                  <div className="flex items-center justify-between text-[11px] font-mono text-[#B8C7D4]">
+                  <div className="flex items-center justify-between text-[11px] font-mono text-slate-300">
                     <span>{d.venue}</span>
-                    <span className="text-[#55DFFF] font-semibold">{d.attendees}</span>
+                    <span className="text-white font-semibold">{d.attendees}</span>
                   </div>
                 </div>
               ))}
@@ -102,24 +102,24 @@ export default function Zone3Community({ onNextZone }) {
           </div>
 
           {/* Right Column: Student Leadership & Mentors Cadre */}
-          <div className="lg:col-span-5 flex flex-col justify-between border-t border-[rgba(150,230,255,0.16)] lg:border-t-0 lg:border-l-2 border-[rgba(150,230,255,0.16)] pt-4 lg:pt-0 pl-0 lg:pl-6 py-1">
+          <div className="lg:col-span-5 flex flex-col justify-between border-t border-white/[0.12] lg:border-t-0 lg:border-l lg:border-white/[0.12] pt-5 lg:pt-0 lg:pl-6 py-1">
             <div>
-              <div className="text-[10px] font-mono text-[#B8C7D4] uppercase tracking-widest flex items-center gap-2 mb-4">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#55DFFF]" />
+              <div className="text-[10px] font-mono text-slate-300 uppercase tracking-widest flex items-center gap-2 mb-4 font-semibold">
+                <ShieldCheck className="w-3.5 h-3.5 text-white" />
                 <span>LEADERSHIP CADRE</span>
               </div>
 
               <div className="space-y-3 mb-5">
                 {ZONE_TEAM.members.slice(0, 3).map((m, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-2 rounded-lg glass-card">
-                    <div className="w-8 h-8 rounded-lg bg-[rgba(85,223,255,0.10)] border border-[rgba(85,223,255,0.25)] flex items-center justify-center text-xs font-mono font-bold text-[#55DFFF] shrink-0">
+                  <div key={idx} className="flex items-center gap-3 p-3 rounded-xl glass-card">
+                    <div className="w-9 h-9 rounded-lg bg-white/[0.10] border border-white/20 flex items-center justify-center text-xs font-mono font-bold text-white shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
                       {m.initials}
                     </div>
                     <div className="min-w-0">
-                      <div className="text-xs font-display font-bold text-white truncate drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
+                      <div className="text-xs font-display font-bold text-white truncate drop-shadow-sm">
                         {m.name}
                       </div>
-                      <div className="text-[10px] font-sans text-[#B8C7D4] truncate">
+                      <div className="text-[10px] font-sans text-slate-300 truncate">
                         {m.role}
                       </div>
                     </div>
@@ -128,11 +128,11 @@ export default function Zone3Community({ onNextZone }) {
               </div>
             </div>
 
-            <div className="pt-3 border-t border-[rgba(150,230,255,0.14)]">
+            <div className="pt-3 border-t border-white/[0.10]">
               <Link
                 href="/team"
                 onClick={() => audioManager.playClick()}
-                className="flex items-center justify-between text-xs font-mono text-[#55DFFF] hover:text-white transition-colors group"
+                className="flex items-center justify-between text-xs font-mono text-slate-200 hover:text-white transition-colors group pointer-events-auto"
               >
                 <span className="font-semibold">VIEW COMPLETE 6-MEMBER TEAM</span>
                 <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
@@ -142,8 +142,8 @@ export default function Zone3Community({ onNextZone }) {
         </div>
 
         {/* Bottom Actions Bar */}
-        <div className="pt-4 border-t border-[rgba(150,230,255,0.16)] flex flex-wrap items-center justify-between gap-4">
-          <span className="text-[11px] font-mono text-[#B8C7D4]">
+        <div className="pt-4 border-t border-white/[0.12] flex flex-wrap items-center justify-between gap-4">
+          <span className="text-[11px] font-mono text-slate-400">
             DISCUSSIONS OPEN TO ALL COLLEGIATE STUDENTS
           </span>
 
@@ -153,10 +153,10 @@ export default function Zone3Community({ onNextZone }) {
                 audioManager.playWhoosh();
                 onNextZone();
               }}
-              className="flex items-center gap-2 px-4 py-2 rounded-lg glass-card hover:border-[#55DFFF]/50 text-xs font-mono text-[#B8C7D4] hover:text-white transition-all cursor-pointer btn-tactile"
+              className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.18] text-xs font-mono text-slate-200 hover:text-white transition-colors cursor-pointer border border-white/20 btn-tactile pointer-events-auto"
             >
               <span>DESCEND TO RESEARCH ZONE</span>
-              <ArrowDown className="w-3.5 h-3.5 text-[#55DFFF]" />
+              <ArrowDown className="w-3.5 h-3.5 text-white" />
             </button>
           )}
         </div>

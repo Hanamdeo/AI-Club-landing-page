@@ -23,27 +23,19 @@ export const SERVER_NODE_ITEMS = [
  * Connects directly to dedicated Next.js routes and glides between 3D zones.
  */
 export default function ServerSideNav({
-  activeNavId = 'entry',
   scrollProgress = 0,
   scrollProgressRef,
   onNavigateToSection,
   onToggleTerminal,
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [activeRobotNodeId, setActiveRobotNodeId] = useState(activeNavId || 'entry');
+  const [activeRobotNodeId, setActiveRobotNodeId] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
   const leaveTimerRef = useRef(null);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
-  // Synchronize robot location along the cold aisle via activeNavId or shared scroll ref on Home
-  useEffect(() => {
-    if (!isHomePage) return;
-    if (activeNavId) {
-      setActiveRobotNodeId(activeNavId);
-    }
-  }, [activeNavId, isHomePage]);
-
+  // Synchronize robot location along the cold aisle via shared scroll ref on Home
   useEffect(() => {
     if (!isHomePage) return;
     let animId;
@@ -54,7 +46,7 @@ export default function ServerSideNav({
         const closestDiff = Math.abs(sp - SERVER_NODE_ITEMS[closestIdx].zProgress);
         return currentDiff < closestDiff ? idx : closestIdx;
       }, 0);
-      const closestId = SERVER_NODE_ITEMS[activeIdx]?.id || 'entry';
+      const closestId = SERVER_NODE_ITEMS[activeIdx]?.id || 'home';
       setActiveRobotNodeId((prev) => (prev !== closestId ? closestId : prev));
       animId = requestAnimationFrame(checkRobotPos);
     };
@@ -96,7 +88,6 @@ export default function ServerSideNav({
     setMobileOpen(false);
     if (isHomePage && onNavigateToSection) {
       e.preventDefault();
-      setActiveRobotNodeId(item.id);
       onNavigateToSection(item.id, item.zProgress);
     }
   };
@@ -112,34 +103,51 @@ export default function ServerSideNav({
 
   return (
     <>
-      {/* Main Server Side Navigation Bar (Desktop Hover-activated Rail) */}
+      {/* Mobile Floating Quick-Toggle Button */}
+      <div className="fixed top-4 left-4 z-50 md:hidden pointer-events-auto">
+        <button
+          onClick={() => setMobileOpen(!mobileOpen)}
+          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#101415]/90 backdrop-blur-xl border border-white/[0.08] text-ivory text-xs font-sans shadow-[0_4px_20px_rgba(0,0,0,0.5)] cursor-pointer"
+          aria-label="Toggle Facility Navigation"
+        >
+          <div className="w-5 h-5 rounded bg-[#161B1C] border border-sage/40 flex items-center justify-center font-mono text-[9px] text-sage font-bold">
+            AI
+          </div>
+          <span className="font-semibold text-[11px] tracking-wide text-ivory">ROUTER</span>
+          {mobileOpen ? <X className="w-3.5 h-3.5 text-sage" /> : <Menu className="w-3.5 h-3.5 text-sage" />}
+        </button>
+      </div>
+
+      {/* Main Server Side Navigation Bar (Hover-activated on desktop) */}
       <aside
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className="hidden md:flex flex-col fixed left-3 sm:left-4 top-1/2 -translate-y-1/2 z-40 select-none font-sans pointer-events-auto transition-all duration-300"
+        className={`fixed left-3 sm:left-4 top-1/2 -translate-y-1/2 z-40 select-none font-sans pointer-events-auto transition-all duration-300 ${
+          mobileOpen ? 'flex flex-col opacity-100' : 'hidden md:flex flex-col'
+        }`}
         aria-label="Facility Data Server Navigation"
       >
         <div
-          className={`flex flex-col rounded-2xl bg-[#050C12]/65 backdrop-blur-[8px] border border-[rgba(150,230,255,0.16)] shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-300 ease-out overflow-hidden ${
+          className={`flex flex-col rounded-2xl bg-[#101415]/90 backdrop-blur-xl border border-white/[0.08] shadow-[0_8px_32px_rgba(0,0,0,0.6)] transition-all duration-300 ease-out overflow-hidden ${
             isExpanded ? 'w-[210px] p-2' : 'w-[44px] p-1.5'
           }`}
         >
           {/* Header Brand Node */}
-          <div className="flex items-center justify-between px-1.5 py-1.5 border-b border-[rgba(150,230,255,0.12)] mb-0.5">
+          <div className="flex items-center justify-between px-1.5 py-1.5 border-b border-white/[0.06] mb-0.5">
             <Link
               href="/"
               onClick={handleLinkClick}
               className="flex items-center gap-2 text-left group cursor-pointer w-full overflow-hidden"
             >
-              <div className="w-6 h-6 rounded-md bg-[#08121A]/70 border border-[rgba(150,230,255,0.25)] flex items-center justify-center font-mono shrink-0 transition-colors group-hover:border-[#55DFFF] shadow-[0_0_10px_rgba(85,223,255,0.15)]">
-                <span className="text-[10px] text-[#55DFFF] font-bold">AI</span>
+              <div className="w-6 h-6 rounded-md bg-[#161B1C] border border-white/30 flex items-center justify-center font-mono shrink-0 transition-colors group-hover:border-white shadow-[0_0_10px_rgba(255,255,255,0.15)]">
+                <span className="text-[10px] text-white font-bold">AI</span>
               </div>
               {isExpanded && (
                 <div className="flex flex-col min-w-0 transition-opacity duration-200">
-                  <span className="text-[11px] font-bold text-white tracking-wider group-hover:text-[#55DFFF] transition-colors leading-tight truncate">
+                  <span className="text-[11px] font-bold text-white tracking-wider group-hover:text-slate-200 transition-colors leading-tight truncate">
                     AI CLUB
                   </span>
-                  <span className="text-[8px] font-mono text-[#55DFFF]/90 tracking-tight truncate">
+                  <span className="text-[8px] font-mono text-slate-400 tracking-tight truncate">
                     {isHomePage ? '3D COLD AISLE' : 'RESEARCH PORTAL'}
                   </span>
                 </div>
@@ -151,10 +159,8 @@ export default function ServerSideNav({
           {isExpanded ? (
             <div className="flex flex-col gap-1 py-1 animate-fadeIn">
               {SERVER_NODE_ITEMS.map((item) => {
-                const isActive = isHomePage
-                  ? (activeNavId === item.id || activeRobotNodeId === item.id)
-                  : (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
-                const isRobotHere = isHomePage && (activeRobotNodeId === item.id);
+                const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+                const isRobotHere = isHomePage && activeRobotNodeId === item.id;
 
                 return (
                   <Link
@@ -163,10 +169,10 @@ export default function ServerSideNav({
                     onClick={(e) => handleItemClick(e, item)}
                     className={`group relative flex items-center justify-between gap-2 px-3 py-1.5 rounded-full text-xs transition-all duration-200 cursor-pointer ${
                       isActive
-                        ? 'text-[#55DFFF] bg-[rgba(85,223,255,0.12)] border border-[rgba(85,223,255,0.40)] shadow-[0_0_12px_rgba(85,223,255,0.2)] font-semibold'
+                        ? 'text-white bg-[#1A1E22] border border-white/50 shadow-[0_0_12px_rgba(255,255,255,0.15)] font-semibold'
                         : isRobotHere
-                        ? 'text-white bg-[rgba(85,223,255,0.08)] border border-[rgba(85,223,255,0.25)] hover:border-[#55DFFF]/60 font-medium'
-                        : 'text-[#B8C7D4] hover:text-white bg-transparent hover:bg-white/[0.04] border border-transparent font-medium'
+                        ? 'text-white bg-[#141819] border border-white/30 hover:border-white/50 font-medium'
+                        : 'text-slate-300 hover:text-white bg-transparent hover:bg-white/[0.06] border border-transparent font-medium'
                     }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
@@ -174,9 +180,9 @@ export default function ServerSideNav({
                       <span
                         className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
                           isActive
-                            ? 'bg-[#55DFFF] shadow-[0_0_8px_#55DFFF]'
+                            ? 'bg-white shadow-[0_0_8px_#FFFFFF]'
                             : isRobotHere
-                            ? 'bg-signal-green animate-pulse shadow-[0_0_8px_#22C55E]'
+                            ? 'bg-slate-300 animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.7)]'
                             : 'bg-white/20 group-hover:bg-white/40'
                         }`}
                       />
@@ -186,14 +192,14 @@ export default function ServerSideNav({
                     {/* Proximity Badge or Chevron */}
                     {isRobotHere ? (
                       <span
-                        className="flex items-center gap-1 text-[8px] font-mono text-[#55DFFF] bg-[rgba(85,223,255,0.15)] px-1.5 py-0.5 rounded-full shrink-0 animate-pulse"
+                        className="flex items-center gap-1 text-[8px] font-mono text-white bg-white/15 px-1.5 py-0.5 rounded-full shrink-0 animate-pulse"
                         title="Robot currently stationed at this server rack"
                       >
-                        <Bot className="w-2.5 h-2.5" />
+                        <Bot className="w-2.5 h-2.5 text-white" />
                         <span className="text-[8px]">BOT</span>
                       </span>
                     ) : (
-                      <ChevronRight className="w-3 h-3 text-[#B8C7D4]/40 group-hover:text-[#55DFFF] group-hover:translate-x-0.5 transition-all shrink-0" />
+                      <ChevronRight className="w-3 h-3 text-slate-400 group-hover:text-white group-hover:translate-x-0.5 transition-all shrink-0" />
                     )}
                   </Link>
                 );
@@ -201,31 +207,26 @@ export default function ServerSideNav({
             </div>
           ) : (
             /* Collapsed Resting State: Minimalist Sleek Server Dots */
-            <div className="flex flex-col items-center gap-2.5 py-3.5 my-0.5 cursor-pointer" title="Click or hover to navigate">
+            <div className="flex flex-col items-center gap-2.5 py-3.5 my-0.5 cursor-pointer" title="Hover to expand navigation">
               {SERVER_NODE_ITEMS.map((item) => {
-                const isActive = isHomePage
-                  ? (activeNavId === item.id || activeRobotNodeId === item.id)
-                  : (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
-                const isRobotHere = isHomePage && (activeRobotNodeId === item.id);
+                const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
+                const isRobotHere = isHomePage && activeRobotNodeId === item.id;
 
                 return (
-                  <button
+                  <div
                     key={item.id}
-                    onClick={(e) => handleItemClick(e, item)}
-                    className="relative flex items-center justify-center group p-1 -m-1 cursor-pointer bg-transparent border-0"
-                    title={item.label}
-                    aria-label={item.label}
+                    className="relative flex items-center justify-center group"
                   >
                     <span
                       className={`rounded-full transition-all duration-300 ${
                         isActive
-                          ? 'w-2 h-2 bg-[#55DFFF] shadow-[0_0_10px_#55DFFF]'
+                          ? 'w-2 h-2 bg-white shadow-[0_0_10px_#FFFFFF]'
                           : isRobotHere
-                          ? 'w-2 h-2 bg-signal-green animate-pulse shadow-[0_0_8px_#22C55E]'
+                          ? 'w-2 h-2 bg-slate-300 animate-pulse shadow-[0_0_8px_rgba(255,255,255,0.7)]'
                           : 'w-1.5 h-1.5 bg-white/25 group-hover:bg-white/50'
                       }`}
                     />
-                  </button>
+                  </div>
                 );
               })}
             </div>
@@ -233,13 +234,13 @@ export default function ServerSideNav({
 
           {/* Action Controls: Terminal CLI & Procedural Audio Toggle */}
           {isExpanded ? (
-            <div className="flex items-center justify-between pt-1.5 px-1 border-t border-[rgba(150,230,255,0.12)] mt-0.5 animate-fadeIn">
+            <div className="flex items-center justify-between pt-1.5 px-1 border-t border-white/[0.06] mt-0.5 animate-fadeIn">
               <button
                 onClick={handleTerminal}
-                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono text-[#55DFFF] hover:text-white bg-[rgba(85,223,255,0.08)] hover:bg-[rgba(85,223,255,0.18)] border border-[rgba(150,230,255,0.16)] hover:border-[#55DFFF]/50 transition-all cursor-pointer"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono text-sage hover:text-ivory bg-[#161B1C] hover:bg-white/[0.06] border border-white/[0.08] hover:border-sage/40 transition-all cursor-pointer"
                 title="Launch Interactive Terminal CLI [~]"
               >
-                <Terminal className="w-3 h-3 text-[#55DFFF]" />
+                <Terminal className="w-3 h-3 text-sage" />
                 <span className="font-semibold tracking-wider">CLI</span>
               </button>
 
@@ -247,7 +248,7 @@ export default function ServerSideNav({
             </div>
           ) : (
             /* Collapsed Hint Chevron */
-            <div className="flex items-center justify-center pt-1.5 border-t border-[rgba(150,230,255,0.12)] text-[#55DFFF]/50">
+            <div className="flex items-center justify-center pt-1.5 border-t border-white/[0.06] text-sage/50">
               <ChevronRight className="w-3.5 h-3.5 animate-pulse" />
             </div>
           )}
