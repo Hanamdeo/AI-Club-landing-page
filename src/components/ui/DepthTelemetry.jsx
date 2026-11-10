@@ -68,7 +68,7 @@ export default function DepthTelemetry({
                     ? 'bg-signal-green shadow-[0_0_6px_#22C55E]'
                     : perfTier === 'high'
                     ? 'bg-sage shadow-[0_0_6px_#A7B7A1]'
-                    : 'bg-[#24BFEA] shadow-[0_0_6px_#24BFEA]'
+                    : 'bg-[#E2E8F0] shadow-[0_0_6px_#E2E8F0]'
                 }`}
               />
               <span className="font-semibold">{perfConfig?.shortLabel || 'BALANCED'}</span>

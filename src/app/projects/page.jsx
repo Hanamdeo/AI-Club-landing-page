@@ -154,7 +154,7 @@ export default function ProjectsPage() {
                   }}
                   className={`px-3 py-1 text-[11px] events-mono-meta rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     active
-                      ? 'bg-[#55DFFF]/20 text-[#55DFFF] border border-[#55DFFF]/50 font-semibold'
+                      ? 'bg-[#FFFFFF]/20 text-[#FFFFFF] border border-[#FFFFFF]/50 font-semibold'
                       : 'bg-white/[0.03] text-slate-400 hover:text-slate-200 border border-transparent'
                   }`}
                 >

@@ -129,7 +129,8 @@ export default function SceneContainer({
           depth: true,
           precision: tierState.tier === 'low' ? 'lowp' : 'mediump',
         }}
-        onCreated={({ gl }) => {
+        onCreated={({ gl, scene, camera }) => {
+          if (typeof window !== 'undefined') { window.__THREE_SCENE__ = scene; window.__THREE_CAMERA__ = camera; }
           if (typeof window !== 'undefined') {
             window.__THREE_GL__ = gl;
           }

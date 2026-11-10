@@ -79,6 +79,7 @@ export default function HUDNavbar({ onToggleTerminal }) {
           className="flex items-center gap-2.5 text-xs text-white hover:text-[#FFFFFF] transition-colors cursor-pointer shrink-0 group btn-tactile"
           aria-label="AI Club Facility Root"
         >
+
           <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 group-hover:border-[#55DFFF]/60 flex items-center justify-center shrink-0 transition-colors bg-black shadow-[0_0_10px_rgba(85,223,255,0.2)]">
             <Image
               src="/logo.png"

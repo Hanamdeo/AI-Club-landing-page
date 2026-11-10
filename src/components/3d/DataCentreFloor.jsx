@@ -127,12 +127,12 @@ export default function DataCentreFloor() {
       {/* Left guide strip */}
       <mesh position={[-1.72, 0.005, -25]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[0.04, 95]} />
-        <meshBasicMaterial color="#A2B29F" transparent opacity={0.65} />
+        <meshBasicMaterial color="#E2E8F0" transparent opacity={0.65} />
       </mesh>
       {/* Right guide strip */}
       <mesh position={[1.72, 0.005, -25]} rotation={[-Math.PI / 2, 0, 0]}>
         <planeGeometry args={[0.04, 95]} />
-        <meshBasicMaterial color="#A2B29F" transparent opacity={0.65} />
+        <meshBasicMaterial color="#E2E8F0" transparent opacity={0.65} />
       </mesh>
 
       {/* Aisle Center Orientation Line */}
@@ -149,7 +149,7 @@ export default function DataCentreFloor() {
         </mesh>
         <mesh position={[0, 0, 0.001]}>
           <planeGeometry args={[2.34, 0.09]} />
-          <meshBasicMaterial color="#A2B29F" transparent opacity={0.85} />
+          <meshBasicMaterial color="#E2E8F0" transparent opacity={0.85} />
         </mesh>
       </group>
 

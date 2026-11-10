@@ -61,13 +61,13 @@ export default function JoinPage() {
     <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[radial-gradient(ellipse_at_top,rgba(85,223,255,0.1)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[radial-gradient(ellipse_at_top,rgba(255, 255, 255,0.1)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto">
         
 
         {/* Master Page Header */}
-        <div className="border-b border-[rgba(85,223,255,0.18)] pb-8 mb-8 sm:mb-10 text-center sm:text-left">
+        <div className="border-b border-[rgba(255, 255, 255,0.18)] pb-8 mb-8 sm:mb-10 text-center sm:text-left">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-3.5">
       
 
@@ -76,13 +76,13 @@ export default function JoinPage() {
               <span className="text-slate-500 px-1">SIMULATE:</span>
               <button
                 onClick={() => setRecruitmentStatus('open')}
-                className={`px-2 py-0.5 rounded cursor-pointer ${recruitmentStatus === 'open' ? 'bg-[#55DFFF]/25 text-[#24BFEA] font-bold' : 'text-slate-400'}`}
+                className={`px-2 py-0.5 rounded cursor-pointer ${recruitmentStatus === 'open' ? 'bg-[#FFFFFF]/25 text-[#E2E8F0] font-bold' : 'text-slate-400'}`}
               >
                 OPEN
               </button>
               <button
                 onClick={() => setRecruitmentStatus('coming-soon')}
-                className={`px-2 py-0.5 rounded cursor-pointer ${recruitmentStatus === 'coming-soon' ? 'bg-[#24BFEA]/25 text-[#55DFFF] font-bold' : 'text-slate-400'}`}
+                className={`px-2 py-0.5 rounded cursor-pointer ${recruitmentStatus === 'coming-soon' ? 'bg-[#E2E8F0]/25 text-[#FFFFFF] font-bold' : 'text-slate-400'}`}
               >
                 SOON
               </button>
@@ -96,7 +96,7 @@ export default function JoinPage() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-5">
-            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-[#55DFFF]/40 shadow-[0_0_30px_rgba(85,223,255,0.3)] shrink-0 bg-black">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-[#FFFFFF]/40 shadow-[0_0_30px_rgba(255, 255, 255,0.3)] shrink-0 bg-black">
               <Image
                 src="/logo.png"
                 alt="AI Club Official Emblem"
@@ -110,7 +110,7 @@ export default function JoinPage() {
               <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
                 JOIN THE COLLECTIVE
               </h1>
-              <p className="text-xs sm:text-sm font-mono text-[#55DFFF] uppercase tracking-wider mt-1">
+              <p className="text-xs sm:text-sm font-mono text-[#FFFFFF] uppercase tracking-wider mt-1">
                 PIONEERING THE AI REVOLUTION • MITS-DU GWALIOR
               </p>
               <p className="text-sm sm:text-base text-slate-300 font-manrope mt-2.5 max-w-xl leading-relaxed">
@@ -122,7 +122,7 @@ export default function JoinPage() {
 
         {/* 1. Official Institutional Contact Routes (PRD 4.9 Requirement) */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
-          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.16)] flex flex-col justify-between">
+          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.16)] flex flex-col justify-between">
             <div>
               <span className="text-[10px] font-mono text-slate-500 uppercase block mb-1">
                 OFFICIAL EMAIL
@@ -133,14 +133,14 @@ export default function JoinPage() {
             </div>
             <a
               href={`mailto:${CLUB_INFO.contactEmail}`}
-              className="mt-3 text-[11px] font-mono text-[#55DFFF] hover:text-white flex items-center gap-1"
+              className="mt-3 text-[11px] font-mono text-[#FFFFFF] hover:text-white flex items-center gap-1"
             >
               <Mail className="w-3 h-3" />
               <span>SEND DISPATCH</span>
             </a>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.16)] flex flex-col justify-between">
+          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.16)] flex flex-col justify-between">
             <div>
               <span className="text-[10px] font-mono text-slate-500 uppercase block mb-1">
                 CAMPUS LAB
@@ -150,13 +150,13 @@ export default function JoinPage() {
               </span>
               <span className="text-[10px] text-slate-400 block mt-0.5">MITS Gwalior</span>
             </div>
-            <span className="mt-3 text-[11px] font-mono text-[#24BFEA] flex items-center gap-1">
+            <span className="mt-3 text-[11px] font-mono text-[#E2E8F0] flex items-center gap-1">
               <MapPin className="w-3 h-3" />
               <span>PHYSICAL FACILITY</span>
             </span>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.16)] flex flex-col justify-between">
+          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.16)] flex flex-col justify-between">
             <div>
               <span className="text-[10px] font-mono text-slate-500 uppercase block mb-1">
                 SOURCE ARCHIVE
@@ -170,14 +170,14 @@ export default function JoinPage() {
               href={CLUB_INFO.socials.github}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 text-[11px] font-mono text-[#55DFFF] hover:text-white flex items-center gap-1"
+              className="mt-3 text-[11px] font-mono text-[#FFFFFF] hover:text-white flex items-center gap-1"
             >
               <Github className="w-3 h-3" />
               <span>INSPECT CODE</span>
             </a>
           </div>
 
-          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.16)] flex flex-col justify-between">
+          <div className="p-4 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.16)] flex flex-col justify-between">
             <div>
               <span className="text-[10px] font-mono text-slate-500 uppercase block mb-1">
                 PROFESSIONAL DESK
@@ -191,7 +191,7 @@ export default function JoinPage() {
               href={CLUB_INFO.socials.linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-3 text-[11px] font-mono text-[#24BFEA] hover:text-white flex items-center gap-1"
+              className="mt-3 text-[11px] font-mono text-[#E2E8F0] hover:text-white flex items-center gap-1"
             >
               <Linkedin className="w-3 h-3" />
               <span>CONNECT</span>
@@ -214,7 +214,7 @@ export default function JoinPage() {
               The intake cycle for the current academic session has concluded. Open workshops, public guest lectures, and paper reading circles remain accessible to all students.
             </p>
             <div className="inline-flex items-center gap-2 p-3 px-5 rounded-xl bg-[#07090A] border border-white/[0.08] text-xs font-mono text-slate-400">
-              <Mail className="w-4 h-4 text-[#55DFFF]" />
+              <Mail className="w-4 h-4 text-[#FFFFFF]" />
               <span>For research collaboration queries, contact: <strong className="text-white">{CLUB_INFO.contactEmail}</strong></span>
             </div>
           </div>
@@ -222,8 +222,8 @@ export default function JoinPage() {
 
         {/* STATE B: RECRUITMENT COMING SOON */}
         {recruitmentStatus === 'coming-soon' && (
-          <div className="p-8 sm:p-10 rounded-3xl bg-[#0C1014]/95 border border-[#24BFEA]/30 text-center animate-fadeIn shadow-[0_8px_32px_rgba(0,0,0,0.8)]">
-            <div className="w-14 h-14 rounded-full bg-[#24BFEA]/10 border border-[#24BFEA]/30 flex items-center justify-center mx-auto mb-4 text-[#24BFEA]">
+          <div className="p-8 sm:p-10 rounded-3xl bg-[#0C1014]/95 border border-[#E2E8F0]/30 text-center animate-fadeIn shadow-[0_8px_32px_rgba(0,0,0,0.8)]">
+            <div className="w-14 h-14 rounded-full bg-[#E2E8F0]/10 border border-[#E2E8F0]/30 flex items-center justify-center mx-auto mb-4 text-[#E2E8F0]">
               <Calendar className="w-6 h-6" />
             </div>
             <h2 className="text-3xl font-barlow-condensed font-bold uppercase text-white mb-2">
@@ -232,7 +232,7 @@ export default function JoinPage() {
             <p className="text-xs sm:text-sm text-slate-300 font-manrope max-w-lg mx-auto mb-6 leading-relaxed">
               The upcoming cohort intake will initiate with the semester orientation. Notice of clearance application deadlines will be posted across official channels once confirmed.
             </p>
-            <div className="inline-block p-4 px-6 rounded-2xl bg-[#07090A] border border-[rgba(85,223,255,0.2)] text-xs font-mono text-[#24BFEA]">
+            <div className="inline-block p-4 px-6 rounded-2xl bg-[#07090A] border border-[rgba(255, 255, 255,0.2)] text-xs font-mono text-[#E2E8F0]">
               <span className="block font-semibold">ESTIMATED CYCLE: AUTUMN COHORT</span>
               <span className="text-[10px] text-slate-400 mt-0.5 block">Department of CSE & AI Orientation</span>
             </div>
@@ -244,7 +244,7 @@ export default function JoinPage() {
           <div>
             {submitted ? (
               /* Submission Success Clearance Card */
-              <div className="p-8 sm:p-10 rounded-3xl bg-[#0C1014]/95 border border-[rgba(85,223,255,0.35)] shadow-[0_8px_32px_rgba(85,223,255,0.2)] text-center animate-fadeIn">
+              <div className="p-8 sm:p-10 rounded-3xl bg-[#0C1014]/95 border border-[rgba(255, 255, 255,0.35)] shadow-[0_8px_32px_rgba(255, 255, 255,0.2)] text-center animate-fadeIn">
                 <div className="w-16 h-16 rounded-full bg-signal-green/20 border border-signal-green/50 flex items-center justify-center mx-auto mb-6 text-signal-green shadow-[0_0_20px_rgba(34,197,94,0.4)]">
                   <CheckCircle2 className="w-8 h-8" />
                 </div>
@@ -261,7 +261,7 @@ export default function JoinPage() {
                   Your credentials have been securely stored in the AI Club admissions database. Your unique research tracking ID is:
                 </p>
 
-                <div className="inline-block p-4 px-8 rounded-2xl bg-[#07090A] border border-[rgba(85,223,255,0.3)] font-mono text-xl sm:text-2xl font-bold text-[#55DFFF] tracking-widest mb-8 shadow-inner">
+                <div className="inline-block p-4 px-8 rounded-2xl bg-[#07090A] border border-[rgba(255, 255, 255,0.3)] font-mono text-xl sm:text-2xl font-bold text-[#FFFFFF] tracking-widest mb-8 shadow-inner">
                   {clearanceId}
                 </div>
 
@@ -271,15 +271,15 @@ export default function JoinPage() {
               </div>
             ) : (
               /* Active Intake Form */
-              <form onSubmit={handleSubmit} className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] space-y-6">
-                <div className="flex items-center justify-between pb-4 border-b border-[rgba(85,223,255,0.14)]">
+              <form onSubmit={handleSubmit} className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] space-y-6">
+                <div className="flex items-center justify-between pb-4 border-b border-[rgba(255, 255, 255,0.14)]">
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-[#55DFFF]" />
+                    <ShieldCheck className="w-4 h-4 text-[#FFFFFF]" />
                     <span className="text-xs font-mono font-bold text-white uppercase tracking-wider">
                       RESEARCH CLEARANCE INTAKE FORM
                     </span>
                   </div>
-                  <span className="text-[10px] font-mono text-[#24BFEA]">
+                  <span className="text-[10px] font-mono text-[#E2E8F0]">
                     DEADLINE: OPEN CYCLES
                   </span>
                 </div>
@@ -295,7 +295,7 @@ export default function JoinPage() {
                       placeholder="e.g. Maya Sharma"
                       value={formData.fullName}
                       onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                      className="w-full bg-[#07090A] border border-[rgba(85,223,255,0.18)] focus:border-[#55DFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors"
+                      className="w-full bg-[#07090A] border border-[rgba(255, 255, 255,0.18)] focus:border-[#FFFFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -309,7 +309,7 @@ export default function JoinPage() {
                       placeholder="student@mitsgwl.ac.in"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full bg-[#07090A] border border-[rgba(85,223,255,0.18)] focus:border-[#55DFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors"
+                      className="w-full bg-[#07090A] border border-[rgba(255, 255, 255,0.18)] focus:border-[#FFFFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -321,7 +321,7 @@ export default function JoinPage() {
                       type="text"
                       value={formData.branch}
                       onChange={(e) => setFormData({ ...formData, branch: e.target.value })}
-                      className="w-full bg-[#07090A] border border-[rgba(85,223,255,0.18)] focus:border-[#55DFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none transition-colors"
+                      className="w-full bg-[#07090A] border border-[rgba(255, 255, 255,0.18)] focus:border-[#FFFFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none transition-colors"
                     />
                   </div>
 
@@ -332,7 +332,7 @@ export default function JoinPage() {
                     <select
                       value={formData.semester}
                       onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
-                      className="w-full bg-[#07090A] border border-[rgba(85,223,255,0.18)] focus:border-[#55DFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none transition-colors"
+                      className="w-full bg-[#07090A] border border-[rgba(255, 255, 255,0.18)] focus:border-[#FFFFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none transition-colors"
                     >
                       <option value="1st Semester">1st Semester (Freshman)</option>
                       <option value="2nd Semester">2nd Semester</option>
@@ -354,7 +354,7 @@ export default function JoinPage() {
                   <select
                     value={formData.domain}
                     onChange={(e) => setFormData({ ...formData, domain: e.target.value })}
-                    className="w-full bg-[#07090A] border border-[rgba(85,223,255,0.18)] focus:border-[#55DFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none transition-colors"
+                    className="w-full bg-[#07090A] border border-[rgba(255, 255, 255,0.18)] focus:border-[#FFFFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white focus:outline-none transition-colors"
                   >
                     {domains.map((d) => (
                       <option key={d} value={d}>
@@ -373,7 +373,7 @@ export default function JoinPage() {
                     placeholder="https://github.com/your-username"
                     value={formData.github}
                     onChange={(e) => setFormData({ ...formData, github: e.target.value })}
-                    className="w-full bg-[#07090A] border border-[rgba(85,223,255,0.18)] focus:border-[#55DFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors"
+                    className="w-full bg-[#07090A] border border-[rgba(255, 255, 255,0.18)] focus:border-[#FFFFFF] rounded-xl px-4 py-2.5 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors"
                   />
                 </div>
 
@@ -386,13 +386,13 @@ export default function JoinPage() {
                     placeholder="Tell us what problem or architecture you want to explore with fellow researchers..."
                     value={formData.statement}
                     onChange={(e) => setFormData({ ...formData, statement: e.target.value })}
-                    className="w-full bg-[#07090A] border border-[rgba(85,223,255,0.18)] focus:border-[#55DFFF] rounded-xl p-4 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors resize-none"
+                    className="w-full bg-[#07090A] border border-[rgba(255, 255, 255,0.18)] focus:border-[#FFFFFF] rounded-xl p-4 text-xs font-mono text-white placeholder:text-slate-600 focus:outline-none transition-colors resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-3.5 rounded-xl btn-glass-cyan text-xs font-mono font-bold tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_24px_rgba(85,223,255,0.35)]"
+                  className="w-full py-3.5 rounded-xl btn-glass-cyan text-xs font-mono font-bold tracking-wider uppercase transition-all flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_24px_rgba(255, 255, 255,0.35)]"
                 >
                   <Send className="w-4 h-4 text-white" />
                   <span>TRANSMIT CLEARANCE DOSSIER</span>

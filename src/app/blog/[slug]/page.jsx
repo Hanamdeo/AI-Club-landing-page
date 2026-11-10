@@ -28,7 +28,7 @@ export default function BlogDetailPage() {
         <h1 className="text-3xl font-barlow-condensed font-bold uppercase text-white mb-4">
           Article Not Found
         </h1>
-        <Link href="/blog" className="text-xs font-mono text-[#55DFFF]">
+        <Link href="/blog" className="text-xs font-mono text-[#FFFFFF]">
           RETURN TO BLOG LISTING
         </Link>
       </main>
@@ -41,20 +41,20 @@ export default function BlogDetailPage() {
     <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Breadcrumb Navigation */}
         <div className="flex items-center gap-2 mb-6 font-mono text-[10px] text-slate-400 tracking-widest uppercase overflow-x-auto no-scrollbar py-1">
-          <Link href="/" className="hover:text-[#55DFFF] transition-colors shrink-0">
+          <Link href="/" className="hover:text-[#FFFFFF] transition-colors shrink-0">
             FACILITY 3D
           </Link>
           <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
-          <Link href="/blog" className="hover:text-[#55DFFF] transition-colors shrink-0">
+          <Link href="/blog" className="hover:text-[#FFFFFF] transition-colors shrink-0">
             BLOG
           </Link>
           <ChevronRight className="w-3 h-3 text-slate-600 shrink-0" />
-          <span className="text-[#55DFFF] font-semibold truncate max-w-[180px] sm:max-w-none">
+          <span className="text-[#FFFFFF] font-semibold truncate max-w-[180px] sm:max-w-none">
             {post.title}
           </span>
         </div>
@@ -62,21 +62,21 @@ export default function BlogDetailPage() {
         {/* Return Button */}
         <Link
           href="/blog"
-          className="inline-flex items-center gap-2 mb-6 sm:mb-8 px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[rgba(85,223,255,0.15)] border border-white/[0.08] hover:border-[#55DFFF]/40 text-xs font-mono text-slate-300 hover:text-white transition-all group"
+          className="inline-flex items-center gap-2 mb-6 sm:mb-8 px-3.5 py-1.5 rounded-xl bg-white/[0.04] hover:bg-[rgba(255, 255, 255,0.15)] border border-white/[0.08] hover:border-[#FFFFFF]/40 text-xs font-mono text-slate-300 hover:text-white transition-all group"
         >
           <ChevronLeft className="w-3.5 h-3.5 group-hover:-translate-x-0.5 transition-transform" />
           <span>RETURN TO RESEARCH ARTICLES</span>
         </Link>
 
         {/* Article Header Card */}
-        <div className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.6)] mb-8 sm:mb-10">
+        <div className="p-5 sm:p-8 md:p-10 rounded-3xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.20)] shadow-[0_8px_32px_rgba(0,0,0,0.6)] mb-8 sm:mb-10">
           <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
-            <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-[rgba(85,223,255,0.12)] border border-[rgba(85,223,255,0.30)] text-[#55DFFF] font-semibold uppercase">
+            <span className="text-[10px] font-mono px-3 py-1 rounded-full bg-[rgba(255, 255, 255,0.12)] border border-[rgba(255, 255, 255,0.30)] text-[#FFFFFF] font-semibold uppercase">
               {post.category}
             </span>
             <div className="flex items-center gap-3 text-xs font-mono text-slate-400">
               <span className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-[#24BFEA]" />
+                <Clock className="w-3.5 h-3.5 text-[#E2E8F0]" />
                 <span>{post.readTime}</span>
               </span>
               <span>•</span>
@@ -93,8 +93,8 @@ export default function BlogDetailPage() {
           </p>
 
           {/* Author Block */}
-          <div className="flex items-center gap-3 pt-6 border-t border-[rgba(85,223,255,0.14)]">
-            <div className="w-10 h-10 rounded-full bg-[rgba(85,223,255,0.2)] border border-[rgba(85,223,255,0.4)] flex items-center justify-center font-mono text-sm font-bold text-[#55DFFF]">
+          <div className="flex items-center gap-3 pt-6 border-t border-[rgba(255, 255, 255,0.14)]">
+            <div className="w-10 h-10 rounded-full bg-[rgba(255, 255, 255,0.2)] border border-[rgba(255, 255, 255,0.4)] flex items-center justify-center font-mono text-sm font-bold text-[#FFFFFF]">
               {post.author.charAt(0)}
             </div>
             <div>
@@ -113,14 +113,14 @@ export default function BlogDetailPage() {
           {post.body.split('\n\n').map((paragraph, idx) => {
             if (paragraph.startsWith('### ')) {
               return (
-                <h3 key={idx} className="text-xl sm:text-2xl font-barlow-condensed font-bold uppercase text-white mt-8 mb-3 text-[#24BFEA]">
+                <h3 key={idx} className="text-xl sm:text-2xl font-barlow-condensed font-bold uppercase text-white mt-8 mb-3 text-[#E2E8F0]">
                   {paragraph.replace('### ', '')}
                 </h3>
               );
             }
             if (paragraph.startsWith('```')) {
               return (
-                <pre key={idx} className="p-4 rounded-xl bg-[#07090A] border border-[rgba(85,223,255,0.15)] font-mono text-xs overflow-x-auto text-[#55DFFF]">
+                <pre key={idx} className="p-4 rounded-xl bg-[#07090A] border border-[rgba(255, 255, 255,0.15)] font-mono text-xs overflow-x-auto text-[#FFFFFF]">
                   {paragraph.replace(/```python|```/g, '')}
                 </pre>
               );
@@ -144,7 +144,7 @@ export default function BlogDetailPage() {
 
         {/* Cited Evidence & References (PRD 4.7 Requirement) */}
         {post.references && post.references.length > 0 && (
-          <div className="p-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.18)] mb-10">
+          <div className="p-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.18)] mb-10">
             <span className="text-xs font-mono text-slate-400 uppercase tracking-widest block mb-3 font-semibold">
               ACADEMIC CITATIONS & OFFICIAL REFERENCES
             </span>
@@ -155,13 +155,13 @@ export default function BlogDetailPage() {
                   href={ref.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3 rounded-xl bg-[#07090A] border border-white/[0.06] hover:border-[#55DFFF]/40 transition-colors group"
+                  className="flex items-center justify-between p-3 rounded-xl bg-[#07090A] border border-white/[0.06] hover:border-[#FFFFFF]/40 transition-colors group"
                 >
                   <div className="flex items-center gap-2">
-                    <FileText className="w-4 h-4 text-[#55DFFF]" />
+                    <FileText className="w-4 h-4 text-[#FFFFFF]" />
                     <span className="text-xs font-mono text-slate-200 group-hover:text-white">{ref.title}</span>
                   </div>
-                  <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#55DFFF] transition-colors" />
+                  <ExternalLink className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#FFFFFF] transition-colors" />
                 </a>
               ))}
             </div>
@@ -179,12 +179,12 @@ export default function BlogDetailPage() {
                 <Link
                   key={rel.id}
                   href={`/blog/${rel.slug}`}
-                  className="p-5 rounded-2xl bg-[#0C1014]/80 border border-[rgba(85,223,255,0.16)] hover:border-[#55DFFF]/50 transition-colors group block"
+                  className="p-5 rounded-2xl bg-[#0C1014]/80 border border-[rgba(255, 255, 255,0.16)] hover:border-[#FFFFFF]/50 transition-colors group block"
                 >
-                  <span className="text-[10px] font-mono text-[#24BFEA] block mb-1 uppercase font-semibold">
+                  <span className="text-[10px] font-mono text-[#E2E8F0] block mb-1 uppercase font-semibold">
                     {rel.category}
                   </span>
-                  <h4 className="text-lg font-barlow-condensed font-bold uppercase text-white group-hover:text-[#55DFFF] transition-colors mb-2 leading-snug">
+                  <h4 className="text-lg font-barlow-condensed font-bold uppercase text-white group-hover:text-[#FFFFFF] transition-colors mb-2 leading-snug">
                     {rel.title}
                   </h4>
                   <span className="text-[10px] font-mono text-slate-400">

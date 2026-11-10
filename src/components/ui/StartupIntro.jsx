@@ -35,7 +35,7 @@ LAYERS.forEach((layer, layerIdx) => {
       x: layer.x,
       y,
       threshold,
-      color: layerIdx === 3 ? '#22C55E' : layerIdx === 0 ? '#24BFEA' : '#A7B7A1',
+      color: layerIdx === 3 ? '#FFFFFF' : layerIdx === 0 ? '#FFFFFF' : '#CBD5E1',
     });
   });
 });
@@ -77,7 +77,7 @@ for (let l = 0; l < LAYERS.length - 1; l++) {
         d: pathD,
         start,
         end,
-        color: l === 0 ? '#24BFEA' : l === 1 ? '#A7B7A1' : '#72E29B',
+        color: l === 0 ? '#FFFFFF' : l === 1 ? '#CBD5E1' : '#E2E8F0',
       });
       connIdx++;
     });
@@ -315,14 +315,14 @@ export default function StartupIntro({ onComplete }) {
         ref={topShutterRef}
         className="absolute top-0 left-0 w-full h-1/2 bg-[#0A0E10] border-b border-white/[0.08] z-10 flex items-start justify-between p-6 sm:p-8"
       >
-        <div className="flex items-center gap-2.5 font-mono text-[11px] text-[#A7B7A1] tracking-widest uppercase">
-          <span className="w-2 h-2 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
+        <div className="flex items-center gap-2.5 font-mono text-[11px] text-[#CBD5E1] tracking-widest uppercase">
+          <span className="w-2 h-2 rounded-full bg-[#FFFFFF] animate-pulse shadow-[0_0_8px_#FFFFFF]" />
           <span>NEURAL NETWORK BOOT // FACILITY CORE</span>
         </div>
 
         <button
           onClick={() => onComplete && onComplete()}
-          className="text-xs font-mono text-[#E6E2D8]/50 hover:text-[#A7B7A1] transition-colors cursor-pointer tracking-wider uppercase px-3 py-1 rounded bg-white/[0.04] border border-white/[0.06] hover:border-white/[0.15]"
+          className="text-xs font-mono text-[#E6E2D8]/50 hover:text-[#CBD5E1] transition-colors cursor-pointer tracking-wider uppercase px-3 py-1 rounded bg-white/[0.04] border border-white/[0.06] hover:border-white/[0.15]"
         >
           [SKIP INTRO ↵]
         </button>
@@ -342,7 +342,7 @@ export default function StartupIntro({ onComplete }) {
       </div>
 
       {/* Ambient Radial Cyber Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.08)_0%,transparent_65%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.08)_0%,transparent_65%)] pointer-events-none" />
 
       {/* Center Neural Network & Brand Experience */}
       <div
@@ -351,7 +351,7 @@ export default function StartupIntro({ onComplete }) {
       >
         {/* Facility Header */}
         <div className="flex flex-col items-center space-y-2 mb-5">
-          <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/20 shadow-[0_0_20px_rgba(85,223,255,0.3)] bg-black mb-1">
+          <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/20 shadow-[0_0_20px_rgba(255,255,255,0.2)] bg-black mb-1">
             <Image
               src="/logo.png"
               alt="AI Club Logo"
@@ -362,8 +362,8 @@ export default function StartupIntro({ onComplete }) {
             />
           </div>
 
-          <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-[10px] font-mono tracking-[0.2em] uppercase text-[#A7B7A1]">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-ping" />
+          <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-[10px] font-mono tracking-[0.2em] uppercase text-[#CBD5E1]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#FFFFFF] animate-ping" />
             <span>CONNECTING NEURAL ARCHITECTURE</span>
           </div>
 
@@ -385,13 +385,13 @@ export default function StartupIntro({ onComplete }) {
             <defs>
               {/* Linear Gradients for Synapse Connections */}
               <linearGradient id="synapseGradCyan" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#24BFEA" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#A7B7A1" stopOpacity="0.8" />
+                <stop offset="0%" stopColor="#FFFFFF" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#CBD5E1" stopOpacity="0.8" />
               </linearGradient>
 
               <linearGradient id="synapseGradSage" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#A7B7A1" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#22C55E" stopOpacity="0.9" />
+                <stop offset="0%" stopColor="#CBD5E1" stopOpacity="0.8" />
+                <stop offset="100%" stopColor="#FFFFFF" stopOpacity="0.9" />
               </linearGradient>
 
               {/* Node Glow Filters */}
@@ -430,7 +430,7 @@ export default function StartupIntro({ onComplete }) {
                   strokeDashoffset="100"
                   style={{
                     transition: 'stroke-dashoffset 0.04s linear',
-                    filter: 'drop-shadow(0 0 3px rgba(36,191,234,0.4))',
+                    filter: 'drop-shadow(0 0 3px rgba(255, 255, 255,0.4))',
                   }}
                 />
               ))}
@@ -494,7 +494,7 @@ export default function StartupIntro({ onComplete }) {
           <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/[0.08] p-0.5">
             <div
               ref={progressLineRef}
-              className="w-full h-full bg-gradient-to-r from-[#24BFEA] via-[#A7B7A1] to-[#22C55E] origin-left rounded-full shadow-[0_0_12px_rgba(36,191,234,0.6)]"
+              className="w-full h-full bg-gradient-to-r from-[#FFFFFF] via-[#CBD5E1] to-[#FFFFFF] origin-left rounded-full shadow-[0_0_12px_rgba(255, 255, 255,0.6)]"
             />
           </div>
 
@@ -507,7 +507,7 @@ export default function StartupIntro({ onComplete }) {
             </span>
             <span
               ref={counterTextRef}
-              className="text-[11px] font-bold text-[#24BFEA] tnum"
+              className="text-[11px] font-bold text-[#FFFFFF] tnum"
             >
               0%
             </span>

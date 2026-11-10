@@ -25,7 +25,7 @@ export const GALLERY_ITEMS = [
     eventSlug: 'hack-ai-national-hackathon',
     eventTitle: 'HACK_AI 36-Hour Hackathon',
     alt: 'Participants working on laptops in a dimly lit auditorium with holographic display boards in the background',
-    gradient: 'from-[#55DFFF]/40 via-[#24BFEA]/20 to-[#07090A]',
+    gradient: 'from-[#FFFFFF]/40 via-[#E2E8F0]/20 to-[#07090A]',
   },
   {
     id: 'gal-002',
@@ -36,7 +36,7 @@ export const GALLERY_ITEMS = [
     eventSlug: 'cuda-kernel-optimization-workshop',
     eventTitle: 'CUDA Kernel Optimization Workshop',
     alt: 'Students analyzing GPU profiling waterfall flame charts and Triton code',
-    gradient: 'from-[#24BFEA]/35 via-[#24BFEA]/20 to-[#07090A]',
+    gradient: 'from-[#E2E8F0]/35 via-[#E2E8F0]/20 to-[#07090A]',
   },
   {
     id: 'gal-003',
@@ -47,7 +47,7 @@ export const GALLERY_ITEMS = [
     eventSlug: 'hack-ai-national-hackathon',
     eventTitle: 'Weekly Reading Group',
     alt: 'Whiteboard filled with attention math matrices and step-by-step reasoning diagrams',
-    gradient: 'from-[#38C9E8]/35 via-[#55DFFF]/20 to-[#07090A]',
+    gradient: 'from-[#38C9E8]/35 via-[#FFFFFF]/20 to-[#07090A]',
   },
   {
     id: 'gal-004',
@@ -58,7 +58,7 @@ export const GALLERY_ITEMS = [
     eventSlug: 'hack-ai-national-hackathon',
     eventTitle: 'Robotics Lab Trials',
     alt: 'Robotics testing bench with robotic chassis, LIDAR sensor nodes, and telemetry monitors',
-    gradient: 'from-[#24BFEA]/40 via-[#24BFEA]/25 to-[#07090A]',
+    gradient: 'from-[#E2E8F0]/40 via-[#E2E8F0]/25 to-[#07090A]',
   },
   {
     id: 'gal-005',
@@ -69,7 +69,7 @@ export const GALLERY_ITEMS = [
     eventSlug: 'agentic-ai-protocol-symposium',
     eventTitle: 'Agentic Protocol Symposium',
     alt: 'Interactive presentation screen showing multi-agent routing graphs and sandbox terminal',
-    gradient: 'from-[#55DFFF]/30 via-[#55DFFF]/25 to-[#07090A]',
+    gradient: 'from-[#FFFFFF]/30 via-[#FFFFFF]/25 to-[#07090A]',
   },
   {
     id: 'gal-006',
@@ -80,7 +80,7 @@ export const GALLERY_ITEMS = [
     eventSlug: 'cuda-kernel-optimization-workshop',
     eventTitle: 'Model Distillation Session',
     alt: 'Terminal displaying tokens per second benchmarks comparing FP16 vs INT4 performance',
-    gradient: 'from-[#55DFFF]/30 via-[#24BFEA]/30 to-[#07090A]',
+    gradient: 'from-[#FFFFFF]/30 via-[#E2E8F0]/30 to-[#07090A]',
   },
 ];
 
@@ -129,14 +129,14 @@ export default function GalleryPage() {
     <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Breadcrumb Navigation */}
        
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(255, 255, 255,0.18)] pb-8">
           <div>
            
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
@@ -147,14 +147,14 @@ export default function GalleryPage() {
             </p>
           </div>
 
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
+          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               CONFIRMED RECORDS
             </span>
-            <span className="text-3xl font-barlow-condensed font-bold text-[#55DFFF] tracking-wider block">
+            <span className="text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
               {GALLERY_ITEMS.length} ARCHIVES
             </span>
-            <span className="text-[10px] font-mono text-[#24BFEA]">Approved Visual Logs</span>
+            <span className="text-[10px] font-mono text-[#E2E8F0]">Approved Visual Logs</span>
           </div>
         </div>
 
@@ -171,8 +171,8 @@ export default function GalleryPage() {
                 }}
                 className={`px-3.5 py-1.5 text-xs font-mono rounded-full transition-all cursor-pointer whitespace-nowrap ${
                   active
-                    ? 'bg-[rgba(85,223,255,0.2)] text-white border border-[#55DFFF] shadow-[0_0_12px_rgba(85,223,255,0.3)] font-semibold'
-                    : 'bg-[#0C1014] text-slate-400 hover:text-white border border-[rgba(85,223,255,0.14)]'
+                    ? 'bg-[rgba(255, 255, 255,0.2)] text-white border border-[#FFFFFF] shadow-[0_0_12px_rgba(255, 255, 255,0.3)] font-semibold'
+                    : 'bg-[#0C1014] text-slate-400 hover:text-white border border-[rgba(255, 255, 255,0.14)]'
                 }`}
               >
                 {cat}
@@ -190,22 +190,22 @@ export default function GalleryPage() {
                 try { audioManager.playClick(); } catch {}
                 setLightboxIndex(index);
               }}
-              className="group cursor-pointer rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.18)] hover:border-[#55DFFF]/50 overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex flex-col justify-between"
+              className="group cursor-pointer rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.18)] hover:border-[#FFFFFF]/50 overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex flex-col justify-between"
             >
               {/* Visual Frame */}
               <div className={`relative h-48 w-full bg-gradient-to-br ${item.gradient} p-4 flex flex-col justify-between overflow-hidden`}>
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#07090A]/80 border border-white/[0.1] text-[#24BFEA]">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#07090A]/80 border border-white/[0.1] text-[#E2E8F0]">
                     {item.category}
                   </span>
-                  <div className="w-8 h-8 rounded-full bg-[#07090A]/80 border border-white/[0.15] flex items-center justify-center text-slate-300 group-hover:text-white group-hover:border-[#55DFFF] transition-colors">
+                  <div className="w-8 h-8 rounded-full bg-[#07090A]/80 border border-white/[0.15] flex items-center justify-center text-slate-300 group-hover:text-white group-hover:border-[#FFFFFF] transition-colors">
                     <Maximize2 className="w-3.5 h-3.5" />
                   </div>
                 </div>
 
                 <div>
                   <div className="text-[10px] font-mono text-slate-300 flex items-center gap-1.5 mb-1">
-                    <Calendar className="w-3 h-3 text-[#55DFFF]" />
+                    <Calendar className="w-3 h-3 text-[#FFFFFF]" />
                     <span>{item.date}</span>
                   </div>
                   <h3 className="text-lg font-barlow-condensed font-bold uppercase text-white leading-tight drop-shadow-md">
@@ -220,9 +220,9 @@ export default function GalleryPage() {
                   {item.caption}
                 </p>
 
-                <div className="pt-2 border-t border-[rgba(85,223,255,0.12)] flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="pt-2 border-t border-[rgba(255, 255, 255,0.12)] flex items-center justify-between text-[11px] font-mono text-slate-400">
                   <span className="truncate">{item.eventTitle}</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#55DFFF] group-hover:translate-x-1 transition-transform shrink-0" />
+                  <ChevronRight className="w-3.5 h-3.5 text-[#FFFFFF] group-hover:translate-x-1 transition-transform shrink-0" />
                 </div>
               </div>
             </div>
@@ -240,11 +240,11 @@ export default function GalleryPage() {
             {/* Backdrop click closer */}
             <div className="absolute inset-0" onClick={closeLightbox} />
 
-            <div className="relative z-10 max-w-4xl w-full bg-[#0C1014] border border-[rgba(85,223,255,0.3)] rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(85,223,255,0.25)]">
+            <div className="relative z-10 max-w-4xl w-full bg-[#0C1014] border border-[rgba(255, 255, 255,0.3)] rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(255, 255, 255,0.25)]">
               {/* Top Modal Controls */}
-              <div className="flex items-center justify-between p-4 px-6 border-b border-[rgba(85,223,255,0.18)] bg-[#07090A]">
+              <div className="flex items-center justify-between p-4 px-6 border-b border-[rgba(255, 255, 255,0.18)] bg-[#07090A]">
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[rgba(85,223,255,0.15)] text-[#55DFFF] border border-[rgba(85,223,255,0.3)] font-semibold">
+                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded bg-[rgba(255, 255, 255,0.15)] text-[#FFFFFF] border border-[rgba(255, 255, 255,0.3)] font-semibold">
                     {activeItem.category}
                   </span>
                   <span className="text-xs font-mono text-slate-400">
@@ -264,7 +264,7 @@ export default function GalleryPage() {
               {/* Main Visual Display */}
               <div className={`relative h-64 sm:h-96 w-full bg-gradient-to-br ${activeItem.gradient} p-8 flex items-center justify-center text-center`}>
                 <div className="max-w-xl">
-                  <div className="w-16 h-16 rounded-2xl bg-black/40 border border-white/[0.15] flex items-center justify-center mx-auto mb-4 text-[#55DFFF] shadow-lg">
+                  <div className="w-16 h-16 rounded-2xl bg-black/40 border border-white/[0.15] flex items-center justify-center mx-auto mb-4 text-[#FFFFFF] shadow-lg">
                     <ImageIcon className="w-8 h-8" />
                   </div>
                   <h2 className="text-2xl sm:text-4xl font-barlow-condensed font-bold uppercase text-white mb-2 leading-tight">
@@ -281,7 +281,7 @@ export default function GalleryPage() {
                     e.stopPropagation();
                     handlePrev();
                   }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-[#55DFFF] border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-[#FFFFFF] border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
                   aria-label="Previous Image"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -291,7 +291,7 @@ export default function GalleryPage() {
                     e.stopPropagation();
                     handleNext();
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-[#55DFFF] border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-[#FFFFFF] border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
                   aria-label="Next Image"
                 >
                   <ChevronRight className="w-5 h-5" />
@@ -301,8 +301,8 @@ export default function GalleryPage() {
               {/* Lightbox Footer Info */}
               <div className="p-6 bg-[#07090A] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div>
-                  <div className="flex items-center gap-2 text-xs font-mono text-[#24BFEA] mb-1">
-                    <Calendar className="w-3.5 h-3.5 text-[#55DFFF]" />
+                  <div className="flex items-center gap-2 text-xs font-mono text-[#E2E8F0] mb-1">
+                    <Calendar className="w-3.5 h-3.5 text-[#FFFFFF]" />
                     <span>Recorded: {activeItem.date}</span>
                   </div>
                   <p className="text-xs sm:text-sm text-slate-300 font-manrope max-w-xl">

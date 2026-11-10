@@ -143,7 +143,7 @@ export default function HolographicCard({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
-      className={`group relative overflow-hidden focus-within:border-[#24BFEA] focus-within:shadow-[0_0_24px_rgba(36,191,234,0.35)] transition-all duration-300 ${
+      className={`group relative overflow-hidden focus-within:border-[#E2E8F0] focus-within:shadow-[0_0_24px_rgba(255, 255, 255, 0.35)] transition-all duration-300 ${
         isClicked ? 'scale-[0.985]' : ''
       } ${className}`}
       style={{
@@ -155,7 +155,7 @@ export default function HolographicCard({
           : 'perspective(1000px) translateY(35px) scale(0.97)',
         opacity: isVisible ? 1 : 0,
         boxShadow: !isVisible
-          ? '0 0 24px rgba(36, 191, 234, 0.35)'
+          ? '0 0 24px rgba(255, 255, 255, 0.35)'
           : undefined,
         transitionProperty: 'transform, opacity, box-shadow, border-color',
         transitionDuration: isVisible ? (isHovered ? '120ms' : '480ms') : '480ms',
@@ -168,23 +168,23 @@ export default function HolographicCard({
       <div
         className={`absolute top-0 left-0 right-0 h-[1.5px] pointer-events-none z-20 transition-opacity duration-300 ${
           isFeatured
-            ? 'bg-gradient-to-r from-transparent via-[#24BFEA] to-transparent opacity-90'
-            : 'bg-gradient-to-r from-transparent via-[#24BFEA]/60 to-transparent opacity-40 group-hover:opacity-100'
+            ? 'bg-gradient-to-r from-transparent via-[#E2E8F0] to-transparent opacity-90'
+            : 'bg-gradient-to-r from-transparent via-[#E2E8F0]/60 to-transparent opacity-40 group-hover:opacity-100'
         }`}
       />
 
       {/* Solo Leveling Tech Corner Notches */}
-      <div className="absolute top-2 left-2 w-1.5 h-1.5 border-t border-l border-[#24BFEA]/40 pointer-events-none z-20 group-hover:border-[#24BFEA]/80 transition-colors" />
-      <div className="absolute top-2 right-2 w-1.5 h-1.5 border-t border-r border-[#24BFEA]/40 pointer-events-none z-20 group-hover:border-[#24BFEA]/80 transition-colors" />
-      <div className="absolute bottom-2 left-2 w-1.5 h-1.5 border-b border-l border-[#24BFEA]/40 pointer-events-none z-20 group-hover:border-[#24BFEA]/80 transition-colors" />
-      <div className="absolute bottom-2 right-2 w-1.5 h-1.5 border-b border-r border-[#24BFEA]/40 pointer-events-none z-20 group-hover:border-[#24BFEA]/80 transition-colors" />
+      <div className="absolute top-2 left-2 w-1.5 h-1.5 border-t border-l border-[#E2E8F0]/40 pointer-events-none z-20 group-hover:border-[#E2E8F0]/80 transition-colors" />
+      <div className="absolute top-2 right-2 w-1.5 h-1.5 border-t border-r border-[#E2E8F0]/40 pointer-events-none z-20 group-hover:border-[#E2E8F0]/80 transition-colors" />
+      <div className="absolute bottom-2 left-2 w-1.5 h-1.5 border-b border-l border-[#E2E8F0]/40 pointer-events-none z-20 group-hover:border-[#E2E8F0]/80 transition-colors" />
+      <div className="absolute bottom-2 right-2 w-1.5 h-1.5 border-b border-r border-[#E2E8F0]/40 pointer-events-none z-20 group-hover:border-[#E2E8F0]/80 transition-colors" />
 
       {/* Dynamic Cursor-Tracked Specular Holographic Sheen */}
       <div
         className="absolute inset-0 pointer-events-none z-10 transition-opacity duration-300 opacity-0 group-hover:opacity-100"
         style={{
           background:
-            'radial-gradient(450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(36, 191, 234, 0.09), transparent 60%)',
+            'radial-gradient(450px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), rgba(255, 255, 255, 0.09), transparent 60%)',
         }}
       />
 
@@ -192,7 +192,7 @@ export default function HolographicCard({
       <div
         className={`absolute inset-0 pointer-events-none z-20 rounded-2xl transition-opacity duration-300 ${
           isClicked
-            ? 'opacity-100 shadow-[inset_0_0_20px_rgba(36,191,234,0.4),0_0_28px_rgba(36,191,234,0.6)] border border-[#24BFEA]'
+            ? 'opacity-100 shadow-[inset_0_0_20px_rgba(255, 255, 255, 0.4),0_0_28px_rgba(255, 255, 255, 0.6)] border border-[#E2E8F0]'
             : 'opacity-0'
         }`}
       />

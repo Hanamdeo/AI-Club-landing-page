@@ -49,3 +49,4 @@ next-env.d.ts
 /public/qa-screenshots/
 qa-report.json
 scripts/center-logo.ps1
+scratch/

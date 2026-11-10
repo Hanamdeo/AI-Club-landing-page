@@ -63,9 +63,9 @@
   --light-warm: #FFF8EE;
 
   /* Subtle Glassmorphism & High-Contrast Readability Tokens */
-  --accent-cyan: #55DFFF;
-  --accent-cyan-dim: rgba(85, 223, 255, 0.28);
-  --accent-cyan-glow: rgba(85, 223, 255, 0.15);
+  --accent-cyan: #FFFFFF;
+  --accent-cyan-dim: rgba(255, 255, 255, 0.28);
+  --accent-cyan-glow: rgba(255, 255, 255, 0.15);
   --text-heading: #FFFFFF;
   --text-desc: rgba(240, 247, 255, 0.92);
   --text-secondary: #B8C7D4;
@@ -216,7 +216,7 @@ p, span, a, button, input, select, textarea, label {
 }
 
 .text-gradient-cyan {
-  background: linear-gradient(135deg, #E0F7FF 0%, #24BFEA 60%, #0090C4 100%);
+  background: linear-gradient(135deg, #E0F7FF 0%, #CBD5E1 60%, #64748B 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
@@ -226,7 +226,7 @@ p, span, a, button, input, select, textarea, label {
 }
 
 .text-glow-cyan {
-  text-shadow: 0 0 24px rgba(36, 191, 234, 0.45);
+  text-shadow: 0 0 24px rgba(255, 255, 255, 0.45);
 }
 
 /* 3D Slade / Slay Display Font with Stereoscopic Anaglyph Depth */
@@ -356,8 +356,8 @@ code, pre, .terminal-mono, .font-mono {
 /* Futuristic Subtle Glass Button with Cyan Accent */
 .btn-glass-cyan,
 .btn-glass-orange {
-  background: rgba(85, 223, 255, 0.08);
-  border: 1px solid rgba(85, 223, 255, 0.28);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   color: #FFFFFF;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
@@ -366,10 +366,10 @@ code, pre, .terminal-mono, .font-mono {
 
 .btn-glass-cyan:hover,
 .btn-glass-orange:hover {
-  background: rgba(85, 223, 255, 0.18);
-  border-color: #55DFFF;
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.35);
   color: #FFFFFF;
-  box-shadow: 0 0 16px rgba(85, 223, 255, 0.25);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
 }
 
@@ -389,7 +389,7 @@ code, pre, .terminal-mono, .font-mono {
 }
 
 .text-cyan-accent {
-  color: #55DFFF;
+  color: #FFFFFF;
 }
 
 .glass-border-sage {
@@ -626,30 +626,30 @@ code, pre, .terminal-mono, .font-mono {
   background: rgba(10, 16, 22, 0.78);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(36, 191, 234, 0.25);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(36, 191, 234, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.45), 0 0 16px rgba(255, 255, 255, 0.08);
   border-radius: 1rem;
 }
 
 .solo-leveling-card:hover {
   background: rgba(12, 20, 28, 0.85);
-  border-color: rgba(36, 191, 234, 0.65);
-  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.60), 0 0 24px rgba(36, 191, 234, 0.26);
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.60), 0 0 24px rgba(255, 255, 255, 0.26);
 }
 
 .solo-leveling-card-featured {
   background: rgba(10, 18, 26, 0.82);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(36, 191, 234, 0.45);
-  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.50), 0 0 20px rgba(36, 191, 234, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 4px 28px rgba(0, 0, 0, 0.50), 0 0 20px rgba(255, 255, 255, 0.18);
   border-radius: 1rem;
 }
 
 .solo-leveling-card-featured:hover {
   background: rgba(12, 22, 32, 0.88);
-  border-color: rgba(36, 191, 234, 0.85);
-  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65), 0 0 30px rgba(36, 191, 234, 0.35);
+  border-color: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.65), 0 0 30px rgba(255, 255, 255, 0.35);
 }
 
 @media (prefers-reduced-motion: reduce) {

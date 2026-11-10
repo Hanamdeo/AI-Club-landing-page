@@ -2,7 +2,7 @@
    EVENTS PAGE SCOPED TYPOGRAPHY & COLOR SYSTEM
    Strictly isolated to .events-page wrapper.
    3D Facility Core Combination:
-   - Primary Accent: Electric Cyan (#55DFFF / #24BFEA / #38C9E8)
+   - Primary Accent: Electric Cyan (#FFFFFF / #E2E8F0 / #38C9E8)
    - Secondary Accent: Facility Deep Blue & Slate (#0B1924 / #64748B / #B8C7D4)
    - Foundation Base: Deep Obsidian Black (#050C12 / #08121A / #0D1012)
    - Contrast & Structure: Stark Pure White (#FFFFFF / #F0F6F7)
@@ -34,8 +34,8 @@
 }
 
 .events-page {
-  --color-cyan: #55DFFF;
-  --color-blue: #24BFEA;
+  --color-cyan: #FFFFFF;
+  --color-blue: #E2E8F0;
   --color-blue-deep: #08121A;
   --color-black-deep: #050C12;
   --color-black-card: #08121A;
@@ -91,8 +91,8 @@
   letter-spacing: -0.01em !important;
   color: #FFFFFF !important;
   text-shadow: 
-    1px 1px 0px rgba(85, 223, 255, 0.95),
-    2px 2px 0px rgba(36, 191, 234, 0.85),
+    1px 1px 0px rgba(255, 255, 255, 0.95),
+    2px 2px 0px rgba(255, 255, 255, 0.85),
     3px 3px 0px rgba(14, 116, 144, 0.75),
     4px 4px 0px rgba(8, 47, 73, 0.65),
     6px 6px 14px rgba(0, 0, 0, 0.95);
@@ -107,9 +107,9 @@
   color: #FFFFFF !important;
   text-shadow: 
     0 0 8px rgba(255, 255, 255, 0.8),
-    0 0 16px rgba(85, 223, 255, 0.85),
-    0 0 32px rgba(36, 191, 234, 0.5),
-    0 0 50px rgba(85, 223, 255, 0.3);
+    0 0 16px rgba(255, 255, 255, 0.85),
+    0 0 32px rgba(255, 255, 255, 0.5),
+    0 0 50px rgba(255, 255, 255, 0.3);
   filter: blur(0.35px);
   -webkit-filter: blur(0.35px);
 }
@@ -122,10 +122,10 @@
   line-height: 0.90 !important;
   letter-spacing: -0.015em !important;
   text-transform: uppercase !important;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 35%, #CFFAFE 70%, #55DFFF 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 35%, #CFFAFE 70%, #FFFFFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 20px rgba(85, 223, 255, 0.3)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
+  filter: drop-shadow(0 4px 20px rgba(255, 255, 255, 0.3)) drop-shadow(0 2px 8px rgba(0, 0, 0, 0.9));
 }
 
 /* Detail Page Hero Title */
@@ -136,10 +136,10 @@
   line-height: 0.96 !important;
   letter-spacing: -0.015em !important;
   text-transform: uppercase !important;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 40%, #CFFAFE 75%, #55DFFF 100%);
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFFFFF 40%, #CFFAFE 75%, #FFFFFF 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 18px rgba(85, 223, 255, 0.28));
+  filter: drop-shadow(0 4px 18px rgba(255, 255, 255, 0.28));
 }
 
 /* 2. Section Headings */
@@ -243,7 +243,7 @@
   transform: translate3d(0, 0, 90px) rotateY(0deg) scale(1);
   z-index: 30;
   opacity: 1;
-  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 30px rgba(85, 223, 255, 0.28));
+  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.95)) drop-shadow(0 0 30px rgba(255, 255, 255, 0.28));
   pointer-events: auto;
 }
 

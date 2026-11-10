@@ -23,73 +23,64 @@ export default function Zone1Hero({ onExploreClick }) {
   return (
     <section
       id="section-arrival"
-      className="relative w-full min-h-[100svh] flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-16 pt-20 sm:pt-28 pb-4 sm:pb-8 select-none font-sans"
+      className="relative w-full h-full min-h-[100svh] flex flex-col justify-between px-4 sm:px-6 md:px-10 lg:px-12 pt-20 sm:pt-24 pb-4 sm:pb-6 select-none font-sans"
     >
       {/* ============================================================== */}
-      {/* MASTER TWO-COLUMN HERO COMPOSITION                              */}
+      {/* MASTER HERO COMPOSITION - STRICTLY LEFT FLANK DOCKED           */}
+      {/* Leaves entire screen center and right wide open for the robot  */}
       {/* ============================================================== */}
-      <div className="w-full mt-auto mb-20 lg:my-auto py-2 sm:py-4 pointer-events-none">
-        <div className="w-full flex flex-col lg:flex-row items-center justify-between gap-8 lg:gap-12">
-          {/* ========================================================== */}
-          {/* LEFT SIDE: IN-WORLD FLOATING HOLOGRAPHIC HUD TEXT          */}
-          {/* Compact width strictly docked left: Zero overlap with robot */}
-          {/* ========================================================== */}
-          <div className="w-full sm:max-w-[420px] lg:max-w-[440px] xl:max-w-[460px] mr-auto pointer-events-auto safe-viewport-card custom-scrollbar">
-            <div className="glass-panel p-6 sm:p-7 md:p-8 relative">
-              {/* Sector Header Tag & Official Logo */}
-              <div className="flex items-center justify-between mb-3">
-                <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-slate-400 uppercase">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
-                  <span>SECTOR 01 // HOLOGRAPHIC HUD</span>
-                </div>
-                <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.15)] bg-black shrink-0">
-                  <Image
-                    src="/logo.png"
-                    alt="AI Club Logo"
-                    width={32}
-                    height={32}
-                    className="w-full h-full object-cover"
-                  />
-                </div>
+      <div className="w-full mt-auto mb-24 sm:my-auto pointer-events-none flex">
+        {/* Left-docked Floating Holographic HUD Card - Zero overlap with robot */}
+        <div className="w-full sm:max-w-[380px] lg:max-w-[400px] xl:max-w-[420px] mr-auto pointer-events-auto safe-viewport-card custom-scrollbar">
+          <div className="glass-panel p-5 sm:p-6 md:p-7 relative">
+            {/* Sector Header Tag & Logo */}
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-slate-400 uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+                <span>SECTOR 01 // HOLOGRAPHIC HUD</span>
               </div>
+              <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.15)] bg-black shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="AI Club Logo"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
 
-              {/* Master Display Heading */}
-              <h1 className="text-fluid-hero font-display font-black tracking-tight text-white mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
-                {CLUB_INFO.name}
-              </h1>
+            {/* Master Display Heading */}
+            <h1 className="text-fluid-hero font-display font-black tracking-tight text-white mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+              {CLUB_INFO.name}
+            </h1>
 
-              {/* Tagline with Space Grotesk - Monochrome Silver */}
-              <p className="text-base sm:text-lg lg:text-xl font-space font-medium text-white/90 mb-3 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
-                {CLUB_INFO.tagline}
-              </p>
+            {/* Tagline with Space Grotesk - Monochrome Silver */}
+            <p className="text-base sm:text-lg lg:text-xl font-space font-medium text-white/90 mb-3 tracking-tight drop-shadow-[0_2px_8px_rgba(0,0,0,0.6)]">
+              {CLUB_INFO.tagline}
+            </p>
 
-              {/* Controlled-Width Description Prose */}
-              <p className="text-xs sm:text-sm text-slate-300 max-w-[400px] leading-[1.65] mb-6 font-normal drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
-                An autonomous collegiate research collective advancing machine intelligence, foundation models, and high-performance computing infrastructure at Madhav Institute of Technology & Science.
-              </p>
+            {/* Controlled-Width Description Prose */}
+            <p className="text-xs sm:text-sm text-slate-300 max-w-[360px] leading-[1.65] mb-6 font-normal drop-shadow-[0_1px_6px_rgba(0,0,0,0.7)]">
+              An autonomous collegiate research collective advancing machine intelligence, foundation models, and high-performance computing infrastructure at Madhav Institute of Technology & Science.
+            </p>
 
-              {/* In-World Terminal Action Button & Scroll Prompt */}
-              <div className="flex flex-wrap items-center gap-4 pt-1">
-                <button
-                  onClick={handleEnter}
-                  className="group flex items-center gap-3 px-6 py-3.5 font-display font-bold text-xs rounded-xl tracking-wider uppercase btn-tactile cursor-pointer bg-white/10 hover:bg-white/20 border border-white/20 text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] transition-all"
-                >
-                  <span className="text-white">EXPLORE FACILITY</span>
-                  <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5 text-white" />
-                </button>
+            {/* In-World Terminal Action Button & Scroll Prompt */}
+            <div className="flex flex-wrap items-center gap-4 pt-1">
+              <button
+                onClick={handleEnter}
+                className="group flex items-center gap-3 px-5 py-3 font-display font-bold text-xs rounded-xl tracking-wider uppercase btn-tactile cursor-pointer bg-white/10 hover:bg-white/20 border border-white/20 text-white shadow-[0_0_20px_rgba(255,255,255,0.08)] transition-all"
+              >
+                <span className="text-white">EXPLORE FACILITY</span>
+                <ArrowDown className="w-4 h-4 transition-transform group-hover:translate-y-0.5 text-white" />
+              </button>
 
-                <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] text-slate-400 uppercase tracking-wider drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
-                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
-                  <span>[PRESS ↓ OR SCROLL TO NAVIGATE]</span>
-                </div>
+              <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] text-slate-400 uppercase tracking-wider drop-shadow-[0_1px_4px_rgba(0,0,0,0.8)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+                <span>[PRESS ↓ OR SCROLL]</span>
               </div>
             </div>
           </div>
-
-          {/* ========================================================== */}
-          {/* RIGHT SIDE: Open Aperture for Centered Robot NEX-01        */}
-          {/* ========================================================== */}
-          <div className="hidden lg:block lg:w-[52%] xl:w-[56%] pointer-events-none" />
         </div>
       </div>
 
