@@ -91,7 +91,7 @@ export default function DataCentreFloor() {
 
       {/* 2. Raised Floor 600mm Tile Grid Seams (Clear metallic joints) */}
       <gridHelper
-        args={[95, 158, '#323E40', '#222B2D']}
+        args={[95, 76, '#323E40', '#222B2D']}
         position={[0, 0.003, -25]}
       />
 

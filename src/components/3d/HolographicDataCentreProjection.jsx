@@ -105,26 +105,34 @@ export default function HolographicDataCentreProjection({
     const pulse = 0.5 + Math.sin(t * 3.6) * 0.3;
 
     if (cubeMeshRef.current) {
-      cubeMeshRef.current.material.opacity = (baseHoloAlpha * 0.18 + (activeScan ? pulse * 0.16 : 0.02));
-      cubeMeshRef.current.visible = cubeMeshRef.current.material.opacity > 0.005;
+      const alpha = activeScan ? pulse * 0.16 + 0.10 : baseHoloAlpha * 0.18;
+      cubeMeshRef.current.material.opacity = alpha;
+      cubeMeshRef.current.visible = activeScan || baseHoloAlpha > 0.05;
     }
 
     if (edgeLinesRef.current) {
-      edgeLinesRef.current.material.opacity = (baseHoloAlpha * 0.85 + (activeScan ? pulse * 0.45 : 0.12));
-      edgeLinesRef.current.visible = edgeLinesRef.current.material.opacity > 0.01;
+      const alpha = activeScan ? pulse * 0.45 + 0.40 : baseHoloAlpha * 0.85;
+      edgeLinesRef.current.material.opacity = alpha;
+      edgeLinesRef.current.visible = activeScan || baseHoloAlpha > 0.05;
     }
 
     if (beamLinesRef.current) {
-      beamLinesRef.current.material.opacity = (baseHoloAlpha * 0.45 + (activeScan ? 0.35 : 0.0));
-      beamLinesRef.current.visible = beamLinesRef.current.material.opacity > 0.05;
+      const alpha = activeScan ? 0.35 : baseHoloAlpha * 0.45;
+      beamLinesRef.current.material.opacity = alpha;
+      beamLinesRef.current.visible = activeScan && alpha > 0.05;
     }
 
     // Vertical sweep scanning plane during cluster transit
     if (scanPlaneRef.current) {
-      const scanCycle = (t * 1.8) % 2.0;
-      const scanY = 0.1 + scanCycle * 1.2;
-      scanPlaneRef.current.position.y = scanY;
-      scanPlaneRef.current.material.opacity = (baseHoloAlpha > 0.05 || activeScan) ? 0.55 : 0.0;
+      if (activeScan) {
+        scanPlaneRef.current.visible = true;
+        const scanCycle = (t * 1.8) % 2.0;
+        const scanY = 0.1 + scanCycle * 1.2;
+        scanPlaneRef.current.position.y = scanY;
+        scanPlaneRef.current.material.opacity = 0.55;
+      } else {
+        scanPlaneRef.current.visible = false;
+      }
     }
   });
 

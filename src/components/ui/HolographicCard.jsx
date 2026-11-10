@@ -28,6 +28,7 @@ export default function HolographicCard({
   const [isHovered, setIsHovered] = useState(false);
   const clickTimeoutRef = useRef(null);
   const rafRef = useRef(null);
+  const rectRef = useRef(null);
 
   // Stagger calculation: 90ms per index, cycling every 8 items so later cards don't wait too long
   const staggerDelay = (index % 8) * 90;
@@ -69,7 +70,7 @@ export default function HolographicCard({
     };
   }, []);
 
-  // Subtle 3D perspective tilt calculation using CSS custom variables
+  // Subtle 3D perspective tilt calculation using cached rect
   const handleMouseMove = useCallback((e) => {
     if (!cardRef.current) return;
 
@@ -80,7 +81,10 @@ export default function HolographicCard({
     rafRef.current = requestAnimationFrame(() => {
       const el = cardRef.current;
       if (!el) return;
-      const rect = el.getBoundingClientRect();
+      if (!rectRef.current) {
+        rectRef.current = el.getBoundingClientRect();
+      }
+      const rect = rectRef.current;
       const x = (e.clientX - rect.left) / rect.width - 0.5; // -0.5 to 0.5
       const y = (e.clientY - rect.top) / rect.height - 0.5; // -0.5 to 0.5
 
@@ -97,10 +101,14 @@ export default function HolographicCard({
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
+    if (cardRef.current) {
+      rectRef.current = cardRef.current.getBoundingClientRect();
+    }
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
+    rectRef.current = null;
     if (rafRef.current) {
       cancelAnimationFrame(rafRef.current);
     }

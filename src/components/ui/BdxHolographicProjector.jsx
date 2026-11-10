@@ -13,15 +13,8 @@ import {
 import { getBdxProjectionPayload } from '@/lib/contentSelectors';
 import { audioManager } from '@/utils/audioManager';
 
-// Dynamic import of Canvas for the floating companion robot
-const CompanionCanvas = dynamic(() => import('./BdxCompanionCanvas'), {
-  ssr: false,
-  loading: () => (
-    <div className="w-14 h-14 rounded-xl bg-[#141819] border border-white/[0.12] flex items-center justify-center">
-      <span className="text-[10px] text-sage font-mono font-bold">BDX</span>
-    </div>
-  ),
-});
+import RobotFace from '@/components/ui/RobotFace';
+
 
 const PROJECTION_MODES = [
   { key: 'EVENTS', label: 'Events' },
@@ -308,7 +301,11 @@ export default function BdxHolographicProjector({
             className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0D1011] border border-white/[0.14] overflow-hidden cursor-pointer hover:border-white transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
             title="BDX-01 Companion (Click/tap to cycle expressions)"
           >
-            <CompanionCanvas isProjecting={isOpen && !isMinimized} />
+            <RobotFace
+              size={44}
+              variant={isOpen && !isMinimized ? 'friendly' : 'neutral'}
+              className="drop-shadow-[0_2px_8px_rgba(255,255,255,0.2)]"
+            />
           </div>
         </div>
       </div>

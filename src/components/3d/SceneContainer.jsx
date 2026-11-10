@@ -53,31 +53,14 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
         intensity={1.50}
       />
 
-      {/* 2. Cohesive Lateral Rack Grazing Lights (Uniform Ice-Silver Cyan for natural metallic speculars) */}
-      {/* Left Row Grazing */}
+      {/* 2. Cohesive Lateral Rack Grazing Light (Uniform Ice-Silver Cyan for natural metallic speculars) */}
       <directionalLight
-        ref={rackGrazingLeftRef}
-        position={[4.6, 4.2, -15]}
+        position={[0, 4.5, -15]}
         color="#E2E8F0"
         intensity={0.65}
       />
 
-      {/* Right Row Grazing */}
-      <directionalLight
-        ref={rackGrazingRightRef}
-        position={[-4.6, 4.2, -15]}
-        color="#E2E8F0"
-        intensity={0.65}
-      />
-
-      {/* 3. Midground Soft Sage Floor Warmth: Signature AI Club atmospheric tone */}
-      <directionalLight
-        position={[0, 3.5, -22]}
-        color="#D1D5DB"
-        intensity={0.40}
-      />
-
-      {/* 4. Dynamic Chamber Pedestal Spot */}
+      {/* 3. Dynamic Chamber Pedestal Spot */}
       <spotLight
         ref={chamberSpotRef}
         position={[0, 8.0, -35.0]}
@@ -121,7 +104,7 @@ export default function SceneContainer({
         className="pointer-events-auto"
         style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
         camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.1, far: 110 }}
-        dpr={[1, tierState.dpr]}
+        dpr={[1, Math.min(1.25, tierState.dpr)]}
         gl={{
           antialias: tierState.tier !== 'low',
           powerPreference: 'high-performance',

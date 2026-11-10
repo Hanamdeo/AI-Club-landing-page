@@ -84,7 +84,7 @@ export default function Home() {
       lenis.raf(time * 1000);
     };
     gsap.ticker.add(tickerUpdate);
-    gsap.ticker.lagSmoothing(0);
+    gsap.ticker.lagSmoothing(500, 33);
 
     // Progressive Depth ScrollTrigger driving the entire 3D data centre journey
     const ctx = gsap.context(() => {
