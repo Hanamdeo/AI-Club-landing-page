@@ -33,31 +33,43 @@ const VARIANT_CONFIGS = {
     name: 'Robot 01 — Friendly (Happy Arcs)',
     duration: '4.2s',
     delay: '0.5s',
+    waveDuration: '1.35s',
+    waveDelay: '0.1s',
   },
   neutral: {
     name: 'Robot 02 — Neutral (Calm LED Ovals)',
     duration: '4.7s',
     delay: '1.2s',
+    waveDuration: '1.5s',
+    waveDelay: '0.3s',
   },
   curious: {
     name: 'Robot 03 — Curious (Asymmetric Inquisitive)',
     duration: '3.9s',
     delay: '1.8s',
+    waveDuration: '1.3s',
+    waveDelay: '0.4s',
   },
   focused: {
     name: 'Robot 04 — Focused (Angled Concentrated Slits)',
     duration: '5.1s',
     delay: '2.4s',
+    waveDuration: '1.6s',
+    waveDelay: '0.2s',
   },
   analytical: {
     name: 'Robot 05 — Analytical (Scanner Reticles)',
     duration: '4.0s',
     delay: '1.0s',
+    waveDuration: '1.45s',
+    waveDelay: '0.5s',
   },
   surprised: {
     name: 'Robot 06 — Surprised (Wide Apertures)',
     duration: '4.8s',
     delay: '2.8s',
+    waveDuration: '1.25s',
+    waveDelay: '0.2s',
   },
 };
 
@@ -65,6 +77,7 @@ export default function RobotFace({
   variant = 'friendly',
   size = 68,
   className = '',
+  wave,
 }) {
   // Normalize variant string or number index
   let normalizedVariant = 'friendly';
@@ -73,6 +86,15 @@ export default function RobotFace({
   } else if (typeof variant === 'string' && VARIANT_CONFIGS[variant.toLowerCase()]) {
     normalizedVariant = variant.toLowerCase();
   }
+
+  // Only two robot types wave:
+  // 1. 'friendly' — waves happily and continuously
+  // 2. 'neutral' (or 'curious') — waves after some time (periodic wave with quiet rest in between)
+  // All other robot types ('focused', 'analytical', 'surprised', etc.) strictly keep arms down and JUST BLINK THEIR EYES!
+  const isFriendly = normalizedVariant === 'friendly';
+  const isPeriodic = normalizedVariant === 'neutral' || normalizedVariant === 'curious';
+  const shouldWave =
+    typeof wave === 'boolean' ? wave : isFriendly || isPeriodic;
 
   const config = VARIANT_CONFIGS[normalizedVariant] || VARIANT_CONFIGS.friendly;
   const animClass = `robot-blink-${normalizedVariant}`;
@@ -97,13 +119,57 @@ export default function RobotFace({
             transform: scaleY(0.06);
           }
         }
+        /* 1. Happy Continuous Wave for 'friendly' */
+        @keyframes robotHappyWave {
+          0%, 100% {
+            transform: rotate(-116deg);
+          }
+          50% {
+            transform: rotate(-152deg);
+          }
+        }
+        /* 2. Periodic Wave for 'curious' (rests quietly with arm down, waves after some time) */
+        @keyframes robotPeriodicWave {
+          0%, 65%, 100% {
+            transform: rotate(-22deg);
+          }
+          72% {
+            transform: rotate(-120deg);
+          }
+          78% {
+            transform: rotate(-150deg);
+          }
+          84% {
+            transform: rotate(-120deg);
+          }
+          90% {
+            transform: rotate(-150deg);
+          }
+          96% {
+            transform: rotate(-120deg);
+          }
+          99% {
+            transform: rotate(-22deg);
+          }
+        }
         .${animClass} {
           transform-origin: 40px 29.5px;
           animation: robotBlinkKeyframe ${config.duration} infinite ease-in-out;
           animation-delay: ${config.delay};
         }
+        .robot-wave-happy {
+          transform-origin: 0px 0px;
+          animation: robotHappyWave 1.4s infinite ease-in-out;
+        }
+        .robot-wave-periodic {
+          transform-origin: 0px 0px;
+          animation: robotPeriodicWave 7.5s infinite ease-in-out;
+          animation-delay: 1.5s;
+        }
         @media (prefers-reduced-motion: reduce) {
-          .${animClass} {
+          .${animClass},
+          .robot-wave-happy,
+          .robot-wave-periodic {
             animation: none !important;
           }
         }
@@ -249,12 +315,24 @@ export default function RobotFace({
           <path d="M17.5 67 Q19.75 70 22 67" stroke="#1A2434" strokeWidth="1.2" strokeLinecap="round" />
         </g>
 
-        {/* Right Arm (Angled down-right) */}
-        <g transform="rotate(-22 60 62)">
-          <rect x="56.5" y="52" width="7.5" height="19" rx="3.75" fill="url(#fullRoboArmGradR)" stroke="#CBD5E1" strokeWidth="0.9" />
-          {/* Inner Dark Joint Accent */}
-          <path d="M58 67 Q60.25 70 62.5 67" stroke="#1A2434" strokeWidth="1.2" strokeLinecap="round" />
-        </g>
+        {/* Right Arm: Only 'friendly' and periodic wave robots wave; rest strictly resting down */}
+        {shouldWave ? (
+          <g transform="translate(60, 55)">
+            <g className={isPeriodic ? 'robot-wave-periodic' : 'robot-wave-happy'}>
+              <g transform="translate(-60, -55)">
+                <rect x="56.5" y="52" width="7.5" height="19" rx="3.75" fill="url(#fullRoboArmGradR)" stroke="#CBD5E1" strokeWidth="0.9" />
+                {/* Inner Dark Joint Accent */}
+                <path d="M58 67 Q60.25 70 62.5 67" stroke="#1A2434" strokeWidth="1.2" strokeLinecap="round" />
+              </g>
+            </g>
+          </g>
+        ) : (
+          /* Stationary resting arm (all other robots) - only blinking their eyes */
+          <g transform="rotate(-22 60 62)">
+            <rect x="56.5" y="52" width="7.5" height="19" rx="3.75" fill="url(#fullRoboArmGradR)" stroke="#CBD5E1" strokeWidth="0.9" />
+            <path d="M58 67 Q60.25 70 62.5 67" stroke="#1A2434" strokeWidth="1.2" strokeLinecap="round" />
+          </g>
+        )}
 
         {/* ============================================================== */}
         {/* 5. CHASSIS HEAD DOME (Spherical Pearlescent White)             */}
