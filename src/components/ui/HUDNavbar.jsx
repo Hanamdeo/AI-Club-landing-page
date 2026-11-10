@@ -79,24 +79,24 @@ export default function HUDNavbar({ onToggleTerminal }) {
           className="flex items-center gap-2.5 text-xs text-white hover:text-[#FFFFFF] transition-colors cursor-pointer shrink-0 group btn-tactile"
           aria-label="AI Club Facility Root"
         >
-          <div className="relative w-7 h-7 rounded-full overflow-hidden border border-white/20 group-hover:border-[#55DFFF]/60 flex items-center justify-center shrink-0 transition-colors bg-black shadow-[0_0_10px_rgba(85,223,255,0.2)]">
+          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 group-hover:border-[#55DFFF]/60 flex items-center justify-center shrink-0 transition-colors bg-black shadow-[0_0_10px_rgba(85,223,255,0.2)]">
             <Image
               src="/logo.png"
               alt="AI Club Logo"
-              width={28}
-              height={28}
+              width={32}
+              height={32}
               className="w-full h-full object-cover"
               priority
             />
           </div>
-          <div className="flex flex-col text-left">
+          <div className="flex flex-col text-left justify-center">
             <div className="flex items-center gap-1.5">
-              <span className="tracking-tight font-bold text-xs text-white group-hover:text-[#FFFFFF] transition-colors">
+              <span className="font-black text-sm sm:text-[15px] tracking-wider text-white group-hover:text-[#FFFFFF] transition-colors uppercase leading-none">
                 AI CLUB
               </span>
-              <span className="w-1.5 h-1.5 rounded-full bg-signal-green shadow-[0_0_6px_#22C55E]" title="Systems Nominal" />
+              <span className="w-2 h-2 rounded-full bg-signal-green shadow-[0_0_8px_#22C55E]" title="Systems Nominal" />
             </div>
-            <span className="hidden sm:inline text-[9px] font-mono text-[#B8C7D4] tracking-wider uppercase -mt-0.5">
+            <span className="text-[8px] sm:text-[8.5px] font-mono text-[#8E9FA8] tracking-[0.16em] uppercase mt-1 leading-none font-medium">
               MITS GWALIOR
             </span>
           </div>

@@ -151,7 +151,7 @@ export default function ServerSideNav({
               </div>
               {isExpanded && (
                 <div className="flex flex-col min-w-0 transition-opacity duration-200">
-                  <span className="text-[11px] font-bold text-white tracking-wider group-hover:text-slate-200 transition-colors leading-tight truncate">
+                  <span className="text-xs sm:text-[13px] font-black text-white tracking-wider group-hover:text-slate-200 transition-colors leading-tight truncate">
                     AI CLUB
                   </span>
                   <span className="text-[8px] font-mono text-slate-400 tracking-tight truncate">
