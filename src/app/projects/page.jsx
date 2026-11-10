@@ -14,6 +14,7 @@ import {
 } from 'lucide-react';
 import { getAllProjects } from '@/lib/contentSelectors';
 import { audioManager } from '@/utils/audioManager';
+import HolographicCard from '@/components/ui/HolographicCard';
 
 export default function ProjectsPage() {
   const projects = getAllProjects();
@@ -111,10 +112,11 @@ export default function ProjectsPage() {
 
         {/* Projects Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredProjects.map((proj) => (
-            <div
+          {filteredProjects.map((proj, index) => (
+            <HolographicCard
               key={proj.id}
-              className="rounded-2xl p-7 bg-[#121617]/90 border border-white/[0.08] hover:border-[#24BFEA]/40 transition-all shadow-[0_4px_24px_rgba(0,0,0,0.4)] flex flex-col justify-between"
+              index={index}
+              className="solo-leveling-card p-7"
             >
               <div>
                 <div className="flex items-center justify-between gap-2 mb-4">
@@ -194,7 +196,7 @@ export default function ProjectsPage() {
                   )}
                 </div>
               </div>
-            </div>
+            </HolographicCard>
           ))}
         </div>
       </div>

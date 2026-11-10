@@ -18,6 +18,7 @@ import {
 import { getAllEvents } from '@/lib/contentSelectors';
 import { filterByCategory, getUniqueCategories } from '@/lib/contentHelpers';
 import { audioManager } from '@/utils/audioManager';
+import HolographicCard from '@/components/ui/HolographicCard';
 
 export default function EventsPage() {
   const events = getAllEvents();
@@ -131,17 +132,17 @@ export default function EventsPage() {
 
         {/* Events Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredEvents.map((ev) => {
+          {filteredEvents.map((ev, index) => {
             const isFeatured = ev.featured;
             const slug = ev.slug || ev.id;
 
             return (
-              <div
+              <HolographicCard
                 key={ev.id}
-                className={`group relative rounded-2xl p-6 sm:p-7 bg-[#121617]/90 border transition-all duration-300 flex flex-col justify-between ${
-                  isFeatured
-                    ? 'border-[#24BFEA]/40 shadow-[0_4px_24px_rgba(36,191,234,0.15)] hover:border-[#24BFEA]'
-                    : 'border-white/[0.08] hover:border-white/[0.2] shadow-[0_4px_20px_rgba(0,0,0,0.4)]'
+                index={index}
+                isFeatured={isFeatured}
+                className={`p-6 sm:p-7 ${
+                  isFeatured ? 'solo-leveling-card-featured' : 'solo-leveling-card'
                 }`}
               >
                 <div>
@@ -210,7 +211,7 @@ export default function EventsPage() {
                     </a>
                   )}
                 </div>
-              </div>
+              </HolographicCard>
             );
           })}
         </div>

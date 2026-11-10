@@ -16,6 +16,7 @@ import {
 import { getAllDiscussions } from '@/lib/contentSelectors';
 import { filterByCategory, getUniqueCategories } from '@/lib/contentHelpers';
 import { audioManager } from '@/utils/audioManager';
+import HolographicCard from '@/components/ui/HolographicCard';
 
 /**
  * Section 04: The Discussion Room
@@ -114,13 +115,17 @@ export default function DiscussionRoom() {
         {/* Discussions Grid */}
         {filteredDiscussions.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            {filteredDiscussions.map((gd) => {
+            {filteredDiscussions.map((gd, index) => {
               const isRegistered = registeredIds.includes(gd.id);
 
               return (
-                <div
+                <HolographicCard
                   key={gd.id}
-                  className="rounded-xl bg-[#141819] border border-white/[0.08] hover:border-white/[0.16] p-6 transition-all flex flex-col justify-between card-lift crosshair-corner"
+                  index={index}
+                  isFeatured={gd.featured}
+                  className={`p-6 ${
+                    gd.featured ? 'solo-leveling-card-featured' : 'solo-leveling-card'
+                  }`}
                 >
                   <div>
                     {/* Category & Status */}
@@ -224,7 +229,7 @@ export default function DiscussionRoom() {
                       </button>
                     </div>
                   )}
-                </div>
+                </HolographicCard>
               );
             })}
           </div>
