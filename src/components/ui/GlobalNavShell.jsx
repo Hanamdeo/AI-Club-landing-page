@@ -21,24 +21,33 @@ function RouteProgressBar() {
     const timer = setTimeout(() => {
       setNavigating(false);
       setProgress(0);
-    }, 220);
+    }, 200);
     return () => clearTimeout(timer);
   }, [pathname]);
 
-  // Listen for instant route navigation triggers
+  // Listen for instant route navigation triggers with guaranteed auto-completion
   useEffect(() => {
+    let t1, t2, t3, t4;
     const handleStart = () => {
       setNavigating(true);
-      setProgress(35);
-      const t1 = setTimeout(() => setProgress(65), 140);
-      const t2 = setTimeout(() => setProgress(88), 320);
-      return () => {
-        clearTimeout(t1);
-        clearTimeout(t2);
-      };
+      setProgress(40);
+      t1 = setTimeout(() => setProgress(75), 100);
+      t2 = setTimeout(() => setProgress(92), 220);
+      // Guaranteed full completion so the bar NEVER freezes mid-screen
+      t3 = setTimeout(() => setProgress(100), 400);
+      t4 = setTimeout(() => {
+        setNavigating(false);
+        setProgress(0);
+      }, 620);
     };
     window.addEventListener('route-navigate-start', handleStart);
-    return () => window.removeEventListener('route-navigate-start', handleStart);
+    return () => {
+      window.removeEventListener('route-navigate-start', handleStart);
+      clearTimeout(t1);
+      clearTimeout(t2);
+      clearTimeout(t3);
+      clearTimeout(t4);
+    };
   }, []);
 
   if (!navigating && progress === 0) return null;
@@ -61,6 +70,26 @@ function RouteProgressBar() {
 export default function GlobalNavShell() {
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
   const router = useRouter();
+  const pathname = usePathname();
+
+  // CSS Integrity Guardian: Prevents unstyled raw HTML drops during client navigation
+  useEffect(() => {
+    const verifyCssIntegrity = () => {
+      if (typeof window === 'undefined') return;
+      const testVal = getComputedStyle(document.documentElement).getPropertyValue('--accent-sage')?.trim();
+      if (!testVal) {
+        const lastRecovery = sessionStorage.getItem('last_css_recovery');
+        const now = Date.now();
+        if (!lastRecovery || now - Number(lastRecovery) > 4000) {
+          sessionStorage.setItem('last_css_recovery', String(now));
+          window.location.reload();
+        }
+      }
+    };
+
+    const timer = setTimeout(verifyCssIntegrity, 100);
+    return () => clearTimeout(timer);
+  }, [pathname]);
 
   useEffect(() => {
     const handleKeyDown = (e) => {
