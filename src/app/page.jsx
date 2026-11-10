@@ -6,12 +6,12 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
 
-// Dynamically import Three.js components with SSR disabled
-const StartupIntro = dynamic(() => import('@/components/ui/StartupIntro'), {
-  ssr: false,
-});
+// Dynamically import Three.js components with SSR disabled & instant pre-warmed backdrop
 const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
   ssr: false,
+  loading: () => (
+    <div className="fixed inset-0 w-full h-full bg-[#0A0E10] pointer-events-none z-0" />
+  ),
 });
 
 import ServerSideNav from '@/components/ui/ServerSideNav';
@@ -40,7 +40,7 @@ const ZONE_DEFINITIONS = [
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const [isIntro, setIsIntro] = useState(true);
+  const [isIntro, setIsIntro] = useState(false);
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('entry');
 
@@ -68,6 +68,9 @@ export default function Home() {
   // Initialize GSAP & Lenis smooth scroll
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== 'undefined' && sessionStorage.getItem('intro_seen')) {
+      setIsIntro(false);
+    }
     gsap.registerPlugin(ScrollTrigger);
 
     const lenis = new Lenis({
@@ -159,6 +162,11 @@ export default function Home() {
 
   const handleIntroComplete = useCallback(() => {
     setIsIntro(false);
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem('intro_seen', 'true');
+      } catch {}
+    }
     setTimeout(() => {
       ScrollTrigger.refresh();
     }, 100);
@@ -166,10 +174,7 @@ export default function Home() {
 
   return (
     <main className="relative bg-graphite text-ivory selection:bg-sage selection:text-graphite min-h-screen">
-      {/* Cinematic Architectural Startup Animation */}
-      {mounted && isIntro && (
-        <StartupIntro onComplete={handleIntroComplete} />
-      )}
+      
 
       {/* 1. Master WebGL 3D Data Centre Canvas: Remains Visually Connected Across the Whole Journey */}
       {mounted && (
@@ -248,10 +253,10 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none z-10 flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden">
         {/* ZONE 01: ENTRY ZONE (Welcome, AI Club Intro, Primary Actions) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform pointer-events-none ${
             activeZoneIndex === 0
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone1Hero onExploreClick={() => handleNavigateToZone(1)} />
@@ -259,10 +264,10 @@ export default function Home() {
 
         {/* ZONE 02: FEATURED ZONE (Highlighted server cluster & upcoming activities) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform pointer-events-none ${
             activeZoneIndex === 1
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone2Featured onNextZone={() => handleNavigateToZone(2)} />
@@ -270,10 +275,10 @@ export default function Home() {
 
         {/* ZONE 03: COMMUNITY ZONE (Discussions, reading circles & student culture) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform pointer-events-none ${
             activeZoneIndex === 2
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone3Community onNextZone={() => handleNavigateToZone(3)} />
@@ -281,10 +286,10 @@ export default function Home() {
 
         {/* ZONE 04: RESEARCH ZONE (Intelligence Core, research tracks & preprints) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform pointer-events-none ${
             activeZoneIndex === 3
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone4Research onNextZone={() => handleNavigateToZone(4)} />
@@ -292,10 +297,10 @@ export default function Home() {
 
         {/* ZONE 05: PROJECTS ZONE (Project showcase displays & hardware builds) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform pointer-events-none ${
             activeZoneIndex === 4
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone5Projects onNextZone={() => handleNavigateToZone(5)} />
@@ -303,10 +308,10 @@ export default function Home() {
 
         {/* ZONE 06: DISCOVERY / EXIT ZONE (Final landmark & navigation hub) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform ${
+          className={`w-full max-w-6xl absolute transition-all duration-700 ease-out transform pointer-events-none ${
             activeZoneIndex === 5
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone6Discovery onReturnTop={() => handleNavigateToZone(0)} />

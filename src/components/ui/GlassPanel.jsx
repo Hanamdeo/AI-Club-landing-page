@@ -13,7 +13,7 @@ export default function GlassPanel({
 }) {
   return (
     <div
-      className={`relative bg-black/10 border border-white/10 rounded-2xl pointer-events-auto p-6 md:p-10 transition-all ${className}`}
+      className={`relative glass-panel rounded-2xl pointer-events-auto p-6 md:p-10 transition-all shadow-[0_12px_48px_rgba(0,0,0,0.55)] ${className}`}
     >
       {children}
     </div>

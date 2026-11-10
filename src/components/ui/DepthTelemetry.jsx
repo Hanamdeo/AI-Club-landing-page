@@ -39,12 +39,12 @@ export default function DepthTelemetry({
       <div className="p-3.5 px-4 rounded-xl bg-[#0D1011]/85 backdrop-blur-md border border-white/[0.08] shadow-[0_4px_20px_rgba(0,0,0,0.35)] text-left min-w-[170px]">
         {/* Header Telemetry Identifier */}
         <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400 uppercase font-semibold">
-          <span className="w-1.5 h-1.5 rounded-full bg-sage ring-2 ring-sage/20" />
+          <span className="w-1.5 h-1.5 rounded-full bg-white ring-2 ring-white/20" />
           <span>CORRIDOR DEPTH</span>
         </div>
 
         {/* Tabular Coordinate Value */}
-        <div className="text-sm font-bold text-sage font-mono mt-0.5 tnum tracking-tight flex items-baseline gap-1">
+        <div className="text-sm font-bold text-white font-mono mt-0.5 tnum tracking-tight flex items-baseline gap-1">
           <span ref={coordRef} id="depth-coord-val">{currentDepth}</span>
           <span className="text-[10px] text-slate-400 font-normal">m</span>
         </div>

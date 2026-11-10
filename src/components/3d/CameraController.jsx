@@ -69,7 +69,7 @@ export default function CameraController({
     []
   );
 
-  const currentPos = useRef(new THREE.Vector3(0, 2.3, 17));
+  const currentPos = useRef(new THREE.Vector3(0, 1.9, 12.5));
   const currentTarget = useRef(new THREE.Vector3(0, 1.6, 0));
   const tempPos = useRef(new THREE.Vector3());
   const tempTarget = useRef(new THREE.Vector3());
@@ -79,7 +79,7 @@ export default function CameraController({
     mouseRef.current.y += (mouseRef.current.targetY - mouseRef.current.y) * 0.05;
 
     if (isIntro) {
-      tempPos.current.set(0, 2.2, 16.5);
+      tempPos.current.set(0, 1.9, 12.5);
       tempTarget.current.set(0, 1.6, 0);
     } else {
       const rawP = scrollProgressRef ? scrollProgressRef.current : scrollProgress;

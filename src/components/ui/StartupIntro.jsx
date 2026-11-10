@@ -109,16 +109,21 @@ export default function StartupIntro({ onComplete }) {
   const triggerComplete = useCallback(() => {
     if (isCompletedRef.current) return;
     isCompletedRef.current = true;
+    if (typeof window !== 'undefined') {
+      try {
+        sessionStorage.setItem('intro_seen', 'true');
+      } catch {}
+    }
     if (onCompleteRef.current) {
       onCompleteRef.current();
     }
   }, []);
 
   useEffect(() => {
-    // Failsafe timer: intro can NEVER hang or freeze for more than 4.2 seconds
+    // Quick failsafe timer: intro can NEVER hang or freeze for more than 1.8 seconds
     const failsafe = setTimeout(() => {
       triggerComplete();
-    }, 4200);
+    }, 1800);
 
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
@@ -157,23 +162,23 @@ export default function StartupIntro({ onComplete }) {
         }
       });
 
-      // 1. Center Title & Neural Net Container Fade In
+      // 1. Center Title & Neural Net Container Fade In (Accelerated)
       tl.to(centerContentRef.current, {
         opacity: 1,
         scale: 1,
-        duration: 0.5,
+        duration: 0.22,
         ease: 'power3.out',
       });
 
       // Track activated nodes to trigger subtle acoustic blips only once
       const activatedNodes = new Set();
 
-      // 2. Main Progress Bar & Synaptic Connection Animation
+      // 2. Main Progress Bar & Synaptic Connection Animation (Accelerated to 0.72s)
       tl.to(
         counterObj,
         {
           val: 100,
-          duration: 2.4,
+          duration: 0.72,
           ease: 'power1.inOut',
           onUpdate: () => {
             const currentVal = Math.floor(counterObj.val);
@@ -246,7 +251,7 @@ export default function StartupIntro({ onComplete }) {
         progressLineRef.current,
         {
           scaleX: 1,
-          duration: 2.4,
+          duration: 0.72,
           ease: 'power1.inOut',
         },
         '<'
@@ -257,26 +262,24 @@ export default function StartupIntro({ onComplete }) {
         centerContentRef.current,
         {
           scale: 1.02,
-          duration: 0.25,
+          duration: 0.12,
           ease: 'power2.out',
         },
-        '+=0.1'
+        '+=0.04'
       );
 
       // 4. Shutter sound trigger
       tl.call(() => {
         try {
           audioManager.playWhoosh();
-        } catch {
-          // Audio fallback
-        }
+        } catch {}
       });
 
       // 5. Center content smoothly fades out
       tl.to(centerContentRef.current, {
         opacity: 0,
-        scale: 1.06,
-        duration: 0.45,
+        scale: 1.04,
+        duration: 0.20,
         ease: 'power2.in',
       });
 
@@ -285,16 +288,16 @@ export default function StartupIntro({ onComplete }) {
         topShutterRef.current,
         {
           yPercent: -100,
-          duration: 0.85,
+          duration: 0.35,
           ease: 'power4.inOut',
         },
-        '-=0.15'
+        '-=0.08'
       );
       tl.to(
         bottomShutterRef.current,
         {
           yPercent: 100,
-          duration: 0.85,
+          duration: 0.35,
           ease: 'power4.inOut',
         },
         '<'

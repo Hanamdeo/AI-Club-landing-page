@@ -276,17 +276,17 @@ export default function BdxHolographicProjector({
             onClick={toggleOpen}
             className={`group flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0D1011]/90 backdrop-blur-md border transition-all cursor-pointer btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)] ${
               isOpen && !isMinimized
-                ? 'border-sage/50 text-sage'
-                : 'border-white/[0.12] text-ivory/80 hover:border-sage/40 hover:text-ivory'
+                ? 'border-white/50 text-white'
+                : 'border-white/[0.12] text-slate-200 hover:border-white/40 hover:text-white'
             }`}
             aria-label="Toggle BDX-01 Hologram"
           >
             <div className="relative flex items-center justify-center">
-              <span className="w-2 h-2 rounded-full bg-sage" />
+              <span className="w-2 h-2 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
             </div>
 
             <div className="flex flex-col text-left">
-              <span className="text-[10px] font-mono tracking-wider font-bold text-sage leading-tight">
+              <span className="text-[10px] font-mono tracking-wider font-bold text-white leading-tight">
                 BDX-01
               </span>
               <span className="text-[9px] text-slate-400 font-medium">
@@ -294,14 +294,19 @@ export default function BdxHolographicProjector({
               </span>
             </div>
 
-            <Sparkles className="w-3.5 h-3.5 text-sage group-hover:rotate-12 transition-transform" />
+            <Sparkles className="w-3.5 h-3.5 text-slate-300 group-hover:rotate-12 transition-transform" />
           </button>
 
           {/* 3D Mini Robot Model Companion Window */}
           <div
-            onClick={toggleOpen}
-            className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0D1011] border border-white/[0.14] overflow-hidden cursor-pointer hover:border-sage transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
-            title="BDX-01 Companion (Click to interact & chirp)"
+            onClick={(e) => {
+              e.stopPropagation();
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('bdx-emotion-cycle'));
+              }
+            }}
+            className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0D1011] border border-white/[0.14] overflow-hidden cursor-pointer hover:border-white transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
+            title="BDX-01 Companion (Click/tap to cycle expressions)"
           >
             <CompanionCanvas isProjecting={isOpen && !isMinimized} />
           </div>

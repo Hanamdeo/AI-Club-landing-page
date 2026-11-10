@@ -52,12 +52,12 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
         intensity={1.50}
       />
 
-      {/* 2. Cohesive Lateral Rack Grazing Lights (Uniform Ice-Silver Cyan for natural metallic speculars) */}
+      {/* 2. Cohesive Lateral Rack Grazing Lights (Uniform Silver Speculars) */}
       {/* Left Row Grazing */}
       <directionalLight
         ref={rackGrazingLeftRef}
         position={[4.6, 4.2, -15]}
-        color="#88D5E8"
+        color="#E2E8F0"
         intensity={0.65}
       />
 
@@ -65,14 +65,14 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
       <directionalLight
         ref={rackGrazingRightRef}
         position={[-4.6, 4.2, -15]}
-        color="#88D5E8"
+        color="#E2E8F0"
         intensity={0.65}
       />
 
-      {/* 3. Midground Soft Sage Floor Warmth: Signature AI Club atmospheric tone */}
+      {/* 3. Midground Soft Silver Floor Warmth */}
       <directionalLight
         position={[0, 3.5, -22]}
-        color="#94A891"
+        color="#D1D5DB"
         intensity={0.40}
       />
 
@@ -81,7 +81,7 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef }) {
         ref={chamberSpotRef}
         position={[0, 8.0, -35.0]}
         target-position={[0, 1.2, -35.0]}
-        color="#E8F4EC"
+        color="#F8FAFC"
         intensity={0.35}
         angle={0.65}
         penumbra={0.6}
@@ -134,7 +134,7 @@ export default function SceneContainer({
       <Canvas
         className="pointer-events-auto"
         style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
-        camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.1, far: 110 }}
+        camera={{ position: [0, 1.9, 12.5], fov: 50, near: 0.1, far: 110 }}
         dpr={perfConfig?.dpr || [0.85, 1.15]}
         gl={GL_CONFIG}
       >
@@ -162,10 +162,10 @@ export default function SceneContainer({
           intensity={1.20 * (perfConfig?.lightingIntensity ?? 1.0)}
         />
 
-        {/* Subtle Silver-Cyan Rim (Calibrated, not blinding neon) */}
+        {/* Subtle Silver Rim */}
         <directionalLight
           position={[1.2, 3.0, 5.0]}
-          color="#8ED5E8"
+          color="#E2E8F0"
           intensity={0.60 * (perfConfig?.lightingIntensity ?? 1.0)}
         />
 
