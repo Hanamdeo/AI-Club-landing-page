@@ -142,7 +142,7 @@ export default function HolographicDataCentreProjection({
         args={[cubeGeom, null, cubeInstanceTransforms.length]}
       >
         <meshBasicMaterial
-          color="#00E5FF"
+          color="#FFFFFF"
           transparent
           opacity={0.12}
           depthWrite={false}
@@ -164,7 +164,7 @@ export default function HolographicDataCentreProjection({
         args={[cubeGeom, null, cubeInstanceTransforms.length]}
       >
         <meshBasicMaterial
-          color="#00F0FF"
+          color="#E2E8F0"
           wireframe
           transparent
           opacity={0.65}
@@ -185,7 +185,7 @@ export default function HolographicDataCentreProjection({
         args={[cubeGeom, null, beamInstanceTransforms.length]}
       >
         <meshBasicMaterial
-          color="#24BFEA"
+          color="#CBD5E1"
           transparent
           opacity={0.35}
           depthWrite={false}
@@ -201,7 +201,7 @@ export default function HolographicDataCentreProjection({
       >
         <planeGeometry args={[7.2, 70]} />
         <meshBasicMaterial
-          color="#00E5FF"
+          color="#FFFFFF"
           transparent
           opacity={0.25}
           depthWrite={false}

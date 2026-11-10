@@ -244,7 +244,7 @@ function ClusterWing({ transforms, materialsRef, drawLeds = true }) {
           <boxGeometry args={[1, 1, 1]} />
           <meshBasicMaterial
             ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
-            color="#38BDF8"
+            color="#FFFFFF"
             transparent
             opacity={0.85}
           />

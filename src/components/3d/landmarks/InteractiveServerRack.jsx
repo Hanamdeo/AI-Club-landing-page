@@ -128,7 +128,7 @@ export default function InteractiveServerRack({ onOpenModal }) {
             {/* GPU Activity LED */}
             <mesh position={[0, 0.07, 0.19]}>
               <boxGeometry args={[0.015, 0.015, 0.015]} />
-              <meshBasicMaterial color={i % 2 === 0 ? '#00E5FF' : '#22C55E'} />
+              <meshBasicMaterial color={i % 2 === 0 ? '#FFFFFF' : '#22C55E'} />
             </mesh>
           </group>
         ))}
