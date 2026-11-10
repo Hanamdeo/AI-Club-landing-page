@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   ShieldCheck,
   ChevronRight,
@@ -101,12 +102,29 @@ export default function JoinPage() {
             </div>
           </div>
 
-          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
-            JOIN THE COLLECTIVE
-          </h1>
-          <p className="text-sm sm:text-base text-slate-300 font-manrope mt-3 max-w-xl leading-relaxed">
-            Apply for research clearance to join AI Club at Madhav Institute of Technology & Science, or reach out through official institutional communication routes.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center sm:items-start gap-5">
+            <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden border-2 border-[#55DFFF]/40 shadow-[0_0_30px_rgba(85,223,255,0.3)] shrink-0 bg-black">
+              <Image
+                src="/logo.png"
+                alt="AI Club Official Emblem"
+                width={96}
+                height={96}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+            <div>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
+                JOIN THE COLLECTIVE
+              </h1>
+              <p className="text-xs sm:text-sm font-mono text-[#55DFFF] uppercase tracking-wider mt-1">
+                PIONEERING THE AI REVOLUTION • MITS-DU GWALIOR
+              </p>
+              <p className="text-sm sm:text-base text-slate-300 font-manrope mt-2.5 max-w-xl leading-relaxed">
+                Apply for research clearance to join AI Club at Madhav Institute of Technology & Science, or reach out through official institutional communication routes.
+              </p>
+            </div>
+          </div>
         </div>
 
         {/* 1. Official Institutional Contact Routes (PRD 4.9 Requirement) */}

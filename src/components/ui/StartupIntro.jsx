@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect, useRef } from 'react';
+import Image from 'next/image';
 import gsap from 'gsap';
 import { audioManager } from '@/utils/audioManager';
 
@@ -349,7 +350,18 @@ export default function StartupIntro({ onComplete }) {
         className="relative z-20 flex flex-col items-center justify-center text-center px-4 max-w-2xl w-full"
       >
         {/* Facility Header */}
-        <div className="space-y-1 mb-5">
+        <div className="flex flex-col items-center space-y-2 mb-5">
+          <div className="relative w-14 h-14 rounded-full overflow-hidden border border-white/20 shadow-[0_0_20px_rgba(85,223,255,0.3)] bg-black mb-1">
+            <Image
+              src="/logo.png"
+              alt="AI Club Logo"
+              width={56}
+              height={56}
+              className="w-full h-full object-cover"
+              priority
+            />
+          </div>
+
           <div className="inline-flex items-center gap-2 px-3 py-0.5 rounded-full bg-white/[0.03] border border-white/[0.08] text-[10px] font-mono tracking-[0.2em] uppercase text-[#A7B7A1]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA] animate-ping" />
             <span>CONNECTING NEURAL ARCHITECTURE</span>

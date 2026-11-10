@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useCallback } from 'react';
+import Image from 'next/image';
 import { ArrowDown } from 'lucide-react';
 import { CLUB_INFO } from '@/data/clubInfo';
 import { audioManager } from '@/utils/audioManager';
@@ -35,10 +36,21 @@ export default function Zone1Hero({ onExploreClick }) {
           {/* ========================================================== */}
           <div className="w-full sm:max-w-[420px] lg:max-w-[440px] xl:max-w-[460px] mr-auto pointer-events-auto safe-viewport-card custom-scrollbar">
             <div className="glass-panel p-6 sm:p-7 md:p-8 relative">
-              {/* Sector Header Tag */}
-              <div className="flex items-center gap-2 mb-3 text-[10px] font-mono tracking-widest text-slate-400 uppercase">
-                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
-                <span>SECTOR 01 // HOLOGRAPHIC HUD</span>
+              {/* Sector Header Tag & Official Logo */}
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2 text-[10px] font-mono tracking-widest text-slate-400 uppercase">
+                  <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.8)]" />
+                  <span>SECTOR 01 // HOLOGRAPHIC HUD</span>
+                </div>
+                <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 shadow-[0_0_12px_rgba(255,255,255,0.15)] bg-black shrink-0">
+                  <Image
+                    src="/logo.png"
+                    alt="AI Club Logo"
+                    width={32}
+                    height={32}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
 
               {/* Master Display Heading */}

@@ -87,6 +87,10 @@ export const metadata = {
     'Student Research',
     'MITS Gwalior',
   ],
+  icons: {
+    icon: '/logo.png',
+    apple: '/logo.png',
+  },
 };
 
 export const viewport = {

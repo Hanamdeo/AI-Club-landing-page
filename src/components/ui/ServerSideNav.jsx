@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { Bot, ChevronRight, Terminal, Menu, X } from 'lucide-react';
 import AudioToggle from './AudioToggle';
@@ -139,8 +140,14 @@ export default function ServerSideNav({
               onClick={handleLinkClick}
               className="flex items-center gap-2 text-left group cursor-pointer w-full overflow-hidden"
             >
-              <div className="w-6 h-6 rounded-md bg-[#161B1C] border border-white/30 flex items-center justify-center font-mono shrink-0 transition-colors group-hover:border-white shadow-[0_0_10px_rgba(255,255,255,0.15)]">
-                <span className="text-[10px] text-white font-bold">AI</span>
+              <div className="relative w-6 h-6 rounded-full overflow-hidden border border-white/30 flex items-center justify-center shrink-0 transition-colors group-hover:border-white shadow-[0_0_10px_rgba(255,255,255,0.15)] bg-black">
+                <Image
+                  src="/logo.png"
+                  alt="AI Club Logo"
+                  width={24}
+                  height={24}
+                  className="w-full h-full object-cover"
+                />
               </div>
               {isExpanded && (
                 <div className="flex flex-col min-w-0 transition-opacity duration-200">

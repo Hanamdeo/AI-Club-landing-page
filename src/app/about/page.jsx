@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Compass,
   ChevronRight,
@@ -84,14 +85,28 @@ export default function AboutPage() {
 
         {/* Master Page Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
-          <div>
-            
-            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
-              ABOUT AI CLUB
-            </h1>
-            <p className="text-sm sm:text-base text-slate-300 font-manrope mt-3 max-w-2xl leading-relaxed">
-              {CLUB_INFO.motto}
-            </p>
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-[#55DFFF]/40 shadow-[0_0_24px_rgba(85,223,255,0.3)] shrink-0 bg-black">
+              <Image
+                src="/logo.png"
+                alt="AI Club Official Emblem"
+                width={80}
+                height={80}
+                className="w-full h-full object-cover"
+                priority
+              />
+            </div>
+            <div>
+              <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
+                ABOUT AI CLUB
+              </h1>
+              <p className="text-xs sm:text-sm font-mono text-[#55DFFF] uppercase tracking-wider mt-1">
+                PIONEERING THE AI REVOLUTION • MITS-DU GWALIOR
+              </p>
+              <p className="text-sm sm:text-base text-slate-300 font-manrope mt-2 max-w-2xl leading-relaxed">
+                {CLUB_INFO.motto}
+              </p>
+            </div>
           </div>
 
           <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right">

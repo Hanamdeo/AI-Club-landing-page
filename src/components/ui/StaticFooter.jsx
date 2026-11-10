@@ -2,12 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import {
   Instagram,
   Linkedin,
   ArrowUp,
   ArrowUpRight,
-  Sparkles,
   Terminal,
 } from 'lucide-react';
 import { audioManager } from '@/utils/audioManager';
@@ -98,8 +98,14 @@ export default function StaticFooter({ onOpenTerminal }) {
             <div className="space-y-4">
               {/* Brand Logo & 3D Title */}
               <div className="flex items-center gap-3.5">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#0B1E2E] to-[#050C12] border border-[#55DFFF]/40 flex items-center justify-center shadow-[0_0_24px_rgba(85,223,255,0.3)] shrink-0 group">
-                  <Sparkles className="w-5 h-5 text-[#55DFFF] group-hover:rotate-12 transition-transform duration-300" />
+                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[#55DFFF]/40 flex items-center justify-center shadow-[0_0_24px_rgba(85,223,255,0.3)] shrink-0 bg-black group">
+                  <Image
+                    src="/logo.png"
+                    alt="AI Club MITS Gwalior Logo"
+                    width={48}
+                    height={48}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
                 </div>
                 <div>
                   <h3 className="font-3d-slade text-3xl sm:text-4xl tracking-wider uppercase leading-none drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)]">

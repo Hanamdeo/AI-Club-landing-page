@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
 import { Terminal, Menu, X } from 'lucide-react';
 import AudioToggle from './AudioToggle';
@@ -78,8 +79,15 @@ export default function HUDNavbar({ onToggleTerminal }) {
           className="flex items-center gap-2.5 text-xs text-white hover:text-[#FFFFFF] transition-colors cursor-pointer shrink-0 group btn-tactile"
           aria-label="AI Club Facility Root"
         >
-          <div className="w-6 h-6 rounded-md bg-[#08121A]/70 border border-[rgba(255,255,255,0.12)] group-hover:border-[#FFFFFF]/50 flex items-center justify-center font-mono transition-colors">
-            <span className="text-[10px] text-[#FFFFFF] font-bold tracking-tight">AI</span>
+          <div className="relative w-7 h-7 rounded-full overflow-hidden border border-white/20 group-hover:border-[#55DFFF]/60 flex items-center justify-center shrink-0 transition-colors bg-black shadow-[0_0_10px_rgba(85,223,255,0.2)]">
+            <Image
+              src="/logo.png"
+              alt="AI Club Logo"
+              width={28}
+              height={28}
+              className="w-full h-full object-cover"
+              priority
+            />
           </div>
           <div className="flex flex-col text-left">
             <div className="flex items-center gap-1.5">
