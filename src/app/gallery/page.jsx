@@ -190,27 +190,40 @@ export default function GalleryPage() {
                 try { audioManager.playClick(); } catch {}
                 setLightboxIndex(index);
               }}
-              className="group cursor-pointer rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.18)] hover:border-[#FFFFFF]/50 overflow-hidden transition-all duration-300 shadow-[0_4px_24px_rgba(0,0,0,0.5)] flex flex-col justify-between"
+              className="group cursor-pointer rounded-2xl bg-[#0C1014]/90 border border-white/10 hover:border-[#24BFEA]/60 hover:shadow-[0_8px_32px_rgba(36,191,234,0.22)] overflow-hidden transition-all duration-300 flex flex-col justify-between"
             >
-              {/* Visual Frame */}
-              <div className={`relative h-48 w-full bg-gradient-to-br ${item.gradient} p-4 flex flex-col justify-between overflow-hidden`}>
-                <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#07090A]/80 border border-white/[0.1] text-[#E2E8F0]">
-                    {item.category}
-                  </span>
-                  <div className="w-8 h-8 rounded-full bg-[#07090A]/80 border border-white/[0.15] flex items-center justify-center text-slate-300 group-hover:text-white group-hover:border-[#FFFFFF] transition-colors">
-                    <Maximize2 className="w-3.5 h-3.5" />
-                  </div>
-                </div>
+              {/* Visual Photo Frame with Dark Website Blue Hover Overlay */}
+              <div className="relative h-52 w-full overflow-hidden bg-[#07090A]">
+                {/* Real High-Resolution Photo */}
+                <img
+                  src={item.image}
+                  alt={item.alt}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
 
-                <div>
-                  <div className="text-[10px] font-mono text-slate-300 flex items-center gap-1.5 mb-1">
-                    <Calendar className="w-3 h-3 text-[#FFFFFF]" />
-                    <span>{item.date}</span>
+                {/* Dark Website Blue Gradient Overlay that deepens on hover */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[#050C12] via-[#05111B]/60 to-[#0A1A28]/40 group-hover:from-[#03090F] group-hover:via-[#051829]/85 group-hover:to-[#07243B]/70 transition-all duration-300 pointer-events-none" />
+
+                {/* Overlaid Meta Badges & Heading */}
+                <div className="absolute inset-0 p-4 flex flex-col justify-between pointer-events-none">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[#07090A]/85 border border-white/[0.15] text-white backdrop-blur-sm">
+                      {item.category}
+                    </span>
+                    <div className="w-8 h-8 rounded-full bg-[#07090A]/85 border border-white/[0.15] group-hover:border-[#55DFFF]/60 flex items-center justify-center text-slate-300 group-hover:text-[#55DFFF] transition-colors shadow-md backdrop-blur-sm">
+                      <Maximize2 className="w-3.5 h-3.5" />
+                    </div>
                   </div>
-                  <h3 className="text-lg font-barlow-condensed font-bold uppercase text-white leading-tight drop-shadow-md">
-                    {item.title}
-                  </h3>
+
+                  <div>
+                    <div className="text-[10px] font-mono text-slate-300 flex items-center gap-1.5 mb-1 drop-shadow-md">
+                      <Calendar className="w-3 h-3 text-[#55DFFF]" />
+                      <span>{item.date}</span>
+                    </div>
+                    <h3 className="text-lg font-barlow-condensed font-bold uppercase text-white leading-tight drop-shadow-md group-hover:text-[#55DFFF] transition-colors">
+                      {item.title}
+                    </h3>
+                  </div>
                 </div>
               </div>
 
@@ -220,9 +233,9 @@ export default function GalleryPage() {
                   {item.caption}
                 </p>
 
-                <div className="pt-2 border-t border-[rgba(255, 255, 255,0.12)] flex items-center justify-between text-[11px] font-mono text-slate-400">
+                <div className="pt-2 border-t border-white/[0.08] flex items-center justify-between text-[11px] font-mono text-slate-400">
                   <span className="truncate">{item.eventTitle}</span>
-                  <ChevronRight className="w-3.5 h-3.5 text-[#FFFFFF] group-hover:translate-x-1 transition-transform shrink-0" />
+                  <ChevronRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#55DFFF] group-hover:translate-x-1 transition-all shrink-0" />
                 </div>
               </div>
             </div>
@@ -262,18 +275,13 @@ export default function GalleryPage() {
               </div>
 
               {/* Main Visual Display */}
-              <div className={`relative h-64 sm:h-96 w-full bg-gradient-to-br ${activeItem.gradient} p-8 flex items-center justify-center text-center`}>
-                <div className="max-w-xl">
-                  <div className="w-16 h-16 rounded-2xl bg-black/40 border border-white/[0.15] flex items-center justify-center mx-auto mb-4 text-[#FFFFFF] shadow-lg">
-                    <ImageIcon className="w-8 h-8" />
-                  </div>
-                  <h2 className="text-2xl sm:text-4xl font-barlow-condensed font-bold uppercase text-white mb-2 leading-tight">
-                    {activeItem.title}
-                  </h2>
-                  <p className="text-xs sm:text-sm text-slate-200 font-manrope">
-                    {activeItem.alt}
-                  </p>
-                </div>
+              <div className="relative h-64 sm:h-[480px] w-full bg-[#07090A] overflow-hidden flex items-center justify-center">
+                <img
+                  src={activeItem.image}
+                  alt={activeItem.alt}
+                  className="w-full h-full object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#07090A] via-transparent to-black/30 pointer-events-none" />
 
                 {/* Left / Right Nav Controls */}
                 <button
@@ -281,7 +289,7 @@ export default function GalleryPage() {
                     e.stopPropagation();
                     handlePrev();
                   }}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-[#FFFFFF] border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-[#55DFFF] hover:text-black border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
                   aria-label="Previous Image"
                 >
                   <ChevronLeft className="w-5 h-5" />
@@ -291,7 +299,7 @@ export default function GalleryPage() {
                     e.stopPropagation();
                     handleNext();
                   }}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/60 hover:bg-[#FFFFFF] border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/70 hover:bg-[#55DFFF] hover:text-black border border-white/[0.2] text-white transition-all cursor-pointer shadow-lg"
                   aria-label="Next Image"
                 >
                   <ChevronRight className="w-5 h-5" />
