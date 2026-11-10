@@ -63,14 +63,7 @@ export default function JoinPage() {
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-[radial-gradient(ellipse_at_top,rgba(85,223,255,0.1)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-4xl mx-auto">
-        {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 mb-6 font-mono text-[10px] text-slate-400 tracking-widest uppercase">
-          <Link href="/" className="hover:text-[#55DFFF] transition-colors">
-            FACILITY 3D
-          </Link>
-          <ChevronRight className="w-3 h-3 text-slate-600" />
-          <span className="text-[#55DFFF] font-semibold">COLLECTIVE // RECRUITMENT & CONTACT</span>
-        </div>
+        
 
         {/* Master Page Header */}
         <div className="border-b border-[rgba(85,223,255,0.18)] pb-8 mb-10 text-center sm:text-left">

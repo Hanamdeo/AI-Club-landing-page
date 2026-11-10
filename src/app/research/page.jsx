@@ -68,22 +68,12 @@ export default function ResearchPage() {
       <div className="absolute bottom-1/4 left-1/4 w-80 h-80 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.06)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
-        {/* Breadcrumb Navigation */}
-        <div className="flex items-center gap-2 mb-6 font-mono text-[10px] text-slate-400 tracking-widest uppercase">
-          <Link href="/" className="hover:text-[#55DFFF] transition-colors">
-            FACILITY 3D
-          </Link>
-          <ChevronRight className="w-3 h-3 text-slate-600" />
-          <span className="text-[#55DFFF] font-semibold">INTELLIGENCE // RESEARCH & GD ARCHIVE</span>
-        </div>
+     
 
         {/* Master Page Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1 mb-3.5 rounded-full bg-[#0C1014] border border-[rgba(85,223,255,0.3)] text-[10px] font-mono tracking-widest text-[#55DFFF] uppercase">
-              <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_8px_#55DFFF]" />
-              <span>GROUP DISCUSSIONS & PREPRINT CRUCIBLE</span>
-            </div>
+            
             <h1 className="text-4xl sm:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
               RESEARCH & GD ARCHIVE
             </h1>
