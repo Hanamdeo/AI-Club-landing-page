@@ -48,6 +48,7 @@ export default function Home() {
   // Performance-optimized shared refs: zero React re-render thrashing during scroll
   const scrollProgressRef = useRef(0);
   const currentZoneIndexRef = useRef(0);
+  const isNavigatingRef = useRef(false);
   const depthCoordRef = useRef(null);
 
   // Modal & Terminal States
@@ -107,24 +108,26 @@ export default function Home() {
             }
 
             // Determine active zone index (0 to 5) for telemetry & navigation state
-            let newZoneIdx = 0;
-            if (p >= 0.85) newZoneIdx = 5;
-            else if (p >= 0.68) newZoneIdx = 4;
-            else if (p >= 0.51) newZoneIdx = 3;
-            else if (p >= 0.34) newZoneIdx = 2;
-            else if (p >= 0.17) newZoneIdx = 1;
-            else newZoneIdx = 0;
+            if (!isNavigatingRef.current) {
+              let newZoneIdx = 0;
+              if (p >= 0.85) newZoneIdx = 5;
+              else if (p >= 0.68) newZoneIdx = 4;
+              else if (p >= 0.51) newZoneIdx = 3;
+              else if (p >= 0.34) newZoneIdx = 2;
+              else if (p >= 0.17) newZoneIdx = 1;
+              else newZoneIdx = 0;
 
-            if (currentZoneIndexRef.current !== newZoneIdx) {
-              currentZoneIndexRef.current = newZoneIdx;
-              setActiveZoneIndex(newZoneIdx);
-              setActiveSection(ZONE_DEFINITIONS[newZoneIdx].id);
-              if (typeof window !== 'undefined') {
-                window.dispatchEvent(
-                  new CustomEvent('facility-zone-change', {
-                    detail: { zoneIndex: newZoneIdx, id: ZONE_DEFINITIONS[newZoneIdx].id },
-                  })
-                );
+              if (currentZoneIndexRef.current !== newZoneIdx) {
+                currentZoneIndexRef.current = newZoneIdx;
+                setActiveZoneIndex(newZoneIdx);
+                setActiveSection(ZONE_DEFINITIONS[newZoneIdx].id);
+                if (typeof window !== 'undefined') {
+                  window.dispatchEvent(
+                    new CustomEvent('facility-zone-change', {
+                      detail: { zoneIndex: newZoneIdx, id: ZONE_DEFINITIONS[newZoneIdx].id },
+                    })
+                  );
+                }
               }
             }
           },
@@ -154,6 +157,7 @@ export default function Home() {
   const handleNavigateToZone = useCallback((zoneIndex) => {
     if (!lenisRef.current) return;
     const targetDef = ZONE_DEFINITIONS[zoneIndex] || ZONE_DEFINITIONS[0];
+    isNavigatingRef.current = true;
     currentZoneIndexRef.current = zoneIndex;
     setActiveZoneIndex(zoneIndex);
     setActiveSection(targetDef.id);
@@ -165,13 +169,19 @@ export default function Home() {
       );
     }
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    lenisRef.current.scrollTo(targetDef.center * maxScroll, { duration: 0.75 });
+    lenisRef.current.scrollTo(targetDef.center * maxScroll, {
+      duration: 0.75,
+      onComplete: () => {
+        isNavigatingRef.current = false;
+      },
+    });
   }, []);
 
   const handleNavigateToSection = useCallback((id, zProgress) => {
     if (!lenisRef.current) return;
     const zoneIdx = ZONE_DEFINITIONS.findIndex((z) => z.id === id);
     if (zoneIdx !== -1) {
+      isNavigatingRef.current = true;
       currentZoneIndexRef.current = zoneIdx;
       setActiveZoneIndex(zoneIdx);
       setActiveSection(id);
@@ -185,7 +195,12 @@ export default function Home() {
     }
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const targetP = typeof zProgress === 'number' ? zProgress : 0;
-    lenisRef.current.scrollTo(targetP * maxScroll, { duration: 0.75 });
+    lenisRef.current.scrollTo(targetP * maxScroll, {
+      duration: 0.75,
+      onComplete: () => {
+        isNavigatingRef.current = false;
+      },
+    });
   }, []);
 
   // Listen for global navigation events from top HUDNavbar
