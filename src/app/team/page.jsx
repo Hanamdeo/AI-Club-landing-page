@@ -35,14 +35,14 @@ export default function TeamPage() {
     <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Architectural Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(85,223,255,0.08)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.06)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.06)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(85,223,255,0.18)] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(255, 255, 255,0.18)] pb-8">
           <div>
            
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
@@ -54,14 +54,14 @@ export default function TeamPage() {
           </div>
 
           {/* Quick Counter */}
-          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(85,223,255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
+          <div className="p-4 px-6 rounded-2xl bg-[#0C1014]/90 border border-[rgba(255, 255, 255,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)] self-start md:self-auto text-left md:text-right w-full sm:w-auto">
             <span className="block text-[9px] font-mono text-slate-400 uppercase tracking-widest">
               CONFIRMED MEMBERS
             </span>
-            <span className="text-3xl font-barlow-condensed font-bold text-[#55DFFF] tracking-wider block">
+            <span className="text-3xl font-barlow-condensed font-bold text-[#FFFFFF] tracking-wider block">
               {TEAM_MEMBERS.length} RESEARCHERS
             </span>
-            <span className="text-[10px] font-mono text-[#24BFEA]">Verified Academic Cadre</span>
+            <span className="text-[10px] font-mono text-[#E2E8F0]">Verified Academic Cadre</span>
           </div>
         </div>
 
@@ -78,8 +78,8 @@ export default function TeamPage() {
                 }}
                 className={`px-4 py-2 text-xs font-mono rounded-full transition-all cursor-pointer whitespace-nowrap ${
                   active
-                    ? 'bg-[rgba(85,223,255,0.18)] text-white border border-[#55DFFF] shadow-[0_0_12px_rgba(85,223,255,0.35)] font-semibold'
-                    : 'bg-[#0C1014] text-slate-400 hover:text-white border border-[rgba(85,223,255,0.14)]'
+                    ? 'bg-[rgba(255, 255, 255,0.18)] text-white border border-[#FFFFFF] shadow-[0_0_12px_rgba(255, 255, 255,0.35)] font-semibold'
+                    : 'bg-[#0C1014] text-slate-400 hover:text-white border border-[rgba(255, 255, 255,0.14)]'
                 }`}
               >
                 {cat.label}
@@ -98,19 +98,19 @@ export default function TeamPage() {
                 key={member.id}
                 className={`rounded-2xl p-5 sm:p-6 bg-[#0C1014]/90 border transition-all duration-300 flex flex-col justify-between ${
                   isFaculty
-                    ? 'border-[#55DFFF]/45 shadow-[0_4px_24px_rgba(85,223,255,0.15)]'
-                    : 'border-[rgba(85,223,255,0.18)] hover:border-[#55DFFF]/40 shadow-[0_4px_20px_rgba(0,0,0,0.4)]'
+                    ? 'border-[#FFFFFF]/45 shadow-[0_4px_24px_rgba(255, 255, 255,0.15)]'
+                    : 'border-[rgba(255, 255, 255,0.18)] hover:border-[#FFFFFF]/40 shadow-[0_4px_20px_rgba(0,0,0,0.4)]'
                 }`}
               >
                 <div>
                   {/* Top Avatar & Domain Badge */}
                   <div className="flex items-start justify-between gap-3 mb-5">
-                    <div className="w-14 h-14 rounded-2xl bg-[#12161A] border border-[rgba(85,223,255,0.3)] flex items-center justify-center font-barlow-condensed text-2xl font-bold text-[#55DFFF] shadow-[0_0_12px_rgba(85,223,255,0.2)]">
+                    <div className="w-14 h-14 rounded-2xl bg-[#12161A] border border-[rgba(255, 255, 255,0.3)] flex items-center justify-center font-barlow-condensed text-2xl font-bold text-[#FFFFFF] shadow-[0_0_12px_rgba(255, 255, 255,0.2)]">
                       {member.initials}
                     </div>
 
                     <div className="flex flex-col items-end gap-1">
-                      <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[rgba(85,223,255,0.1)] border border-[rgba(85,223,255,0.25)] text-[#24BFEA] font-semibold">
+                      <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-[rgba(255, 255, 255,0.1)] border border-[rgba(255, 255, 255,0.25)] text-[#E2E8F0] font-semibold">
                         {member.domain}
                       </span>
                       {isFaculty && (
@@ -126,7 +126,7 @@ export default function TeamPage() {
                   <h3 className="text-xl sm:text-2xl font-barlow-condensed font-bold uppercase text-white mb-1 tracking-tight">
                     {member.name}
                   </h3>
-                  <p className="text-xs font-mono font-medium text-[#55DFFF] mb-1">
+                  <p className="text-xs font-mono font-medium text-[#FFFFFF] mb-1">
                     {member.role}
                   </p>
                   <p className="text-[11px] font-mono text-slate-400 mb-4">
@@ -140,13 +140,13 @@ export default function TeamPage() {
                 </div>
 
                 {/* Social Channels */}
-                <div className="flex items-center gap-2 pt-4 border-t border-[rgba(85,223,255,0.14)]">
+                <div className="flex items-center gap-2 pt-4 border-t border-[rgba(255, 255, 255,0.14)]">
                   {member.github && (
                     <a
                       href={member.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-lg bg-white/[0.04] hover:bg-[rgba(85,223,255,0.2)] text-slate-400 hover:text-white transition-colors"
+                      className="p-2 rounded-lg bg-white/[0.04] hover:bg-[rgba(255, 255, 255,0.2)] text-slate-400 hover:text-white transition-colors"
                       title="GitHub Profile"
                     >
                       <Github className="w-3.5 h-3.5" />
@@ -157,7 +157,7 @@ export default function TeamPage() {
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="p-2 rounded-lg bg-white/[0.04] hover:bg-[rgba(85,223,255,0.2)] text-slate-400 hover:text-white transition-colors"
+                      className="p-2 rounded-lg bg-white/[0.04] hover:bg-[rgba(255, 255, 255,0.2)] text-slate-400 hover:text-white transition-colors"
                       title="LinkedIn Profile"
                     >
                       <Linkedin className="w-3.5 h-3.5" />
@@ -166,7 +166,7 @@ export default function TeamPage() {
                   {member.email && (
                     <a
                       href={`mailto:${member.email}`}
-                      className="p-2 rounded-lg bg-white/[0.04] hover:bg-[rgba(85,223,255,0.2)] text-slate-400 hover:text-white transition-colors"
+                      className="p-2 rounded-lg bg-white/[0.04] hover:bg-[rgba(255, 255, 255,0.2)] text-slate-400 hover:text-white transition-colors"
                       title="Institutional Email"
                     >
                       <Mail className="w-3.5 h-3.5" />
@@ -184,7 +184,7 @@ export default function TeamPage() {
             <ShieldCheck className="w-4 h-4 text-signal-green shrink-0" />
             <span>All leadership roles and faculty advisor appointments have been officially confirmed and documented.</span>
           </div>
-          <Link href="/about" className="text-[#55DFFF] hover:text-white flex items-center gap-1 shrink-0">
+          <Link href="/about" className="text-[#FFFFFF] hover:text-white flex items-center gap-1 shrink-0">
             <span>ABOUT CHARTER</span>
             <ArrowRight className="w-3 h-3" />
           </Link>

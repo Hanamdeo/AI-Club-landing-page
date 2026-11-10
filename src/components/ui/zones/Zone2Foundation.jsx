@@ -69,8 +69,8 @@ export default function Zone2Foundation({ onInspectRack }) {
                   <Compass className="w-3.5 h-3.5" />
                   CHASSIS 02 // VISION
                 </span>
-                <span className="text-[#24BFEA] flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#24BFEA]" />
+                <span className="text-[#FFFFFF] flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#FFFFFF]" />
                   SYNCED
                 </span>
               </div>

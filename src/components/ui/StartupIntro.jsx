@@ -342,7 +342,7 @@ export default function StartupIntro({ onComplete }) {
       </div>
 
       {/* Ambient Radial Cyber Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.08)_0%,transparent_65%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.08)_0%,transparent_65%)] pointer-events-none" />
 
       {/* Center Neural Network & Brand Experience */}
       <div
@@ -430,7 +430,7 @@ export default function StartupIntro({ onComplete }) {
                   strokeDashoffset="100"
                   style={{
                     transition: 'stroke-dashoffset 0.04s linear',
-                    filter: 'drop-shadow(0 0 3px rgba(36,191,234,0.4))',
+                    filter: 'drop-shadow(0 0 3px rgba(255, 255, 255,0.4))',
                   }}
                 />
               ))}
@@ -494,7 +494,7 @@ export default function StartupIntro({ onComplete }) {
           <div className="w-full h-1.5 bg-black/60 rounded-full overflow-hidden border border-white/[0.08] p-0.5">
             <div
               ref={progressLineRef}
-              className="w-full h-full bg-gradient-to-r from-[#FFFFFF] via-[#CBD5E1] to-[#FFFFFF] origin-left rounded-full shadow-[0_0_12px_rgba(36,191,234,0.6)]"
+              className="w-full h-full bg-gradient-to-r from-[#FFFFFF] via-[#CBD5E1] to-[#FFFFFF] origin-left rounded-full shadow-[0_0_12px_rgba(255, 255, 255,0.6)]"
             />
           </div>
 

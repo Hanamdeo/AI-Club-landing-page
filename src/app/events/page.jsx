@@ -109,15 +109,15 @@ export default function EventsPage() {
     <main className="relative min-h-screen bg-[#050C12] text-[#F0F6F7] font-events-body pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Architectural Grid & 3D Facility Core Blue Flare */}
       <div className="absolute inset-0 bg-facility-grid opacity-25 pointer-events-none" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[420px] bg-[radial-gradient(ellipse_at_top,rgba(85,223,255,0.12)_0%,transparent_65%)] pointer-events-none" />
-      <div className="absolute top-44 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-[radial-gradient(circle_at_center,rgba(36,191,234,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-[420px] bg-[radial-gradient(ellipse_at_top,rgba(255, 255, 255,0.12)_0%,transparent_65%)] pointer-events-none" />
+      <div className="absolute top-44 left-1/2 -translate-x-1/2 w-[700px] h-80 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Breadcrumb Navigation - IBM Plex Mono */}
         
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10 border-b border-[rgba(85,223,255,0.15)] pb-6 sm:pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 sm:mb-10 border-b border-[rgba(255, 255, 255,0.15)] pb-6 sm:pb-8">
           <div>
             {/* Hero Heading: CS Slade 3D (White & Cyan with 3D Core Depth) */}
             <h1 className="events-hero-title">
@@ -130,22 +130,22 @@ export default function EventsPage() {
           </div>
 
           {/* Telemetry Counter */}
-          <div className="p-4 px-5 sm:px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(85,223,255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] self-stretch sm:self-start md:self-auto flex items-center justify-between sm:justify-start gap-4 sm:gap-6">
+          <div className="p-4 px-5 sm:px-6 rounded-2xl bg-[#08121A]/95 border border-[rgba(255, 255, 255,0.2)] shadow-[0_8px_32px_rgba(0,0,0,0.85)] self-stretch sm:self-start md:self-auto flex items-center justify-between sm:justify-start gap-4 sm:gap-6">
             <div>
               <span className="block events-mono-meta text-slate-400 mb-1">
                 VERIFIED OPERATIONS
               </span>
-              <span className="text-3xl sm:text-4xl font-bold font-events-heading bg-gradient-to-r from-[#55DFFF] via-[#24BFEA] to-white bg-clip-text text-transparent tracking-wider leading-none">
+              <span className="text-3xl sm:text-4xl font-bold font-events-heading bg-gradient-to-r from-[#FFFFFF] via-[#E2E8F0] to-white bg-clip-text text-transparent tracking-wider leading-none">
                 0{events.length}
               </span>
             </div>
-            <div className="h-10 w-[1px] bg-[rgba(85,223,255,0.15)]" />
+            <div className="h-10 w-[1px] bg-[rgba(255, 255, 255,0.15)]" />
             <div>
               <span className="block events-mono-meta text-slate-400 mb-1">
                 REGISTRATION STATUS
               </span>
-              <span className="inline-flex items-center gap-1.5 text-xs events-mono-meta font-bold text-[#55DFFF] mt-1">
-                <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_8px_#55DFFF]" />
+              <span className="inline-flex items-center gap-1.5 text-xs events-mono-meta font-bold text-[#FFFFFF] mt-1">
+                <span className="w-2 h-2 rounded-full bg-[#FFFFFF] animate-pulse shadow-[0_0_8px_#FFFFFF]" />
                 ACCEPTING APPS
               </span>
             </div>
@@ -168,8 +168,8 @@ export default function EventsPage() {
                     }}
                     className={`px-3.5 py-1.5 text-xs events-mono-btn rounded-full transition-all cursor-pointer whitespace-nowrap ${
                       active
-                        ? 'bg-gradient-to-r from-[#55DFFF]/30 to-[#24BFEA]/25 text-white border border-[#55DFFF]/70 shadow-[0_0_16px_rgba(85,223,255,0.35)] font-bold'
-                        : 'bg-[#08121A] text-slate-300 hover:text-white border border-white/[0.08] hover:border-[rgba(85,223,255,0.3)]'
+                        ? 'bg-gradient-to-r from-[#FFFFFF]/30 to-[#E2E8F0]/25 text-white border border-[#FFFFFF]/70 shadow-[0_0_16px_rgba(255, 255, 255,0.35)] font-bold'
+                        : 'bg-[#08121A] text-slate-300 hover:text-white border border-white/[0.08] hover:border-[rgba(255, 255, 255,0.3)]'
                     }`}
                   >
                     {cat}
@@ -180,7 +180,7 @@ export default function EventsPage() {
 
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full md:w-auto">
               {/* View Mode Switcher: 3D Slide vs Matrix Grid */}
-              <div className="flex items-center justify-center p-1 rounded-xl bg-[#08121A] border border-[rgba(85,223,255,0.2)]">
+              <div className="flex items-center justify-center p-1 rounded-xl bg-[#08121A] border border-[rgba(255, 255, 255,0.2)]">
                 <button
                   onClick={() => {
                     try { audioManager.playClick(); } catch {}
@@ -188,12 +188,12 @@ export default function EventsPage() {
                   }}
                   className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer flex-1 sm:flex-initial ${
                     viewMode === '3d-slide'
-                      ? 'bg-[#55DFFF]/25 text-white border border-[#55DFFF]/60 shadow-[0_0_12px_rgba(85,223,255,0.3)] font-bold'
+                      ? 'bg-[#FFFFFF]/25 text-white border border-[#FFFFFF]/60 shadow-[0_0_12px_rgba(255, 255, 255,0.3)] font-bold'
                       : 'text-slate-400 hover:text-white'
                   }`}
                   title="Interactive CSS 3D Slide View"
                 >
-                  <Layers className="w-3.5 h-3.5 text-[#55DFFF]" />
+                  <Layers className="w-3.5 h-3.5 text-[#FFFFFF]" />
                   <span>3D SLIDE</span>
                 </button>
                 <button
@@ -203,12 +203,12 @@ export default function EventsPage() {
                   }}
                   className={`flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg events-mono-meta transition-all cursor-pointer flex-1 sm:flex-initial ${
                     viewMode === 'grid'
-                      ? 'bg-[#55DFFF]/25 text-white border border-[#55DFFF]/60 shadow-[0_0_12px_rgba(85,223,255,0.3)] font-bold'
+                      ? 'bg-[#FFFFFF]/25 text-white border border-[#FFFFFF]/60 shadow-[0_0_12px_rgba(255, 255, 255,0.3)] font-bold'
                       : 'text-slate-400 hover:text-white'
                   }`}
                   title="Grid Matrix View"
                 >
-                  <LayoutGrid className="w-3.5 h-3.5 text-[#55DFFF]" />
+                  <LayoutGrid className="w-3.5 h-3.5 text-[#FFFFFF]" />
                   <span>GRID</span>
                 </button>
               </div>
@@ -221,7 +221,7 @@ export default function EventsPage() {
                   placeholder="Search operations, topics..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#08121A] border border-[rgba(85,223,255,0.2)] text-xs events-mono-btn text-white placeholder-slate-500 focus:outline-none focus:border-[#55DFFF] transition-colors"
+                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-[#08121A] border border-[rgba(255, 255, 255,0.2)] text-xs events-mono-btn text-white placeholder-slate-500 focus:outline-none focus:border-[#FFFFFF] transition-colors"
                 />
               </div>
             </div>
@@ -243,7 +243,7 @@ export default function EventsPage() {
                   }}
                   className={`px-3 py-1 text-[11px] events-mono-meta rounded-lg transition-all cursor-pointer whitespace-nowrap ${
                     active
-                      ? 'bg-[#55DFFF]/20 text-[#55DFFF] border border-[#55DFFF]/50 font-semibold'
+                      ? 'bg-[#FFFFFF]/20 text-[#FFFFFF] border border-[#FFFFFF]/50 font-semibold'
                       : 'bg-white/[0.03] text-slate-400 hover:text-slate-200 border border-transparent'
                   }`}
                 >
@@ -291,19 +291,19 @@ export default function EventsPage() {
                       isFeatured={isFeatured}
                       className={`p-7 sm:p-8 bg-[#08121A]/95 ${
                         isFeatured ? 'solo-leveling-card-featured' : 'solo-leveling-card'
-                      } ${offset === 0 ? 'border-[#55DFFF]/60 ring-1 ring-[#55DFFF]/40 shadow-[0_0_35px_rgba(85,223,255,0.25)]' : ''}`}
+                      } ${offset === 0 ? 'border-[#FFFFFF]/60 ring-1 ring-[#FFFFFF]/40 shadow-[0_0_35px_rgba(255, 255, 255,0.25)]' : ''}`}
                     >
                       <div>
                         {/* Top Meta Line: IBM Plex Mono */}
                         <div className="flex items-center justify-between gap-2 mb-4">
-                          <span className="events-mono-meta px-2.5 py-0.5 rounded-full bg-[#55DFFF]/15 border border-[#55DFFF]/35 text-[#55DFFF] font-semibold">
+                          <span className="events-mono-meta px-2.5 py-0.5 rounded-full bg-[#FFFFFF]/15 border border-[#FFFFFF]/35 text-[#FFFFFF] font-semibold">
                             {ev.category}
                           </span>
 
                           <span
                             className={`events-mono-meta px-2 py-0.5 rounded-full flex items-center gap-1 ${
                               ev.registrationStatus === 'open'
-                                ? 'bg-[#55DFFF]/15 text-[#55DFFF] border border-[#55DFFF]/35 shadow-[0_0_10px_rgba(85,223,255,0.2)]'
+                                ? 'bg-[#FFFFFF]/15 text-[#FFFFFF] border border-[#FFFFFF]/35 shadow-[0_0_10px_rgba(255, 255, 255,0.2)]'
                                 : 'bg-white/[0.05] text-slate-400 border border-white/[0.08]'
                             }`}
                           >
@@ -313,7 +313,7 @@ export default function EventsPage() {
                         </div>
 
                         {/* Title: Barlow Condensed 600 */}
-                        <h3 className="events-card-title text-white group-hover:text-[#55DFFF] transition-colors mb-3">
+                        <h3 className="events-card-title text-white group-hover:text-[#FFFFFF] transition-colors mb-3">
                           {ev.title}
                         </h3>
                         {/* Body description: Manrope 400 */}
@@ -322,30 +322,30 @@ export default function EventsPage() {
                         </p>
 
                         {/* Logistics Badges: 3D Facility Blue */}
-                        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)] mb-6 text-xs font-events-mono text-slate-200">
+                        <div className="grid grid-cols-2 gap-3 pt-4 border-t border-[rgba(255, 255, 255,0.12)] mb-6 text-xs font-events-mono text-slate-200">
                           <div className="flex items-center gap-2">
-                            <Calendar className="w-3.5 h-3.5 text-[#55DFFF] shrink-0" />
+                            <Calendar className="w-3.5 h-3.5 text-[#FFFFFF] shrink-0" />
                             <span className="truncate tracking-wide">{ev.date}</span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <Clock className="w-3.5 h-3.5 text-[#24BFEA] shrink-0" />
+                            <Clock className="w-3.5 h-3.5 text-[#E2E8F0] shrink-0" />
                             <span className="truncate tracking-wide">{ev.time}</span>
                           </div>
                           <div className="flex items-center gap-2 col-span-2">
-                            <MapPin className="w-3.5 h-3.5 text-[#55DFFF]/80 shrink-0" />
+                            <MapPin className="w-3.5 h-3.5 text-[#FFFFFF]/80 shrink-0" />
                             <span className="truncate tracking-wide">{ev.venue}</span>
                           </div>
                         </div>
                       </div>
 
                       {/* Bottom Actions: IBM Plex Mono Buttons */}
-                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
+                      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-4 border-t border-[rgba(255, 255, 255,0.12)]">
                         <Link
                           href={`/events/${slug}`}
-                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn text-center"
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#FFFFFF]/15 border border-white/[0.12] hover:border-[#FFFFFF]/40 events-mono-btn text-white hover:text-[#FFFFFF] transition-all group/btn text-center"
                         >
                           <span>PROTOCOL DETAILS</span>
-                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#55DFFF] transition-all" />
+                          <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#FFFFFF] transition-all" />
                         </Link>
 
                         {ev.registrationUrl && (
@@ -353,7 +353,7 @@ export default function EventsPage() {
                             href={ev.registrationUrl}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black text-center"
+                            className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#E2E8F0] via-[#FFFFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(255, 255, 255,0.45)] shrink-0 font-black text-center"
                           >
                             <span>REGISTER</span>
                             <ExternalLink className="w-3.5 h-3.5 text-[#050C12]" />
@@ -367,10 +367,10 @@ export default function EventsPage() {
             </div>
 
             {/* 3D Slide Carousel Interactive Controls */}
-            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-4 z-40 bg-[#08121A]/95 px-5 py-2.5 rounded-full border border-[rgba(85,223,255,0.2)] shadow-[0_8px_30px_rgba(0,0,0,0.9)]">
+            <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 flex items-center gap-4 z-40 bg-[#08121A]/95 px-5 py-2.5 rounded-full border border-[rgba(255, 255, 255,0.2)] shadow-[0_8px_30px_rgba(0,0,0,0.9)]">
               <button
                 onClick={handlePrevSlide}
-                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-[#55DFFF]/25 hover:text-white border border-white/[0.1] transition-all cursor-pointer text-slate-300"
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-[#FFFFFF]/25 hover:text-white border border-white/[0.1] transition-all cursor-pointer text-slate-300"
                 aria-label="Previous Slide"
               >
                 <ChevronLeft className="w-4 h-4" />
@@ -387,7 +387,7 @@ export default function EventsPage() {
                     }}
                     className={`h-2 rounded-full transition-all cursor-pointer ${
                       activeSlideIndex === idx
-                        ? 'w-7 bg-gradient-to-r from-[#55DFFF] to-[#24BFEA] shadow-[0_0_10px_#55DFFF]'
+                        ? 'w-7 bg-gradient-to-r from-[#FFFFFF] to-[#E2E8F0] shadow-[0_0_10px_#FFFFFF]'
                         : 'w-2 bg-white/20 hover:bg-white/40'
                     }`}
                     aria-label={`Slide ${idx + 1}`}
@@ -397,7 +397,7 @@ export default function EventsPage() {
 
               <button
                 onClick={handleNextSlide}
-                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-[#55DFFF]/25 hover:text-white border border-white/[0.1] transition-all cursor-pointer text-slate-300"
+                className="w-8 h-8 rounded-full flex items-center justify-center bg-white/[0.05] hover:bg-[#FFFFFF]/25 hover:text-white border border-white/[0.1] transition-all cursor-pointer text-slate-300"
                 aria-label="Next Slide"
               >
                 <ChevronRight className="w-4 h-4" />
@@ -425,20 +425,20 @@ export default function EventsPage() {
                   index={index}
                   isFeatured={isFeatured}
                   className={`p-6 sm:p-7 bg-[#08121A]/95 ${
-                    isFeatured ? 'solo-leveling-card-featured border-[#55DFFF]/40' : 'solo-leveling-card'
+                    isFeatured ? 'solo-leveling-card-featured border-[#FFFFFF]/40' : 'solo-leveling-card'
                   }`}
                 >
                   <div>
                     {/* Top Meta Line: IBM Plex Mono */}
                     <div className="flex items-center justify-between gap-2 mb-4">
-                      <span className="events-mono-meta px-2.5 py-0.5 rounded-full bg-[#55DFFF]/15 border border-[#55DFFF]/35 text-[#55DFFF] font-semibold">
+                      <span className="events-mono-meta px-2.5 py-0.5 rounded-full bg-[#FFFFFF]/15 border border-[#FFFFFF]/35 text-[#FFFFFF] font-semibold">
                         {ev.category}
                       </span>
 
                       <span
                         className={`events-mono-meta px-2 py-0.5 rounded-full flex items-center gap-1 ${
                           ev.registrationStatus === 'open'
-                            ? 'bg-[#55DFFF]/15 text-[#55DFFF] border border-[#55DFFF]/35 shadow-[0_0_10px_rgba(85,223,255,0.2)]'
+                            ? 'bg-[#FFFFFF]/15 text-[#FFFFFF] border border-[#FFFFFF]/35 shadow-[0_0_10px_rgba(255, 255, 255,0.2)]'
                             : 'bg-white/[0.05] text-slate-400 border border-white/[0.08]'
                         }`}
                       >
@@ -448,7 +448,7 @@ export default function EventsPage() {
                     </div>
 
                     {/* Title: Barlow Condensed 600 */}
-                    <h3 className="events-card-title text-white group-hover:text-[#55DFFF] transition-colors mb-3">
+                    <h3 className="events-card-title text-white group-hover:text-[#FFFFFF] transition-colors mb-3">
                       {ev.title}
                     </h3>
                     {/* Body description: Manrope 400 */}
@@ -457,30 +457,30 @@ export default function EventsPage() {
                     </p>
 
                     {/* Logistics Badges: 3D Facility Blue */}
-                    <div className="grid grid-cols-2 gap-2.5 pt-4 border-t border-[rgba(85,223,255,0.12)] mb-6 text-[11px] font-events-mono text-slate-300">
+                    <div className="grid grid-cols-2 gap-2.5 pt-4 border-t border-[rgba(255, 255, 255,0.12)] mb-6 text-[11px] font-events-mono text-slate-300">
                       <div className="flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-[#55DFFF] shrink-0" />
+                        <Calendar className="w-3.5 h-3.5 text-[#FFFFFF] shrink-0" />
                         <span className="truncate tracking-wide">{ev.date}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <Clock className="w-3.5 h-3.5 text-[#24BFEA] shrink-0" />
+                        <Clock className="w-3.5 h-3.5 text-[#E2E8F0] shrink-0" />
                         <span className="truncate tracking-wide">{ev.time}</span>
                       </div>
                       <div className="flex items-center gap-2 col-span-2">
-                        <MapPin className="w-3.5 h-3.5 text-[#55DFFF]/80 shrink-0" />
+                        <MapPin className="w-3.5 h-3.5 text-[#FFFFFF]/80 shrink-0" />
                         <span className="truncate tracking-wide">{ev.venue}</span>
                       </div>
                     </div>
                   </div>
 
                   {/* Bottom Actions: IBM Plex Mono Buttons */}
-                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-4 border-t border-[rgba(85,223,255,0.12)]">
+                  <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 sm:gap-3 pt-4 border-t border-[rgba(255, 255, 255,0.12)]">
                     <Link
                       href={`/events/${slug}`}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#55DFFF]/15 border border-white/[0.12] hover:border-[#55DFFF]/40 events-mono-btn text-white hover:text-[#55DFFF] transition-all group/btn text-center"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-white/[0.05] hover:bg-[#FFFFFF]/15 border border-white/[0.12] hover:border-[#FFFFFF]/40 events-mono-btn text-white hover:text-[#FFFFFF] transition-all group/btn text-center"
                     >
                       <span>PROTOCOL DETAILS</span>
-                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#55DFFF] transition-all" />
+                      <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover/btn:translate-x-1 group-hover/btn:text-[#FFFFFF] transition-all" />
                     </Link>
 
                     {ev.registrationUrl && (
@@ -488,7 +488,7 @@ export default function EventsPage() {
                         href={ev.registrationUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(85,223,255,0.45)] shrink-0 font-black text-center"
+                        className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#E2E8F0] via-[#FFFFFF] to-[#38C9E8] hover:brightness-110 text-[#050C12] events-mono-btn transition-all shadow-[0_0_22px_rgba(255, 255, 255,0.45)] shrink-0 font-black text-center"
                       >
                         <span>REGISTER</span>
                         <ExternalLink className="w-3.5 h-3.5 text-[#050C12]" />

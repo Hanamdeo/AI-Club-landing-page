@@ -118,8 +118,8 @@ export default function Section03ProjectionChamber({ onTransitionToEditorial }) 
             <span>CORE</span>
           </div>
           <div className="flex items-center gap-1.5 text-[#F2EFE8] font-semibold">
-            <span className="text-[#24BFEA] font-bold">03</span>
-            <span className="underline decoration-[#24BFEA] underline-offset-4 font-bold text-[#F2EFE8]">CHAMBER</span>
+            <span className="text-[#FFFFFF] font-bold">03</span>
+            <span className="underline decoration-[#FFFFFF] underline-offset-4 font-bold text-[#F2EFE8]">CHAMBER</span>
           </div>
         </div>
 
