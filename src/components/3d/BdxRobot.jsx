@@ -91,8 +91,8 @@ export default function BdxRobot({
   const { canvas: visorCanvas, texture: visorTexture } = useMemo(() => {
     if (typeof document === 'undefined') return { canvas: null, texture: null };
     const c = document.createElement('canvas');
-    c.width = 1024;
-    c.height = 512;
+    c.width = 512;
+    c.height = 256;
     const t = new THREE.CanvasTexture(c);
     t.needsUpdate = true;
     return { canvas: c, texture: t };
@@ -138,6 +138,8 @@ export default function BdxRobot({
   const prevProgress = useRef(0);
   const smoothedVelocity = useRef(0);
   const currentPos = useRef(new THREE.Vector3(1.28, 1.50, 8.2));
+  const targetPosRef = useRef(new THREE.Vector3());
+  const tangentRef = useRef(new THREE.Vector3());
   const currentRotY = useRef(-0.25);
   const currentPitchX = useRef(0);
   const currentRollZ = useRef(0);
@@ -280,12 +282,15 @@ export default function BdxRobot({
   // =========================================================================
   const drawVisorFace = useCallback((ctx, emotion, blinkScale, gazeX, gazeY, time) => {
     if (!ctx) return;
-    const w = 1024;
-    const h = 512;
+    const w = 512;
+    const h = 256;
 
     // 1. Deep Obsidian Midnight Visor Screen Background
     ctx.fillStyle = '#050912';
     ctx.fillRect(0, 0, w, h);
+
+    ctx.save();
+    ctx.scale(0.5, 0.5);
 
     // Glowing Neon Stroke Helper
     const drawGlowStroke = (drawFn, color = '#00F0FF', coreColor = '#FFFFFF', lineWidth = 20, glowWidth = 34) => {
@@ -376,6 +381,7 @@ export default function BdxRobot({
       } else {
         drawSmileMouth(512, 300, 76);
       }
+      ctx.restore();
       return;
     }
 
@@ -564,6 +570,7 @@ export default function BdxRobot({
       drawArchEye(714, 245, 76);
       drawSmileMouth(512, 300, 76);
     }
+    ctx.restore();
   }, []);
 
   // Initial Face Render
@@ -580,9 +587,10 @@ export default function BdxRobot({
   const chestReactorTexture = useMemo(() => {
     if (typeof document === 'undefined') return null;
     const canvas = document.createElement('canvas');
-    canvas.width = 512;
-    canvas.height = 512;
+    canvas.width = 256;
+    canvas.height = 256;
     const ctx = canvas.getContext('2d');
+    ctx.scale(0.5, 0.5);
 
     ctx.fillStyle = '#0f141d';
     ctx.fillRect(0, 0, 512, 512);
@@ -673,8 +681,10 @@ export default function BdxRobot({
 
       // 3. Smooth continuous 3D Path Sampling (C1 continuous Catmull-Rom spline)
       const curve = isMobileRef.current ? mobileCurve : desktopCurve;
-      const targetPos = curve.getPoint(p);
-      const tangent = curve.getTangent(p);
+      curve.getPoint(p, targetPosRef.current);
+      curve.getTangent(p, tangentRef.current);
+      const targetPos = targetPosRef.current;
+      const tangent = tangentRef.current;
 
       // Damped position interpolation (guarantees smooth glide to target)
       currentPos.current.lerp(targetPos, 1 - Math.exp(-safeDelta * 9.0));
@@ -866,13 +876,12 @@ export default function BdxRobot({
     }
 
     if (needsRedraw && faceCanvasRef.current && faceTextureRef.current) {
-      lastRenderStateRef.current = {
-        emotion: currentEmotion,
-        blink: currentBlink,
-        gazeX: mx,
-        gazeY: my,
-        step: timeStep,
-      };
+      const state = lastRenderStateRef.current;
+      state.emotion = currentEmotion;
+      state.blink = currentBlink;
+      state.gazeX = mx;
+      state.gazeY = my;
+      state.step = timeStep;
       drawVisorFace(
         faceCanvasRef.current.getContext('2d'),
         currentEmotion,

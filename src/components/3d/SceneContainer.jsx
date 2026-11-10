@@ -15,6 +15,7 @@ import FoundationBay from './landmarks/FoundationBay';
 import ProjectionChamber from './landmarks/ProjectionChamber';
 import HolographicDataCentreProjection from './HolographicDataCentreProjection';
 import { getZoneTransitionState } from '@/utils/zoneTransition';
+import { usePerformanceTier } from '@/utils/ResponsivePerformanceManager';
 
 /**
  * ZoneLightingController
@@ -108,6 +109,9 @@ export default function SceneContainer({
   onNavigateToSection,
   activeNavId = 'hero',
 }) {
+  const tierState = usePerformanceTier();
+  const maxLights = tierState.features?.maxLights ?? 5;
+
   return (
     <div
       className="fixed inset-0 w-full h-full pointer-events-none z-0 transition-opacity duration-700 ease-out"
@@ -117,13 +121,22 @@ export default function SceneContainer({
         className="pointer-events-auto"
         style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
         camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.1, far: 110 }}
-        dpr={[1, 1.25]}
+        dpr={[1, tierState.dpr]}
         gl={{
-          antialias: true,
+          antialias: tierState.tier !== 'low',
           powerPreference: 'high-performance',
           stencil: false,
           depth: true,
-          precision: 'mediump',
+          precision: tierState.tier === 'low' ? 'lowp' : 'mediump',
+        }}
+        onCreated={({ gl }) => {
+          if (typeof window !== 'undefined') {
+            window.__THREE_GL__ = gl;
+          }
+          gl.domElement.addEventListener('webglcontextlost', (e) => {
+            e.preventDefault();
+            console.warn('[WebGL] Context lost. Attempting recovery...');
+          });
         }}
       >
         {/* Harmonious Obsidian Atmosphere: Blends seamlessly with website background */}
@@ -139,7 +152,7 @@ export default function SceneContainer({
           scrollProgressRef={scrollProgressRef}
         />
 
-        {/* 3. Restrained Studio 3-Point Lighting for Companion NEX-01 */}
+        {/* 3. Studio Lighting for Companion NEX-01 */}
         {/* Soft Ceramic Key */}
         <directionalLight
           position={[2.6, 3.6, 11.0]}
@@ -148,19 +161,23 @@ export default function SceneContainer({
         />
 
         {/* Subtle Silver-Cyan Rim (Calibrated, not blinding neon) */}
-        <directionalLight
-          position={[1.2, 3.0, 5.0]}
-          color="#8ED5E8"
-          intensity={0.60}
-        />
+        {maxLights >= 4 && (
+          <directionalLight
+            position={[1.2, 3.0, 5.0]}
+            color="#8ED5E8"
+            intensity={0.60}
+          />
+        )}
 
         {/* Floor Bounce Fill */}
-        <pointLight
-          position={[1.3, 0.4, 8.5]}
-          color="#1B2527"
-          intensity={0.30}
-          distance={3.5}
-        />
+        {maxLights >= 5 && (
+          <pointLight
+            position={[1.3, 0.4, 8.5]}
+            color="#1B2527"
+            intensity={0.30}
+            distance={3.5}
+          />
+        )}
 
         {/* Dynamic Scroll-Controlled Camera along Cold Aisle */}
         <CameraController

@@ -23,19 +23,27 @@ export const SERVER_NODE_ITEMS = [
  * Connects directly to dedicated Next.js routes and glides between 3D zones.
  */
 export default function ServerSideNav({
+  activeNavId = 'entry',
   scrollProgress = 0,
   scrollProgressRef,
   onNavigateToSection,
   onToggleTerminal,
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [activeRobotNodeId, setActiveRobotNodeId] = useState('home');
+  const [activeRobotNodeId, setActiveRobotNodeId] = useState(activeNavId || 'entry');
   const [mobileOpen, setMobileOpen] = useState(false);
   const leaveTimerRef = useRef(null);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
 
-  // Synchronize robot location along the cold aisle via shared scroll ref on Home
+  // Synchronize robot location along the cold aisle via activeNavId or shared scroll ref on Home
+  useEffect(() => {
+    if (!isHomePage) return;
+    if (activeNavId) {
+      setActiveRobotNodeId(activeNavId);
+    }
+  }, [activeNavId, isHomePage]);
+
   useEffect(() => {
     if (!isHomePage) return;
     let animId;
@@ -46,7 +54,7 @@ export default function ServerSideNav({
         const closestDiff = Math.abs(sp - SERVER_NODE_ITEMS[closestIdx].zProgress);
         return currentDiff < closestDiff ? idx : closestIdx;
       }, 0);
-      const closestId = SERVER_NODE_ITEMS[activeIdx]?.id || 'home';
+      const closestId = SERVER_NODE_ITEMS[activeIdx]?.id || 'entry';
       setActiveRobotNodeId((prev) => (prev !== closestId ? closestId : prev));
       animId = requestAnimationFrame(checkRobotPos);
     };
@@ -88,6 +96,7 @@ export default function ServerSideNav({
     setMobileOpen(false);
     if (isHomePage && onNavigateToSection) {
       e.preventDefault();
+      setActiveRobotNodeId(item.id);
       onNavigateToSection(item.id, item.zProgress);
     }
   };
@@ -103,28 +112,11 @@ export default function ServerSideNav({
 
   return (
     <>
-      {/* Mobile Floating Quick-Toggle Button */}
-      <div className="fixed top-4 left-4 z-50 md:hidden pointer-events-auto">
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#101415]/90 backdrop-blur-xl border border-white/[0.08] text-ivory text-xs font-sans shadow-[0_4px_20px_rgba(0,0,0,0.5)] cursor-pointer"
-          aria-label="Toggle Facility Navigation"
-        >
-          <div className="w-5 h-5 rounded bg-[#161B1C] border border-sage/40 flex items-center justify-center font-mono text-[9px] text-sage font-bold">
-            AI
-          </div>
-          <span className="font-semibold text-[11px] tracking-wide text-ivory">ROUTER</span>
-          {mobileOpen ? <X className="w-3.5 h-3.5 text-sage" /> : <Menu className="w-3.5 h-3.5 text-sage" />}
-        </button>
-      </div>
-
-      {/* Main Server Side Navigation Bar (Hover-activated on desktop) */}
+      {/* Main Server Side Navigation Bar (Desktop Hover-activated Rail) */}
       <aside
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
-        className={`fixed left-3 sm:left-4 top-1/2 -translate-y-1/2 z-40 select-none font-sans pointer-events-auto transition-all duration-300 ${
-          mobileOpen ? 'flex flex-col opacity-100' : 'hidden md:flex flex-col'
-        }`}
+        className="hidden md:flex flex-col fixed left-3 sm:left-4 top-1/2 -translate-y-1/2 z-40 select-none font-sans pointer-events-auto transition-all duration-300"
         aria-label="Facility Data Server Navigation"
       >
         <div
@@ -159,8 +151,10 @@ export default function ServerSideNav({
           {isExpanded ? (
             <div className="flex flex-col gap-1 py-1 animate-fadeIn">
               {SERVER_NODE_ITEMS.map((item) => {
-                const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-                const isRobotHere = isHomePage && activeRobotNodeId === item.id;
+                const isActive = isHomePage
+                  ? (activeNavId === item.id || activeRobotNodeId === item.id)
+                  : (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
+                const isRobotHere = isHomePage && (activeRobotNodeId === item.id);
 
                 return (
                   <Link
@@ -207,15 +201,20 @@ export default function ServerSideNav({
             </div>
           ) : (
             /* Collapsed Resting State: Minimalist Sleek Server Dots */
-            <div className="flex flex-col items-center gap-2.5 py-3.5 my-0.5 cursor-pointer" title="Hover to expand navigation">
+            <div className="flex flex-col items-center gap-2.5 py-3.5 my-0.5 cursor-pointer" title="Click or hover to navigate">
               {SERVER_NODE_ITEMS.map((item) => {
-                const isActive = item.href === '/' ? pathname === '/' : pathname.startsWith(item.href);
-                const isRobotHere = isHomePage && activeRobotNodeId === item.id;
+                const isActive = isHomePage
+                  ? (activeNavId === item.id || activeRobotNodeId === item.id)
+                  : (item.href === '/' ? pathname === '/' : pathname.startsWith(item.href));
+                const isRobotHere = isHomePage && (activeRobotNodeId === item.id);
 
                 return (
-                  <div
+                  <button
                     key={item.id}
-                    className="relative flex items-center justify-center group"
+                    onClick={(e) => handleItemClick(e, item)}
+                    className="relative flex items-center justify-center group p-1 -m-1 cursor-pointer bg-transparent border-0"
+                    title={item.label}
+                    aria-label={item.label}
                   >
                     <span
                       className={`rounded-full transition-all duration-300 ${
@@ -226,7 +225,7 @@ export default function ServerSideNav({
                           : 'w-1.5 h-1.5 bg-white/25 group-hover:bg-white/50'
                       }`}
                     />
-                  </div>
+                  </button>
                 );
               })}
             </div>

@@ -38,7 +38,7 @@ export default function EventsPage() {
   });
 
   return (
-    <main className="relative min-h-screen bg-[#0A0E10] text-[#E6E2D8] font-sans pt-28 pb-24 px-6 md:px-12 lg:px-16 overflow-hidden">
+    <main className="relative min-h-screen bg-[#0A0E10] text-[#E6E2D8] font-sans pt-28 pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Architectural Grid */}
       <div className="absolute inset-0 bg-facility-grid opacity-25 pointer-events-none" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-[radial-gradient(ellipse_at_top,rgba(36,191,234,0.08)_0%,transparent_70%)] pointer-events-none" />
@@ -60,7 +60,7 @@ export default function EventsPage() {
               <span className="w-2 h-2 rounded-full bg-[#24BFEA] animate-pulse shadow-[0_0_8px_#24BFEA]" />
               <span>ACTIVE DISPATCHES // MITS GWALIOR</span>
             </div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-labeouf font-bold tracking-wider text-gradient-cyber leading-none">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-labeouf font-bold tracking-wider text-gradient-cyber leading-tight sm:leading-none">
               OPERATIONS BOARD
             </h1>
             <p className="text-sm sm:text-base text-[#B5B8AF] font-normal mt-3 max-w-2xl leading-relaxed">

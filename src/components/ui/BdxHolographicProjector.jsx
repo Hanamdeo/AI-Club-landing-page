@@ -9,9 +9,11 @@ import {
   X,
   Minimize2,
   Sparkles,
+  Bot,
 } from 'lucide-react';
 import { getBdxProjectionPayload } from '@/lib/contentSelectors';
 import { audioManager } from '@/utils/audioManager';
+import { usePerformanceTier } from '@/utils/ResponsivePerformanceManager';
 
 // Dynamic import of Canvas for the floating companion robot
 const CompanionCanvas = dynamic(() => import('./BdxCompanionCanvas'), {
@@ -47,6 +49,8 @@ export default function BdxHolographicProjector({
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMinimized, setIsMinimized] = useState(false);
+  const tierState = usePerformanceTier();
+  const isLowTier = tierState.tier === 'low';
 
   // Sync mode with active website section
   useEffect(() => {
@@ -127,9 +131,9 @@ export default function BdxHolographicProjector({
         {/* 1. HOLOGRAPHIC PROJECTION INTERFACE SURFACE                     */}
         {/* ============================================================== */}
         {isOpen && !isMinimized && (
-          <div className="relative mb-3 w-[calc(100vw-2.5rem)] sm:w-[390px] max-w-[420px] rounded-xl bg-[#0D1011]/95 backdrop-blur-md border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden animate-fade-in text-ivory crosshair-corner">
+          <div className="relative mb-3 w-[calc(100vw-2.5rem)] sm:w-[390px] max-w-[420px] max-h-[calc(100svh-5.5rem)] flex flex-col rounded-xl bg-[#0D1011]/95 backdrop-blur-md border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.6)] overflow-hidden animate-fade-in text-ivory crosshair-corner">
             {/* Top Hologram Header Bar */}
-            <div className="relative flex items-center justify-between px-3.5 py-2.5 bg-[#15191A] border-b border-white/[0.08]">
+            <div className="relative flex-shrink-0 flex items-center justify-between px-3.5 py-2.5 bg-[#15191A] border-b border-white/[0.08]">
               <div className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-sage ring-2 ring-sage/20" />
                 <span className="text-[10px] font-mono tracking-widest text-sage uppercase font-bold">
@@ -158,7 +162,7 @@ export default function BdxHolographicProjector({
             </div>
 
             {/* Mode Selector Pill Scroller */}
-            <div className="relative flex items-center gap-1 px-3 py-1.5 bg-[#0D1011] border-b border-white/[0.06] overflow-x-auto no-scrollbar">
+            <div className="relative flex-shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#0D1011] border-b border-white/[0.06] overflow-x-auto no-scrollbar">
               {PROJECTION_MODES.map((m) => {
                 const isActive = currentMode === m.key;
                 return (
@@ -178,7 +182,7 @@ export default function BdxHolographicProjector({
             </div>
 
             {/* Projected Card Content Viewport */}
-            <div className="relative p-4">
+            <div className="relative p-4 overflow-y-auto custom-scrollbar flex-1">
               {currentItem ? (
                 <div>
                   {/* Badge & Item Counter */}
@@ -274,7 +278,7 @@ export default function BdxHolographicProjector({
           {/* Hologram Launch Button / Status Pill */}
           <button
             onClick={toggleOpen}
-            className={`group flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0D1011]/90 backdrop-blur-md border transition-all cursor-pointer btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)] ${
+            className={`group hidden sm:flex items-center gap-2 px-3 py-2 rounded-xl bg-[#0D1011]/90 backdrop-blur-md border transition-all cursor-pointer btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)] ${
               isOpen && !isMinimized
                 ? 'border-sage/50 text-sage'
                 : 'border-white/[0.12] text-ivory/80 hover:border-sage/40 hover:text-ivory'
@@ -303,7 +307,14 @@ export default function BdxHolographicProjector({
             className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0D1011] border border-white/[0.14] overflow-hidden cursor-pointer hover:border-sage transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
             title="BDX-01 Companion (Click to interact & chirp)"
           >
-            <CompanionCanvas isProjecting={isOpen && !isMinimized} />
+            {isLowTier ? (
+              <div className="flex flex-col items-center justify-center text-sage">
+                <Bot className="w-6 h-6 animate-pulse" />
+                <span className="text-[8px] font-mono font-bold tracking-widest text-sage/80 mt-0.5">BDX</span>
+              </div>
+            ) : (
+              <CompanionCanvas isProjecting={isOpen && !isMinimized} />
+            )}
           </div>
         </div>
       </div>

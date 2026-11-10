@@ -20,8 +20,29 @@ export const FACILITY_6_ZONES = [
   { id: 'discovery', index: 5, code: '06', name: 'Discovery Hub', range: [0.85, 1.00], center: 0.93 },
 ];
 
+// Zero-GC Preallocated Transition State Cache
+const cachedTransitionState = {
+  activeZone: 'entry',
+  zoneIndex: 0,
+  sceneState: 'idle',
+  statusMessage: 'BAY 01 // ENTRY THRESHOLD: WELCOME',
+  clusters: {
+    c1: { slide: 0, opacity: 1.0 },
+    c2: { slide: 0, opacity: 1.0 },
+    c3: { slide: 0, opacity: 1.0 },
+  },
+  lighting: {
+    lightZ: 4.0,
+    lightIntensity: 1.5,
+    lightColor: '#F0F6F7',
+    coreWashIntensity: 0.5,
+    chamberSpotIntensity: 0.25,
+  },
+};
+
 /**
  * Calculates continuous cluster transforms, lighting parameters, and scene state.
+ * Uses zero-allocation cached return to eliminate Garbage Collection thrashing in useFrame loops.
  * @param {number} rawP - Scroll progress (0.0 to 1.0)
  * @param {boolean} isReducedMotion - Respect prefers-reduced-motion
  */
@@ -94,22 +115,25 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
   const coreWashIntensity = 0.5 + (p >= 0.45 && p <= 0.75 ? 0.6 : 0.2);
   const chamberSpotIntensity = 0.25 + (p > 0.75 ? ((p - 0.75) / 0.25) * 1.85 : 0);
 
-  return {
-    activeZone,
-    zoneIndex,
-    sceneState: 'idle',
-    statusMessage,
-    clusters: {
-      c1: { slide: c1Slide, opacity: c1Opacity },
-      c2: { slide: c2Slide, opacity: c2Opacity },
-      c3: { slide: c3Slide, opacity: c3Opacity },
-    },
-    lighting: {
-      lightZ,
-      lightIntensity,
-      lightColor,
-      coreWashIntensity,
-      chamberSpotIntensity,
-    },
-  };
+  // Mutate cached transition state to eliminate GC allocations
+  cachedTransitionState.activeZone = activeZone;
+  cachedTransitionState.zoneIndex = zoneIndex;
+  cachedTransitionState.statusMessage = statusMessage;
+
+  cachedTransitionState.clusters.c1.slide = c1Slide;
+  cachedTransitionState.clusters.c1.opacity = c1Opacity;
+
+  cachedTransitionState.clusters.c2.slide = c2Slide;
+  cachedTransitionState.clusters.c2.opacity = c2Opacity;
+
+  cachedTransitionState.clusters.c3.slide = c3Slide;
+  cachedTransitionState.clusters.c3.opacity = c3Opacity;
+
+  cachedTransitionState.lighting.lightZ = lightZ;
+  cachedTransitionState.lighting.lightIntensity = lightIntensity;
+  cachedTransitionState.lighting.lightColor = lightColor;
+  cachedTransitionState.lighting.coreWashIntensity = coreWashIntensity;
+  cachedTransitionState.lighting.chamberSpotIntensity = chamberSpotIntensity;
+
+  return cachedTransitionState;
 }

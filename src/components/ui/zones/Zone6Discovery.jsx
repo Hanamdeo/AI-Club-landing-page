@@ -38,7 +38,7 @@ export default function Zone6Discovery({ onReturnTop }) {
   ];
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans safe-viewport-card custom-scrollbar">
       <div className="relative py-4 sm:py-6 drop-shadow-[0_4px_24px_rgba(0,0,0,0.95)]">
         {/* Top Telemetry Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-5 border-b border-white/[0.12] text-[10px] font-mono">
@@ -57,7 +57,7 @@ export default function Zone6Discovery({ onReturnTop }) {
 
         {/* Section Heading */}
         <div className="mb-6">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-gradient-cyber tracking-tight mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
+          <h2 className="text-fluid-h2 font-display font-bold text-gradient-cyber tracking-tight mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.9)]">
             The Future Is Built Together
           </h2>
           <p className="text-xs sm:text-sm text-[#D1D5DB] font-sans max-w-2xl leading-relaxed drop-shadow-[0_2px_8px_rgba(0,0,0,0.85)]">
@@ -164,7 +164,7 @@ export default function Zone6Discovery({ onReturnTop }) {
           </div>
 
           {/* Right Column: Complete Navigation Hub Directory */}
-          <div className="lg:col-span-6 border-l-2 border-white/[0.12] pl-6 py-1 flex flex-col justify-between">
+          <div className="lg:col-span-6 border-t border-white/[0.12] lg:border-t-0 lg:border-l-2 pt-6 lg:pt-0 pl-0 lg:pl-6 py-1 flex flex-col justify-between">
             <div>
               <div className="text-[10px] font-mono text-slate-300 uppercase tracking-widest flex items-center gap-2 mb-3">
                 <Compass className="w-3.5 h-3.5 text-[#24BFEA]" />
