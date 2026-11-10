@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@400;600;700;800&display=swap');
+
 /* ============================================================== */
 /* LOCAL FONT FACES: LaBeouf Techno Display Family               */
 /* ============================================================== */
@@ -87,9 +89,12 @@
 
   /* Typography Variables */
   --font-labeouf: 'LaBeouf', sans-serif;
-  --font-syne: 'LaBeouf', 'Syne', sans-serif;
+  --font-syne: 'Syne', 'LaBeouf', sans-serif;
   --font-space: 'Space Grotesk', sans-serif;
+  --font-archivo: 'Archivo', sans-serif;
+  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-geist: 'Geist', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --font-inter-fallback: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 

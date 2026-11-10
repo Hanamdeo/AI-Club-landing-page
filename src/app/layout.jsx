@@ -1,9 +1,8 @@
 import localFont from 'next/font/local';
-import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk, Syne } from 'next/font/google';
 import './globals.css';
 import GlobalNavShell from '@/components/ui/GlobalNavShell';
 
-// Futuristic Techno Display Font: LaBeouf
+// Futuristic Techno Display Font: LaBeouf (100% Local, zero network dependency)
 const labeouf = localFont({
   src: [
     {
@@ -29,45 +28,6 @@ const labeouf = localFont({
   ],
   variable: '--font-labeouf',
   display: 'swap',
-});
-
-// Futuristic Neo-Grotesque Space typography for interface & body fallback
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-space',
-  weight: ['400', '500', '600', '700'],
-});
-
-// Striking Avant-Garde Syne typography for High-Impact Master Headings
-const syne = Syne({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-syne',
-  weight: ['400', '500', '600', '700', '800'],
-});
-
-// Clean Inter typography for body fallback
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
-
-// Powerful Archivo Display typography
-const archivo = Archivo({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-archivo',
-  weight: ['400', '600', '700', '800', '900'],
-});
-
-// Precision Monospace for Telemetry, HUD, UNIX terminal & Technical Labels
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-mono',
-  weight: ['400', '500', '600'],
 });
 
 export const metadata = {
@@ -98,7 +58,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark bg-[#0A0E10] text-[#E6E2D8] ${labeouf.variable} ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      className={`dark bg-[#0A0E10] text-[#E6E2D8] ${labeouf.variable}`}
       style={{ backgroundColor: '#0A0E10', color: '#E6E2D8', colorScheme: 'dark' }}
     >
       <body
@@ -111,3 +71,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
