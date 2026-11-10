@@ -83,11 +83,6 @@ export default function Zone1Hero({ onExploreClick }) {
           </div>
         </div>
       </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* ============================================================== */}
       {/* SEAMLESS BOTTOM TELEMETRY DOCK: SERVER BLADE DIAGNOSTICS       */}
