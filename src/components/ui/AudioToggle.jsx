@@ -48,6 +48,11 @@ export default function AudioToggle() {
       ) : (
         <>
           <VolumeX className="w-3.5 h-3.5" />
+           <div className="flex items-end gap-0.5 h-2.5 px-0.5">
+            <span className="w-0.5 h-2 bg-sage rounded-full " />
+            <span className="w-0.5 h-3 bg-sage rounded-full " />
+            <span className="w-0.5 h-1.5 bg-sage rounded-full " />
+          </div>
           {/* <span className="hidden sm:inline text-[11px] tracking-wider uppercase">
             SOUND: OFF
           </span> */}
