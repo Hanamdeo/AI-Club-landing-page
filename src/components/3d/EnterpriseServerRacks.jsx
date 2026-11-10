@@ -320,25 +320,67 @@ export default function EnterpriseServerRacks({
     currentC1Slide.current += (clusters.c1.slide - currentC1Slide.current) * lerpFactor;
     currentC1Op.current += (clusters.c1.opacity - currentC1Op.current) * lerpFactor;
 
-    if (c1LeftRef.current) c1LeftRef.current.position.x = -currentC1Slide.current;
-    if (c1RightRef.current) c1RightRef.current.position.x = currentC1Slide.current;
-    c1Materials.current.forEach((mat) => { mat.opacity = currentC1Op.current; });
+    const op1 = currentC1Op.current;
+    const vis1 = op1 > 0.02;
+    if (c1LeftRef.current) {
+      c1LeftRef.current.position.x = -currentC1Slide.current;
+      c1LeftRef.current.visible = vis1;
+    }
+    if (c1RightRef.current) {
+      c1RightRef.current.position.x = currentC1Slide.current;
+      c1RightRef.current.visible = vis1;
+    }
+    if (vis1) {
+      const trans1 = op1 < 0.98;
+      c1Materials.current.forEach((mat) => {
+        mat.opacity = op1;
+        if (mat.transparent !== trans1) mat.transparent = trans1;
+      });
+    }
 
     // 2. Cluster 2 Lateral Slide & Opacity
     currentC2Slide.current += (clusters.c2.slide - currentC2Slide.current) * lerpFactor;
     currentC2Op.current += (clusters.c2.opacity - currentC2Op.current) * lerpFactor;
 
-    if (c2LeftRef.current) c2LeftRef.current.position.x = -currentC2Slide.current;
-    if (c2RightRef.current) c2RightRef.current.position.x = currentC2Slide.current;
-    c2Materials.current.forEach((mat) => { mat.opacity = currentC2Op.current; });
+    const op2 = currentC2Op.current;
+    const vis2 = op2 > 0.02;
+    if (c2LeftRef.current) {
+      c2LeftRef.current.position.x = -currentC2Slide.current;
+      c2LeftRef.current.visible = vis2;
+    }
+    if (c2RightRef.current) {
+      c2RightRef.current.position.x = currentC2Slide.current;
+      c2RightRef.current.visible = vis2;
+    }
+    if (vis2) {
+      const trans2 = op2 < 0.98;
+      c2Materials.current.forEach((mat) => {
+        mat.opacity = op2;
+        if (mat.transparent !== trans2) mat.transparent = trans2;
+      });
+    }
 
     // 3. Cluster 3 Lateral Slide & Opacity
     currentC3Slide.current += (clusters.c3.slide - currentC3Slide.current) * lerpFactor;
     currentC3Op.current += (clusters.c3.opacity - currentC3Op.current) * lerpFactor;
 
-    if (c3LeftRef.current) c3LeftRef.current.position.x = -currentC3Slide.current;
-    if (c3RightRef.current) c3RightRef.current.position.x = currentC3Slide.current;
-    c3Materials.current.forEach((mat) => { mat.opacity = currentC3Op.current; });
+    const op3 = currentC3Op.current;
+    const vis3 = op3 > 0.02;
+    if (c3LeftRef.current) {
+      c3LeftRef.current.position.x = -currentC3Slide.current;
+      c3LeftRef.current.visible = vis3;
+    }
+    if (c3RightRef.current) {
+      c3RightRef.current.position.x = currentC3Slide.current;
+      c3RightRef.current.visible = vis3;
+    }
+    if (vis3) {
+      const trans3 = op3 < 0.98;
+      c3Materials.current.forEach((mat) => {
+        mat.opacity = op3;
+        if (mat.transparent !== trans3) mat.transparent = trans3;
+      });
+    }
   });
 
   return (

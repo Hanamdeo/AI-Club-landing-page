@@ -24,36 +24,18 @@ export const SERVER_NODE_ITEMS = [
  * Connects directly to dedicated Next.js routes and glides between 3D zones.
  */
 export default function ServerSideNav({
+  activeNavId = 'entry',
   scrollProgress = 0,
   scrollProgressRef,
   onNavigateToSection,
   onToggleTerminal,
 }) {
   const [isHovered, setIsHovered] = useState(false);
-  const [activeRobotNodeId, setActiveRobotNodeId] = useState('home');
   const [mobileOpen, setMobileOpen] = useState(false);
   const leaveTimerRef = useRef(null);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
-
-  // Synchronize robot location along the cold aisle via shared scroll ref on Home
-  useEffect(() => {
-    if (!isHomePage) return;
-    let animId;
-    const checkRobotPos = () => {
-      const sp = scrollProgressRef?.current !== undefined ? scrollProgressRef.current : scrollProgress;
-      const activeIdx = SERVER_NODE_ITEMS.reduce((closestIdx, item, idx) => {
-        const currentDiff = Math.abs(sp - item.zProgress);
-        const closestDiff = Math.abs(sp - SERVER_NODE_ITEMS[closestIdx].zProgress);
-        return currentDiff < closestDiff ? idx : closestIdx;
-      }, 0);
-      const closestId = SERVER_NODE_ITEMS[activeIdx]?.id || 'home';
-      setActiveRobotNodeId((prev) => (prev !== closestId ? closestId : prev));
-      animId = requestAnimationFrame(checkRobotPos);
-    };
-    animId = requestAnimationFrame(checkRobotPos);
-    return () => cancelAnimationFrame(animId);
-  }, [scrollProgressRef, scrollProgress, isHomePage]);
+  const activeRobotNodeId = activeNavId || 'entry';
 
   const handleMouseEnter = useCallback(() => {
     if (leaveTimerRef.current) {

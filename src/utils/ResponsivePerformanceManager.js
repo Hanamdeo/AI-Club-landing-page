@@ -118,12 +118,12 @@ class PerformanceCoordinator {
         this.targetFps = 30;
         break;
       case 'medium':
-        this.dpr = typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.25;
+        this.dpr = typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.15;
         this.targetFps = 60;
         break;
       case 'high':
       default:
-        this.dpr = typeof window !== 'undefined' && window.innerWidth < 768 ? 1.25 : 1.5;
+        this.dpr = typeof window !== 'undefined' && window.innerWidth < 768 ? 1.0 : 1.25;
         this.targetFps = 60;
         break;
     }

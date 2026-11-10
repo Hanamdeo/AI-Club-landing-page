@@ -1,10 +1,9 @@
 import localFont from 'next/font/local';
-import { Inter, Archivo, IBM_Plex_Mono, Space_Grotesk, Syne } from 'next/font/google';
 import './globals.css';
 import GlobalNavShell from '@/components/ui/GlobalNavShell';
 import GlobalFooterShell from '@/components/ui/GlobalFooterShell';
 
-// Futuristic Techno Display Font: LaBeouf
+// Futuristic Techno Display Font: LaBeouf (Local - zero network overhead)
 const labeouf = localFont({
   src: [
     {
@@ -30,45 +29,6 @@ const labeouf = localFont({
   ],
   variable: '--font-labeouf',
   display: 'swap',
-});
-
-// Futuristic Neo-Grotesque Space typography for interface & body fallback
-const spaceGrotesk = Space_Grotesk({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-space',
-  weight: ['400', '500', '600', '700'],
-});
-
-// Striking Avant-Garde Syne typography for High-Impact Master Headings
-const syne = Syne({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-syne',
-  weight: ['400', '500', '600', '700', '800'],
-});
-
-// Clean Inter typography for body fallback
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-inter',
-});
-
-// Powerful Archivo Display typography
-const archivo = Archivo({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-archivo',
-  weight: ['400', '600', '700', '800', '900'],
-});
-
-// Precision Monospace for Telemetry, HUD, UNIX terminal & Technical Labels
-const ibmPlexMono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-  variable: '--font-mono',
-  weight: ['400', '500', '600'],
 });
 
 export const metadata = {
@@ -103,9 +63,17 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark bg-[#0A0E10] text-[#E6E2D8] ${labeouf.variable} ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      className={`dark bg-[#0A0E10] text-[#E6E2D8] ${labeouf.variable}`}
       style={{ backgroundColor: '#0A0E10', color: '#E6E2D8', colorScheme: 'dark' }}
     >
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;600;700;800;900&family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&family=Syne:wght@700;800&display=swap"
+        />
+      </head>
       <body
         className="bg-[#0A0E10] text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal"
         style={{ backgroundColor: '#0A0E10', color: '#E6E2D8' }}
