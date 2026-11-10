@@ -152,10 +152,10 @@ export default function SceneContainer({
           scrollProgressRef={scrollProgressRef}
         />
 
-        {/* 3. Studio Lighting for Companion NEX-01 */}
+        {/* 3. Studio Lighting for Centered Companion NEX-01 */}
         {/* Soft Ceramic Key */}
         <directionalLight
-          position={[2.6, 3.6, 11.0]}
+          position={[1.8, 3.6, 11.0]}
           color="#FFFFFF"
           intensity={1.20}
         />
@@ -163,7 +163,7 @@ export default function SceneContainer({
         {/* Subtle Silver-Cyan Rim (Calibrated, not blinding neon) */}
         {maxLights >= 4 && (
           <directionalLight
-            position={[1.2, 3.0, 5.0]}
+            position={[-1.8, 3.0, 5.0]}
             color="#8ED5E8"
             intensity={0.60}
           />
@@ -172,7 +172,7 @@ export default function SceneContainer({
         {/* Floor Bounce Fill */}
         {maxLights >= 5 && (
           <pointLight
-            position={[1.3, 0.4, 8.5]}
+            position={[0.0, 0.4, 8.5]}
             color="#1B2527"
             intensity={0.30}
             distance={3.5}
