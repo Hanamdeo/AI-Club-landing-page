@@ -23,7 +23,6 @@ export default function TeamHierarchyTree() {
   const treeRef = useRef(null);
   const spineRef = useRef(null);
   const progressBarRef = useRef(null);
-  const [activeDepth, setActiveDepth] = useState('L1 // Leadership');
   const [selectedMember, setSelectedMember] = useState(null);
 
   useEffect(() => {
@@ -135,18 +134,6 @@ export default function TeamHierarchyTree() {
             }
           );
         }
-
-        // Depth tracker trigger
-        ScrollTrigger.create({
-          trigger: levelEl,
-          start: 'top 50%',
-          end: 'bottom 50%',
-          onToggle: (self) => {
-            if (self.isActive && depthVal) {
-              setActiveDepth(depthVal);
-            }
-          },
-        });
       });
     }, containerRef);
 
@@ -164,25 +151,6 @@ export default function TeamHierarchyTree() {
           ref={progressBarRef}
           className="h-full w-full bg-white origin-left scale-x-0 transition-transform shadow-[0_0_8px_#FFFFFF]"
         />
-      </div>
-
-      {/* Floating Depth Telemetry Monitor */}
-      <div className="sticky top-20 z-20 mb-8 flex items-center justify-between pointer-events-none px-2 sm:px-0">
-        <div className="pointer-events-auto inline-flex items-center gap-3 px-4 py-2 rounded-xl bg-[#0C1014]/95 border border-white/20 backdrop-blur-md shadow-[0_8px_30px_rgba(0,0,0,0.7)]">
-          <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_8px_#FFFFFF]" />
-            <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
-              ACTIVE CADRE DEPTH:
-            </span>
-          </div>
-          <span className="text-xs font-mono font-bold text-white tracking-wider">
-            {activeDepth}
-          </span>
-        </div>
-
-        <div className="hidden sm:inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#0C1014]/85 border border-white/10 text-[10px] font-mono text-slate-400">
-          <span>TREE NAVIGATION ACTIVE</span>
-        </div>
       </div>
 
       {/* Main Hierarchy Tree Container */}
