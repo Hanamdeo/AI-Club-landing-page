@@ -90,45 +90,46 @@ export default function CameraController({
     };
   }, []);
 
-  // 6 Progressive Architectural Depth Waypoints along the Data Centre Corridor
+  // 6 Progressive Architectural Depth Waypoints: Smooth straight-line trajectory down corridor center
+  // Maintains consistent, comfortable framing distance so camera never zooms in on robot
   const waypoints = useMemo(
     () => [
       {
         progress: 0.0,
-        pos: new THREE.Vector3(0, 1.9, 12.5),
-        target: new THREE.Vector3(0, 1.6, 0),
+        pos: new THREE.Vector3(0.00, 1.85, 13.5),
+        target: new THREE.Vector3(0.00, 1.45, 0.0),
       },
       {
         progress: 0.2,
-        pos: new THREE.Vector3(0.55, 1.8, 0.5),
-        target: new THREE.Vector3(1.3, 1.55, -5.0),
+        pos: new THREE.Vector3(0.00, 1.80, 5.0),
+        target: new THREE.Vector3(0.00, 1.40, -10.0),
       },
       {
         progress: 0.4,
-        pos: new THREE.Vector3(-0.55, 1.8, -11.5),
-        target: new THREE.Vector3(-1.3, 1.55, -17.0),
+        pos: new THREE.Vector3(0.00, 1.80, -7.0),
+        target: new THREE.Vector3(0.00, 1.40, -22.0),
       },
       {
         progress: 0.6,
-        pos: new THREE.Vector3(0.50, 1.8, -22.5),
-        target: new THREE.Vector3(1.3, 1.55, -28.5),
+        pos: new THREE.Vector3(0.00, 1.80, -18.0),
+        target: new THREE.Vector3(0.00, 1.40, -33.0),
       },
       {
         progress: 0.8,
-        pos: new THREE.Vector3(-0.45, 1.8, -33.5),
-        target: new THREE.Vector3(-1.1, 1.55, -39.0),
+        pos: new THREE.Vector3(0.00, 1.80, -29.0),
+        target: new THREE.Vector3(0.00, 1.40, -44.0),
       },
       {
         progress: 1.0,
-        pos: new THREE.Vector3(0, 1.85, -44.0),
-        target: new THREE.Vector3(0, 1.50, -49.5),
+        pos: new THREE.Vector3(0.00, 1.80, -39.0),
+        target: new THREE.Vector3(0.00, 1.40, -54.0),
       },
     ],
     []
   );
 
-  const currentPos = useRef(new THREE.Vector3(0, 2.3, 17));
-  const currentTarget = useRef(new THREE.Vector3(0, 1.6, 0));
+  const currentPos = useRef(new THREE.Vector3(0.00, 1.85, 13.5));
+  const currentTarget = useRef(new THREE.Vector3(0.00, 1.45, 0.0));
   const tempPos = useRef(new THREE.Vector3());
   const tempTarget = useRef(new THREE.Vector3());
 

@@ -12,33 +12,28 @@ function lerpAngle(from, to, t) {
   return from + shortest * t;
 }
 
-// Facility corridor spline control points across 6 Progressive Depth Zones
+// Facility corridor spline control points across 6 Progressive Depth Zones (Centrally Aligned)
 const DESKTOP_CONTROL_POINTS = [
-  new THREE.Vector3(1.28, 1.50, 8.2),    // p = 0.00: Zone 01 Entry threshold
-  new THREE.Vector3(0.85, 1.35, -1.0),   // p = 0.20: Zone 02 Featured display
-  new THREE.Vector3(-0.80, 1.25, -13.0), // p = 0.40: Zone 03 Community collaborative aisle
-  new THREE.Vector3(0.80, 1.15, -24.0),  // p = 0.60: Zone 04 Research intelligence core
-  new THREE.Vector3(-0.65, 1.10, -35.0), // p = 0.80: Zone 05 Projects hardware archive
-  new THREE.Vector3(0.65, 1.05, -45.0),  // p = 1.00: Zone 06 Discovery final landmark hub
+  new THREE.Vector3(0.00, 1.45, 8.0),    // p = 0.00: Zone 01 Entry threshold (centered)
+  new THREE.Vector3(0.00, 1.40, -1.0),   // p = 0.20: Zone 02 Featured display (centered)
+  new THREE.Vector3(0.00, 1.35, -13.0),  // p = 0.40: Zone 03 Community collaborative aisle (centered)
+  new THREE.Vector3(0.00, 1.30, -24.0),  // p = 0.60: Zone 04 Research intelligence core (centered)
+  new THREE.Vector3(0.00, 1.25, -35.0),  // p = 0.80: Zone 05 Projects hardware archive (centered)
+  new THREE.Vector3(0.00, 1.20, -45.0),  // p = 1.00: Zone 06 Discovery final landmark hub (centered)
 ];
 
 const MOBILE_CONTROL_POINTS = [
-  new THREE.Vector3(0.35, 1.15, 8.0),    // p = 0.00
-  new THREE.Vector3(0.20, 1.05, -1.0),   // p = 0.20
-  new THREE.Vector3(-0.25, 1.00, -13.0), // p = 0.40
-  new THREE.Vector3(0.25, 0.95, -24.0),  // p = 0.60
-  new THREE.Vector3(-0.20, 0.95, -35.0), // p = 0.80
-  new THREE.Vector3(0.20, 0.95, -45.0),  // p = 1.00
+  new THREE.Vector3(0.00, 1.30, 8.0),    // p = 0.00 (centered)
+  new THREE.Vector3(0.00, 1.25, -1.0),   // p = 0.20 (centered)
+  new THREE.Vector3(0.00, 1.20, -13.0),  // p = 0.40 (centered)
+  new THREE.Vector3(0.00, 1.15, -24.0),  // p = 0.60 (centered)
+  new THREE.Vector3(0.00, 1.10, -35.0),  // p = 0.80 (centered)
+  new THREE.Vector3(0.00, 1.05, -45.0),  // p = 1.00 (centered)
 ];
 
-// Continuous idle settle orientation across the 6 facility zones
-function getIdleAngle(p) {
-  const zoneIndex = Math.min(5, Math.floor(p * 6));
-  const angles = [-0.25, 0.30, -0.28, 0.25, -0.20, 0.00];
-  const nextIdx = Math.min(5, zoneIndex + 1);
-  const localT = (p * 6) - zoneIndex;
-  const ease = localT * localT * (3 - 2 * localT);
-  return THREE.MathUtils.lerp(angles[zoneIndex], angles[nextIdx], ease);
+// Continuous idle settle orientation: Perfectly centered facing forward towards camera
+function getIdleAngle() {
+  return 0.0;
 }
 
 /**
@@ -137,10 +132,10 @@ export default function BdxRobot({
   const progressSmoothed = useRef(0);
   const prevProgress = useRef(0);
   const smoothedVelocity = useRef(0);
-  const currentPos = useRef(new THREE.Vector3(1.28, 1.50, 8.2));
+  const currentPos = useRef(new THREE.Vector3(0.00, 1.45, 8.0));
   const targetPosRef = useRef(new THREE.Vector3());
   const tangentRef = useRef(new THREE.Vector3());
-  const currentRotY = useRef(-0.25);
+  const currentRotY = useRef(0.0);
   const currentPitchX = useRef(0);
   const currentRollZ = useRef(0);
 
