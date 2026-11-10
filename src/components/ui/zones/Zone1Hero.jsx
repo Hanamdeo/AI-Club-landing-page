@@ -23,7 +23,7 @@ export default function Zone1Hero({ onExploreClick }) {
   return (
     <section
       id="section-arrival"
-      className="relative w-full min-h-[100svh] flex flex-col justify-between px-6 sm:px-10 md:px-12 lg:px-16 pt-24 sm:pt-28 pb-6 sm:pb-8 select-none font-sans"
+      className="relative w-full min-h-[100svh] flex flex-col justify-between px-4 sm:px-8 md:px-12 lg:px-16 pt-20 sm:pt-28 pb-4 sm:pb-8 select-none font-sans"
     >
       {/* ============================================================== */}
       {/* MASTER TWO-COLUMN HERO COMPOSITION                              */}
@@ -33,7 +33,7 @@ export default function Zone1Hero({ onExploreClick }) {
           {/* ========================================================== */}
           {/* LEFT SIDE: IN-WORLD FLOATING HOLOGRAPHIC HUD TEXT          */}
           {/* ========================================================== */}
-          <div className="w-full lg:w-[54%] max-w-[580px] xl:max-w-[640px] pointer-events-auto">
+          <div className="w-full lg:w-[54%] max-w-[580px] xl:max-w-[640px] pointer-events-auto safe-viewport-card custom-scrollbar">
             <div className="glass-panel p-6 sm:p-8 md:p-9 relative">
               {/* Holographic Projection Header Telemetry */}
               <div className="flex items-center justify-between pb-2.5 mb-4 border-b border-[rgba(150,230,255,0.16)] text-[10px] font-mono">
@@ -52,7 +52,7 @@ export default function Zone1Hero({ onExploreClick }) {
               </div>
 
               {/* Master Display Heading */}
-              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-display font-black tracking-tight text-white mb-2 leading-[0.94] drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
+              <h1 className="text-fluid-hero font-display font-black tracking-tight text-white mb-2 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]">
                 {CLUB_INFO.name}
               </h1>
 
@@ -102,16 +102,16 @@ export default function Zone1Hero({ onExploreClick }) {
         </div>
 
         {/* 3 Verified Statistics in Floating Blade Telemetry Dock */}
-        <div className="glass-panel flex items-center gap-5 sm:gap-7 md:gap-9 px-4 sm:px-6 py-2.5 rounded-xl md:ml-32 lg:ml-40">
+        <div className="glass-panel flex items-center gap-3 sm:gap-7 md:gap-9 px-3 sm:px-6 py-2 sm:py-2.5 rounded-xl md:ml-12 lg:ml-16 overflow-x-auto no-scrollbar">
           {/* Blade Metric 1 */}
-          <div className="flex flex-col">
+          <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_6px_rgba(85,223,255,0.7)]" />
-              <span className="text-[9px] text-[#B8C7D4] tracking-[0.14em] uppercase font-mono font-medium">
+              <span className="text-[8px] sm:text-[9px] text-[#B8C7D4] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 01 // MEMBERS
               </span>
             </div>
-            <span className="text-base sm:text-lg text-white font-bold font-mono tracking-tight tnum mt-0.5">
+            <span className="text-sm sm:text-base md:text-lg text-white font-bold font-mono tracking-tight tnum mt-0.5">
               450+
             </span>
           </div>
@@ -119,14 +119,14 @@ export default function Zone1Hero({ onExploreClick }) {
           <div className="w-[1px] h-7 bg-[rgba(150,230,255,0.16)] hidden sm:block" />
 
           {/* Blade Metric 2 */}
-          <div className="flex flex-col">
+          <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_6px_rgba(85,223,255,0.7)]" />
-              <span className="text-[9px] text-[#B8C7D4] tracking-[0.14em] uppercase font-mono font-medium">
+              <span className="text-[8px] sm:text-[9px] text-[#B8C7D4] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 02 // PROJECTS
               </span>
             </div>
-            <span className="text-base sm:text-lg text-white font-bold font-mono tracking-tight tnum mt-0.5">
+            <span className="text-sm sm:text-base md:text-lg text-white font-bold font-mono tracking-tight tnum mt-0.5">
               32
             </span>
           </div>
@@ -134,21 +134,21 @@ export default function Zone1Hero({ onExploreClick }) {
           <div className="w-[1px] h-7 bg-[rgba(150,230,255,0.16)] hidden sm:block" />
 
           {/* Blade Metric 3 */}
-          <div className="flex flex-col">
+          <div className="flex flex-col shrink-0">
             <div className="flex items-center gap-1.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_6px_rgba(85,223,255,0.7)]" />
-              <span className="text-[9px] text-[#B8C7D4] tracking-[0.14em] uppercase font-mono font-medium">
+              <span className="text-[8px] sm:text-[9px] text-[#B8C7D4] tracking-[0.14em] uppercase font-mono font-medium">
                 BLADE 03 // PAPERS
               </span>
             </div>
-            <span className="text-base sm:text-lg text-white font-bold font-mono tracking-tight tnum mt-0.5">
+            <span className="text-sm sm:text-base md:text-lg text-white font-bold font-mono tracking-tight tnum mt-0.5">
               14
             </span>
           </div>
         </div>
 
-        {/* Scroll To Explore Indicator Cue: Seamless Frosted Capsule */}
-        <div className="flex items-center sm:pr-24 md:pr-28">
+        {/* Scroll To Explore Indicator Cue: Centered Frosted Capsule (Never collides with bottom-right BDX) */}
+        <div className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2 bottom-2.5 lg:bottom-3 pointer-events-auto">
           <button
             onClick={handleEnter}
             className="group flex items-center gap-3 px-4 py-2 rounded-full glass-panel hover:border-[#55DFFF]/50 text-xs text-[#B8C7D4] hover:text-white transition-all cursor-pointer font-mono btn-tactile"
@@ -161,6 +161,9 @@ export default function Zone1Hero({ onExploreClick }) {
             </div>
           </button>
         </div>
+
+        {/* Safe Right Spacer: Reserving clearance for bottom-right fixed BDX-01 companion pod */}
+        <div className="hidden md:block w-36 lg:w-56 pointer-events-none" />
       </div>
     </section>
   );

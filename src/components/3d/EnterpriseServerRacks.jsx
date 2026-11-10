@@ -4,6 +4,7 @@ import React, { useMemo, useRef, useEffect } from 'react';
 import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { getZoneTransitionState } from '@/utils/zoneTransition';
+import { usePerformanceTier } from '@/utils/ResponsivePerformanceManager';
 
 /**
  * High-Performance Hardware Matrix Generator
@@ -135,7 +136,7 @@ function generateClusterHardware(zStart, zEnd, reservedOpenings = [-15, -35]) {
  * Ultra-Fast Instanced Cluster Wing
  * Zero React re-renders. Manages direct Three.js materials for maximum 60-120 FPS throughput.
  */
-function ClusterWing({ transforms, materialsRef }) {
+function ClusterWing({ transforms, materialsRef, drawLeds = true }) {
   const fRef = useRef();
   const cRef = useRef();
   const rRef = useRef();
@@ -151,14 +152,14 @@ function ClusterWing({ transforms, materialsRef }) {
     if (rRef.current) transforms.rails.forEach((m, i) => rRef.current.setMatrixAt(i, m));
     if (scRef.current) transforms.computeChassis.forEach((m, i) => scRef.current.setMatrixAt(i, m));
     if (gcRef.current) transforms.gpuChassis.forEach((m, i) => gcRef.current.setMatrixAt(i, m));
-    if (grnRef.current) transforms.greenLeds.forEach((m, i) => grnRef.current.setMatrixAt(i, m));
-    if (cynRef.current) transforms.cyanLeds.forEach((m, i) => cynRef.current.setMatrixAt(i, m));
-    if (ambRef.current) transforms.amberLeds.forEach((m, i) => ambRef.current.setMatrixAt(i, m));
+    if (drawLeds && grnRef.current) transforms.greenLeds.forEach((m, i) => grnRef.current.setMatrixAt(i, m));
+    if (drawLeds && cynRef.current) transforms.cyanLeds.forEach((m, i) => cynRef.current.setMatrixAt(i, m));
+    if (drawLeds && ambRef.current) transforms.amberLeds.forEach((m, i) => ambRef.current.setMatrixAt(i, m));
 
     [fRef, cRef, rRef, scRef, gcRef, grnRef, cynRef, ambRef].forEach((ref) => {
       if (ref.current) ref.current.instanceMatrix.needsUpdate = true;
     });
-  }, [transforms]);
+  }, [transforms, drawLeds]);
 
   return (
     <group>
@@ -227,7 +228,7 @@ function ClusterWing({ transforms, materialsRef }) {
           />
         </instancedMesh>
       )}
-      {transforms.greenLeds.length > 0 && (
+      {drawLeds && transforms.greenLeds.length > 0 && (
         <instancedMesh ref={grnRef} args={[null, null, transforms.greenLeds.length]}>
           <boxGeometry args={[1, 1, 1]} />
           <meshBasicMaterial
@@ -238,7 +239,7 @@ function ClusterWing({ transforms, materialsRef }) {
           />
         </instancedMesh>
       )}
-      {transforms.cyanLeds.length > 0 && (
+      {drawLeds && transforms.cyanLeds.length > 0 && (
         <instancedMesh ref={cynRef} args={[null, null, transforms.cyanLeds.length]}>
           <boxGeometry args={[1, 1, 1]} />
           <meshBasicMaterial
@@ -249,7 +250,7 @@ function ClusterWing({ transforms, materialsRef }) {
           />
         </instancedMesh>
       )}
-      {transforms.amberLeds.length > 0 && (
+      {drawLeds && transforms.amberLeds.length > 0 && (
         <instancedMesh ref={ambRef} args={[null, null, transforms.amberLeds.length]}>
           <boxGeometry args={[1, 1, 1]} />
           <meshBasicMaterial
@@ -273,6 +274,8 @@ export default function EnterpriseServerRacks({
   scrollProgressRef,
 }) {
   const isReducedMotion = useRef(false);
+  const tierState = usePerformanceTier();
+  const drawLeds = tierState.features?.drawLeds ?? true;
 
   useEffect(() => {
     isReducedMotion.current =
@@ -343,30 +346,30 @@ export default function EnterpriseServerRacks({
       {/* CLUSTER 1: ARRIVAL BAY (Z = +12 to -5.5) */}
       <group name="cluster-01-arrival">
         <group ref={c1LeftRef}>
-          <ClusterWing transforms={c1Data.left} materialsRef={c1Materials} />
+          <ClusterWing transforms={c1Data.left} materialsRef={c1Materials} drawLeds={drawLeds} />
         </group>
         <group ref={c1RightRef}>
-          <ClusterWing transforms={c1Data.right} materialsRef={c1Materials} />
+          <ClusterWing transforms={c1Data.right} materialsRef={c1Materials} drawLeds={drawLeds} />
         </group>
       </group>
 
       {/* CLUSTER 2: INTELLIGENCE CORE BAY (Z = -6.5 to -25.5) */}
       <group name="cluster-02-core">
         <group ref={c2LeftRef}>
-          <ClusterWing transforms={c2Data.left} materialsRef={c2Materials} />
+          <ClusterWing transforms={c2Data.left} materialsRef={c2Materials} drawLeds={drawLeds} />
         </group>
         <group ref={c2RightRef}>
-          <ClusterWing transforms={c2Data.right} materialsRef={c2Materials} />
+          <ClusterWing transforms={c2Data.right} materialsRef={c2Materials} drawLeds={drawLeds} />
         </group>
       </group>
 
       {/* CLUSTER 3: PROJECTION CHAMBER BAY (Z = -26.5 to -56.0) */}
       <group name="cluster-03-chamber">
         <group ref={c3LeftRef}>
-          <ClusterWing transforms={c3Data.left} materialsRef={c3Materials} />
+          <ClusterWing transforms={c3Data.left} materialsRef={c3Materials} drawLeds={drawLeds} />
         </group>
         <group ref={c3RightRef}>
-          <ClusterWing transforms={c3Data.right} materialsRef={c3Materials} />
+          <ClusterWing transforms={c3Data.right} materialsRef={c3Materials} drawLeds={drawLeds} />
         </group>
       </group>
     </group>

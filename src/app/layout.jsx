@@ -98,9 +98,13 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark ${labeouf.variable} ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      className={`dark bg-[#0A0E10] text-[#E6E2D8] ${labeouf.variable} ${spaceGrotesk.variable} ${syne.variable} ${inter.variable} ${archivo.variable} ${ibmPlexMono.variable}`}
+      style={{ backgroundColor: '#0A0E10', color: '#E6E2D8', colorScheme: 'dark' }}
     >
-      <body className="bg-graphite text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal">
+      <body
+        className="bg-[#0A0E10] text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal"
+        style={{ backgroundColor: '#0A0E10', color: '#E6E2D8' }}
+      >
         <GlobalNavShell />
         {children}
       </body>

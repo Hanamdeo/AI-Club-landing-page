@@ -15,6 +15,18 @@ const nextConfig = {
     };
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: '/favicon.ico',
+        destination: '/icon.png',
+      },
+      {
+        source: '/.well-known/appspecific/com.chrome.devtools.json',
+        destination: '/api/chrome-devtools',
+      },
+    ];
+  },
 };
 
 export default nextConfig;

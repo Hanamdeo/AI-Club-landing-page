@@ -13,7 +13,7 @@ import { audioManager } from '@/utils/audioManager';
  */
 export default function Zone5Projects({ onNextZone }) {
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans safe-viewport-card custom-scrollbar">
       <div className="glass-panel p-6 sm:p-8 rounded-xl relative">
         {/* Top Telemetry Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-5 border-b border-[rgba(150,230,255,0.16)] text-[10px] font-mono">
@@ -33,7 +33,7 @@ export default function Zone5Projects({ onNextZone }) {
 
         {/* Section Heading */}
         <div className="mb-6">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]">
+          <h2 className="text-fluid-h2 font-display font-bold text-white tracking-tight mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]">
             Student Projects & Builds
           </h2>
           <p className="text-xs sm:text-sm text-[rgba(240,247,255,0.92)] font-sans max-w-2xl leading-[1.65] drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">

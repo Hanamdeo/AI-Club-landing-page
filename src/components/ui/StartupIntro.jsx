@@ -104,6 +104,18 @@ export default function StartupIntro({ onComplete }) {
   const nodeCoreRefs = useRef({});
 
   useEffect(() => {
+    // Instantly bypass on mobile screens (< 768px or touch mobile agents)
+    const isMobile =
+      typeof window !== 'undefined' &&
+      (window.innerWidth < 768 ||
+        window.matchMedia('(max-width: 767px)').matches ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+
+    if (isMobile) {
+      if (onComplete) onComplete();
+      return;
+    }
+
     const handleKeyDown = (e) => {
       if (e.key === 'Escape' || e.key === ' ' || e.key === 'Enter') {
         if (onComplete) onComplete();
@@ -295,7 +307,7 @@ export default function StartupIntro({ onComplete }) {
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 pointer-events-auto flex items-center justify-center overflow-hidden select-none font-sans bg-[#0A0E10]"
+      className="hidden md:flex fixed inset-0 z-50 pointer-events-auto items-center justify-center overflow-hidden select-none font-sans bg-[#0A0E10]"
     >
       {/* Top Architectural Blast Shutter */}
       <div

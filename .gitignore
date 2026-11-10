@@ -44,3 +44,8 @@ pnpm-debug.log*
 next-env.d.ts
 
 .agents
+
+# QA Screenshots & Reports
+/public/qa-screenshots/
+qa-report.json
+scripts/center-logo.ps1

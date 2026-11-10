@@ -1,20 +1,28 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef, useEffect } from 'react';
 import * as THREE from 'three';
+import { usePerformanceTier } from '@/utils/ResponsivePerformanceManager';
 
 /**
- * DataCentreCeiling (Refinement V3)
- * High-Scale Overhead Data Centre Infrastructure:
- * - Industrial ladder cable trays suspended above the server racks
- * - High-visibility Telecom Yellow FiberRunner optical raceways
- * - Chilled-water cooling supply/return pipes with metallic coupling collars
- * - Continuous architectural linear LED light battens illuminating the cold aisle
- * - Cold Aisle Containment (CAC) crystal-clear polycarbonate ceiling baffles (no blur)
- * - Increased ceiling clearance (Y = 4.5m) for majestic enterprise scale
+ * DataCentreCeiling (High-Performance GPU-Instanced Infrastructure)
+ * - Trapeze hangers and pipe flanges rendered via InstancedMesh (drops 88 draw calls to 4)
+ * - Progressive tier adaptation (culls fine hangers on low-tier hardware)
+ * - Industrial cable trays, optical raceways, and linear LED fixtures
  */
 export default function DataCentreCeiling() {
-  const { trapezePositions, pipeJointPositions } = useMemo(() => {
+  const tierState = usePerformanceTier();
+  const enableTrapezes = tierState.features?.enableCeilingTrapezes ?? true;
+
+  const {
+    trapezeCount,
+    strutMatrices,
+    rodLeftMatrices,
+    rodRightMatrices,
+    flangeSupplyMatrices,
+    flangeReturnMatrices,
+    pipeJointCount,
+  } = useMemo(() => {
     const trapezes = [];
     const pipeJoints = [];
 
@@ -25,8 +33,102 @@ export default function DataCentreCeiling() {
       pipeJoints.push(z);
     }
 
-    return { trapezePositions: trapezes, pipeJointPositions: pipeJoints };
+    const dummy = new THREE.Object3D();
+
+    const struts = [];
+    const rodL = [];
+    const rodR = [];
+
+    trapezes.forEach((z) => {
+      // Horizontal strut
+      dummy.position.set(0, 3.94, z);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(6.2, 0.045, 0.05);
+      dummy.updateMatrix();
+      struts.push(dummy.matrix.clone());
+
+      // Left rod
+      dummy.position.set(-3.0, 4.22, z);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      rodL.push(dummy.matrix.clone());
+
+      // Right rod
+      dummy.position.set(3.0, 4.22, z);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      rodR.push(dummy.matrix.clone());
+    });
+
+    const fSupply = [];
+    const fReturn = [];
+
+    pipeJoints.forEach((z) => {
+      // Supply coupling flange
+      dummy.position.set(1.35, 4.22, z);
+      dummy.rotation.set(Math.PI / 2, 0, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      fSupply.push(dummy.matrix.clone());
+
+      // Return coupling flange
+      dummy.position.set(-1.35, 4.22, z);
+      dummy.rotation.set(Math.PI / 2, 0, 0);
+      dummy.scale.set(1, 1, 1);
+      dummy.updateMatrix();
+      fReturn.push(dummy.matrix.clone());
+    });
+
+    return {
+      trapezeCount: trapezes.length,
+      strutMatrices: struts,
+      rodLeftMatrices: rodL,
+      rodRightMatrices: rodR,
+      pipeJointCount: pipeJoints.length,
+      flangeSupplyMatrices: fSupply,
+      flangeReturnMatrices: fReturn,
+    };
   }, []);
+
+  const strutInstRef = useRef();
+  const rodLeftInstRef = useRef();
+  const rodRightInstRef = useRef();
+  const fSupplyInstRef = useRef();
+  const fReturnInstRef = useRef();
+
+  useEffect(() => {
+    if (enableTrapezes) {
+      if (strutInstRef.current) {
+        strutMatrices.forEach((m, i) => strutInstRef.current.setMatrixAt(i, m));
+        strutInstRef.current.instanceMatrix.needsUpdate = true;
+      }
+      if (rodLeftInstRef.current) {
+        rodLeftMatrices.forEach((m, i) => rodLeftInstRef.current.setMatrixAt(i, m));
+        rodLeftInstRef.current.instanceMatrix.needsUpdate = true;
+      }
+      if (rodRightInstRef.current) {
+        rodRightMatrices.forEach((m, i) => rodRightInstRef.current.setMatrixAt(i, m));
+        rodRightInstRef.current.instanceMatrix.needsUpdate = true;
+      }
+    }
+    if (fSupplyInstRef.current) {
+      flangeSupplyMatrices.forEach((m, i) => fSupplyInstRef.current.setMatrixAt(i, m));
+      fSupplyInstRef.current.instanceMatrix.needsUpdate = true;
+    }
+    if (fReturnInstRef.current) {
+      flangeReturnMatrices.forEach((m, i) => fReturnInstRef.current.setMatrixAt(i, m));
+      fReturnInstRef.current.instanceMatrix.needsUpdate = true;
+    }
+  }, [
+    enableTrapezes,
+    strutMatrices,
+    rodLeftMatrices,
+    rodRightMatrices,
+    flangeSupplyMatrices,
+    flangeReturnMatrices,
+  ]);
 
   return (
     <group position={[0, 0, 0]}>
@@ -59,21 +161,19 @@ export default function DataCentreCeiling() {
         <meshStandardMaterial color="#323C3D" roughness={0.35} metalness={0.75} />
       </mesh>
 
-      {/* Pipe Flange Joints & Identification Colored Bands */}
-      {pipeJointPositions.map((z, idx) => (
-        <group key={`pipe-joints-${idx}`}>
-          {/* Supply Coupling Flange */}
-          <mesh position={[1.35, 4.22, z]} rotation={[Math.PI / 2, 0, 0]}>
+      {/* Instanced Pipe Flange Joints */}
+      {pipeJointCount > 0 && (
+        <>
+          <instancedMesh ref={fSupplyInstRef} args={[null, null, pipeJointCount]}>
             <cylinderGeometry args={[0.12, 0.12, 0.14, 16]} />
             <meshStandardMaterial color="#A2B29F" roughness={0.3} metalness={0.8} />
-          </mesh>
-          {/* Return Coupling Flange */}
-          <mesh position={[-1.35, 4.22, z]} rotation={[Math.PI / 2, 0, 0]}>
+          </instancedMesh>
+          <instancedMesh ref={fReturnInstRef} args={[null, null, pipeJointCount]}>
             <cylinderGeometry args={[0.12, 0.12, 0.14, 16]} />
             <meshStandardMaterial color="#4A5958" roughness={0.3} metalness={0.8} />
-          </mesh>
-        </group>
-      ))}
+          </instancedMesh>
+        </>
+      )}
 
       {/* 3. High-Visibility FiberRunner Optical Duct (Vibrant Telecom Yellow) */}
       <mesh position={[0, 4.08, -25]}>
@@ -117,25 +217,23 @@ export default function DataCentreCeiling() {
         <meshStandardMaterial color="#C76E1A" roughness={0.6} metalness={0.3} />
       </mesh>
 
-      {/* 5. Suspended Unistrut Trapeze Hangers every 3.8m */}
-      {trapezePositions.map((z, idx) => (
-        <group key={`trapeze-${idx}`} position={[0, 0, z]}>
-          {/* Horizontal Strut */}
-          <mesh position={[0, 3.94, 0]}>
-            <boxGeometry args={[6.2, 0.045, 0.05]} />
+      {/* 5. Instanced Suspended Unistrut Trapeze Hangers (Adaptive) */}
+      {enableTrapezes && trapezeCount > 0 && (
+        <>
+          <instancedMesh ref={strutInstRef} args={[null, null, trapezeCount]}>
+            <boxGeometry args={[1, 1, 1]} />
             <meshStandardMaterial color="#3E4C4E" roughness={0.35} metalness={0.75} />
-          </mesh>
-          {/* Threaded Suspension Rods */}
-          <mesh position={[-3.0, 4.22, 0]}>
+          </instancedMesh>
+          <instancedMesh ref={rodLeftInstRef} args={[null, null, trapezeCount]}>
             <cylinderGeometry args={[0.012, 0.012, 0.55, 8]} />
             <meshStandardMaterial color="#9AA7A8" roughness={0.25} metalness={0.9} />
-          </mesh>
-          <mesh position={[3.0, 4.22, 0]}>
+          </instancedMesh>
+          <instancedMesh ref={rodRightInstRef} args={[null, null, trapezeCount]}>
             <cylinderGeometry args={[0.012, 0.012, 0.55, 8]} />
             <meshStandardMaterial color="#9AA7A8" roughness={0.25} metalness={0.9} />
-          </mesh>
-        </group>
-      ))}
+          </instancedMesh>
+        </>
+      )}
 
       {/* 6. Continuous Architectural Linear LED Light Battens (Neutral White 4500K) */}
       {/* Left Linear Light Fixture (X = -1.65, Y = 3.98) */}
@@ -163,7 +261,6 @@ export default function DataCentreCeiling() {
       </group>
 
       {/* 7. Cold Aisle Containment (CAC) Crystal Polycarbonate Ceiling Baffles */}
-      {/* Zero transmission pass = Crisp sharp 60 FPS rendering without blur */}
       <mesh position={[0, 3.92, -25]}>
         <boxGeometry args={[3.4, 0.012, 95]} />
         <meshStandardMaterial

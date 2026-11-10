@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { Terminal, Menu, X } from 'lucide-react';
 import AudioToggle from './AudioToggle';
 import { audioManager } from '@/utils/audioManager';
@@ -21,17 +21,96 @@ export const NAV_LINKS = [
  * HUDNavbar
  * Precision architectural floating HUD navbar.
  * Synthesizes Swiss engineering restraint with high-density developer telemetry.
- * Provides true client-side route navigation with visual active route indication.
+ * Provides instant 0ms tactile navigation with background prefetching and progress cues.
  */
 export default function HUDNavbar({ onToggleTerminal }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeHomeSection, setActiveHomeSection] = useState('entry');
+  const [navigatingId, setNavigatingId] = useState(null);
   const pathname = usePathname();
+  const router = useRouter();
+  const isHomePage = pathname === '/';
 
-  const handleLinkClick = () => {
+  // Reset routing indicator on route completion
+  React.useEffect(() => {
+    setNavigatingId(null);
+    setMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Aggressive route prefetching in background for instant switching
+  React.useEffect(() => {
+    NAV_LINKS.forEach((link) => {
+      if (link.href && link.href !== pathname) {
+        try {
+          router.prefetch(link.href);
+        } catch {}
+      }
+    });
+  }, [pathname, router]);
+
+  // Synchronize active indicator with 3D facility zone on Home
+  React.useEffect(() => {
+    const handleZoneChange = (e) => {
+      if (e.detail?.id) {
+        setActiveHomeSection(e.detail.id);
+      }
+    };
+    window.addEventListener('facility-zone-change', handleZoneChange);
+    return () => window.removeEventListener('facility-zone-change', handleZoneChange);
+  }, []);
+
+  const handleLinkClick = (e, link) => {
     try {
       audioManager.playClick();
     } catch {}
-    setMobileMenuOpen(false);
+
+    // On the 3D home page, smoothly glide the 3D camera rather than unmounting the scene
+    if (isHomePage) {
+      const zoneMap = {
+        home: { id: 'entry', zoneIndex: 0 },
+        events: { id: 'featured', zoneIndex: 1 },
+        team: { id: 'community', zoneIndex: 2 },
+        research: { id: 'research', zoneIndex: 3 },
+        projects: { id: 'projects', zoneIndex: 4 },
+        join: { id: 'discovery', zoneIndex: 5 },
+      };
+
+      if (zoneMap[link.id]) {
+        if (e) e.preventDefault();
+        setActiveHomeSection(zoneMap[link.id].id);
+        setMobileMenuOpen(false);
+        window.dispatchEvent(
+          new CustomEvent('facility-navigate', {
+            detail: zoneMap[link.id],
+          })
+        );
+        return;
+      }
+    }
+
+    // Navigating across pages: trigger immediate 0ms progress line and tactile feedback
+    if (link.href !== pathname) {
+      setNavigatingId(link.id);
+      window.dispatchEvent(new CustomEvent('route-navigate-start'));
+      setTimeout(() => {
+        setMobileMenuOpen(false);
+      }, 70);
+    } else {
+      setMobileMenuOpen(false);
+    }
+  };
+
+  const getIsActive = (link) => {
+    if (isHomePage) {
+      if (link.id === 'home') return activeHomeSection === 'entry';
+      if (link.id === 'events') return activeHomeSection === 'featured';
+      if (link.id === 'team') return activeHomeSection === 'community';
+      if (link.id === 'research') return activeHomeSection === 'research';
+      if (link.id === 'projects') return activeHomeSection === 'projects';
+      if (link.id === 'join') return activeHomeSection === 'discovery';
+      return false;
+    }
+    return link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
   };
 
   const handleTerminalClick = () => {
@@ -47,7 +126,8 @@ export default function HUDNavbar({ onToggleTerminal }) {
         {/* Brand Node: Architectural Identification Pill */}
         <Link
           href="/"
-          onClick={handleLinkClick}
+          prefetch={true}
+          onClick={(e) => handleLinkClick(e, { id: 'home', href: '/' })}
           className="flex items-center gap-2.5 text-xs text-white hover:text-[#55DFFF] transition-colors cursor-pointer shrink-0 group btn-tactile"
           aria-label="AI Club Facility Root"
         >
@@ -70,15 +150,19 @@ export default function HUDNavbar({ onToggleTerminal }) {
         {/* Desktop Technical Navigation Links */}
         <div className="hidden lg:flex items-center gap-1 overflow-x-auto no-scrollbar py-0.5">
           {NAV_LINKS.map((link) => {
-            const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+            const isActive = getIsActive(link);
+            const isNavigating = navigatingId === link.id;
 
             return (
               <Link
                 key={link.id}
                 href={link.href}
-                onClick={handleLinkClick}
+                prefetch={true}
+                onClick={(e) => handleLinkClick(e, link)}
                 className={`relative px-3 py-1 text-xs rounded-md transition-all cursor-pointer font-medium whitespace-nowrap btn-tactile ${
-                  isActive
+                  isNavigating
+                    ? 'text-signal-green bg-white/[0.08] border border-signal-green/40 font-semibold'
+                    : isActive
                     ? 'text-[#55DFFF] bg-[rgba(85,223,255,0.10)] border border-[rgba(85,223,255,0.35)] font-semibold shadow-[0_0_12px_rgba(85,223,255,0.15)]'
                     : 'text-[#B8C7D4] hover:text-white hover:bg-white/[0.04] border border-transparent'
                 }`}
@@ -127,20 +211,31 @@ export default function HUDNavbar({ onToggleTerminal }) {
             <span className="text-[#55DFFF] font-bold">ROUTES</span>
           </div>
           {NAV_LINKS.map((link) => {
-            const isActive = link.href === '/' ? pathname === '/' : pathname.startsWith(link.href);
+            const isActive = getIsActive(link);
+            const isNavigating = navigatingId === link.id;
+
             return (
               <Link
                 key={link.id}
                 href={link.href}
-                onClick={handleLinkClick}
+                prefetch={true}
+                onClick={(e) => handleLinkClick(e, link)}
                 className={`flex items-center justify-between px-3.5 py-2.5 rounded-lg text-xs font-medium text-left transition-all btn-tactile ${
-                  isActive
+                  isNavigating
+                    ? 'bg-signal-green/15 border border-signal-green/50 text-signal-green font-bold shadow-[0_0_12px_rgba(34,197,94,0.3)]'
+                    : isActive
                     ? 'bg-[rgba(85,223,255,0.10)] border border-[rgba(85,223,255,0.35)] text-[#55DFFF] font-semibold shadow-[0_0_12px_rgba(85,223,255,0.15)]'
                     : 'text-[#B8C7D4] hover:bg-white/[0.04] hover:text-white border border-transparent'
                 }`}
               >
                 <span>{link.label}</span>
-                {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#55DFFF] shadow-[0_0_6px_#55DFFF]" />}
+                {isNavigating ? (
+                  <span className="text-[10px] font-mono text-signal-green uppercase tracking-wider animate-pulse font-bold">
+                    ROUTING...
+                  </span>
+                ) : isActive ? (
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#55DFFF] shadow-[0_0_6px_#55DFFF]" />
+                ) : null}
               </Link>
             );
           })}

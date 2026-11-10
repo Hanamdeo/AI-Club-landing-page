@@ -19,7 +19,7 @@ export default function Zone4Research({ onNextZone }) {
     ZONE_RESEARCH.domains[0];
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans safe-viewport-card custom-scrollbar">
       <div className="glass-panel p-6 sm:p-8 rounded-xl relative">
         {/* Top Telemetry Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-5 border-b border-[rgba(150,230,255,0.16)] text-[10px] font-mono">
@@ -39,7 +39,7 @@ export default function Zone4Research({ onNextZone }) {
 
         {/* Section Heading */}
         <div className="mb-6">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-white tracking-tight mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]">
+          <h2 className="text-fluid-h2 font-display font-bold text-white tracking-tight mb-2 drop-shadow-[0_2px_10px_rgba(0,0,0,0.65)]">
             AI Research, Learning & Resources
           </h2>
           <p className="text-xs sm:text-sm text-[rgba(240,247,255,0.92)] font-sans max-w-2xl leading-[1.65] drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]">
@@ -90,7 +90,7 @@ export default function Zone4Research({ onNextZone }) {
           </div>
 
           {/* Right Detailed Laboratory Dossier */}
-          <div className="lg:col-span-7 border-l-2 border-[rgba(150,230,255,0.16)] pl-6 py-1 flex flex-col justify-between">
+          <div className="lg:col-span-7 border-t border-[rgba(150,230,255,0.16)] lg:border-t-0 lg:border-l-2 border-[rgba(150,230,255,0.16)] pt-4 lg:pt-0 pl-0 lg:pl-6 py-1 flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between pb-2 border-b border-[rgba(150,230,255,0.14)] mb-3">
                 <span className="text-xs font-mono font-semibold text-white uppercase tracking-wider">
