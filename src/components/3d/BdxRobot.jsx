@@ -86,8 +86,8 @@ export default function BdxRobot({
   const { canvas: visorCanvas, texture: visorTexture } = useMemo(() => {
     if (typeof document === 'undefined') return { canvas: null, texture: null };
     const c = document.createElement('canvas');
-    c.width = 512;
-    c.height = 256;
+    c.width = 1024;
+    c.height = 512;
     const t = new THREE.CanvasTexture(c);
     t.needsUpdate = true;
     return { canvas: c, texture: t };
@@ -927,32 +927,40 @@ export default function BdxRobot({
   // =========================================================================
   const pearlCeramicMat = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
+      new THREE.MeshPhysicalMaterial({
         color: hovered ? '#FFFFFF' : '#F5F6FA',
-        roughness: 0.22,
-        metalness: 0.08,
+        roughness: 0.16,
+        metalness: 0.04,
+        clearcoat: 0.94, // High-gloss lacquered clearcoat reflection
+        clearcoatRoughness: 0.08,
+        reflectivity: 0.90,
       }),
     [hovered]
   );
 
   const visorGlassMat = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
+      new THREE.MeshPhysicalMaterial({
         color: '#080E1A',
-        roughness: 0.12,
-        metalness: 0.2,
+        roughness: 0.08,
+        metalness: 0.12,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.04,
         transparent: true,
         opacity: 0.94,
+        reflectivity: 0.95,
       }),
     []
   );
 
   const cobaltThrusterMat = useMemo(
     () =>
-      new THREE.MeshStandardMaterial({
+      new THREE.MeshPhysicalMaterial({
         color: '#181C22', // Deep monochrome graphite
-        roughness: 0.32,
-        metalness: 0.65,
+        roughness: 0.28,
+        metalness: 0.70,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.15,
       }),
     []
   );
