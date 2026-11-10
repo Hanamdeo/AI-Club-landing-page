@@ -32,10 +32,10 @@ export default function StaticFooter({ onOpenTerminal }) {
 
   // Middle column links requested by user
   const navLinks = [
-    { label: 'ABOUT', href: '/about', note: 'Charter & Cadre' },
-    { label: 'BLOG', href: '/blog', note: 'Research Papers' },
-    { label: 'GD', href: '/research', note: 'Discussion Archive' },
-    { label: 'REGISTER', href: '/events', note: 'Upcoming Operations' },
+    { label: 'ABOUT', href: '/about' },
+    { label: 'BLOG', href: '/blog' },
+    { label: 'GD', href: '/research' },
+    { label: 'REGISTER', href: '/events' },
   ];
 
   // Right column vertical social stack matching reference
@@ -124,21 +124,15 @@ export default function StaticFooter({ onOpenTerminal }) {
           {/* ------------------------------------------------------------ */}
           {/* COLUMN 2: CLEAN DIRECTORY LINKS (ABOUT, BLOG, GD, REGISTER)  */}
           {/* ------------------------------------------------------------ */}
-          <div className="md:col-span-4 lg:col-span-4 md:border-l md:border-[rgba(85,223,255,0.22)] md:pl-10 lg:pl-16 flex flex-col justify-center space-y-6 sm:space-y-7">
+          <div className="md:col-span-4 lg:col-span-4 md:border-l md:border-[rgba(85,223,255,0.22)] md:pl-10 lg:pl-16 flex flex-col justify-center space-y-2 sm:space-y-2.5">
             {navLinks.map((link) => (
               <Link
                 key={link.label}
                 href={link.href}
-                className="group flex items-center justify-between py-1 transition-all"
+                className="group inline-flex items-center w-fit py-0.5 transition-transform duration-150 hover:translate-x-1"
               >
-                <div className="flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 rounded-full bg-transparent group-hover:bg-[#55DFFF] transition-all group-hover:shadow-[0_0_8px_#55DFFF]" />
-                  <span className="font-3d-slade-subtle text-xl sm:text-2xl tracking-wider uppercase text-white group-hover:text-[#55DFFF] transition-all">
-                    {link.label}
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono text-slate-500 group-hover:text-slate-300 transition-colors uppercase tracking-wider">
-                  {link.note}
+                <span className="font-3d-slade text-xl sm:text-2xl tracking-wider uppercase text-white group-hover:text-[#55DFFF] transition-colors leading-tight">
+                  {link.label}
                 </span>
               </Link>
             ))}
