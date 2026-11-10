@@ -239,24 +239,21 @@ p, span, a, button, input, select, textarea, label {
 }
 
 .font-3d-slade, .font-3d-slay {
-  font-family: 'CS Slade 3D', 'LaBeouf', var(--font-labeouf), var(--font-barlow-condensed), sans-serif;
+  font-family: 'CS Slade 3D', var(--font-syne), var(--font-barlow-condensed), sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   color: #FFFFFF;
-  text-shadow:
-    -2px 0px 0px rgba(255, 30, 86, 0.95),
-    2px 0px 0px rgba(0, 229, 255, 0.95),
-    0 4px 14px rgba(0, 0, 0, 0.85);
+  letter-spacing: 0.02em;
+  text-shadow: none;
 }
 
 .font-3d-slade-subtle, .font-3d-slay-subtle {
-  font-family: 'CS Slade 3D', 'LaBeouf', var(--font-labeouf), var(--font-barlow-condensed), sans-serif;
+  font-family: 'CS Slade 3D', var(--font-syne), var(--font-barlow-condensed), sans-serif;
   font-weight: 700;
   text-transform: uppercase;
   color: #FFFFFF;
-  text-shadow:
-    -1.5px 0px 0px rgba(255, 30, 86, 0.85),
-    1.5px 0px 0px rgba(0, 229, 255, 0.85);
+  letter-spacing: 0.02em;
+  text-shadow: none;
 }
 
 /* Tabular Lining Figures for stats, timers & cluster telemetry */

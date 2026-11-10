@@ -114,21 +114,11 @@ export default function EventsPage() {
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Breadcrumb Navigation - IBM Plex Mono */}
-        <div className="flex items-center gap-2 mb-6 events-mono-meta text-slate-400">
-          <Link href="/" className="hover:text-[#55DFFF] transition-colors flex items-center gap-1">
-            <span>FACILITY</span>
-          </Link>
-          <ChevronRight className="w-3 h-3 text-slate-600" />
-          <span className="text-[#55DFFF] font-semibold">OPERATIONS // EVENTS</span>
-        </div>
+        
 
         {/* Master Page Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 border-b border-[rgba(85,223,255,0.15)] pb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 mb-3.5 rounded-full bg-[#08121A] border border-[rgba(85,223,255,0.25)] events-mono-meta text-slate-200">
-              <span className="w-2 h-2 rounded-full bg-[#55DFFF] animate-pulse shadow-[0_0_10px_#55DFFF]" />
-              <span>ACTIVE DISPATCHES // MITS GWALIOR</span>
-            </div>
             {/* Hero Heading: CS Slade 3D (White & Cyan with 3D Core Depth) */}
             <h1 className="events-hero-title">
               OPERATIONS BOARD
