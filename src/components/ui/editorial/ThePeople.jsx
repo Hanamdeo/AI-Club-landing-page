@@ -1,12 +1,15 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import {
   Users,
   Github,
   Linkedin,
   Mail,
   ShieldCheck,
+  ArrowRight,
+  GitBranch,
 } from 'lucide-react';
 import { getTeamMembers } from '@/lib/contentSelectors';
 import { audioManager } from '@/utils/audioManager';
@@ -14,9 +17,9 @@ import { audioManager } from '@/utils/audioManager';
 const ROLE_TABS = [
   { key: 'all', label: 'All People' },
   { key: 'lead', label: 'Leadership' },
-  { key: 'core', label: 'Research Leads' },
+  { key: 'core', label: 'Core Heads' },
+  { key: 'coordinator', label: 'Coordinators' },
   { key: 'faculty', label: 'Faculty' },
-  { key: 'contributor', label: 'Contributors' },
 ];
 
 /**
@@ -159,6 +162,31 @@ export default function ThePeople() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Link to Full Interactive Hierarchy */}
+        <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 p-5 rounded-2xl bg-[#141819] border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.4)]">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center text-white">
+              <GitBranch className="w-5 h-5" />
+            </div>
+            <div>
+              <h4 className="font-barlow-condensed font-bold text-lg text-white uppercase tracking-tight">
+                EXPLORE OFFICIAL CLUB HIERARCHY
+              </h4>
+              <p className="text-xs font-mono text-slate-400">
+                View connected leadership branches, core directors, and implementation coordinators.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            href="/team"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-mono font-bold text-xs uppercase tracking-wider hover:bg-slate-200 transition-all shadow-[0_0_16px_rgba(255,255,255,0.3)] shrink-0"
+          >
+            <span>LAUNCH TREE VIEW</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       </div>
     </section>
