@@ -121,7 +121,7 @@ export default function SceneContainer({
         className="pointer-events-auto"
         style={{ pointerEvents: 'auto', touchAction: 'pan-y' }}
         camera={{ position: [0, 1.9, 13.5], fov: 50, near: 0.1, far: 110 }}
-        dpr={[1, tierState.dpr]}
+        dpr={[1, typeof window !== 'undefined' && window.innerWidth < 1024 ? 1.2 : Math.min(1.5, tierState.dpr)]}
         gl={{
           antialias: tierState.tier !== 'low',
           powerPreference: 'high-performance',

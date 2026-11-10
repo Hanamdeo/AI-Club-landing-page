@@ -150,9 +150,12 @@ export default function BdxRobot({
 
   // Responsive state detection
   const isMobileRef = useRef(false);
+  const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
     const checkMobile = () => {
-      isMobileRef.current = window.innerWidth < 1024;
+      const mob = window.innerWidth < 1024;
+      isMobileRef.current = mob;
+      setIsMobile(mob);
     };
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -844,29 +847,33 @@ export default function BdxRobot({
       }
     }
 
-    // High-Performance Dynamic Face Canvas Redraw (Zero overhead when idle/flying)
+    // High-Performance Dynamic Face Canvas Redraw (Zero overhead during flight)
     let needsRedraw = false;
     const currentBlink = isBlinking.current ? 0.06 : 1.0;
     const timeStep = Math.floor(t * 4);
+    const isMoving = Math.abs(smoothedVelocity.current) > 0.02;
 
-    if (lastRenderStateRef.current.emotion !== currentEmotion) {
-      needsRedraw = true;
-    }
-    if (Math.abs(lastRenderStateRef.current.blink - currentBlink) > 0.05) {
-      needsRedraw = true;
-    }
-    if (currentEmotion === 'THINKING' && lastRenderStateRef.current.step !== timeStep) {
-      needsRedraw = true;
-    }
-    if (currentEmotion === 'LAUGH' || currentEmotion === 'CRY') {
-      needsRedraw = true; // Actively animate streaming and rolling tears
-    }
-    if (currentEmotion === 'CURIOUS') {
-      if (
-        Math.abs(lastRenderStateRef.current.gazeX - mx) > 0.06 ||
-        Math.abs(lastRenderStateRef.current.gazeY - my) > 0.06
-      ) {
+    // Freeze 2D canvas repaints during flight to dedicate 100% GPU bandwidth to 60fps motion
+    if (!isMoving) {
+      if (lastRenderStateRef.current.emotion !== currentEmotion) {
         needsRedraw = true;
+      }
+      if (Math.abs(lastRenderStateRef.current.blink - currentBlink) > 0.05) {
+        needsRedraw = true;
+      }
+      if (currentEmotion === 'THINKING' && lastRenderStateRef.current.step !== timeStep) {
+        needsRedraw = true;
+      }
+      if (currentEmotion === 'LAUGH' || currentEmotion === 'CRY') {
+        needsRedraw = true; // Actively animate streaming and rolling tears
+      }
+      if (currentEmotion === 'CURIOUS') {
+        if (
+          Math.abs(lastRenderStateRef.current.gazeX - mx) > 0.06 ||
+          Math.abs(lastRenderStateRef.current.gazeY - my) > 0.06
+        ) {
+          needsRedraw = true;
+        }
       }
     }
 
@@ -894,47 +901,64 @@ export default function BdxRobot({
   });
 
   // =========================================================================
-  // 3. PHOTOREALISTIC STUDIO MATERIALS MATCHING REFERENCE RENDER
+  // 3. PHOTOREALISTIC STUDIO MATERIALS (ADAPTIVE MOBILE STANDARD / DESKTOP PHYSICAL)
   // =========================================================================
-  const pearlCeramicMat = useMemo(
-    () =>
-      new THREE.MeshPhysicalMaterial({
-        color: hovered ? '#FFFFFF' : '#F5F6FA',
-        roughness: 0.16,
-        metalness: 0.04,
-        clearcoat: 0.94, // High-gloss lacquered clearcoat reflection
-        clearcoatRoughness: 0.08,
-        reflectivity: 0.90,
-      }),
-    [hovered]
-  );
+  const pearlCeramicMat = useMemo(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+    return isMobile
+      ? new THREE.MeshStandardMaterial({
+          color: hovered ? '#FFFFFF' : '#F5F6FA',
+          roughness: 0.22,
+          metalness: 0.08,
+        })
+      : new THREE.MeshPhysicalMaterial({
+          color: hovered ? '#FFFFFF' : '#F5F6FA',
+          roughness: 0.16,
+          metalness: 0.04,
+          clearcoat: 0.94,
+          clearcoatRoughness: 0.08,
+          reflectivity: 0.90,
+        });
+  }, [hovered]);
 
-  const visorGlassMat = useMemo(
-    () =>
-      new THREE.MeshPhysicalMaterial({
-        color: '#080E1A',
-        roughness: 0.08,
-        metalness: 0.12,
-        clearcoat: 1.0,
-        clearcoatRoughness: 0.04,
-        transparent: true,
-        opacity: 0.94,
-        reflectivity: 0.95,
-      }),
-    []
-  );
+  const visorGlassMat = useMemo(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+    return isMobile
+      ? new THREE.MeshStandardMaterial({
+          color: '#080E1A',
+          roughness: 0.10,
+          metalness: 0.15,
+          transparent: true,
+          opacity: 0.94,
+        })
+      : new THREE.MeshPhysicalMaterial({
+          color: '#080E1A',
+          roughness: 0.08,
+          metalness: 0.12,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.04,
+          transparent: true,
+          opacity: 0.94,
+          reflectivity: 0.95,
+        });
+  }, []);
 
-  const cobaltThrusterMat = useMemo(
-    () =>
-      new THREE.MeshPhysicalMaterial({
-        color: '#152A4A', // Exact deep cobalt-navy from reference thruster base
-        roughness: 0.24,
-        metalness: 0.65,
-        clearcoat: 0.6,
-        clearcoatRoughness: 0.15,
-      }),
-    []
-  );
+  const cobaltThrusterMat = useMemo(() => {
+    const isMobile = typeof window !== 'undefined' && window.innerWidth < 1024;
+    return isMobile
+      ? new THREE.MeshStandardMaterial({
+          color: '#152A4A',
+          roughness: 0.28,
+          metalness: 0.65,
+        })
+      : new THREE.MeshPhysicalMaterial({
+          color: '#152A4A',
+          roughness: 0.24,
+          metalness: 0.65,
+          clearcoat: 0.6,
+          clearcoatRoughness: 0.15,
+        });
+  }, []);
 
   const titaniumTrimMat = useMemo(
     () =>
@@ -964,18 +988,17 @@ export default function BdxRobot({
     []
   );
 
+  // High-performance Standard Material without transmission pass (eliminates offscreen render buffer)
   const cyanGlassMat = useMemo(
     () =>
-      new THREE.MeshPhysicalMaterial({
+      new THREE.MeshStandardMaterial({
         color: '#00D8F6',
-        emissive: '#0090B8',
-        emissiveIntensity: 0.50,
+        emissive: '#0080A8',
+        emissiveIntensity: 0.45,
         roughness: 0.12,
-        metalness: 0.25,
-        transmission: 0.75,
+        metalness: 0.35,
         transparent: true,
-        opacity: 0.90,
-        ior: 1.45,
+        opacity: 0.88,
       }),
     []
   );
@@ -1038,8 +1061,10 @@ export default function BdxRobot({
             </mesh>
           )}
 
-          {/* Forward Soft Eye Glow Projection */}
-          <pointLight position={[0, 0.04, 0.75]} color="#00E5FF" intensity={1.2} distance={2.5} decay={2} />
+          {/* Forward Soft Eye Glow Projection (Omitted on mobile to maximize GPU fill rate) */}
+          {!isMobile && (
+            <pointLight position={[0, 0.04, 0.75]} color="#00E5FF" intensity={1.2} distance={2.5} decay={2} />
+          )}
 
           {/* ============================================================ */}
           {/* PROMINENT HEADPHONE EAR CUPS + REAR CYAN AERODYNAMIC FINS    */}
@@ -1159,8 +1184,10 @@ export default function BdxRobot({
               <cylinderGeometry args={[0.034, 0.034, 0.018, 24]} />
             </mesh>
 
-            {/* Soft Controlled Chest Glow */}
-            <pointLight position={[0, 0, 0.08]} color="#00E5FF" intensity={0.9} distance={1.4} decay={2} />
+            {/* Soft Controlled Chest Glow (Omitted on mobile) */}
+            {!isMobile && (
+              <pointLight position={[0, 0, 0.08]} color="#00E5FF" intensity={0.9} distance={1.4} decay={2} />
+            )}
 
             {/* Volumetric Hologram Cone (Activates during Section 3 Projection) */}
             <group position={[0, 0, 0.06]} rotation={[Math.PI / 2, 0, 0]}>
@@ -1197,8 +1224,10 @@ export default function BdxRobot({
               <torusGeometry args={[0.15, 0.014, 16, 36]} />
             </mesh>
 
-            {/* Soft Downward Propulsion Light */}
-            <pointLight position={[0, -0.22, 0]} color="#00E5FF" intensity={1.5} distance={2.4} decay={2} />
+            {/* Soft Downward Propulsion Light (Omitted on mobile) */}
+            {!isMobile && (
+              <pointLight position={[0, -0.22, 0]} color="#00E5FF" intensity={1.5} distance={2.4} decay={2} />
+            )}
           </group>
 
           {/* ============================================================ */}

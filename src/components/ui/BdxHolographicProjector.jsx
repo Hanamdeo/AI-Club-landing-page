@@ -49,8 +49,22 @@ export default function BdxHolographicProjector({
   const [isOpen, setIsOpen] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMinimized, setIsMinimized] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const tierState = usePerformanceTier();
   const isLowTier = tierState.tier === 'low';
+
+  // Responsive device check: Prevent running duplicate WebGL canvases on mobile
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth < 1024 ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+      );
+    };
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Sync mode with active website section
   useEffect(() => {
@@ -307,7 +321,7 @@ export default function BdxHolographicProjector({
             className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-[#0D1011] border border-white/[0.14] overflow-hidden cursor-pointer hover:border-sage transition-all flex items-center justify-center relative shrink-0 btn-tactile shadow-[0_4px_16px_rgba(0,0,0,0.4)]"
             title="BDX-01 Companion (Click to interact & chirp)"
           >
-            {isLowTier ? (
+            {isLowTier || isMobile ? (
               <div className="flex flex-col items-center justify-center text-sage">
                 <Bot className="w-6 h-6 animate-pulse" />
                 <span className="text-[8px] font-mono font-bold tracking-widest text-sage/80 mt-0.5">BDX</span>
