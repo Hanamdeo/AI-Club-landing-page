@@ -271,10 +271,10 @@ export default function Home() {
       <div className="fixed inset-0 pointer-events-none z-10 flex items-center justify-center p-4 sm:p-6 md:p-8 overflow-hidden">
         {/* ZONE 01: ENTRY ZONE (Welcome, AI Club Intro, Primary Actions) */}
         <div
-          className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
+          className={`w-full max-w-7xl mx-auto absolute inset-0 transition-all duration-300 ease-out transform pointer-events-none ${
             activeZoneIndex === 0
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone1Hero onExploreClick={() => handleNavigateToZone(1)} />
@@ -284,8 +284,8 @@ export default function Home() {
         <div
           className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 1
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone2Featured onNextZone={() => handleNavigateToZone(2)} />
@@ -295,8 +295,8 @@ export default function Home() {
         <div
           className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 2
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone3Community onNextZone={() => handleNavigateToZone(3)} />
@@ -306,8 +306,8 @@ export default function Home() {
         <div
           className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 3
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone4Research onNextZone={() => handleNavigateToZone(4)} />
@@ -317,8 +317,8 @@ export default function Home() {
         <div
           className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 4
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone5Projects onNextZone={() => handleNavigateToZone(5)} />
@@ -328,8 +328,8 @@ export default function Home() {
         <div
           className={`w-full max-w-6xl absolute transition-all duration-200 ease-out transform ${
             activeZoneIndex === 5
-              ? 'opacity-100 pointer-events-auto translate-y-0 scale-100'
-              : 'opacity-0 pointer-events-none translate-y-8 scale-95'
+              ? 'opacity-100 translate-y-0 scale-100 visible'
+              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
           }`}
         >
           <Zone6Discovery onReturnTop={() => handleNavigateToZone(0)} />

@@ -55,7 +55,7 @@ function RouteProgressBar() {
   return (
     <div className="fixed top-0 left-0 right-0 h-[2.5px] z-[9999] pointer-events-none bg-black/40 overflow-hidden">
       <div
-        className="h-full bg-gradient-to-r from-[#24BFEA] via-[#55DFFF] to-[#38C9E8] shadow-[0_0_12px_#55DFFF] transition-all duration-200 ease-out"
+        className="h-full bg-gradient-to-r from-white/40 via-white to-white/60 shadow-[0_0_12px_rgba(255,255,255,0.8)] transition-all duration-200 ease-out"
         style={{ width: `${progress}%` }}
       />
     </div>
