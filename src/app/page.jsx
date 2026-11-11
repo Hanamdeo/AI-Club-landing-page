@@ -40,6 +40,7 @@ let hasGlobalIntroPlayed = false;
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [isMobileDevice, setIsMobileDevice] = useState(false);
   const [isIntro, setIsIntro] = useState(() => !hasGlobalIntroPlayed);
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('entry');
@@ -60,7 +61,18 @@ export default function Home() {
     const isMobile =
       window.innerWidth < 768 ||
       window.matchMedia('(max-width: 767px)').matches ||
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+
+    setIsMobileDevice(isMobile);
+
+    const handleResize = () => {
+      const mob =
+        window.innerWidth < 768 ||
+        window.matchMedia('(max-width: 767px)').matches ||
+        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+      setIsMobileDevice(mob);
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
 
     if (isMobile || hasGlobalIntroPlayed) {
       setIsIntro(false);
@@ -140,6 +152,7 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('keydown', handleGlobalKey);
+      window.removeEventListener('resize', handleResize);
       if (tickerUpdate) gsap.ticker.remove(tickerUpdate);
       if (lenis) {
         lenis.destroy();
@@ -228,8 +241,8 @@ export default function Home() {
         />
       )}
 
-      {/* 1. Master WebGL 3D Data Centre Canvas: Remains Visually Connected Across the Whole Journey */}
-      {mounted && (
+      {/* 1. Master WebGL 3D Data Centre Canvas: Exclusively Rendered on Desktop / Laptops */}
+      {mounted && !isMobileDevice && (
         <SceneContainer
           scrollProgressRef={scrollProgressRef}
           isIntro={isIntro}
@@ -239,6 +252,15 @@ export default function Home() {
           onNavigateToSection={handleNavigateToSection}
           activeNavId={activeSection}
         />
+      )}
+
+      {/* 1b. Mobile Pure CSS Cyber Backdrop: Zero WebGL Context / Zero GPU Shaders */}
+      {isMobileDevice && (
+        <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#0A0E10]" aria-hidden="true">
+          <div className="absolute inset-0 bg-facility-grid opacity-35" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_15%,rgba(162,178,159,0.10),transparent_70%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_85%,rgba(142,213,232,0.07),transparent_70%)]" />
+        </div>
       )}
 
       {/* 2. Interactive Data Server Facility Navigation Rail */}

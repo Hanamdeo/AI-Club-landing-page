@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { ArrowDown } from 'lucide-react';
 import { CLUB_INFO } from '@/data/clubInfo';
 import { audioManager } from '@/utils/audioManager';
+import RobotFace from '@/components/ui/RobotFace';
 
 /**
  * Section 01: The Arrival (In-Environment Holographic Terminal)
@@ -29,7 +30,12 @@ export default function Zone1Hero({ onExploreClick }) {
       {/* MASTER HERO COMPOSITION - STRICTLY LEFT FLANK DOCKED           */}
       {/* Leaves entire screen center and right wide open for the robot  */}
       {/* ============================================================== */}
-      <div className="w-full mt-auto mb-3 sm:mb-24 sm:my-auto pointer-events-none flex">
+      <div className="w-full mt-auto mb-3 sm:mb-24 sm:my-auto pointer-events-none flex flex-col sm:flex-row">
+        {/* On Mobile Only: Crisp 2D Mascot Avatar (Zero WebGL Overhead) */}
+        <div className="flex sm:hidden justify-center items-center pb-2 pointer-events-auto">
+          <RobotFace variant="friendly" size={92} wave={true} />
+        </div>
+
         {/* Left-docked Floating Holographic HUD Card - Zero overlap with robot */}
         <div className="w-full sm:max-w-[380px] lg:max-w-[400px] xl:max-w-[420px] mr-auto pointer-events-auto safe-viewport-card custom-scrollbar">
           <div className="glass-panel p-4 sm:p-6 md:p-7 relative">
