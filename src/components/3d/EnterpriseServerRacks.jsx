@@ -34,6 +34,11 @@ function generateClusterHardware(zStart, zEnd, reservedOpenings = [-15, -35]) {
       greenLeds: [],
       cyanLeds: [],
       amberLeds: [],
+      neonFrames: [],
+      matrixCyanLeds: [],
+      matrixBlueLeds: [],
+      matrixWhiteLeds: [],
+      hexagons: [],
     },
     right: {
       frames: [],
@@ -44,6 +49,11 @@ function generateClusterHardware(zStart, zEnd, reservedOpenings = [-15, -35]) {
       greenLeds: [],
       cyanLeds: [],
       amberLeds: [],
+      neonFrames: [],
+      matrixCyanLeds: [],
+      matrixBlueLeds: [],
+      matrixWhiteLeds: [],
+      hexagons: [],
     },
   };
 
@@ -79,8 +89,10 @@ function generateClusterHardware(zStart, zEnd, reservedOpenings = [-15, -35]) {
         target.rails.push(dummy.matrix.clone());
       });
 
-      // 4. Server Chassis Blocks (Stacked Compute Bays)
-      const frontFaceX = centerX + dir * 0.43;
+      // 4. Server Chassis Blocks (Stacked Compute Bays) & Aisle Face Plane
+      // The rack enclosure front edge facing the center corridor aisle:
+      const aisleFaceX = (centerX - dir * 0.05) + dir * (rackDepthX / 2);
+      const frontFaceX = aisleFaceX + dir * 0.025; // 2.5cm out in front of the cabinet facing corridor
 
       if (!isGpuRack) {
         // High-Density Blade Compute (10 modular 2U chassis)
@@ -126,6 +138,64 @@ function generateClusterHardware(zStart, zEnd, reservedOpenings = [-15, -35]) {
           (isWarn ? target.amberLeds : target.greenLeds).push(dummy.matrix.clone());
         }
       }
+
+      // 5. Synapse Reference: Vertical Luminous Neon Rack Frames (Solid glowing boundary pillars & trim)
+      // Left upright neon pillar
+      dummy.position.set(frontFaceX + dir * 0.02, rackHeightY / 2 + 0.04, z + rackWidthZ * 0.48);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(0.024, rackHeightY, 0.024);
+      dummy.updateMatrix();
+      target.neonFrames.push(dummy.matrix.clone());
+
+      // Right upright neon pillar
+      dummy.position.set(frontFaceX + dir * 0.02, rackHeightY / 2 + 0.04, z - rackWidthZ * 0.48);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(0.024, rackHeightY, 0.024);
+      dummy.updateMatrix();
+      target.neonFrames.push(dummy.matrix.clone());
+
+      // Top horizontal neon beam
+      dummy.position.set(frontFaceX + dir * 0.02, rackHeightY + 0.03, z);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(0.022, 0.022, rackWidthZ);
+      dummy.updateMatrix();
+      target.neonFrames.push(dummy.matrix.clone());
+
+      // Bottom horizontal neon beam
+      dummy.position.set(frontFaceX + dir * 0.02, 0.05, z);
+      dummy.rotation.set(0, 0, 0);
+      dummy.scale.set(0.022, 0.022, rackWidthZ);
+      dummy.updateMatrix();
+      target.neonFrames.push(dummy.matrix.clone());
+
+      // 6. Synapse Reference: Dense Dot-Matrix Micro-LED Grid (High-Tech Compute Pattern)
+      for (let r = 0; r < 9; r++) {
+        const rowY = 0.36 + r * 0.22;
+        for (let c = 0; c < 5; c++) {
+          const colZ = z - rackWidthZ * 0.32 + c * (rackWidthZ * 0.16);
+          dummy.position.set(frontFaceX + dir * 0.025, rowY, colZ);
+          dummy.rotation.set(0, 0, 0);
+          dummy.scale.set(0.02, 0.042, 0.056);
+          dummy.updateMatrix();
+          const seed = (rackIndex * 13 + r * 7 + c);
+          if (seed % 3 === 0) {
+            target.matrixCyanLeds.push(dummy.matrix.clone());
+          } else if (seed % 3 === 1) {
+            target.matrixBlueLeds.push(dummy.matrix.clone());
+          } else {
+            target.matrixWhiteLeds.push(dummy.matrix.clone());
+          }
+        }
+      }
+
+      // 7. Synapse Reference: Floating Hexagonal Holographic Wireframe Brackets
+      if (rackIndex % 2 === 1) {
+        dummy.position.set(frontFaceX + dir * 0.035, rackHeightY * 0.52, z);
+        dummy.rotation.set(0, dir === 1 ? Math.PI / 2 : -Math.PI / 2, 0);
+        dummy.scale.set(1, 1, 1);
+        dummy.updateMatrix();
+        target.hexagons.push(dummy.matrix.clone());
+      }
     });
   }
 
@@ -145,6 +215,12 @@ function ClusterWing({ transforms, materialsRef, drawLeds = true }) {
   const grnRef = useRef();
   const cynRef = useRef();
   const ambRef = useRef();
+  const neonRef = useRef();
+  const matCynRef = useRef();
+  const matBluRef = useRef();
+  const matWhiRef = useRef();
+  const hexRef = useRef();
+  const hexInnerRef = useRef();
 
   useEffect(() => {
     if (fRef.current) transforms.frames.forEach((m, i) => fRef.current.setMatrixAt(i, m));
@@ -156,7 +232,14 @@ function ClusterWing({ transforms, materialsRef, drawLeds = true }) {
     if (drawLeds && cynRef.current) transforms.cyanLeds.forEach((m, i) => cynRef.current.setMatrixAt(i, m));
     if (drawLeds && ambRef.current) transforms.amberLeds.forEach((m, i) => ambRef.current.setMatrixAt(i, m));
 
-    [fRef, cRef, rRef, scRef, gcRef, grnRef, cynRef, ambRef].forEach((ref) => {
+    if (neonRef.current && transforms.neonFrames) transforms.neonFrames.forEach((m, i) => neonRef.current.setMatrixAt(i, m));
+    if (matCynRef.current && transforms.matrixCyanLeds) transforms.matrixCyanLeds.forEach((m, i) => matCynRef.current.setMatrixAt(i, m));
+    if (matBluRef.current && transforms.matrixBlueLeds) transforms.matrixBlueLeds.forEach((m, i) => matBluRef.current.setMatrixAt(i, m));
+    if (matWhiRef.current && transforms.matrixWhiteLeds) transforms.matrixWhiteLeds.forEach((m, i) => matWhiRef.current.setMatrixAt(i, m));
+    if (hexRef.current && transforms.hexagons) transforms.hexagons.forEach((m, i) => hexRef.current.setMatrixAt(i, m));
+    if (hexInnerRef.current && transforms.hexagons) transforms.hexagons.forEach((m, i) => hexInnerRef.current.setMatrixAt(i, m));
+
+    [fRef, cRef, rRef, scRef, gcRef, grnRef, cynRef, ambRef, neonRef, matCynRef, matBluRef, matWhiRef, hexRef, hexInnerRef].forEach((ref) => {
       if (ref.current) ref.current.instanceMatrix.needsUpdate = true;
     });
   }, [transforms, drawLeds]);
@@ -233,7 +316,7 @@ function ClusterWing({ transforms, materialsRef, drawLeds = true }) {
           <boxGeometry args={[1, 1, 1]} />
           <meshBasicMaterial
             ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
-            color="#26B85E"
+            color="#E2E8F0"
             transparent
             opacity={0.85}
           />
@@ -246,7 +329,7 @@ function ClusterWing({ transforms, materialsRef, drawLeds = true }) {
             ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
             color="#FFFFFF"
             transparent
-            opacity={0.85}
+            opacity={0.95}
           />
         </instancedMesh>
       )}
@@ -255,11 +338,89 @@ function ClusterWing({ transforms, materialsRef, drawLeds = true }) {
           <boxGeometry args={[1, 1, 1]} />
           <meshBasicMaterial
             ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
-            color="#F59E0B"
+            color="#94A3B8"
             transparent
-            opacity={0.85}
+            opacity={0.80}
           />
         </instancedMesh>
+      )}
+
+      {/* Monochrome Data Centre: Solid Luminous White Rack Boundary Frames & Uprights */}
+      {transforms.neonFrames && transforms.neonFrames.length > 0 && (
+        <instancedMesh ref={neonRef} args={[null, null, transforms.neonFrames.length]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshBasicMaterial
+            ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
+            color="#FFFFFF"
+            toneMapped={false}
+          />
+        </instancedMesh>
+      )}
+
+      {/* Monochrome Data Centre: Dense Dot-Matrix Micro-LED Activity Grids (White, Slate & Cool Grey) */}
+      {drawLeds && transforms.matrixCyanLeds && transforms.matrixCyanLeds.length > 0 && (
+        <instancedMesh ref={matCynRef} args={[null, null, transforms.matrixCyanLeds.length]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshBasicMaterial
+            ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
+            color="#FFFFFF"
+            toneMapped={false}
+          />
+        </instancedMesh>
+      )}
+      {drawLeds && transforms.matrixBlueLeds && transforms.matrixBlueLeds.length > 0 && (
+        <instancedMesh ref={matBluRef} args={[null, null, transforms.matrixBlueLeds.length]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshBasicMaterial
+            ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
+            color="#94A3B8"
+            toneMapped={false}
+          />
+        </instancedMesh>
+      )}
+      {drawLeds && transforms.matrixWhiteLeds && transforms.matrixWhiteLeds.length > 0 && (
+        <instancedMesh ref={matWhiRef} args={[null, null, transforms.matrixWhiteLeds.length]}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshBasicMaterial
+            ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
+            color="#CBD5E1"
+            toneMapped={false}
+          />
+        </instancedMesh>
+      )}
+
+      {/* Monochrome Data Centre: Floating Hexagonal Holographic Wireframe Brackets (Dual Ring in Silver-White) */}
+      {transforms.hexagons && transforms.hexagons.length > 0 && (
+        <group>
+          {/* Outer Ring */}
+          <instancedMesh ref={hexRef} args={[null, null, transforms.hexagons.length]}>
+            <ringGeometry args={[0.22, 0.25, 6]} />
+            <meshBasicMaterial
+              ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
+              color="#FFFFFF"
+              transparent
+              opacity={0.82}
+              side={THREE.DoubleSide}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              toneMapped={false}
+            />
+          </instancedMesh>
+          {/* Inner Ring */}
+          <instancedMesh ref={hexInnerRef} args={[null, null, transforms.hexagons.length]}>
+            <ringGeometry args={[0.09, 0.11, 6]} />
+            <meshBasicMaterial
+              ref={(mat) => { if (mat && !materialsRef.current.includes(mat)) materialsRef.current.push(mat); }}
+              color="#94A3B8"
+              transparent
+              opacity={0.65}
+              side={THREE.DoubleSide}
+              depthWrite={false}
+              blending={THREE.AdditiveBlending}
+              toneMapped={false}
+            />
+          </instancedMesh>
+        </group>
       )}
     </group>
   );
@@ -275,7 +436,7 @@ export default function EnterpriseServerRacks({
 }) {
   const isReducedMotion = useRef(false);
   const tierState = usePerformanceTier();
-  const drawLeds = tierState.features?.drawLeds ?? true;
+  const drawLeds = true;
 
   useEffect(() => {
     isReducedMotion.current =

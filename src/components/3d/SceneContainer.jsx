@@ -78,6 +78,44 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef, isLowTi
 }
 
 /**
+ * VanishingPointPortal
+ * The illuminated doorway seen at the corridor vanishing point in monochrome silver-white.
+ */
+function VanishingPointPortal() {
+  return (
+    <group position={[0, 1.6, -58]}>
+      {/* Outer Door Frame Arch (Crisp White) */}
+      <mesh position={[-1.2, 0, 0]}>
+        <boxGeometry args={[0.15, 3.2, 0.2]} />
+        <meshBasicMaterial color="#FFFFFF" toneMapped={false} />
+      </mesh>
+      <mesh position={[1.2, 0, 0]}>
+        <boxGeometry args={[0.15, 3.2, 0.2]} />
+        <meshBasicMaterial color="#FFFFFF" toneMapped={false} />
+      </mesh>
+      <mesh position={[0, 1.6, 0]}>
+        <boxGeometry args={[2.55, 0.15, 0.2]} />
+        <meshBasicMaterial color="#FFFFFF" toneMapped={false} />
+      </mesh>
+
+      {/* Radiant Portal Light Aperture */}
+      <mesh position={[0, 0, -0.05]}>
+        <planeGeometry args={[2.25, 3.05]} />
+        <meshBasicMaterial
+          color="#FFFFFF"
+          transparent
+          opacity={0.95}
+          toneMapped={false}
+        />
+      </mesh>
+
+      {/* Atmospheric Forward Beam (Crisp White) */}
+      <pointLight position={[0, 0, 1.5]} color="#FFFFFF" intensity={2.2} distance={18} decay={2} />
+    </group>
+  );
+}
+
+/**
  * SceneContainer (High-Performance Cyber Data Centre)
  * - Harmonious, non-clashing cinematic lighting (obsidian base, silver-cyan grazing, soft sage warmth)
  * - Zero-lag cluster hardware engine
@@ -126,12 +164,12 @@ export default function SceneContainer({
           });
         }}
       >
-        {/* Harmonious Obsidian Atmosphere: Blends seamlessly with website background */}
-        <color attach="background" args={['#0A0E10']} />
-        <fog attach="fog" args={['#0A0E10', 16, isLowTier ? 55 : 78]} />
+        {/* Architectural Monochrome Atmosphere with Slate Grey Nuance */}
+        <color attach="background" args={['#080A0C']} />
+        <fog attach="fog" args={['#080A0C', 22, isLowTier ? 65 : 90]} />
 
-        {/* 1. Neutral Deep Shadow Ambient: Preserves rich true blacks */}
-        <ambientLight color="#0F1416" intensity={0.52} />
+        {/* 1. Deep Neutral Shadow Ambient: Preserves blacks while enhancing metallic slate edges */}
+        <ambientLight color="#181B1F" intensity={0.65} />
 
         {/* 2. Harmonious Zone Lighting Controller */}
         <ZoneLightingController
@@ -200,6 +238,7 @@ export default function SceneContainer({
         <FoundationBay />
         <InteractiveServerRack onOpenModal={onOpenRackModal} />
         <ProjectionChamber isProjecting={isProjecting} />
+        <VanishingPointPortal />
 
         {/* NEX-01 Robot Companion */}
         <BdxRobot

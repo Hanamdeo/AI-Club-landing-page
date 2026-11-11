@@ -2,7 +2,169 @@
 
 import React, { useMemo, useRef, useEffect } from 'react';
 import * as THREE from 'three';
+import { useFrame } from '@react-three/fiber';
 import { usePerformanceTier } from '@/utils/ResponsivePerformanceManager';
+
+/**
+ * LuminousConduits
+ * High-intensity illuminated overhead conduit tubes from the Synapse data centre reference.
+ * Features continuous glowing neon pipes with dynamic streaming light packets racing down the aisle.
+ */
+function LuminousConduits() {
+  const pulseRefL = useRef();
+  const pulseRefR = useRef();
+  const numPulses = 8;
+  const pulseTransforms = useMemo(() => {
+    return Array.from({ length: numPulses }, (_, i) => ({
+      offset: i * (80 / numPulses),
+      speed: 14 + (i % 3) * 3,
+    }));
+  }, []);
+
+  const dummy = useMemo(() => new THREE.Object3D(), []);
+
+  useFrame(({ clock }) => {
+    const t = clock.getElapsedTime();
+    if (pulseRefL.current) {
+      pulseTransforms.forEach(({ offset, speed }, i) => {
+        const z = 14 - (((t * speed + offset) % 78));
+        dummy.position.set(-2.15, 2.95, z);
+        dummy.rotation.set(Math.PI / 2, 0, 0);
+        dummy.scale.set(0.18, 5.5, 0.18);
+        dummy.updateMatrix();
+        pulseRefL.current.setMatrixAt(i, dummy.matrix);
+      });
+      pulseRefL.current.instanceMatrix.needsUpdate = true;
+    }
+    if (pulseRefR.current) {
+      pulseTransforms.forEach(({ offset, speed }, i) => {
+        const z = 14 - (((t * speed + offset + 5.2) % 78));
+        dummy.position.set(2.15, 2.95, z);
+        dummy.rotation.set(Math.PI / 2, 0, 0);
+        dummy.scale.set(0.18, 5.5, 0.18);
+        dummy.updateMatrix();
+        pulseRefR.current.setMatrixAt(i, dummy.matrix);
+      });
+      pulseRefR.current.instanceMatrix.needsUpdate = true;
+    }
+  });
+
+  return (
+    <group>
+      {/* 1. Left Twin Conduits: Lower White Neon + Upper Slate Silver Core + Volumetric Aura */}
+      <group position={[-2.15, 2.95, -25]}>
+        {/* Structural cable tray chassis */}
+        <mesh position={[0, 0.12, 0]}>
+          <boxGeometry args={[0.26, 0.08, 95]} />
+          <meshStandardMaterial color="#11161B" roughness={0.5} metalness={0.7} />
+        </mesh>
+        {/* Primary lower glowing conduit pipe (Crisp White) */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.048, 0.048, 95, 16]} />
+          <meshBasicMaterial color="#FFFFFF" toneMapped={false} />
+        </mesh>
+        {/* Volumetric glow sheath (Soft Silver Aura) */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.13, 0.13, 95, 16]} />
+          <meshBasicMaterial
+            color="#F1F5F9"
+            transparent
+            opacity={0.32}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+            toneMapped={false}
+          />
+        </mesh>
+        {/* Parallel upper conduit pipe (Twin Rail in Slate Grey) */}
+        <mesh position={[0, 0.24, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.032, 0.032, 95, 16]} />
+          <meshBasicMaterial color="#94A3B8" toneMapped={false} />
+        </mesh>
+      </group>
+
+      {/* 2. Right Twin Conduits: Lower White Neon + Upper Slate Silver Core + Volumetric Aura */}
+      <group position={[2.15, 2.95, -25]}>
+        {/* Structural cable tray chassis */}
+        <mesh position={[0, 0.12, 0]}>
+          <boxGeometry args={[0.26, 0.08, 95]} />
+          <meshStandardMaterial color="#11161B" roughness={0.5} metalness={0.7} />
+        </mesh>
+        {/* Primary lower glowing conduit pipe (Crisp White) */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.048, 0.048, 95, 16]} />
+          <meshBasicMaterial color="#FFFFFF" toneMapped={false} />
+        </mesh>
+        {/* Volumetric glow sheath (Soft Silver Aura) */}
+        <mesh rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.13, 0.13, 95, 16]} />
+          <meshBasicMaterial
+            color="#F1F5F9"
+            transparent
+            opacity={0.32}
+            depthWrite={false}
+            blending={THREE.AdditiveBlending}
+            toneMapped={false}
+          />
+        </mesh>
+        {/* Parallel upper conduit pipe (Twin Rail in Slate Grey) */}
+        <mesh position={[0, 0.24, 0]} rotation={[Math.PI / 2, 0, 0]}>
+          <cylinderGeometry args={[0.032, 0.032, 95, 16]} />
+          <meshBasicMaterial color="#94A3B8" toneMapped={false} />
+        </mesh>
+      </group>
+
+      {/* Vertical Hanger Struts connecting Ceiling to Conduits */}
+      {Array.from({ length: 22 }).map((_, i) => {
+        const hz = 12 - i * 3.5;
+        return (
+          <group key={`hanger-${i}`}>
+            <mesh position={[-2.15, 3.6, hz]}>
+              <cylinderGeometry args={[0.012, 0.012, 1.2, 8]} />
+              <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.3} />
+            </mesh>
+            <mesh position={[2.15, 3.6, hz]}>
+              <cylinderGeometry args={[0.012, 0.012, 1.2, 8]} />
+              <meshStandardMaterial color="#334155" metalness={0.8} roughness={0.3} />
+            </mesh>
+          </group>
+        );
+      })}
+
+      {/* Longitudinal Center Ceiling Light Rails pointing to Vanishing Point */}
+      <mesh position={[-0.5, 4.15, -25]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.02, 0.02, 95, 8]} />
+        <meshBasicMaterial color="#E2E8F0" transparent opacity={0.55} toneMapped={false} />
+      </mesh>
+      <mesh position={[0.5, 4.15, -25]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.02, 0.02, 95, 8]} />
+        <meshBasicMaterial color="#E2E8F0" transparent opacity={0.55} toneMapped={false} />
+      </mesh>
+
+      {/* 3. Traveling High-Intensity Laser Pulse Streaks */}
+      <instancedMesh ref={pulseRefL} args={[null, null, numPulses]}>
+        <cylinderGeometry args={[1, 1, 1, 12]} />
+        <meshBasicMaterial
+          color="#FFFFFF"
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </instancedMesh>
+
+      <instancedMesh ref={pulseRefR} args={[null, null, numPulses]}>
+        <cylinderGeometry args={[1, 1, 1, 12]} />
+        <meshBasicMaterial
+          color="#FFFFFF"
+          transparent
+          opacity={0.9}
+          depthWrite={false}
+          blending={THREE.AdditiveBlending}
+        />
+      </instancedMesh>
+    </group>
+  );
+}
 
 /**
  * DataCentreCeiling (High-Performance GPU-Instanced Infrastructure)
@@ -271,6 +433,8 @@ export default function DataCentreCeiling() {
           opacity={0.22}
         />
       </mesh>
+      {/* 8. Synapse Reference: Overhead High-Intensity Luminous Conduits & Laser Streaks */}
+      <LuminousConduits />
     </group>
   );
 }

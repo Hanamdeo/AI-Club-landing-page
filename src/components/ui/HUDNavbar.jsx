@@ -80,7 +80,7 @@ export default function HUDNavbar({ onToggleTerminal }) {
           aria-label="AI Club Facility Root"
         >
 
-          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 group-hover:border-[#55DFFF]/60 flex items-center justify-center shrink-0 transition-colors bg-black shadow-[0_0_10px_rgba(85,223,255,0.2)]">
+          <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 group-hover:border-white/60 flex items-center justify-center shrink-0 transition-colors bg-black shadow-[0_0_10px_rgba(255,255,255,0.2)]">
             <Image
               src="/logo.png"
               alt="AI Club Logo"
