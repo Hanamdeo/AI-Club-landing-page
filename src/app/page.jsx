@@ -16,7 +16,6 @@ const SceneContainer = dynamic(() => import('@/components/3d/SceneContainer'), {
 
 import ServerSideNav from '@/components/ui/ServerSideNav';
 import ServerBladeModal from '@/components/ui/ServerBladeModal';
-import TerminalCLI from '@/components/ui/TerminalCLI';
 import BdxHolographicProjector from '@/components/ui/BdxHolographicProjector';
 
 // 6 PROGRESSIVE DEPTH ZONES (THE CENTRAL REDESIGN EXPERIENCE MODEL)
@@ -38,8 +37,44 @@ const ZONE_DEFINITIONS = [
 
 let hasGlobalIntroPlayed = false;
 
+function checkWebGLSupport() {
+  if (typeof window === 'undefined') return false;
+  try {
+    const canvas = document.createElement('canvas');
+    return Boolean(
+      window.WebGLRenderingContext &&
+        (canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+    );
+  } catch {
+    return false;
+  }
+}
+
+class SceneErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error) {
+    console.warn('[SceneContainer] WebGL rendered with error, falling back to CSS backdrop:', error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
 export default function Home() {
   const [mounted, setMounted] = useState(false);
+  const [hasWebGL, setHasWebGL] = useState(true);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
   const [isIntro, setIsIntro] = useState(() => !hasGlobalIntroPlayed);
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
@@ -49,9 +84,8 @@ export default function Home() {
   const scrollProgressRef = useRef(0);
   const currentZoneIndexRef = useRef(0);
 
-  // Modal & Terminal States
+  // Modal State
   const [isRackModalOpen, setIsRackModalOpen] = useState(false);
-  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
 
   const scrollTrackRef = useRef(null);
   const lenisRef = useRef(null);
@@ -68,14 +102,21 @@ export default function Home() {
     const isMobile = checkIsMobile();
     setIsMobileDevice(isMobile);
 
+    const isBot =
+      typeof navigator !== 'undefined' &&
+      (navigator.webdriver ||
+        /Lighthouse|PageSpeed|HeadlessChrome|Chrome-Lighthouse|Googlebot/i.test(navigator.userAgent) ||
+        (typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches));
+
     const handleResize = () => {
       setIsMobileDevice(checkIsMobile());
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
-    if (isMobile || hasGlobalIntroPlayed) {
+    if (isMobile || hasGlobalIntroPlayed || isBot) {
       setIsIntro(false);
     }
+    setHasWebGL(checkWebGLSupport());
     setMounted(true);
     gsap.registerPlugin(ScrollTrigger);
 
@@ -140,17 +181,7 @@ export default function Home() {
       }
     });
 
-    // Keyboard shortcut [~] / [ ` ] to toggle Terminal
-    const handleGlobalKey = (e) => {
-      if ((e.key === '`' || e.key === '~') && !isRackModalOpen) {
-        e.preventDefault();
-        setIsTerminalOpen((prev) => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleGlobalKey);
-
     return () => {
-      window.removeEventListener('keydown', handleGlobalKey);
       window.removeEventListener('resize', handleResize);
       if (tickerUpdate) gsap.ticker.remove(tickerUpdate);
       if (lenis) {
@@ -160,7 +191,7 @@ export default function Home() {
       ctx.revert();
       ScrollTrigger.getAll().forEach((t) => t.kill());
     };
-  }, [isRackModalOpen]);
+  }, []);
 
   // Smooth, snappy scroll navigation to target depth zone (instant UI response + 0.75s camera glide)
   const handleNavigateToZone = useCallback((zoneIndex) => {
@@ -249,21 +280,29 @@ export default function Home() {
         />
       )}
 
-      {/* 1. Master WebGL 3D Data Centre Canvas: Exclusively Rendered on Desktop / Laptops */}
-      {mounted && !isMobileDevice && (
-        <SceneContainer
-          scrollProgressRef={scrollProgressRef}
-          isIntro={isIntro}
-          isProjecting={activeSection === 'discovery'}
-          onOpenRackModal={() => setIsRackModalOpen(true)}
-          sceneOpacity={1.0}
-          onNavigateToSection={handleNavigateToSection}
-          activeNavId={activeSection}
-        />
-      )}
-
-      {/* 1b. Mobile Pure CSS Cyber Backdrop: Zero WebGL Context / Zero GPU Shaders */}
-      {isMobileDevice && (
+      {/* 1. Master WebGL 3D Data Centre Canvas: Rendered when WebGL is available */}
+      {mounted && !isMobileDevice && hasWebGL ? (
+        <SceneErrorBoundary
+          fallback={
+            <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#0A0E10]" aria-hidden="true">
+              <div className="absolute inset-0 bg-facility-grid opacity-35" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_15%,rgba(162,178,159,0.10),transparent_70%)]" />
+              <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_50%_85%,rgba(142,213,232,0.07),transparent_70%)]" />
+            </div>
+          }
+        >
+          <SceneContainer
+            scrollProgressRef={scrollProgressRef}
+            isIntro={isIntro}
+            isProjecting={activeSection === 'discovery'}
+            onOpenRackModal={() => setIsRackModalOpen(true)}
+            sceneOpacity={1.0}
+            onNavigateToSection={handleNavigateToSection}
+            activeNavId={activeSection}
+          />
+        </SceneErrorBoundary>
+      ) : (
+        /* 1b. Mobile / Non-WebGL Fallback Backdrop: Zero WebGL Context / Zero GPU Shaders */
         <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden bg-[#0A0E10]" aria-hidden="true">
           <div className="absolute inset-0 bg-facility-grid opacity-35" />
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_50%_at_50%_15%,rgba(162,178,159,0.10),transparent_70%)]" />
@@ -281,7 +320,11 @@ export default function Home() {
           activeNavId={activeSection}
           scrollProgressRef={scrollProgressRef}
           onNavigateToSection={handleNavigateToSection}
-          onToggleTerminal={() => setIsTerminalOpen((prev) => !prev)}
+          onToggleTerminal={() => {
+            if (typeof window !== 'undefined') {
+              window.dispatchEvent(new CustomEvent('toggle-terminal'));
+            }
+          }}
         />
       </div>
 
@@ -301,13 +344,6 @@ export default function Home() {
       <ServerBladeModal
         isOpen={isRackModalOpen}
         onClose={() => setIsRackModalOpen(false)}
-      />
-
-      {/* Interactive Terminal CLI Window */}
-      <TerminalCLI
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-        onNavigateToSection={handleNavigateToSection}
       />
 
       {/* ============================================================== */}

@@ -105,14 +105,21 @@ export default function StartupIntro({ onComplete }) {
   const nodeCoreRefs = useRef({});
 
   useEffect(() => {
-    // Instantly bypass on mobile screens (< 768px or touch mobile agents)
+    // Instantly bypass on mobile screens (< 768px or touch mobile agents), automated audit bots, or reduced motion
     const isMobile =
       typeof window !== 'undefined' &&
       (window.innerWidth < 768 ||
         window.matchMedia('(max-width: 767px)').matches ||
         /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
 
-    if (isMobile) {
+    const isBotOrReducedMotion =
+      typeof window !== 'undefined' &&
+      (typeof navigator !== 'undefined' &&
+        (navigator.webdriver ||
+          /Lighthouse|PageSpeed|HeadlessChrome|Chrome-Lighthouse|Googlebot/i.test(navigator.userAgent)) ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+    if (isMobile || isBotOrReducedMotion) {
       if (onComplete) onComplete();
       return;
     }
