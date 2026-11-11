@@ -1,0 +1,15 @@
+# AI Club — Madhav Institute of Technology & Science (MITS) Gwalior
+
+> Official collegiate artificial intelligence and computing research collective at MITS Gwalior. Developing student-led open-source research across machine learning, computer vision, robotics, and distributed systems.
+
+## Sections
+- [Events](/events): National hackathons, hands-on CUDA workshops, and machine learning reading groups.
+- [Projects](/projects): Open-source repositories, neural architectures, and hardware prototypes.
+- [Research & GD](/research): Student research labs, preprints, and active discussions.
+- [Team](/team): Core members, domain leads, faculty coordinators, and student developers.
+- [About](/about): Club mission, computational facility history, and technical infrastructure.
+- [Join](/join): Student membership intake, role tracks, and application information.
+
+## Primary Facility
+- Campus: Madhav Institute of Technology & Science (MITS-DU), Gwalior, Madhya Pradesh, India
+- Official Email: aiclub@mitsgwalior.in

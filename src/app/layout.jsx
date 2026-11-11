@@ -144,6 +144,12 @@ export default function RootLayout({ children }) {
         className="bg-[#0A0E10] text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal"
         style={{ backgroundColor: '#0A0E10', color: '#E6E2D8' }}
       >
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[99999] focus:px-4 focus:py-2 focus:bg-white focus:text-black focus:font-mono focus:text-xs focus:rounded focus:outline-none focus:ring-2 focus:ring-white"
+        >
+          Skip to main content
+        </a>
         <GlobalNavShell />
         {children}
         <GlobalFooterShell />

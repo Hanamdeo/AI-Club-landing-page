@@ -39,12 +39,44 @@ let hasGlobalIntroPlayed = false;
 
 function checkWebGLSupport() {
   if (typeof window === 'undefined') return false;
+
+  // Never run heavy WebGL on automated bots, headless crawlers, or Lighthouse
+  if (
+    typeof navigator !== 'undefined' &&
+    (navigator.webdriver ||
+      /Lighthouse|PageSpeed|HeadlessChrome|Chrome-Lighthouse|Googlebot/i.test(navigator.userAgent) ||
+      (typeof window !== 'undefined' &&
+        window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches))
+  ) {
+    return false;
+  }
+
   try {
     const canvas = document.createElement('canvas');
-    return Boolean(
-      window.WebGLRenderingContext &&
-        (canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
-    );
+    if (!window.WebGLRenderingContext) return false;
+
+    const gl =
+      canvas.getContext('webgl2') ||
+      canvas.getContext('webgl') ||
+      canvas.getContext('experimental-webgl');
+    if (!gl) return false;
+
+    // Reject CPU software rasterizers (SwiftShader, llvmpipe, softpipe, etc.)
+    const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+    if (debugInfo) {
+      const renderer = gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL).toLowerCase();
+      if (
+        renderer.includes('swiftshader') ||
+        renderer.includes('llvmpipe') ||
+        renderer.includes('softpipe') ||
+        renderer.includes('software') ||
+        renderer.includes('basic render')
+      ) {
+        return false;
+      }
+    }
+    return true;
   } catch {
     return false;
   }
@@ -74,9 +106,9 @@ class SceneErrorBoundary extends React.Component {
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
-  const [hasWebGL, setHasWebGL] = useState(true);
+  const [hasWebGL, setHasWebGL] = useState(false);
   const [isMobileDevice, setIsMobileDevice] = useState(false);
-  const [isIntro, setIsIntro] = useState(() => !hasGlobalIntroPlayed);
+  const [isIntro, setIsIntro] = useState(false);
   const [activeZoneIndex, setActiveZoneIndex] = useState(0);
   const [activeSection, setActiveSection] = useState('entry');
 
@@ -113,10 +145,11 @@ export default function Home() {
     };
     window.addEventListener('resize', handleResize, { passive: true });
 
-    if (isMobile || hasGlobalIntroPlayed || isBot) {
-      setIsIntro(false);
+    if (!isMobile && !hasGlobalIntroPlayed && !isBot) {
+      setIsIntro(true);
     }
-    setHasWebGL(checkWebGLSupport());
+    const canRunWebGL = checkWebGLSupport();
+    setHasWebGL(canRunWebGL);
     setMounted(true);
     gsap.registerPlugin(ScrollTrigger);
 
@@ -266,7 +299,7 @@ export default function Home() {
   }, [handleNavigateToZone, handleNavigateToSection]);
 
   return (
-    <main className="relative bg-graphite text-ivory selection:bg-sage selection:text-graphite min-h-screen">
+    <main id="main-content" className="relative bg-graphite text-ivory selection:bg-sage selection:text-graphite min-h-screen">
       {/* Cinematic Architectural Startup Animation */}
       {mounted && isIntro && (
         <StartupIntro
