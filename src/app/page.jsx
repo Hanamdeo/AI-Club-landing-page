@@ -176,12 +176,17 @@ export default function Home() {
         })
       );
     }
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const targetScroll = targetDef.center * maxScroll;
     if (lenisRef.current) {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const targetScroll = targetDef.center * maxScroll;
       lenisRef.current.scrollTo(targetScroll, { duration: 0.75 });
     } else {
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      const sectionIds = ['section-arrival', 'section-featured', 'section-community', 'section-research', 'section-projects', 'section-discovery'];
+      const targetId = sectionIds[zoneIndex] || 'section-arrival';
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, []);
 
@@ -199,13 +204,17 @@ export default function Home() {
         );
       }
     }
-    const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-    const targetP = typeof zProgress === 'number' ? zProgress : 0;
-    const targetScroll = targetP * maxScroll;
     if (lenisRef.current) {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const targetP = typeof zProgress === 'number' ? zProgress : 0;
+      const targetScroll = targetP * maxScroll;
       lenisRef.current.scrollTo(targetScroll, { duration: 0.75 });
     } else {
-      window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+      const targetId = id === 'entry' ? 'section-arrival' : `section-${id}`;
+      const el = document.getElementById(targetId);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
     }
   }, []);
 
@@ -303,103 +312,134 @@ export default function Home() {
       />
 
       {/* ============================================================== */}
-      {/* PROGRESSIVE DEPTH-BASED CONTENT REVEAL VIEWPORT (HUD OVERLAY)  */}
-      {/* Open, borderless holographic HUD directly floating in the 3D world */}
+      {/* CONTENT REVEAL VIEWPORT                                        */}
+      {/* - Mobile: Natural continuous document flow with full readability */}
+      {/* - Desktop: Progressive Depth-Based HUD Overlay (3D Camera Travel) */}
       {/* ============================================================== */}
-      <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
-        {/* ZONE 01: ENTRY ZONE (Welcome, AI Club Intro, Primary Actions) */}
-        <div
-          className={`w-full h-full absolute inset-0 transition-all duration-300 ease-out transform pointer-events-none ${
-            activeZoneIndex === 0
-              ? 'opacity-100 translate-y-0 scale-100 visible'
-              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
-          }`}
-        >
-          <Zone1Hero onExploreClick={() => handleNavigateToZone(1)} />
-        </div>
+      {isMobileDevice ? (
+        <div className="relative z-10 w-full flex flex-col gap-14 px-4 pt-20 pb-28">
+          <section id="section-arrival" className="w-full">
+            <Zone1Hero onExploreClick={() => handleNavigateToZone(1)} />
+          </section>
 
-        {/* ZONE 02: FEATURED ZONE (Highlighted server cluster & upcoming activities) */}
-        <div
-          className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
-            activeZoneIndex === 1
-              ? 'opacity-100 translate-y-0 scale-100 visible'
-              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
-          }`}
-        >
-          <div className="w-full max-w-6xl">
+          <section id="section-featured" className="w-full">
             <Zone2Featured onNextZone={() => handleNavigateToZone(2)} />
-          </div>
-        </div>
+          </section>
 
-        {/* ZONE 03: COMMUNITY ZONE (Discussions, reading circles & student culture) */}
-        <div
-          className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
-            activeZoneIndex === 2
-              ? 'opacity-100 translate-y-0 scale-100 visible'
-              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
-          }`}
-        >
-          <div className="w-full max-w-6xl">
+          <section id="section-community" className="w-full">
             <Zone3Community onNextZone={() => handleNavigateToZone(3)} />
-          </div>
-        </div>
+          </section>
 
-        {/* ZONE 04: RESEARCH ZONE (Intelligence Core, research tracks & preprints) */}
-        <div
-          className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
-            activeZoneIndex === 3
-              ? 'opacity-100 translate-y-0 scale-100 visible'
-              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
-          }`}
-        >
-          <div className="w-full max-w-6xl">
+          <section id="section-research" className="w-full">
             <Zone4Research onNextZone={() => handleNavigateToZone(4)} />
-          </div>
-        </div>
+          </section>
 
-        {/* ZONE 05: PROJECTS ZONE (Project showcase displays & hardware builds) */}
-        <div
-          className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
-            activeZoneIndex === 4
-              ? 'opacity-100 translate-y-0 scale-100 visible'
-              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
-          }`}
-        >
-          <div className="w-full max-w-6xl">
+          <section id="section-projects" className="w-full">
             <Zone5Projects onNextZone={() => handleNavigateToZone(5)} />
-          </div>
-        </div>
+          </section>
 
-        {/* ZONE 06: DISCOVERY / EXIT ZONE (Final landmark & navigation hub) */}
-        <div
-          className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
-            activeZoneIndex === 5
-              ? 'opacity-100 translate-y-0 scale-100 visible'
-              : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
-          }`}
-        >
-          <div className="w-full max-w-6xl">
+          <section id="section-discovery" className="w-full">
             <Zone6Discovery onReturnTop={() => handleNavigateToZone(0)} />
+          </section>
+        </div>
+      ) : (
+        <div className="fixed inset-0 pointer-events-none z-10 overflow-hidden">
+          {/* ZONE 01: ENTRY ZONE (Welcome, AI Club Intro, Primary Actions) */}
+          <div
+            className={`w-full h-full absolute inset-0 transition-all duration-300 ease-out transform pointer-events-none ${
+              activeZoneIndex === 0
+                ? 'opacity-100 translate-y-0 scale-100 visible'
+                : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
+            }`}
+          >
+            <Zone1Hero onExploreClick={() => handleNavigateToZone(1)} />
+          </div>
+
+          {/* ZONE 02: FEATURED ZONE (Highlighted server cluster & upcoming activities) */}
+          <div
+            className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
+              activeZoneIndex === 1
+                ? 'opacity-100 translate-y-0 scale-100 visible'
+                : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
+            }`}
+          >
+            <div className="w-full max-w-6xl">
+              <Zone2Featured onNextZone={() => handleNavigateToZone(2)} />
+            </div>
+          </div>
+
+          {/* ZONE 03: COMMUNITY ZONE (Discussions, reading circles & student culture) */}
+          <div
+            className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
+              activeZoneIndex === 2
+                ? 'opacity-100 translate-y-0 scale-100 visible'
+                : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
+            }`}
+          >
+            <div className="w-full max-w-6xl">
+              <Zone3Community onNextZone={() => handleNavigateToZone(3)} />
+            </div>
+          </div>
+
+          {/* ZONE 04: RESEARCH ZONE (Intelligence Core, research tracks & preprints) */}
+          <div
+            className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
+              activeZoneIndex === 3
+                ? 'opacity-100 translate-y-0 scale-100 visible'
+                : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
+            }`}
+          >
+            <div className="w-full max-w-6xl">
+              <Zone4Research onNextZone={() => handleNavigateToZone(4)} />
+            </div>
+          </div>
+
+          {/* ZONE 05: PROJECTS ZONE (Project showcase displays & hardware builds) */}
+          <div
+            className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
+              activeZoneIndex === 4
+                ? 'opacity-100 translate-y-0 scale-100 visible'
+                : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
+            }`}
+          >
+            <div className="w-full max-w-6xl">
+              <Zone5Projects onNextZone={() => handleNavigateToZone(5)} />
+            </div>
+          </div>
+
+          {/* ZONE 06: DISCOVERY / EXIT ZONE (Final landmark & navigation hub) */}
+          <div
+            className={`w-full h-full absolute inset-0 flex items-center justify-center p-4 sm:p-6 md:p-8 transition-all duration-200 ease-out transform ${
+              activeZoneIndex === 5
+                ? 'opacity-100 translate-y-0 scale-100 visible'
+                : 'opacity-0 translate-y-8 scale-95 invisible pointer-events-none'
+            }`}
+          >
+            <div className="w-full max-w-6xl">
+              <Zone6Discovery onReturnTop={() => handleNavigateToZone(0)} />
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* ============================================================== */}
       {/* VIRTUAL DEPTH SCROLL TRACK (DRIVES 3D TRAVEL & ZONE DISCOVERY) */}
-      {/* 600vh total height = ~100vh of depth travel per zone           */}
+      {/* Rendered ONLY on desktop to drive 3D WebGL camera depth        */}
       {/* ============================================================== */}
-      <div ref={scrollTrackRef} className="relative w-full h-[600vh] pointer-events-none">
-        {/* Invisible spatial waypoints for accessibility & screen readers */}
-        <div className="sr-only">
-          <h2>Data Centre Facility Corridor</h2>
-          <p>Zone 1: Entry Threshold</p>
-          <p>Zone 2: Featured Events & Hackathons</p>
-          <p>Zone 3: Community Discussions & Working Groups</p>
-          <p>Zone 4: Research Labs & Intelligence Core</p>
-          <p>Zone 5: Project Showcase & Open Source Builds</p>
-          <p>Zone 6: Discovery Hub & Membership Intake</p>
+      {!isMobileDevice && (
+        <div ref={scrollTrackRef} className="relative w-full h-[600vh] pointer-events-none">
+          {/* Invisible spatial waypoints for accessibility & screen readers */}
+          <div className="sr-only">
+            <h2>Data Centre Facility Corridor</h2>
+            <p>Zone 1: Entry Threshold</p>
+            <p>Zone 2: Featured Events & Hackathons</p>
+            <p>Zone 3: Community Discussions & Working Groups</p>
+            <p>Zone 4: Research Labs & Intelligence Core</p>
+            <p>Zone 5: Project Showcase & Open Source Builds</p>
+            <p>Zone 6: Discovery Hub & Membership Intake</p>
+          </div>
         </div>
-      </div>
+      )}
     </main>
   );
 }

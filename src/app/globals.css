@@ -723,6 +723,12 @@ html, body {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
   }
+
+  /* 6. Expand cards naturally on mobile so users can scroll and read all content */
+  .safe-viewport-card {
+    max-height: none !important;
+    overflow-y: visible !important;
+  }
 }
 
 
