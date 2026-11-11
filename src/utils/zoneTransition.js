@@ -81,31 +81,15 @@ export function getZoneTransitionState(rawP = 0, isReducedMotion = false) {
   }
 
   // 1. Cluster Transforms (Slide X and Opacity)
-  // Cluster 1: Active in Zones 1 & 2 (p: 0.0 to 0.30)
-  const c1Slide = Math.min(maxSlide, Math.max(0, (p - 0.20) * 3.0 * maxSlide));
-  const c1Opacity = Math.max(0.18, 1.0 - Math.max(0, (p - 0.20) * 2.5));
+  // Majestic continuous data centre corridor: all clusters fully visible and aligned
+  const c1Slide = 0;
+  const c1Opacity = 1.0;
 
-  // Cluster 2: Active in Zones 2, 3, & 4 (p: 0.25 to 0.65)
-  let c2Slide = 0;
-  let c2Opacity = 1.0;
-  if (p < 0.25) {
-    const t = (0.25 - p) / 0.25;
-    c2Slide = t * maxSlide;
-    c2Opacity = 0.18 + (1 - t) * 0.82;
-  } else if (p > 0.65) {
-    const t = Math.min(1, (p - 0.65) / 0.20);
-    c2Slide = t * maxSlide;
-    c2Opacity = 1.0 - t * 0.82;
-  }
+  const c2Slide = 0;
+  const c2Opacity = 1.0;
 
-  // Cluster 3: Active in Zones 4, 5, & 6 (p: 0.60 to 1.0)
-  let c3Slide = 0;
-  let c3Opacity = 1.0;
-  if (p < 0.65) {
-    const t = Math.min(1, (0.65 - p) / 0.25);
-    c3Slide = t * maxSlide;
-    c3Opacity = 0.18 + (1 - t) * 0.82;
-  }
+  const c3Slide = 0;
+  const c3Opacity = 1.0;
 
   // 2. Dynamic Lighting Targets (Harmonious 5200K Architectural Spectrum)
   // Light position glides smoothly along the corridor from Z = +4 to Z = -45

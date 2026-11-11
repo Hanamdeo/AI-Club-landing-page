@@ -78,20 +78,20 @@ export default function DataCentreFloor() {
 
   return (
     <group position={[0, 0, 0]}>
-      {/* 1. Main Raised Floor Base: Anti-static semi-matte slate-graphite epoxy (no harsh specular blowout) */}
+      {/* 1. Main Raised Floor Base: Glossy reflective monochrome epoxy finish */}
       <mesh position={[0, -0.01, -25]} rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
         <planeGeometry args={[11.5, 95]} />
         <meshStandardMaterial
-          color="#151A1B"
-          roughness={0.58}
-          metalness={0.35}
-          envMapIntensity={0.4}
+          color="#07090C"
+          roughness={0.22}
+          metalness={0.75}
+          envMapIntensity={0.8}
         />
       </mesh>
 
-      {/* 2. Raised Floor 600mm Tile Grid Seams (Clear metallic joints) */}
+      {/* 2. Raised Floor 600mm Tile Grid Seams (Clear metallic slate joints) */}
       <gridHelper
-        args={[95, 76, '#323E40', '#222B2D']}
+        args={[95, 76, '#262D35', '#12161A']}
         position={[0, 0.003, -25]}
       />
 
@@ -103,8 +103,8 @@ export default function DataCentreFloor() {
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial
-          color="#252F30"
-          roughness={0.4}
+          color="#161B20"
+          roughness={0.35}
           metalness={0.7}
         />
       </instancedMesh>
@@ -117,50 +117,73 @@ export default function DataCentreFloor() {
       >
         <planeGeometry args={[1, 1]} />
         <meshStandardMaterial
-          color="#161B1C"
-          roughness={0.5}
+          color="#11151A"
+          roughness={0.4}
           metalness={0.6}
         />
       </instancedMesh>
 
-      {/* 5. Central Cold Aisle Floor Demarcation Guide Strips (Sage Green) */}
-      {/* Left guide strip */}
-      <mesh position={[-1.72, 0.005, -25]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[0.04, 95]} />
-        <meshBasicMaterial color="#E2E8F0" transparent opacity={0.65} />
+      {/* 5. Monochrome Reference: Dual Glowing White Runway Guide Lines (X = -0.85 and X = +0.85) */}
+      <mesh position={[-0.85, 0.007, -25]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[0.025, 95]} />
+        <meshBasicMaterial color="#FFFFFF" transparent opacity={0.70} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* Right guide strip */}
-      <mesh position={[1.72, 0.005, -25]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[0.04, 95]} />
-        <meshBasicMaterial color="#E2E8F0" transparent opacity={0.65} />
+      <mesh position={[0.85, 0.007, -25]} rotation={[-Math.PI / 2, 0, 0]}>
+        <planeGeometry args={[0.025, 95]} />
+        <meshBasicMaterial color="#FFFFFF" transparent opacity={0.70} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
 
-      {/* Aisle Center Orientation Line */}
-      <mesh position={[0, 0.004, -25]} rotation={[-Math.PI / 2, 0, 0]}>
-        <planeGeometry args={[0.02, 95]} />
-        <meshBasicMaterial color="#3E4C4E" transparent opacity={0.7} />
-      </mesh>
+      {/* 6. Monochrome Reference: Stepped Illuminated Floor Tiles Heading into Distance */}
+      {Array.from({ length: 18 }).map((_, i) => {
+        const z = 12 - i * 4.0;
+        return (
+          <group key={`step-tile-${i}`} position={[0, 0.006, z]} rotation={[-Math.PI / 2, 0, 0]}>
+            {/* Outer Slate Silver Radiance Frame */}
+            <mesh>
+              <planeGeometry args={[0.92, 0.38]} />
+              <meshBasicMaterial
+                color="#94A3B8"
+                transparent
+                opacity={0.45}
+                depthWrite={false}
+                blending={THREE.AdditiveBlending}
+              />
+            </mesh>
+            {/* Inner High-Lumen White Core */}
+            <mesh position={[0, 0, 0.001]}>
+              <planeGeometry args={[0.76, 0.24]} />
+              <meshBasicMaterial
+                color="#FFFFFF"
+                transparent
+                opacity={0.92}
+                depthWrite={false}
+                blending={THREE.AdditiveBlending}
+              />
+            </mesh>
+          </group>
+        );
+      })}
 
       {/* Stenciled Threshold Placard at Aisle Entrance */}
-      <group position={[0, 0.007, 8]} rotation={[-Math.PI / 2, 0, 0]}>
+      <group position={[0, 0.008, 9]} rotation={[-Math.PI / 2, 0, 0]}>
         <mesh>
           <planeGeometry args={[2.4, 0.14]} />
-          <meshBasicMaterial color="#1A2122" />
+          <meshBasicMaterial color="#0A0E12" />
         </mesh>
         <mesh position={[0, 0, 0.001]}>
           <planeGeometry args={[2.34, 0.09]} />
-          <meshBasicMaterial color="#E2E8F0" transparent opacity={0.85} />
+          <meshBasicMaterial color="#FFFFFF" transparent opacity={0.85} />
         </mesh>
       </group>
 
-      {/* Underfloor Cold Air Plenum Upward Glow along Racks */}
+      {/* Underfloor Cold Air Plenum Upward Glow along Racks (Cool Slate Grey) */}
       {[-2.05, 2.05].map((x) =>
         [6, -6, -18, -30, -42].map((z, idx) => (
           <pointLight
             key={`plenum-glow-${x}-${idx}`}
             position={[x, 0.15, z]}
-            color="#8FA89B"
-            intensity={0.42}
+            color="#94A3B8"
+            intensity={0.35}
             distance={4.2}
             decay={2}
           />

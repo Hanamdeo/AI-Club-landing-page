@@ -12,14 +12,14 @@ function lerpAngle(from, to, t) {
   return from + shortest * t;
 }
 
-// Facility corridor spline control points across 6 Progressive Depth Zones (Centrally Aligned)
+// Facility corridor spline control points across 6 Progressive Depth Zones (Right Docked on Desktop)
 const DESKTOP_CONTROL_POINTS = [
-  new THREE.Vector3(0.00, 1.45, 8.0),    // p = 0.00: Zone 01 Entry threshold (centered)
-  new THREE.Vector3(0.00, 1.40, -1.0),   // p = 0.20: Zone 02 Featured display (centered)
-  new THREE.Vector3(0.00, 1.35, -13.0),  // p = 0.40: Zone 03 Community collaborative aisle (centered)
-  new THREE.Vector3(0.00, 1.30, -24.0),  // p = 0.60: Zone 04 Research intelligence core (centered)
-  new THREE.Vector3(0.00, 1.25, -35.0),  // p = 0.80: Zone 05 Projects hardware archive (centered)
-  new THREE.Vector3(0.00, 1.20, -45.0),  // p = 1.00: Zone 06 Discovery final landmark hub (centered)
+  new THREE.Vector3(1.35, 1.20, 7.8),    // p = 0.00: Zone 01 Entry threshold (docked right, corridor completely clear)
+  new THREE.Vector3(1.20, 1.20, -1.0),   // p = 0.20: Zone 02
+  new THREE.Vector3(1.10, 1.20, -13.0),  // p = 0.40: Zone 03
+  new THREE.Vector3(1.05, 1.20, -24.0),  // p = 0.60: Zone 04
+  new THREE.Vector3(1.00, 1.15, -35.0),  // p = 0.80: Zone 05
+  new THREE.Vector3(0.00, 1.15, -45.0),  // p = 1.00: Zone 06
 ];
 
 const MOBILE_CONTROL_POINTS = [
@@ -49,7 +49,7 @@ function getIdleAngle() {
  * - High-gloss automotive clearcoat pearl white finish with studio reflections
  */
 export default function BdxRobot({
-  scale = 0.94,
+  scale = 0.72,
   isStatic = false,
   hoverMode = false,
   isIntro = false,
@@ -132,7 +132,7 @@ export default function BdxRobot({
   const progressSmoothed = useRef(0);
   const prevProgress = useRef(0);
   const smoothedVelocity = useRef(0);
-  const currentPos = useRef(new THREE.Vector3(0.00, 1.45, 8.0));
+  const currentPos = useRef(new THREE.Vector3(1.35, 1.20, 7.8));
   const currentRotY = useRef(0.0);
   const currentPitchX = useRef(0);
   const currentRollZ = useRef(0);
