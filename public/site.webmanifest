@@ -1,0 +1,28 @@
+{
+  "name": "AI CLUB — Madhav Institute of Technology & Science",
+  "short_name": "AI Club MITS",
+  "description": "Official Artificial Intelligence & Computing Research Club at MITS Gwalior. Exploring cutting-edge machine learning, computer vision, embodied robotics, and distributed systems with student-led open source engineering.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0A0E10",
+  "theme_color": "#0A0E10",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
+

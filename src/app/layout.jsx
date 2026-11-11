@@ -2,6 +2,15 @@ import localFont from 'next/font/local';
 import './globals.css';
 import GlobalNavShell from '@/components/ui/GlobalNavShell';
 import GlobalFooterShell from '@/components/ui/GlobalFooterShell';
+import {
+  SITE_URL,
+  DEFAULT_SITE_TITLE,
+  SITE_NAME,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_KEYWORDS,
+  getOrganizationSchema,
+  getWebSiteSchema,
+} from '@/lib/seo';
 
 // Local Display Font: LaBeouf
 const labeouf = localFont({
@@ -32,39 +41,105 @@ const labeouf = localFont({
 });
 
 export const metadata = {
-  title: 'AI CLUB — Madhav Institute of Technology & Science',
-  description:
-    'Explore the collegiate artificial intelligence research collective at MITS Gwalior. 3D facility journey with robotic companion NEX-01, interactive research archives, and open student engineering.',
-  keywords: [
-    'AI Club',
-    'NEX-01',
-    'BDX-01',
-    'Data Centre',
-    'Machine Learning',
-    'Deep Learning',
-    'Generative AI',
-    'Computer Vision',
-    'Student Research',
-    'MITS Gwalior',
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: DEFAULT_SITE_TITLE,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: DEFAULT_DESCRIPTION,
+  applicationName: 'AI Club MITS',
+  authors: [
+    { name: 'AI Club MITS Gwalior', url: SITE_URL },
+    { name: 'Madhav Institute of Technology and Science', url: 'https://mitsgwalior.in' },
   ],
+  generator: 'Next.js',
+  keywords: DEFAULT_KEYWORDS,
+  creator: 'AI Club MITS Gwalior',
+  publisher: 'Madhav Institute of Technology & Science',
+  category: 'technology',
+  classification: 'Educational & Research Organization',
+  alternates: {
+    canonical: '/',
+  },
   icons: {
-    icon: '/logo.png',
-    apple: '/logo.png',
+    icon: [
+      { url: '/logo.png', sizes: '32x32', type: 'image/png' },
+      { url: '/logo.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/logo.png', sizes: '180x180', type: 'image/png' },
+    ],
+    shortcut: '/logo.png',
+  },
+  manifest: '/manifest.json',
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    alternateLocale: 'en_IN',
+    url: SITE_URL,
+    siteName: SITE_NAME,
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'AI CLUB — Madhav Institute of Technology & Science Official Preview',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: DEFAULT_SITE_TITLE,
+    description: DEFAULT_DESCRIPTION,
+    images: ['/og-image.png'],
+    creator: '@aiclub_mits',
+    site: '@aiclub_mits',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
 };
 
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
+  themeColor: '#0A0E10',
 };
 
 export default function RootLayout({ children }) {
+  const organizationSchema = getOrganizationSchema();
+  const webSiteSchema = getWebSiteSchema();
+
   return (
     <html
       lang="en"
       className={`dark bg-[#0A0E10] text-[#E6E2D8] ${labeouf.variable}`}
       style={{ backgroundColor: '#0A0E10', color: '#E6E2D8', colorScheme: 'dark' }}
     >
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(organizationSchema),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(webSiteSchema),
+          }}
+        />
+      </head>
       <body
         className="bg-[#0A0E10] text-ivory font-sans antialiased selection:bg-sage selection:text-graphite font-feature-normal"
         style={{ backgroundColor: '#0A0E10', color: '#E6E2D8' }}
