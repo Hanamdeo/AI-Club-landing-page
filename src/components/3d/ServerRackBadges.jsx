@@ -149,11 +149,11 @@ export default function ServerRackBadges({
               />
             </mesh>
 
-            {/* 2. Emissive Diode Indicator (Zero-cost emissive, no point light recompiles) */}
+            {/* 2. Emissive Diode Indicator (Monochrome Neutral) */}
             <mesh position={[htmlOffsetX * 0.8, 0, 0]}>
               <sphereGeometry args={[0.024, 10, 10]} />
               <meshBasicMaterial
-                color={isHighlighted ? '#A2B29F' : '#475558'}
+                color={isHighlighted ? '#FFFFFF' : '#475558'}
               />
             </mesh>
 
@@ -168,8 +168,8 @@ export default function ServerRackBadges({
                 onClick={(e) => handleBadgeClick(node, e)}
                 className={`group flex items-center gap-2.5 px-3 py-1.5 rounded-full select-none cursor-pointer transition-all duration-200 font-sans whitespace-nowrap shadow-[0_4px_24px_rgba(0,0,0,0.5)] ${
                   isHighlighted
-                    ? 'bg-[#101415]/95 border border-sage/80 text-ivory ring-1 ring-sage/30 shadow-sage-glow'
-                    : 'bg-[#101415]/80 backdrop-blur-md border border-white/[0.08] text-ivory/80 hover:border-sage/50 hover:text-ivory hover:bg-[#161B1C]'
+                    ? 'bg-[#0A1016]/95 border border-[#38BDF8]/70 text-white ring-1 ring-[#38BDF8]/40 shadow-[0_0_20px_rgba(56,189,248,0.25)]'
+                    : 'bg-[#0C1218]/80 backdrop-blur-md border border-white/[0.12] text-slate-200 hover:border-[#38BDF8]/50 hover:text-white hover:bg-[#101822]'
                 }`}
                 title={`Server Node ${node.code}: ${node.label} — Click to Scroll`}
               >
@@ -177,10 +177,21 @@ export default function ServerRackBadges({
                 <span
                   className={`w-1.5 h-1.5 rounded-full transition-all shrink-0 ${
                     isHighlighted
-                      ? 'bg-sage shadow-[0_0_8px_#A2B29F]'
-                      : 'bg-white/25 group-hover:bg-white/50'
+                      ? 'bg-[#38BDF8] shadow-[0_0_8px_#38BDF8]'
+                      : 'bg-white/30 group-hover:bg-[#38BDF8]/80'
                   }`}
                 />
+
+                {/* Cyber Blue Server Node Number */}
+                <span
+                  className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded transition-all ${
+                    isHighlighted
+                      ? 'bg-[#00A3FF]/25 text-[#38BDF8] border border-[#38BDF8]/50 shadow-[0_0_8px_rgba(0,163,255,0.35)]'
+                      : 'bg-white/[0.06] text-slate-400 border border-white/[0.08] group-hover:text-[#38BDF8] group-hover:border-[#38BDF8]/40'
+                  }`}
+                >
+                  {node.code}
+                </span>
 
                 {/* Section Name */}
                 <span className="text-xs font-semibold tracking-wide">
@@ -189,12 +200,12 @@ export default function ServerRackBadges({
 
                 {/* Robot Proximity Badge or Chevron */}
                 {isRobotNear ? (
-                  <div className="flex items-center gap-1 text-[9px] font-mono text-sage bg-sage/15 px-1.5 py-0.5 rounded-full animate-pulse">
-                    <Bot className="w-3 h-3 text-sage" />
+                  <div className="flex items-center gap-1 text-[9px] font-mono text-[#38BDF8] bg-[#00A3FF]/15 px-1.5 py-0.5 rounded-full border border-[#00A3FF]/30 animate-pulse">
+                    <Bot className="w-3 h-3 text-[#38BDF8]" />
                     <span className="hidden sm:inline">ROBOT</span>
                   </div>
                 ) : (
-                  <ChevronRight className="w-3 h-3 text-sage/60 group-hover:text-sage group-hover:translate-x-0.5 transition-all" />
+                  <ChevronRight className="w-3 h-3 text-slate-400 group-hover:text-[#38BDF8] group-hover:translate-x-0.5 transition-all" />
                 )}
               </div>
             </Html>
