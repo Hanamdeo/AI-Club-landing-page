@@ -55,18 +55,18 @@ export default function DataCentreSignage() {
             <meshStandardMaterial color="#8E9999" roughness={0.2} metalness={0.9} />
           </mesh>
 
-          {/* Top Status LED Bar (Sage Green) */}
+          {/* Top Status LED Bar (Vibrant Cyber Blue) */}
           <mesh position={[0, 0.1, 0.023]}>
-            <planeGeometry args={[2.6, 0.015]} />
-            <meshBasicMaterial color="#A2B29F" />
+            <planeGeometry args={[2.6, 0.018]} />
+            <meshBasicMaterial color="#00A3FF" toneMapped={false} />
           </mesh>
 
-          {/* Glowing Indicator Pip */}
+          {/* Glowing Indicator Pip (Electric Cyan Blue with Halo) */}
           <mesh position={[-1.2, 0, 0.024]}>
-            <circleGeometry args={[0.025, 16]} />
-            <meshBasicMaterial color="#A2B29F" />
+            <circleGeometry args={[0.028, 24]} />
+            <meshBasicMaterial color="#38BDF8" toneMapped={false} />
           </mesh>
-          <pointLight position={[-1.2, 0, 0.06]} color="#A2B29F" intensity={0.3} distance={1.2} />
+          <pointLight position={[-1.2, 0, 0.08]} color="#00A3FF" intensity={0.9} distance={2.0} decay={2} />
 
           {/* Dual Sided: Facing down the corridor in both directions */}
           <mesh position={[0, 0, -0.021]} rotation={[0, Math.PI, 0]}>
@@ -74,8 +74,12 @@ export default function DataCentreSignage() {
             <meshStandardMaterial color="#222828" roughness={0.5} metalness={0.5} />
           </mesh>
           <mesh position={[0, 0.1, -0.023]} rotation={[0, Math.PI, 0]}>
-            <planeGeometry args={[2.6, 0.015]} />
-            <meshBasicMaterial color="#A2B29F" />
+            <planeGeometry args={[2.6, 0.018]} />
+            <meshBasicMaterial color="#00A3FF" toneMapped={false} />
+          </mesh>
+          <mesh position={[1.2, 0, -0.024]} rotation={[0, Math.PI, 0]}>
+            <circleGeometry args={[0.028, 24]} />
+            <meshBasicMaterial color="#38BDF8" toneMapped={false} />
           </mesh>
         </group>
       ))}

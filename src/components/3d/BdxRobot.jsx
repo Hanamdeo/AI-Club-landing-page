@@ -192,10 +192,10 @@ export default function BdxRobot({
     // 1. Transparent Visor Canvas Background (seamlessly displays curved obsidian visor glass without rectangular box)
     ctx.clearRect(0, 0, w, h);
 
-    // Glowing Monochrome White Stroke Helper
+    // Glowing Stroke Helper with subtle Electric Cyan/Blue atmospheric rim
     const drawGlowStroke = (drawFn, color = '#FFFFFF', coreColor = '#FFFFFF', lineWidth = 20, glowWidth = 34) => {
       ctx.save();
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.28)';
+      ctx.strokeStyle = 'rgba(0, 163, 255, 0.45)';
       ctx.lineWidth = glowWidth;
       ctx.lineCap = 'round';
       ctx.lineJoin = 'round';
@@ -216,12 +216,12 @@ export default function BdxRobot({
       ctx.restore();
     };
 
-    // Cheerful smiling arch eye ◠
+    // Cheerful smiling arch eye ◠ with crisp white core & subtle cyan-blue glow
     const drawArchEye = (cx, cy, radius = 76, startA = Math.PI * 0.12, endA = Math.PI * 0.88) => {
       drawGlowStroke(() => {
         ctx.beginPath();
-        ctx.arc(cx, cy, radius, Math.PI + startA, Math.PI + endA, false);
-      }, '#FFFFFF', '#FFFFFF', 20, 34);
+        ctx.arc(cx, cy, radius, startA, endA, false);
+      }, '#E0F2FE', '#FFFFFF', 20, 36);
     };
 
     // Sad downturned arch eye ◡
@@ -988,7 +988,7 @@ export default function BdxRobot({
   const cyanEmissiveMat = useMemo(
     () =>
       new THREE.MeshBasicMaterial({
-        color: '#FFFFFF',
+        color: '#00A3FF',
       }),
     []
   );
@@ -996,9 +996,9 @@ export default function BdxRobot({
   const cyanGlassMat = useMemo(
     () =>
       new THREE.MeshPhysicalMaterial({
-        color: '#E0E6ED',
-        emissive: '#A0AEC0',
-        emissiveIntensity: 0.25,
+        color: '#38BDF8',
+        emissive: '#0284C7',
+        emissiveIntensity: 0.35,
         roughness: 0.12,
         metalness: 0.35,
         transmission: 0.85,
@@ -1090,8 +1090,8 @@ export default function BdxRobot({
             </mesh>
           )}
 
-          {/* Forward Soft Eye Glow Projection - Pure White */}
-          <pointLight position={[0, 0.04, 0.75]} color="#FFFFFF" intensity={1.2} distance={2.5} decay={2} />
+          {/* Forward Soft Eye Glow Projection - Ambient Cyber Cyan */}
+          <pointLight position={[0, 0.04, 0.75]} color="#60A5FA" intensity={1.1} distance={2.5} decay={2} />
 
           {/* Broad Transparent Click Target Sphere over the Face & Helmet */}
           <mesh
@@ -1261,8 +1261,8 @@ export default function BdxRobot({
               <torusGeometry args={[0.15, 0.014, 16, 36]} />
             </mesh>
 
-            {/* Soft Downward Propulsion Light */}
-            <pointLight position={[0, -0.22, 0]} color="#E2E8F0" intensity={1.2} distance={2.4} decay={2} />
+            {/* Soft Downward Propulsion Light - Subtle Hover Cyan */}
+            <pointLight position={[0, -0.22, 0]} color="#38BDF8" intensity={1.3} distance={2.5} decay={2} />
           </group>
 
           {/* ============================================================ */}

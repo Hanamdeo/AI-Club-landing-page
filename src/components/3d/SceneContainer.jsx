@@ -51,7 +51,7 @@ function ZoneLightingController({ scrollProgress = 0, scrollProgressRef, isLowTi
         intensity={1.50}
       />
 
-      {/* 2. Cohesive Lateral Rack Grazing Light (Omitted on low tier to preserve mobile fillrate) */}
+      {/* 2. Cohesive Lateral Rack Grazing Light (Monochrome architectural white) */}
       {!isLowTier && (
         <directionalLight
           position={[0, 4.5, -15]}
