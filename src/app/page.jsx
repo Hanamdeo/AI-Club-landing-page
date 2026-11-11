@@ -58,19 +58,18 @@ export default function Home() {
 
   // Initialize GSAP & Lenis smooth scroll
   useEffect(() => {
-    const isMobile =
-      window.innerWidth < 768 ||
-      window.matchMedia('(max-width: 767px)').matches ||
-      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
+    const checkIsMobile = () => {
+      if (typeof window === 'undefined') return false;
+      const isNarrow = window.innerWidth < 768;
+      const isMobilePhoneUA = /Android.+Mobile|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      return isNarrow || (isMobilePhoneUA && window.innerWidth < 1024);
+    };
 
+    const isMobile = checkIsMobile();
     setIsMobileDevice(isMobile);
 
     const handleResize = () => {
-      const mob =
-        window.innerWidth < 768 ||
-        window.matchMedia('(max-width: 767px)').matches ||
-        /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mobile/i.test(navigator.userAgent);
-      setIsMobileDevice(mob);
+      setIsMobileDevice(checkIsMobile());
     };
     window.addEventListener('resize', handleResize, { passive: true });
 

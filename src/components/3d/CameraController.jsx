@@ -38,7 +38,8 @@ export default function CameraController({
           const aspect = width / height;
           containerAspectRef.current = aspect;
 
-          // Adaptive camera FOV & projection update for portrait mobile and ultrawides
+          // Adaptive camera FOV & projection update across all screen form factors:
+          // Mobile phones, foldables, tablets, laptops, desktop monitors, and 21:9 / 32:9 ultrawides
           if (camera.isPerspectiveCamera) {
             if (aspect < 0.75) {
               // Narrow portrait mobile (e.g. 375x812, 390x844): widen FOV slightly to frame both corridor walls
@@ -46,11 +47,17 @@ export default function CameraController({
             } else if (aspect < 1.0) {
               // Standard tablet / foldable portrait
               camera.fov = 55;
-            } else if (aspect > 2.2) {
-              // 21:9 or 32:9 ultrawide: slightly tighter vertical FOV for cinematic intimacy
-              camera.fov = 46;
+            } else if (aspect >= 1.0 && aspect < 1.35) {
+              // 4:3 / iPad / Surface displays
+              camera.fov = 52;
+            } else if (aspect > 2.35) {
+              // 32:9 Super Ultrawide (e.g. 5120x1440): tighter vertical FOV prevents distortion
+              camera.fov = 40;
+            } else if (aspect > 1.85) {
+              // 21:9 Ultrawide (e.g. 2560x1080, 3440x1440)
+              camera.fov = 45;
             } else {
-              // Standard 16:9 / 16:10 desktop & laptop
+              // Standard 16:9 / 16:10 desktop & laptop (1366x768, 1920x1080, 2560x1440, MacBook)
               camera.fov = 50;
             }
             camera.updateProjectionMatrix();
