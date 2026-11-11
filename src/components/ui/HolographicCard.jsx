@@ -151,7 +151,7 @@ export default function HolographicCard({
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={handleClick}
-      className={`group relative overflow-hidden focus-within:border-[#E2E8F0] focus-within:shadow-[0_0_24px_rgba(255, 255, 255, 0.35)] transition-all duration-300 ${
+      className={`group relative overflow-hidden focus-within:border-[#E2E8F0] focus-within:shadow-[0_0_24px_rgba(255,255,255,0.35)] transition-all duration-300 ${
         isClicked ? 'scale-[0.985]' : ''
       } ${className}`}
       style={{
@@ -200,7 +200,7 @@ export default function HolographicCard({
       <div
         className={`absolute inset-0 pointer-events-none z-20 rounded-2xl transition-opacity duration-300 ${
           isClicked
-            ? 'opacity-100 shadow-[inset_0_0_20px_rgba(255, 255, 255, 0.4),0_0_28px_rgba(255, 255, 255, 0.6)] border border-[#E2E8F0]'
+            ? 'opacity-100 shadow-[inset_0_0_20px_rgba(255,255,255,0.4),0_0_28px_rgba(255,255,255,0.6)] border border-[#E2E8F0]'
             : 'opacity-0'
         }`}
       />

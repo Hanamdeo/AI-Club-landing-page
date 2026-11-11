@@ -1,69 +1,110 @@
 /**
  * dateUtils.js
  * Comprehensive date parsing, formatting, and calculation utilities.
- * Handles comparison against current date (2026-11-04) to resolve event & discussion statuses.
+ * Anchored to Asia/Kolkata (IST: UTC+5:30) calendar days to avoid timezone shifts.
  */
 
-const REFERENCE_NOW = new Date('2026-11-04T23:15:00');
-
 /**
- * Returns the reference or current Date object
+ * Returns the current Date object
  */
 export function getNow() {
-  return typeof window !== 'undefined' ? new Date() : REFERENCE_NOW;
+  return new Date();
 }
 
 /**
- * Check if a date string is in the future
- * @param {string} dateStr - ISO date string (YYYY-MM-DD or full ISO)
+ * Parse YYYY-MM-DD or ISO date string into an IST end-of-day Date object
+ * @param {string} dateStr 
  */
-export function isUpcoming(dateStr) {
-  if (!dateStr) return false;
-  const target = new Date(dateStr);
-  if (isNaN(target.getTime())) return false;
-  // End of the day for date-only strings
-  target.setHours(23, 59, 59, 999);
-  return target.getTime() >= getNow().getTime();
+export function getEndOfDayIST(dateStr) {
+  if (!dateStr) return null;
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    // 23:59:59.999 IST = 18:29:59.999 UTC
+    return new Date(Date.UTC(year, month - 1, day, 18, 29, 59, 999));
+  }
+  const d = new Date(dateStr);
+  if (isNaN(d.getTime())) return null;
+  d.setHours(23, 59, 59, 999);
+  return d;
 }
 
 /**
- * Check if a date string is in the past
- * @param {string} dateStr
+ * Check if an event or date is in the future or currently running
+ * @param {string} dateStr - Start date (YYYY-MM-DD)
+ * @param {string} [endDateStr] - Optional end date (YYYY-MM-DD) for multi-day events
  */
-export function isPast(dateStr) {
-  if (!dateStr) return false;
-  const target = new Date(dateStr);
-  if (isNaN(target.getTime())) return false;
-  target.setHours(23, 59, 59, 999);
-  return target.getTime() < getNow().getTime();
+export function isUpcoming(dateStr, endDateStr) {
+  const targetEnd = getEndOfDayIST(endDateStr || dateStr);
+  if (!targetEnd) return false;
+  return targetEnd.getTime() >= getNow().getTime();
 }
 
 /**
- * Format a date string into an editorial readable string
- * e.g., "Nov 14, 2026" or "14 November 2026"
+ * Check if an event or date is completely concluded
+ * @param {string} dateStr - Start date (YYYY-MM-DD)
+ * @param {string} [endDateStr] - Optional end date (YYYY-MM-DD) for multi-day events
+ */
+export function isPast(dateStr, endDateStr) {
+  const targetEnd = getEndOfDayIST(endDateStr || dateStr);
+  if (!targetEnd) return false;
+  return targetEnd.getTime() < getNow().getTime();
+}
+
+/**
+ * Format a calendar date string into a consistent editorial string in Asia/Kolkata
+ * e.g., "15 Nov 2026" or "15 November 2026"
  */
 export function formatDate(dateStr, format = 'medium') {
   if (!dateStr) return '';
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const monthsLong = [
+      'January', 'February', 'March', 'April', 'May', 'June',
+      'July', 'August', 'September', 'October', 'November', 'December',
+    ];
+    if (format === 'short') return `${day} ${monthsShort[month - 1]}`;
+    if (format === 'full') return `${day} ${monthsLong[month - 1]} ${year}`;
+    return `${day} ${monthsShort[month - 1]} ${year}`;
+  }
+
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return dateStr;
 
-  const options =
-    format === 'short'
-      ? { month: 'short', day: 'numeric' }
-      : format === 'full'
-      ? { weekday: 'short', month: 'long', day: 'numeric', year: 'numeric' }
-      : { month: 'short', day: 'numeric', year: 'numeric' };
+  return new Intl.DateTimeFormat('en-IN', {
+    timeZone: 'Asia/Kolkata',
+    day: 'numeric',
+    month: format === 'full' ? 'long' : 'short',
+    year: format === 'short' ? undefined : 'numeric',
+  }).format(date);
+}
 
-  return new Intl.DateTimeFormat('en-US', options).format(date);
+/**
+ * Format a multi-day event range, e.g., "15–17 Nov 2026"
+ */
+export function formatEventDateRange(startDateStr, endDateStr) {
+  if (!startDateStr) return '';
+  if (!endDateStr || startDateStr === endDateStr) return formatDate(startDateStr);
+
+  if (/^\d{4}-\d{2}-\d{2}$/.test(startDateStr) && /^\d{4}-\d{2}-\d{2}$/.test(endDateStr)) {
+    const [sYear, sMonth, sDay] = startDateStr.split('-').map(Number);
+    const [eYear, eMonth, eDay] = endDateStr.split('-').map(Number);
+    const monthsShort = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    if (sYear === eYear && sMonth === eMonth) {
+      return `${sDay}–${eDay} ${monthsShort[sMonth - 1]} ${sYear}`;
+    }
+  }
+
+  return `${formatDate(startDateStr)} – ${formatDate(endDateStr)}`;
 }
 
 /**
  * Calculate human-friendly time remaining or elapsed
  */
-export function getRelativeTimeString(dateStr) {
+export function getRelativeTimeString(dateStr, endDateStr) {
   if (!dateStr) return '';
-  const target = new Date(dateStr);
-  if (isNaN(target.getTime())) return '';
+  const target = getEndOfDayIST(endDateStr || dateStr);
+  if (!target) return '';
 
   const now = getNow();
   const diffMs = target.getTime() - now.getTime();
@@ -78,4 +119,3 @@ export function getRelativeTimeString(dateStr) {
 
   return formatDate(dateStr);
 }
-

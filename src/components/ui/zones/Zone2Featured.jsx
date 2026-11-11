@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Calendar, ArrowRight, ArrowDown, Sparkles, MapPin, CheckCircle2 } from 'lucide-react';
-import { ZONE_OPERATIONS } from '@/data/clubData';
+import { getUpcomingEvents } from '@/lib/contentSelectors';
+import { formatEventDateRange } from '@/lib/dateUtils';
 import { audioManager } from '@/utils/audioManager';
 
 /**
@@ -13,6 +14,7 @@ import { audioManager } from '@/utils/audioManager';
  */
 export default function Zone2Featured({ onNextZone }) {
   const [registeredEvents, setRegisteredEvents] = useState([]);
+  const featuredEvents = useMemo(() => getUpcomingEvents().slice(0, 2), []);
 
   const handleRegister = (id) => {
     audioManager.playBeep(1100, 0.12);
@@ -22,7 +24,7 @@ export default function Zone2Featured({ onNextZone }) {
   };
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans safe-viewport-card custom-scrollbar pointer-events-auto">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-text font-sans safe-viewport-card custom-scrollbar pointer-events-auto">
       <div className="glass-panel p-6 sm:p-8 rounded-2xl relative shadow-[0_16px_48px_rgba(0,0,0,0.65)]">
         {/* Top Telemetry Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-5 border-b border-white/[0.12] text-[10px] font-mono">
@@ -52,8 +54,9 @@ export default function Zone2Featured({ onNextZone }) {
 
         {/* Featured Events Frosted Glass Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6 mb-6">
-          {ZONE_OPERATIONS.events.slice(0, 2).map((ev) => {
+          {featuredEvents.map((ev) => {
             const isRegistered = registeredEvents.includes(ev.id);
+            const dateDisplay = formatEventDateRange(ev.date, ev.endDate);
 
             return (
               <div
@@ -64,11 +67,11 @@ export default function Zone2Featured({ onNextZone }) {
                   {/* Badge & Date */}
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-white/[0.10] text-slate-200 border border-white/20 uppercase tracking-wider font-semibold">
-                      {ev.type}
+                      {ev.category}
                     </span>
                     <span className="text-xs font-mono text-slate-300 flex items-center gap-1.5 font-medium">
                       <Calendar className="w-3.5 h-3.5 text-white" />
-                      <span>{ev.date}</span>
+                      <span>{dateDisplay}</span>
                     </span>
                   </div>
 
@@ -90,23 +93,13 @@ export default function Zone2Featured({ onNextZone }) {
                     <span className="truncate">{ev.venue}</span>
                   </div>
 
-                  <button
-                    onClick={() => handleRegister(ev.id)}
-                    className={`px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 btn-tactile pointer-events-auto ${
-                      isRegistered
-                        ? 'bg-white/20 text-white border border-white/40 shadow-[0_0_12px_rgba(255,255,255,0.25)]'
-                        : 'bg-white/[0.08] hover:bg-white/[0.18] text-white border border-white/20 hover:border-white/50 shadow-[0_2px_8px_rgba(0,0,0,0.4)]'
-                    }`}
+                  <Link
+                    href={`/events/${ev.slug}`}
+                    className="px-3.5 py-1.5 rounded-lg text-xs font-mono font-semibold transition-all cursor-pointer flex items-center gap-1.5 shrink-0 btn-tactile pointer-events-auto bg-white/[0.08] hover:bg-white/[0.18] text-white border border-white/20 hover:border-white/50 shadow-[0_2px_8px_rgba(0,0,0,0.4)]"
                   >
-                    {isRegistered ? (
-                      <>
-                        <CheckCircle2 className="w-3.5 h-3.5 text-white" />
-                        <span>REGISTERED</span>
-                      </>
-                    ) : (
-                      <span>REGISTER NOW</span>
-                    )}
-                  </button>
+                    <span>VIEW EVENT</span>
+                    <ArrowRight className="w-3 h-3 text-white" />
+                  </Link>
                 </div>
               </div>
             );

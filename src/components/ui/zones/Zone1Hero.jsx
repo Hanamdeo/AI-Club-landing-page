@@ -24,7 +24,7 @@ export default function Zone1Hero({ onExploreClick }) {
   return (
     <section
       id="section-arrival"
-      className="relative w-full h-full min-h-[100svh] flex flex-col justify-between px-4 sm:px-6 md:px-10 lg:px-12 pt-20 sm:pt-24 pb-4 sm:pb-6 select-none font-sans"
+      className="relative w-full h-full min-h-[100svh] flex flex-col justify-between px-4 sm:px-6 md:px-10 lg:px-12 pt-20 sm:pt-24 pb-4 sm:pb-6 select-text font-sans"
     >
       {/* ============================================================== */}
       {/* MASTER HERO COMPOSITION - STRICTLY LEFT FLANK DOCKED           */}

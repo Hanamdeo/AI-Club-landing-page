@@ -58,7 +58,7 @@ const BLOB_VARIANTS = [
  */
 export default function CadreOrganicCard({ member, index = 0 }) {
   const variant = BLOB_VARIANTS[index % BLOB_VARIANTS.length];
-  const photoSrc = member.image || `/images/team/member-${index % 21}.jpg`;
+  const photoSrc = member.image || '/images/team/member-0.jpg';
 
   return (
     <div className="group relative flex flex-col items-center text-center transition-all duration-300 hover:-translate-y-1.5">
@@ -105,18 +105,31 @@ export default function CadreOrganicCard({ member, index = 0 }) {
         {member.name}
       </h3>
 
-      {/* 4. LinkedIn Profile Link with Official LinkedIn Brand Color (#0A66C2) */}
-      <a
-        href={member.linkedin || 'https://linkedin.com'}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#0A66C2] hover:text-[#2884E0] transition-colors group/link cursor-pointer px-2 py-0.5 rounded-md hover:bg-[#0A66C2]/10"
-      >
-        <Linkedin className="w-3.5 h-3.5 text-[#0A66C2] group-hover/link:text-[#2884E0] transition-colors shrink-0" />
-        <span className="underline underline-offset-4 decoration-[#0A66C2]/60 group-hover/link:decoration-[#2884E0]">
-          LinkedIn Profile
+      {/* 4. Contact / LinkedIn Link */}
+      {member.linkedin ? (
+        <a
+          href={member.linkedin}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 text-xs font-mono font-medium text-[#0A66C2] hover:text-[#2884E0] transition-colors group/link cursor-pointer px-2 py-0.5 rounded-md hover:bg-[#0A66C2]/10"
+        >
+          <Linkedin className="w-3.5 h-3.5 text-[#0A66C2] group-hover/link:text-[#2884E0] transition-colors shrink-0" />
+          <span className="underline underline-offset-4 decoration-[#0A66C2]/60 group-hover/link:decoration-[#2884E0]">
+            LinkedIn Profile
+          </span>
+        </a>
+      ) : member.email ? (
+        <a
+          href={`mailto:${member.email}`}
+          className="inline-flex items-center gap-1.5 text-[11px] font-mono text-slate-400 hover:text-white transition-colors px-2 py-0.5"
+        >
+          <span>{member.email}</span>
+        </a>
+      ) : (
+        <span className="text-[11px] font-mono text-slate-400">
+          {member.department || 'MITS Gwalior'}
         </span>
-      </a>
+      )}
     </div>
   );
 }

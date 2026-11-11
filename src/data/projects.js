@@ -16,6 +16,7 @@ export const PROJECTS = [
     liveDemo: null,
     featured: true,
     status: "Stable Production",
+    statusCode: "published",
     benchmarks: [
       { metric: "TTFT Reduction", value: "3.2x faster" },
       { metric: "Memory Overhead", value: "< 4.5% GPU VRAM" },
@@ -33,6 +34,7 @@ export const PROJECTS = [
     liveDemo: "https://omnisplat.aiclub.mitsgwalior.in",
     featured: true,
     status: "Active Research",
+    statusCode: "draft",
     benchmarks: [
       { metric: "Framerate", value: "60 FPS @ 1440p" },
       { metric: "Initialization", value: "< 850ms load" },
@@ -50,6 +52,7 @@ export const PROJECTS = [
     liveDemo: null,
     featured: false,
     status: "Clinical Prototype",
+    statusCode: "draft",
     benchmarks: [
       { metric: "F1 Score", value: "94.8% on MIMIC-IV" },
       { metric: "Hallucination Rate", value: "< 0.4%" },
@@ -66,6 +69,7 @@ export const PROJECTS = [
     liveDemo: null,
     featured: false,
     status: "Hardware Deployed",
+    statusCode: "published",
     benchmarks: [
       { metric: "Power Draw", value: "13.4 mW continuous" },
       { metric: "Inference Latency", value: "11.2 ms" },
@@ -83,10 +87,27 @@ export const PROJECTS = [
     liveDemo: "https://huggingface.co/aiclub-mits/indic-dialect-7b",
     featured: false,
     status: "Model Released",
+    statusCode: "published",
     benchmarks: [
       { metric: "Token Compression", value: "+38% efficiency" },
       { metric: "Hindi MMLU", value: "68.4% Acc" },
     ],
   },
+  {
+    id: "proj-06",
+    title: "VisionNav-V1: Monocular Visual Odometry for UAVs",
+    description: "Legacy monocular visual-inertial odometry pipeline using extended Kalman filtering. Maintained as an open educational benchmark.",
+    category: "Robotics & Perception",
+    contributors: ["Karan Patel", "Alumni Engineering Group"],
+    technologies: ["C++", "ROS 1", "OpenCV", "Eigen"],
+    github: "https://github.com/aiclub-mits/visionnav-v1",
+    liveDemo: null,
+    featured: false,
+    status: "Archived Build",
+    statusCode: "archived",
+    benchmarks: [
+      { metric: "Drift Error", value: "< 1.2% per 100m" },
+      { metric: "Status", value: "Benchmark Retained" },
+    ],
+  },
 ];
-

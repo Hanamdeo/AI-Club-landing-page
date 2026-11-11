@@ -95,8 +95,8 @@ export default function StaticFooter({ onOpenTerminal }) {
       {/* 2. ATMOSPHERIC FACILITY AMBIENCE                               */}
       {/* ============================================================== */}
       <div className="absolute inset-0 bg-facility-grid opacity-15 pointer-events-none" />
-      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.07)_0%,transparent_70%)] pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.05)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.07)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.05)_0%,transparent_70%)] pointer-events-none" />
 
       {/* ============================================================== */}
       {/* 3. MAIN 3-COLUMN EDITORIAL DECK                                */}
@@ -111,7 +111,7 @@ export default function StaticFooter({ onOpenTerminal }) {
             <div className="space-y-4">
               {/* Brand Logo & 3D Title */}
               <div className="flex items-center gap-3.5">
-                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[#FFFFFF]/40 flex items-center justify-center shadow-[0_0_24px_rgba(255, 255, 255,0.3)] shrink-0 bg-black group">
+                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-[#FFFFFF]/40 flex items-center justify-center shadow-[0_0_24px_rgba(255,255,255,0.3)] shrink-0 bg-black group">
                   <Image
                     src="/logo.png"
                     alt="AI Club MITS Gwalior Logo"
@@ -221,7 +221,7 @@ export default function StaticFooter({ onOpenTerminal }) {
       {/* ============================================================== */}
       {/* 4. SUBTLE BOTTOM COPYRIGHT & TELEMETRY BAR                     */}
       {/* ============================================================== */}
-      <div className="relative border-t border-[rgba(255, 255, 255,0.14)] bg-[#04080D]">
+      <div className="relative border-t border-[rgba(255,255,255,0.14)] bg-[#04080D]">
         <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] font-mono text-slate-400 text-center sm:text-left">
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2">
             <span className="text-white font-medium">© {new Date().getFullYear()} AI CLUB</span>

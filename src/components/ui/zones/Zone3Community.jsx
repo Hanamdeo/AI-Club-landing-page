@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import { Users, ArrowRight, ArrowDown, MessageSquare, ShieldCheck } from 'lucide-react';
-import { ZONE_TEAM } from '@/data/clubData';
+import { TEAM_MEMBERS } from '@/data/team';
+import { DISCUSSIONS } from '@/data/discussions';
 import { audioManager } from '@/utils/audioManager';
 
 /**
@@ -12,33 +13,14 @@ import { audioManager } from '@/utils/audioManager';
  * Content revealed: Group discussions, workshops and club culture.
  */
 export default function Zone3Community({ onNextZone }) {
-  // Weekly Discussion / Workshop Topics
-  const discussions = [
-    {
-      topic: 'Latent Chain-of-Thought & Test-Time Search',
-      time: 'Thursdays 18:00',
-      venue: 'Computing Lab 02',
-      badge: 'Active Debate',
-      attendees: '45+ Researchers',
-    },
-    {
-      topic: 'Sparse Attention & Sub-Millisecond KV Caches',
-      time: 'Saturdays 14:00',
-      venue: 'Systems Server Room',
-      badge: 'Systems Deep Dive',
-      attendees: '30+ Builders',
-    },
-    {
-      topic: 'Agentic Tool-Use Protocols (MCP & Sandboxing)',
-      time: 'Bi-Weekly Wednesdays',
-      venue: 'Innovation Hub',
-      badge: 'Architecture Track',
-      attendees: '60+ Members',
-    },
-  ];
+  const activeDiscussions = useMemo(() => DISCUSSIONS.slice(0, 3), []);
+  const leadershipCadre = useMemo(
+    () => TEAM_MEMBERS.filter((m) => m.category === 'lead' || m.level === 'L1').slice(0, 3),
+    []
+  );
 
   return (
-    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-none font-sans safe-viewport-card custom-scrollbar pointer-events-auto">
+    <div className="w-full max-w-5xl mx-auto px-4 sm:px-6 select-text font-sans safe-viewport-card custom-scrollbar pointer-events-auto">
       <div className="glass-panel p-6 sm:p-8 rounded-2xl relative shadow-[0_16px_48px_rgba(0,0,0,0.65)]">
         {/* Top Telemetry Header */}
         <div className="flex flex-wrap items-center justify-between gap-3 pb-2.5 mb-5 border-b border-white/[0.12] text-[10px] font-mono">
@@ -76,14 +58,14 @@ export default function Zone3Community({ onNextZone }) {
             </div>
 
             <div className="space-y-3">
-              {discussions.map((d, i) => (
+              {activeDiscussions.map((d) => (
                 <div
-                  key={i}
+                  key={d.id}
                   className="rounded-xl p-4 glass-card transition-all duration-200"
                 >
                   <div className="flex items-center justify-between gap-2 mb-1.5">
                     <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/[0.10] text-slate-200 border border-white/20 font-semibold">
-                      {d.badge}
+                      {d.category}
                     </span>
                     <span className="text-[11px] font-mono text-slate-400 font-medium">
                       {d.time}
@@ -93,8 +75,8 @@ export default function Zone3Community({ onNextZone }) {
                     {d.topic}
                   </h4>
                   <div className="flex items-center justify-between text-[11px] font-mono text-slate-300">
-                    <span>{d.venue}</span>
-                    <span className="text-white font-semibold">{d.attendees}</span>
+                    <span className="truncate max-w-[240px]">{d.venue}</span>
+                    <span className="text-white font-semibold">{d.moderator}</span>
                   </div>
                 </div>
               ))}
@@ -110,42 +92,52 @@ export default function Zone3Community({ onNextZone }) {
               </div>
 
               <div className="space-y-3 mb-5">
-                {ZONE_TEAM.members.slice(0, 3).map((m, idx) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 rounded-xl glass-card">
+                {leadershipCadre.map((m) => (
+                  <div key={m.id} className="flex items-center gap-3 p-3 rounded-xl glass-card">
                     <div className="w-9 h-9 rounded-lg bg-white/[0.10] border border-white/20 flex items-center justify-center text-xs font-mono font-bold text-white shrink-0 shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
                       {m.initials}
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 flex-1">
                       <div className="text-xs font-display font-bold text-white truncate drop-shadow-sm">
                         {m.name}
                       </div>
-                      <div className="text-[10px] font-sans text-slate-300 truncate">
+                      <div className="text-[11px] font-mono text-slate-300 truncate">
                         {m.role}
                       </div>
                     </div>
+                    <span className="text-[9px] font-mono text-slate-400 border border-white/10 px-2 py-0.5 rounded-full shrink-0">
+                      {m.level}
+                    </span>
                   </div>
                 ))}
               </div>
+
+              <div className="p-3.5 rounded-xl border border-white/[0.10] bg-black/40 text-[11px] font-mono text-slate-300">
+                Weekly paper syncs every Thursday. All students welcome to present or defend preprints.
+              </div>
             </div>
 
-            <div className="pt-3 border-t border-white/[0.10]">
-              <Link
-                href="/team"
-                onClick={() => audioManager.playClick()}
-                className="flex items-center justify-between text-xs font-mono text-slate-200 hover:text-white transition-colors group pointer-events-auto"
-              >
-                <span className="font-semibold">VIEW COMPLETE 6-MEMBER TEAM</span>
-                <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
+            <Link
+              href="/team"
+              onClick={() => audioManager.playClick()}
+              className="mt-4 flex items-center justify-between text-xs font-mono text-slate-200 hover:text-white transition-colors group p-2.5 rounded-lg border border-white/[0.10] hover:border-white/30 bg-white/[0.04] pointer-events-auto"
+            >
+              <span className="font-semibold">MEET COMPLETE ROSTER</span>
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
         </div>
 
         {/* Bottom Actions Bar */}
         <div className="pt-4 border-t border-white/[0.12] flex flex-wrap items-center justify-between gap-4">
-          <span className="text-[11px] font-mono text-slate-400">
-            DISCUSSIONS OPEN TO ALL COLLEGIATE STUDENTS
-          </span>
+          <Link
+            href="/research"
+            onClick={() => audioManager.playClick()}
+            className="flex items-center gap-2 text-xs font-mono text-slate-200 hover:text-white transition-colors group pointer-events-auto"
+          >
+            <span className="font-semibold">EXPLORE ACTIVE RESEARCH COMMONS</span>
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+          </Link>
 
           {onNextZone && (
             <button
@@ -155,7 +147,7 @@ export default function Zone3Community({ onNextZone }) {
               }}
               className="flex items-center gap-2 px-3.5 py-1.5 rounded-lg bg-white/[0.08] hover:bg-white/[0.18] text-xs font-mono text-slate-200 hover:text-white transition-colors cursor-pointer border border-white/20 btn-tactile pointer-events-auto"
             >
-              <span>DESCEND TO RESEARCH ZONE</span>
+              <span>DESCEND TO RESEARCH CORE</span>
               <ArrowDown className="w-3.5 h-3.5 text-white" />
             </button>
           )}

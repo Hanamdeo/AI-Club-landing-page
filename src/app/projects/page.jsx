@@ -35,11 +35,11 @@ export default function ProjectsPage() {
   const filteredProjects = projects.filter((p) => {
     // State Filter
     if (selectedState === 'published') {
-      if (p.status?.toLowerCase() !== 'production' && p.status?.toLowerCase() !== 'active' && p.status?.toLowerCase() !== 'published') return false;
+      if (p.statusCode !== 'published') return false;
     } else if (selectedState === 'archived') {
-      if (p.status?.toLowerCase() !== 'archived') return false;
+      if (p.statusCode !== 'archived') return false;
     } else if (selectedState === 'draft') {
-      if (p.status?.toLowerCase() !== 'beta' && p.status?.toLowerCase() !== 'draft' && p.status?.toLowerCase() !== 'in development') return false;
+      if (p.statusCode !== 'draft') return false;
     }
 
     const matchesSearch =

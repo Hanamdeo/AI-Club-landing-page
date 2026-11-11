@@ -269,10 +269,10 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-md animate-fade-in pointer-events-auto font-mono text-xs text-slate-200">
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-3xl h-[85svh] max-h-[640px] rounded-2xl bg-[#050C12]/98 border border-[rgba(255, 255, 255, 0.3)] shadow-[0_24px_70px_rgba(0,0,0,0.9),0_0_35px_rgba(255, 255, 255, 0.15)] flex flex-col overflow-hidden select-text"
+        className="w-full max-w-3xl h-[85svh] max-h-[640px] rounded-2xl bg-[#050C12]/98 border border-[rgba(255,255,255,0.3)] shadow-[0_24px_70px_rgba(0,0,0,0.9),0_0_35px_rgba(255,255,255,0.15)] flex flex-col overflow-hidden select-text"
       >
         {/* Terminal Header Bar */}
-        <div className="flex items-center justify-between px-4 py-2.5 bg-[#08121A] border-b border-[rgba(255, 255, 255, 0.2)] select-none shrink-0">
+        <div className="flex items-center justify-between px-4 py-2.5 bg-[#08121A] border-b border-[rgba(255,255,255,0.2)] select-none shrink-0">
           <div className="flex items-center gap-2.5">
             <div className="flex items-center gap-1.5">
               <span className="w-3 h-3 rounded-full bg-rose-500/80 cursor-pointer" onClick={onClose} />
@@ -328,7 +328,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
 
             if (item.type === 'help') {
               return (
-                <div key={idx} className="p-2.5 rounded-lg bg-[#08121A] border border-[rgba(255, 255, 255, 0.2)] space-y-1">
+                <div key={idx} className="p-2.5 rounded-lg bg-[#08121A] border border-[rgba(255,255,255,0.2)] space-y-1">
                   <div className="text-[#FFFFFF] font-bold mb-1.5">AVAILABLE SYSTEM COMMANDS:</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-1">
                     {item.commands.map((c, i) => (
@@ -344,7 +344,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
 
             if (item.type === 'events') {
               return (
-                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255, 255, 255, 0.2)] space-y-2">
+                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255,255,255,0.2)] space-y-2">
                   <div className="text-[#FFFFFF] font-bold">UPCOMING OPERATIONS BOARD:</div>
                   {item.items.map((ev, i) => (
                     <div key={i} className="border-b border-white/10 pb-1.5 last:border-0 last:pb-0">
@@ -362,7 +362,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
 
             if (item.type === 'gd') {
               return (
-                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255, 255, 255, 0.2)] space-y-2">
+                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255,255,255,0.2)] space-y-2">
                   <div className="text-[#FFFFFF] font-bold">DISCUSSION ROOM TOPICS:</div>
                   {item.items.map((gd, i) => (
                     <div key={i} className="border-b border-white/10 pb-1.5 last:border-0 last:pb-0">
@@ -380,7 +380,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
 
             if (item.type === 'news') {
               return (
-                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255, 255, 255, 0.2)] space-y-2">
+                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255,255,255,0.2)] space-y-2">
                   <div className="text-[#FFFFFF] font-bold">AI RADAR DISPATCHES:</div>
                   {item.items.map((n, i) => (
                     <div key={i} className="border-b border-white/10 pb-1.5 last:border-0 last:pb-0">
@@ -395,7 +395,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
 
             if (item.type === 'projects') {
               return (
-                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255, 255, 255, 0.2)] space-y-2">
+                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255,255,255,0.2)] space-y-2">
                   <div className="text-[#FFFFFF] font-bold">RESEARCH & OPEN-SOURCE REPOSITORIES:</div>
                   {item.items.map((p, i) => (
                     <div key={i} className="border-b border-white/10 pb-1.5 last:border-0 last:pb-0">
@@ -413,7 +413,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
 
             if (item.type === 'research') {
               return (
-                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255, 255, 255, 0.2)] space-y-2">
+                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255,255,255,0.2)] space-y-2">
                   <div className="text-[#FFFFFF] font-bold">COMPUTE ARCHITECTURE & TRACKS:</div>
                   <div className="text-slate-300 text-[10px]">
                     Accelerators: {item.specs.accelerators}
@@ -430,11 +430,11 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
 
             if (item.type === 'team') {
               return (
-                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255, 255, 255, 0.2)] space-y-2">
+                <div key={idx} className="p-3 rounded-lg bg-[#08121A] border border-[rgba(255,255,255,0.2)] space-y-2">
                   <div className="text-[#FFFFFF] font-bold">CORE RESEARCHERS & LEADS:</div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {item.members.map((m, i) => (
-                      <div key={i} className="p-2 rounded bg-[#050C12] border border-[rgba(255, 255, 255, 0.15)]">
+                      <div key={i} className="p-2 rounded bg-[#050C12] border border-[rgba(255,255,255,0.15)]">
                         <div className="text-white font-bold">{m.name}</div>
                         <div className="text-[#FFFFFF] text-[10px]">{m.role}</div>
                         <div className="text-slate-400 text-[9px]">{m.domain}</div>
@@ -463,7 +463,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
         </div>
 
         {/* Input Bar */}
-        <div className="flex items-center gap-2 px-4 py-3 bg-[#08121A] border-t border-[rgba(255, 255, 255, 0.2)] shrink-0">
+        <div className="flex items-center gap-2 px-4 py-3 bg-[#08121A] border-t border-[rgba(255,255,255,0.2)] shrink-0">
           <span className="text-[#FFFFFF] font-bold text-xs select-none">aiclub@facility:~$</span>
           <input
             ref={inputRef}
@@ -478,7 +478,7 @@ export default function TerminalCLI({ isOpen, onClose, onNavigateToSection }) {
           />
           <button
             onClick={() => handleCommand(inputVal)}
-            className="p-1.5 rounded-lg bg-[rgba(255, 255, 255, 0.15)] hover:bg-[#FFFFFF] text-[#FFFFFF] hover:text-[#050C12] transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg bg-[rgba(255,255,255,0.15)] hover:bg-[#FFFFFF] text-[#FFFFFF] hover:text-[#050C12] transition-colors cursor-pointer"
           >
             <CornerDownLeft className="w-3.5 h-3.5" />
           </button>

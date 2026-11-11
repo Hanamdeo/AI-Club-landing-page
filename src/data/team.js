@@ -9,6 +9,7 @@ export const TEAM_MEMBERS = [
   // ACADEMIC ADVISORY
   // =========================================================================
   {
+    image: "/images/team/member-0.jpg",
     id: "dr-vikram-seth",
     name: "Dr. Vikram Seth",
     role: "Faculty Advisor & Mentor",
@@ -21,7 +22,7 @@ export const TEAM_MEMBERS = [
     level: "L0",
     levelTitle: "Academic Patron",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "vikram.seth@mitsgwalior.in",
   },
 
@@ -29,6 +30,7 @@ export const TEAM_MEMBERS = [
   // L1: LEADERSHIP
   // =========================================================================
   {
+    image: "/images/team/member-1.jpg",
     id: "samarth-agrawal",
     name: "Samarth Agrawal",
     role: "President",
@@ -40,11 +42,12 @@ export const TEAM_MEMBERS = [
     category: "lead",
     level: "L1",
     levelTitle: "Leadership",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "president.aiclub@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-2.jpg",
     id: "yash-yadav",
     name: "Yash Yadav",
     role: "Vice President",
@@ -56,8 +59,8 @@ export const TEAM_MEMBERS = [
     category: "lead",
     level: "L1",
     levelTitle: "Leadership",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "vp.aiclub@mitsgwalior.in",
   },
 
@@ -65,6 +68,7 @@ export const TEAM_MEMBERS = [
   // L2: ADMINISTRATION
   // =========================================================================
   {
+    image: "/images/team/member-3.jpg",
     id: "harshita-gupta",
     name: "Harshita Gupta",
     role: "Secretary",
@@ -76,11 +80,12 @@ export const TEAM_MEMBERS = [
     category: "lead",
     level: "L2",
     levelTitle: "Administration",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "secretary.aiclub@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-4.jpg",
     id: "samarth-patidar",
     name: "Samarth Patidar",
     role: "Treasurer",
@@ -92,8 +97,8 @@ export const TEAM_MEMBERS = [
     category: "lead",
     level: "L2",
     levelTitle: "Administration",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "treasurer.aiclub@mitsgwalior.in",
   },
 
@@ -101,6 +106,7 @@ export const TEAM_MEMBERS = [
   // L3: CORE HEADS
   // =========================================================================
   {
+    image: "/images/team/member-5.jpg",
     id: "krishna-sharma",
     name: "Krishna Sharma",
     role: "PR & Marketing Head",
@@ -113,10 +119,11 @@ export const TEAM_MEMBERS = [
     level: "L3",
     levelTitle: "Core Heads",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "pr.aiclub@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-6.jpg",
     id: "rahul-dhakad",
     name: "Rahul Dhakad",
     role: "Logistics Head",
@@ -129,10 +136,11 @@ export const TEAM_MEMBERS = [
     level: "L3",
     levelTitle: "Core Heads",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "logistics.aiclub@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-7.jpg",
     id: "naitik-jain",
     name: "Naitik Jain",
     role: "Technical Head",
@@ -144,11 +152,12 @@ export const TEAM_MEMBERS = [
     category: "core",
     level: "L3",
     levelTitle: "Core Heads",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "tech.aiclub@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-8.jpg",
     id: "chetan-nagre",
     name: "Chetan Nagre",
     role: "Graphics Head",
@@ -161,10 +170,11 @@ export const TEAM_MEMBERS = [
     level: "L3",
     levelTitle: "Core Heads",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "graphics.aiclub@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-9.jpg",
     id: "vidagdh-singh-tomar",
     name: "Vidagdh Singh Tomar",
     role: "R&D Co-Head",
@@ -176,11 +186,12 @@ export const TEAM_MEMBERS = [
     category: "core",
     level: "L3",
     levelTitle: "Core Heads",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "rnd.aiclub@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-10.jpg",
     id: "dewarsh-jain",
     name: "Dewarsh Jain",
     role: "R&D Co-Head",
@@ -192,8 +203,8 @@ export const TEAM_MEMBERS = [
     category: "core",
     level: "L3",
     levelTitle: "Core Heads",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "rnd2.aiclub@mitsgwalior.in",
   },
 
@@ -201,6 +212,7 @@ export const TEAM_MEMBERS = [
   // L4: SUB-HEADS & COORDINATORS (ROW 1)
   // =========================================================================
   {
+    image: "/images/team/member-11.jpg",
     id: "ritesh-rajak",
     name: "Ritesh Rajak",
     role: "Junior Coordinator",
@@ -213,10 +225,11 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "ritesh.rajak@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-12.jpg",
     id: "vedika-sabharwal",
     name: "Vedika Sabharwal",
     role: "Junior Coordinator",
@@ -229,10 +242,11 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "vedika.sabharwal@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-13.jpg",
     id: "prakriti-krishna-pal",
     name: "Prakriti Krishna Pal",
     role: "Graphics Sub-Head",
@@ -245,10 +259,11 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "prakriti.pal@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-14.jpg",
     id: "akash-birla",
     name: "Akash Birla",
     role: "Promotion Sub-Head",
@@ -261,10 +276,11 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "akash.birla@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-15.jpg",
     id: "ishika-singhal",
     name: "Ishika Singhal",
     role: "Data Management Sub-Head",
@@ -277,7 +293,7 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "ishika.singhal@mitsgwalior.in",
   },
 
@@ -285,6 +301,7 @@ export const TEAM_MEMBERS = [
   // L4: SUB-HEADS & COORDINATORS (ROW 2)
   // =========================================================================
   {
+    image: "/images/team/member-16.jpg",
     id: "dolly-rewasiya",
     name: "Dolly Rewasiya",
     role: "Social Media Sub-Head",
@@ -297,10 +314,11 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "dolly.rewasiya@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-17.jpg",
     id: "aayush-kushwah",
     name: "Aayush Kushwah",
     role: "Logistics Sub-Head",
@@ -313,10 +331,11 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "aayush.kushwah@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-18.jpg",
     id: "sameer-shrivas",
     name: "Sameer Shrivas",
     role: "Video Editing Sub-Head",
@@ -329,10 +348,11 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "sameer.shrivas@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-19.jpg",
     id: "prateek-singh",
     name: "Prateek Singh",
     role: "Technical Sub-Head",
@@ -344,11 +364,12 @@ export const TEAM_MEMBERS = [
     category: "coordinator",
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
-    github: "https://github.com",
-    linkedin: "https://linkedin.com",
+    github: null,
+    linkedin: null,
     email: "prateek.singh@mitsgwalior.in",
   },
   {
+    image: "/images/team/member-20.jpg",
     id: "manjari-singh-kushwah",
     name: "Manjari Singh Kushwah",
     role: "Editorial Sub-Head",
@@ -361,7 +382,7 @@ export const TEAM_MEMBERS = [
     level: "L4",
     levelTitle: "Sub-Heads & Coordinators",
     github: null,
-    linkedin: "https://linkedin.com",
+    linkedin: null,
     email: "manjari.kushwah@mitsgwalior.in",
   },
 ];
@@ -372,7 +393,8 @@ export const TEAM_MEMBERS = [
 export const TEAM_HIERARCHY_TREE = {
   levels: [
     {
-      id: "leadership",
+      image: "/images/team/member-0.jpg",
+    id: "leadership",
       depth: "L1 // Leadership",
       tag: "Leadership",
       subtag: "Executive Command",
@@ -392,7 +414,8 @@ export const TEAM_HIERARCHY_TREE = {
       ],
     },
     {
-      id: "administration",
+      image: "/images/team/member-1.jpg",
+    id: "administration",
       depth: "L2 // Administration",
       tag: "Administration",
       subtag: "Operational Governance",
@@ -408,7 +431,8 @@ export const TEAM_HIERARCHY_TREE = {
       ],
     },
     {
-      id: "core-heads",
+      image: "/images/team/member-2.jpg",
+    id: "core-heads",
       depth: "L3 // Core Heads",
       tag: "Core Heads",
       subtag: "Domain Leads",
@@ -428,7 +452,8 @@ export const TEAM_HIERARCHY_TREE = {
       ],
     },
     {
-      id: "sub-heads",
+      image: "/images/team/member-3.jpg",
+    id: "sub-heads",
       depth: "L4 // Sub-Heads & Coordinators",
       tag: "Sub-Heads, Coordinators & Team Members",
       subtag: "Implementation & Operations Cohort",

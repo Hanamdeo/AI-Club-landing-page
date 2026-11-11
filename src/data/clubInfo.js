@@ -78,5 +78,12 @@ export const CLUB_INFO = {
       keywords: ["Tokenization", "Morphology", "Instruction Tuning", "IndicNLP"],
     },
   ],
+  recruitment: {
+    status: "opening-soon", // "open" | "opening-soon" | "closed"
+    statusLabel: "Intake Opening Soon",
+    nextCycle: "Autumn/Winter 2026 Cohort",
+    contactEmail: "aiclub@mitsgwalior.in",
+    notice: "Membership applications for the next student cohort will open shortly. Connect with us or follow official announcements.",
+  },
 };
 

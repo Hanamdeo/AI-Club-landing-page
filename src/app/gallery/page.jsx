@@ -129,14 +129,14 @@ export default function GalleryPage() {
     <main className="relative min-h-screen bg-[#07090A] text-white font-manrope pt-24 sm:pt-28 pb-20 sm:pb-24 px-4 sm:px-8 md:px-12 lg:px-16 overflow-hidden">
       {/* Background Ambience */}
       <div className="absolute inset-0 bg-facility-grid opacity-20 pointer-events-none" />
-      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(255, 255, 255,0.08)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.08)_0%,transparent_70%)] pointer-events-none" />
 
       <div className="relative z-10 max-w-6xl mx-auto">
         {/* Breadcrumb Navigation */}
        
 
         {/* Master Page Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(255, 255, 255,0.18)] pb-8">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-12 border-b border-[rgba(255,255,255,0.18)] pb-8">
           <div>
            
             <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-barlow-condensed font-bold uppercase tracking-tight text-white leading-tight">
@@ -171,8 +171,8 @@ export default function GalleryPage() {
                 }}
                 className={`px-3.5 py-1.5 text-xs font-mono rounded-full transition-all cursor-pointer whitespace-nowrap ${
                   active
-                    ? 'bg-[rgba(255, 255, 255,0.2)] text-white border border-[#FFFFFF] shadow-[0_0_12px_rgba(255, 255, 255,0.3)] font-semibold'
-                    : 'bg-[#0C1014] text-slate-400 hover:text-white border border-[rgba(255, 255, 255,0.14)]'
+                    ? 'bg-[rgba(255,255,255,0.2)] text-white border border-[#FFFFFF] shadow-[0_0_12px_rgba(255,255,255,0.3)] font-semibold'
+                    : 'bg-[#0C1014] text-slate-400 hover:text-white border border-[rgba(255,255,255,0.14)]'
                 }`}
               >
                 {cat}
