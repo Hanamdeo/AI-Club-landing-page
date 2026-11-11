@@ -45,9 +45,9 @@ export default function InteractiveServerRack({ onOpenModal }) {
 
   // Materials
   const frameMat = new THREE.MeshStandardMaterial({
-    color: hovered ? '#354345' : '#22292B',
+    color: hovered ? '#212B33' : '#11161B',
     roughness: 0.45,
-    metalness: 0.75,
+    metalness: 0.82,
   });
 
   const copperMat = new THREE.MeshStandardMaterial({
@@ -57,15 +57,15 @@ export default function InteractiveServerRack({ onOpenModal }) {
   });
 
   const pcbMat = new THREE.MeshStandardMaterial({
-    color: '#152E28',
+    color: '#0E1418',
     roughness: 0.6,
-    metalness: 0.2,
+    metalness: 0.3,
   });
 
   const heatsinkMat = new THREE.MeshStandardMaterial({
-    color: '#A6B3B5',
-    roughness: 0.28,
-    metalness: 0.9,
+    color: '#7C8B99',
+    roughness: 0.25,
+    metalness: 0.92,
   });
 
   return (
@@ -89,10 +89,10 @@ export default function InteractiveServerRack({ onOpenModal }) {
         <boxGeometry args={[0.86, 2.42, 1.10]} />
       </mesh>
 
-      {/* Rack Status Glow Trim at Header */}
+      {/* Rack Status Glow Trim at Header (Cyber Cyan Accent) */}
       <mesh position={[0, 1.18, 0.54]}>
         <boxGeometry args={[0.82, 0.04, 0.02]} />
-        <meshBasicMaterial color={hovered ? '#E6E2D8' : '#A2B29F'} />
+        <meshBasicMaterial color={hovered ? '#38BDF8' : '#00A3FF'} toneMapped={false} />
       </mesh>
 
       {/* 2. Interactive Sliding Server Blade Drawer (Local +Z is out into aisle) */}
@@ -105,13 +105,13 @@ export default function InteractiveServerRack({ onOpenModal }) {
         {/* Front Server Blade Bezel Handle & Indicator */}
         <mesh position={[0, 0, 0.55]}>
           <boxGeometry args={[0.80, 0.24, 0.03]} />
-          <meshStandardMaterial color="#2B3638" roughness={0.35} metalness={0.75} />
+          <meshStandardMaterial color="#1E262E" roughness={0.35} metalness={0.85} />
         </mesh>
 
         {/* Drawer Pull Handle (Brushed Aluminum) */}
         <mesh position={[0, 0, 0.58]}>
           <boxGeometry args={[0.26, 0.035, 0.03]} />
-          <meshStandardMaterial color="#E6E2D8" roughness={0.2} metalness={0.9} />
+          <meshStandardMaterial color="#CBD5E1" roughness={0.2} metalness={0.92} />
         </mesh>
 
         {/* 4x GPU Accelerator Blocks (Liquid Cooled H100s) */}
@@ -125,10 +125,10 @@ export default function InteractiveServerRack({ onOpenModal }) {
             <mesh position={[0, 0.07, 0]} material={copperMat}>
               <cylinderGeometry args={[0.01, 0.01, 0.32, 12]} />
             </mesh>
-            {/* GPU Activity LED */}
+            {/* GPU Activity LED (Cyan & Crisp White only) */}
             <mesh position={[0, 0.07, 0.19]}>
               <boxGeometry args={[0.015, 0.015, 0.015]} />
-              <meshBasicMaterial color={i % 2 === 0 ? '#FFFFFF' : '#22C55E'} />
+              <meshBasicMaterial color={i % 2 === 0 ? '#FFFFFF' : '#00A3FF'} toneMapped={false} />
             </mesh>
           </group>
         ))}
