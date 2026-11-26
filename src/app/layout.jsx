@@ -1,4 +1,4 @@
-import localFont from 'next/font/local';
+import { Archivo, Inter } from 'next/font/google';
 import './globals.css';
 import GlobalNavShell from '@/components/ui/GlobalNavShell';
 import GlobalFooterShell from '@/components/ui/GlobalFooterShell';
@@ -12,31 +12,16 @@ import {
   getWebSiteSchema,
 } from '@/lib/seo';
 
-// Local Display Font: LaBeouf
-const labeouf = localFont({
-  src: [
-    {
-      path: '../../public/fonts/labeouf/labeouf-regular.ttf',
-      weight: '400',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/labeouf/labeouf-bold.ttf',
-      weight: '700',
-      style: 'normal',
-    },
-    {
-      path: '../../public/fonts/labeouf/labeouf-italic.ttf',
-      weight: '400',
-      style: 'italic',
-    },
-    {
-      path: '../../public/fonts/labeouf/labeouf-bold-italic.ttf',
-      weight: '700',
-      style: 'italic',
-    },
-  ],
-  variable: '--font-labeouf',
+const archivo = Archivo({
+  subsets: ['latin'],
+  display: 'swap',
+  style: ['normal', 'italic'],
+  variable: '--font-archivo-face',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter-sans',
   display: 'swap',
 });
 
@@ -123,7 +108,7 @@ export default function RootLayout({ children }) {
   return (
     <html
       lang="en"
-      className={`dark bg-[#0A0E10] text-[#E6E2D8] ${labeouf.variable}`}
+      className={`dark bg-[#0A0E10] text-[#E6E2D8] ${archivo.variable} ${inter.variable}`}
       style={{ backgroundColor: '#0A0E10', color: '#E6E2D8', colorScheme: 'dark' }}
     >
       <head>

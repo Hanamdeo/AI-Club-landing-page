@@ -92,7 +92,7 @@ export default function HUDNavbar({ onToggleTerminal }) {
           </div>
           <div className="flex flex-col text-left justify-center">
             <div className="flex items-center gap-1.5">
-              <span className="font-black text-sm sm:text-[15px] tracking-wider text-white group-hover:text-[#FFFFFF] transition-colors uppercase leading-none">
+              <span className="font-display font-extrabold text-sm sm:text-[15px] tracking-wider text-white group-hover:text-[#FFFFFF] transition-colors uppercase leading-none">
                 AI CLUB
               </span>
               <span className="w-2 h-2 rounded-full bg-signal-green shadow-[0_0_8px_#22C55E]" title="Systems Nominal" />
