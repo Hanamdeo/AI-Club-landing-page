@@ -42,17 +42,20 @@
   --color-white-pure: #FFFFFF;
   --color-white-off: #F0F6F7;
 
-  --font-cs-slade-3d: 'CS Slade 3D', var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
-  --font-morque-blur: 'Morque Blur', 'Morque', var(--font-barlow-condensed), 'Barlow Condensed', sans-serif;
-  --font-heading: var(--font-barlow-condensed), 'Barlow Condensed', sans-serif-condensed, sans-serif;
-  --font-body: var(--font-manrope), 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-tech-mono: var(--font-ibm-plex-mono-events), var(--font-mono), 'IBM Plex Mono', monospace;
+  --font-cs-slade-3d: var(--font-archivo-face), 'Archivo', sans-serif;
+  --font-morque-blur: var(--font-archivo-face), 'Archivo', sans-serif;
+  --font-heading: var(--font-archivo-face), 'Archivo', sans-serif;
+  --font-body: var(--font-inter-sans), 'Inter', sans-serif;
+  --font-tech-mono: var(--font-inter-sans), 'Inter', sans-serif;
   font-family: var(--font-body);
 }
 
 /* Scoped Utility Font Families */
 .events-page .font-events-heading {
   font-family: var(--font-heading) !important;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
 }
 
 .events-page .font-events-body {
@@ -101,7 +104,7 @@
 /* 1. Hero Heading: White to Cyan Gradient with 3D Core Depth */
 .events-page .events-hero-title {
   font-family: var(--font-cs-slade-3d) !important;
-  font-weight: 700 !important;
+  font-weight: 800 !important;
   font-size: clamp(32px, 7.5vw, 88px) !important;
   line-height: 0.95 !important;
   letter-spacing: -0.015em !important;
@@ -130,10 +133,21 @@
   filter: drop-shadow(0 4px 18px rgba(255, 255, 255, 0.28));
 }
 
+.events-page .events-hero-title,
+.events-page .events-detail-title,
+.events-page .events-section-title,
+.events-page .events-card-title,
+.events-page .font-cs-slade-3d,
+.events-page .font-morque-blur {
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
 /* 2. Section Headings */
 .events-page .events-section-title {
   font-family: var(--font-heading) !important;
-  font-weight: 600 !important;
+  font-weight: 800 !important;
   font-size: clamp(30px, 3.8vw, 44px) !important;
   line-height: 1.08 !important;
   letter-spacing: -0.015em !important;
@@ -144,7 +158,7 @@
 /* 3. Event Titles */
 .events-page .events-card-title {
   font-family: var(--font-heading) !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
   font-size: clamp(24px, 2.4vw, 30px) !important;
   line-height: 1.12 !important;
   letter-spacing: -0.01em !important;

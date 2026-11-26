@@ -96,18 +96,20 @@
   --space-12: 48px;
   --space-16: 64px;
 
-  /* Typography Variables */
-  --font-labeouf: 'LaBeouf', sans-serif;
-  --font-syne: 'Syne', 'LaBeouf', sans-serif;
-  --font-space: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-inter: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-archivo: 'Archivo', 'LaBeouf', sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
-  --font-barlow-condensed: 'Barlow Condensed', 'LaBeouf', sans-serif;
-  --font-manrope: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-ibm-plex-mono-events: 'IBM Plex Mono', ui-monospace, monospace;
-  --font-geist: 'Geist', sans-serif;
-  --font-inter-fallback: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  /* Typography: Archivo for headings, Inter for body and UI content */
+  --font-heading: var(--font-archivo-face), 'Archivo', sans-serif;
+  --font-body: var(--font-inter-sans), 'Inter', sans-serif;
+  --font-labeouf: var(--font-heading);
+  --font-syne: var(--font-heading);
+  --font-space: var(--font-body);
+  --font-inter: var(--font-body);
+  --font-archivo: var(--font-heading);
+  --font-mono: var(--font-body);
+  --font-barlow-condensed: var(--font-heading);
+  --font-manrope: var(--font-body);
+  --font-ibm-plex-mono-events: var(--font-body);
+  --font-geist: var(--font-body);
+  --font-inter-fallback: var(--font-body);
 }
 
 * {
@@ -128,7 +130,7 @@ body {
   padding: 0;
   min-height: 100vh;
   min-height: 100svh;
-  font-family: var(--font-labeouf), var(--font-space), var(--font-inter), var(--font-geist), var(--font-inter-fallback);
+  font-family: var(--font-body);
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -161,45 +163,50 @@ textarea {
 }
 
 /* ============================================================== */
-/* UNIFIED TYPOGRAPHY SYSTEM (LaBeouf, Syne, Space, Inter, Mono)   */
+/* TYPOGRAPHY: Archivo headings, Inter body                    */
 /* ============================================================== */
 
-/* High-Impact Display Headings */
-h1, h2, h3, h4, h5, h6 {
-  font-family: var(--font-labeouf), var(--font-syne), var(--font-space), var(--font-archivo), sans-serif;
+h1, h2, h3, h4, h5, h6,
+.font-display,
+.font-labeouf,
+.font-syne,
+.font-archivo,
+.font-barlow-condensed,
+.font-3d-slade,
+.font-3d-slay,
+.font-3d-slade-subtle,
+.font-3d-slay-subtle {
+  font-family: var(--font-heading);
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+h1,
+h2,
+h1.font-bold,
+h2.font-bold,
+h1.font-black,
+h2.font-black,
+.font-display.font-bold,
+.font-barlow-condensed.font-bold {
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+h3, h4, h5, h6 {
   font-weight: 700;
-  letter-spacing: 0.02em;
+  letter-spacing: -0.02em;
 }
 
-.font-display {
-  font-family: var(--font-labeouf), var(--font-syne), var(--font-space), sans-serif;
-  letter-spacing: 0.02em;
+.font-space,
+.font-manrope,
+.font-mono {
+  font-family: var(--font-body);
 }
 
-.font-labeouf {
-  font-family: var(--font-labeouf), sans-serif;
-  letter-spacing: 0.02em;
-}
-
-.font-syne {
-  font-family: var(--font-labeouf), var(--font-syne), sans-serif;
-  letter-spacing: 0.01em;
-}
-
-.font-space {
-  font-family: var(--font-space), sans-serif;
-  letter-spacing: -0.01em;
-}
-
-.font-archivo {
-  font-family: var(--font-labeouf), var(--font-archivo), sans-serif;
-  letter-spacing: 0.01em;
-}
-
-/* Precision Body Copy */
-p, span, a, button, input, select, textarea, label {
-  font-family: var(--font-labeouf), var(--font-space), var(--font-inter), sans-serif;
-  letter-spacing: 0.01em;
+p, li, label, input, select, textarea, button {
+  font-family: var(--font-body);
 }
 
 /* Futuristic Cyber Text Gradients */
@@ -245,7 +252,7 @@ p, span, a, button, input, select, textarea, label {
 }
 
 .font-3d-slade, .font-3d-slay {
-  font-family: 'CS Slade 3D', var(--font-syne), var(--font-barlow-condensed), sans-serif;
+  font-family: var(--font-heading);
   font-weight: 700;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -254,7 +261,7 @@ p, span, a, button, input, select, textarea, label {
 }
 
 .font-3d-slade-subtle, .font-3d-slay-subtle {
-  font-family: 'CS Slade 3D', var(--font-syne), var(--font-barlow-condensed), sans-serif;
+  font-family: var(--font-heading);
   font-weight: 700;
   text-transform: uppercase;
   color: #FFFFFF;
@@ -264,13 +271,15 @@ p, span, a, button, input, select, textarea, label {
 
 /* Tabular Lining Figures for stats, timers & cluster telemetry */
 .num-normal, .tnum {
-  font-family: var(--font-mono), 'IBM Plex Mono', 'JetBrains Mono', monospace !important;
-  font-feature-settings: 'tnum' on, 'lnum' on, 'zero' on;
+  font-family: var(--font-body) !important;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: 'tnum' on, 'lnum' on;
 }
 
-/* Dedicated Monospace for UNIX Terminal CLI Buffer & Code */
-code, pre, .terminal-mono, .font-mono {
-  font-family: var(--font-mono), 'JetBrains Mono', ui-monospace, Menlo, Monaco, monospace;
+/* Code stays monospace so snippets remain readable */
+code, pre, kbd, samp, .terminal-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  letter-spacing: 0;
 }
 
 /* Custom Telemetry Selection */
